@@ -68,7 +68,7 @@ const IdeasBoxView = () => {
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
       if (response.error || !response.data) return '';
-      let roomName = response.data.room_name;
+      const roomName = response.data.room_name;
       return roomName;
     });
   };
@@ -96,7 +96,7 @@ const IdeasBoxView = () => {
     if (currentBoxPhase != boxPhase && response.data) {
       setBoxPhase(currentBoxPhase);
       dispatch({
-        action: 'SET_BREADCRUMB',
+        type: 'SET_BREADCRUMB',
         breadcrumb: [
           [roomName, `/room/${room_id}/phase/0`],
           [t(`phases.name-${currentBoxPhase}`), `/room/${room_id}/phase/${currentBoxPhase}`],
@@ -107,7 +107,7 @@ const IdeasBoxView = () => {
     } else {
       if (response.data && response.data.name)
         dispatch({
-          action: 'SET_BREADCRUMB',
+          type: 'SET_BREADCRUMB',
           breadcrumb: [
             [roomName, `/room/${room_id}/phase/0`],
             [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
@@ -207,14 +207,14 @@ const IdeasBoxView = () => {
 
   const saveScroll = (evt: SyntheticEvent) => {
     dispatch({
-      action: 'SAVE_SCROLL',
+      type: 'SAVE_SCROLL',
       lastScroll: (evt.target as HTMLElement).scrollTop,
       lastIdeaList: 'box-ideas-' + phase,
     });
   };
 
   useEffect(() => {
-    let ideasList = document.getElementById('box-ideas');
+    const ideasList = document.getElementById('box-ideas');
     if (ideasList) {
       if (appState.lastIdeaList == 'box-ideas-' + phase) {
         ideasList.scrollTop = appState.lastScroll;

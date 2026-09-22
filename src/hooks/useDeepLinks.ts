@@ -24,7 +24,9 @@ export const useDeepLinks = () => {
   // Both change identity on every location or store change; a ref keeps the
   // listener registered once.
   const latest = useRef({ navigate, dispatch });
-  latest.current = { navigate, dispatch };
+  useEffect(() => {
+    latest.current = { navigate, dispatch };
+  });
 
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;

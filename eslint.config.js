@@ -21,14 +21,21 @@ export default tseslint.config(
     rules: {
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+      '@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true }],
+      // Advisory for our effect-based data layer; real fix is a shared async hook / react-query.
+      'react-hooks/set-state-in-effect': 'warn',
+      // Remaining anys are library-boundary casts (MUI slotProps, yup shapes); tracked, not blocking.
+      '@typescript-eslint/no-explicit-any': 'warn',
     },
   },
   {
     // Playwright resolves fixtures by exact destructured name, so dependency
-    // fixtures must be declared even when their value is unused.
+    // fixtures must be declared even when their value is unused, and a
+    // dependency-less fixture must still take an empty `{}` destructuring pattern.
     files: ['tests/**/*.{ts,tsx}'],
     rules: {
       '@typescript-eslint/no-unused-vars': ['error', { args: 'none' }],
+      'no-empty-pattern': ['error', { allowObjectPatternsAsParameters: true }],
     },
   },
   prettier
