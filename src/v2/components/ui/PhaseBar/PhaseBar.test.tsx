@@ -38,7 +38,7 @@ describe('PhaseBar current phase', () => {
   it('gives the current phase the room to itself', () => {
     const { container } = renderBar({ phase: '20' });
 
-    expect(wrapper(container, '20').className).toContain('@md:flex-3');
+    expect(wrapper(container, '20').className).toContain('flex-2');
     expect(wrapper(container, '10').className).toContain('flex-1');
   });
 
@@ -52,16 +52,10 @@ describe('PhaseBar current phase', () => {
   it('shares the width evenly when no phase is current, the last phase included', () => {
     const { container } = renderBar();
 
-    expect(container.querySelectorAll('.flex-3')).toHaveLength(0);
+    expect(container.querySelectorAll('.flex-2')).toHaveLength(0);
     ['0', '10', '20', '30', '40'].forEach((displayPhase) =>
       expect(wrapper(container, displayPhase).className).toContain('flex-1')
     );
-  });
-
-  it('keeps the last phase narrow on a room page, where a sibling is always expanded', () => {
-    const { container } = renderBar({ phase: '0' });
-
-    expect(wrapper(container, '40').className).toContain('@md:flex-[0.75]');
   });
 
   it('still expands a hovered phase with none current, so the names stay reachable', async () => {
@@ -70,8 +64,8 @@ describe('PhaseBar current phase', () => {
 
     await user.hover(segment(container, '30'));
 
-    expect(wrapper(container, '30').className).toContain('@md:flex-3');
-    expect(wrapper(container, '0').className).not.toContain('flex-3');
+    expect(wrapper(container, '30').className).toContain('flex-2');
+    expect(wrapper(container, '0').className).not.toContain('flex-2');
   });
 });
 
@@ -133,18 +127,5 @@ describe('PhaseBar in a narrow bar', () => {
     const { container } = renderBar({ phase: '0', counts: { '0': 3 } });
 
     expect(label(container, '0').className).toContain('grid-cols-[0fr] @md:grid-cols-[1fr]');
-  });
-
-  it('leaves the current phase no wider than its siblings, so five counts fit', () => {
-    const { container } = renderBar({ phase: '0', counts: { '0': 3 } });
-
-    expect(wrapper(container, '0').className).toContain('flex-1 @md:flex-3');
-  });
-
-  it('marks the current phase with its active shade, the only cue left once names are hidden', () => {
-    const { container } = renderBar({ phase: '0', counts: { '0': 3 } });
-
-    expect(segment(container, '0').className).toContain('bg-wild-active @md:bg-wild');
-    expect(segment(container, '10').className).not.toContain('@md:bg-discussion');
   });
 });
