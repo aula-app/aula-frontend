@@ -1,6 +1,5 @@
 import { AppIconButton } from '@/components';
-import AppIcon from '@/components/AppIcon';
-import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig, RuntimeConfigNotFoundError } from '@/config';
+import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from '@/config';
 import { localStorageGet, localStorageSet } from "@/utils";
 import { validateAndSaveInstanceCode } from '@/services/instance';
 import { checkPasswordKey, setPassword } from '@/services/login';
