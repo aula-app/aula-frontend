@@ -238,14 +238,3 @@ export function createStatusFilter<T extends { status: any }>(): FilterFunction<
     return items.filter((item) => item.status.toString() === statusValue);
   };
 }
-
-/**
- * Creates a room type filter (for type 0 or 1)
- */
-export function createRoomTypeFilter<T extends { type: 0 | 1 }>(): FilterFunction<T> {
-  return (items, typeValue: string) => {
-    if (!typeValue) return items;
-    const typeNumber = parseInt(typeValue, 10);
-    return items.filter((item) => item.type === typeNumber);
-  };
-}

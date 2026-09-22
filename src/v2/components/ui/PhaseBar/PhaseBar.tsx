@@ -3,7 +3,6 @@ import { RoomPhases } from '@/types/SettingsTypes';
 import { phases } from '@/utils';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router-dom';
 import Link from '../../navigation/Link';
 
 const ARROW_SIZE = 16;
@@ -17,8 +16,6 @@ const RING_WIDTH = 2;
 const APEX_OFFSET = 2.561; // arrow point/notch shifted inward along its bisector
 const CORNER_NEAR = 4.161; // corner where a diagonal meets the edge, near a concave notch
 const CORNER_FAR = 16.961; // corner where a diagonal meets the edge, opposite a convex tip
-
-const isValidPhase = (phase: string): phase is `${RoomPhases}` => Object.keys(phases).includes(phase);
 
 const displayPhases = Object.keys(phases) as `${RoomPhases}`[];
 
@@ -51,14 +48,25 @@ function getRingClipPath(index: number, total: number): string {
 
 interface PhaseBarProps {
   room: string;
+  /** The phase to mark current. Omitted means none is: every segment keeps an equal share of the width. */
+  phase?: `${RoomPhases}`;
+  /** Item count per phase, shown beside each icon. Ideas in phase 0, boxes in the rest. */
+  counts?: Partial<Record<`${RoomPhases}`, number>>;
+  /** Names the room a segment leads to, so a list of bars does not repeat identical link labels. */
+  roomName?: string;
 }
 
-function PhaseBar({ room }: PhaseBarProps) {
+function PhaseBar({ room, phase, counts, roomName }: PhaseBarProps) {
   const { t } = useTranslation();
-  const { phase } = useParams();
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
 
-  const currentPhase = phase && isValidPhase(phase) ? phase : '0';
+  // "10 idea boxes in discussion". Phase 0 has no sentence key, so it reads as its count alone.
+  const countLabel = (displayPhase: `${RoomPhases}`, count?: number) => {
+    if (count === undefined) return undefined;
+    const scope = displayPhase === '0' ? 'ideas' : 'boxes';
+    const noun = t(`v2.scopes.${scope}.${count === 1 ? 'singular' : 'plural'}`);
+    return t(`phases.id-${displayPhase}`, { var: `${count} ${noun}`, defaultValue: `${count} ${noun}` });
+  };
 
   return (
     <div
@@ -72,27 +80,30 @@ function PhaseBar({ room }: PhaseBarProps) {
     >
       {displayPhases.map((displayPhase, index) => {
         const phaseType = phases[displayPhase];
-        const isActive = currentPhase === displayPhase;
+        const isActive = phase === displayPhase;
         const isExpanded = hoveredPhase !== null ? hoveredPhase === displayPhase : isActive;
+        const count = counts?.[displayPhase];
+        const label = countLabel(displayPhase, count) ?? t('v2.ui.moveToPhase', { phase: t(`phases.${phaseType}`) });
 
         return (
           <div
             key={displayPhase}
-            className={`-mr-4 last:mr-0 bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active has-[a:focus-visible]:bg-foreground transition-[flex] duration-300 ease-in-out ${isExpanded ? 'flex-3 z-10' : `${index === displayPhases.length - 1 ? 'flex-[0.75]' : 'flex-1'} z-0`}`}
+            className={`-mr-4 last:mr-0 bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active has-[a:focus-visible]:bg-foreground transition-[flex] duration-300 ease-in-out ${isExpanded ? 'flex-3 z-10' : `${phase && index === displayPhases.length - 1 ? 'flex-[0.75]' : 'flex-1'} z-0`}`}
             style={{ clipPath: getClipPath(index, displayPhases.length) }}
           >
             <Link
               to={`/room/${room}/phase/${displayPhase}`}
               disabled={isActive}
-              aria-label={t('v2.ui.moveToPhase', { phase: t(`phases.${phaseType}`) })}
+              aria-label={roomName ? t('v2.ui.roomPhase', { room: roomName, var: label }) : label}
               aria-current={isActive ? 'page' : undefined}
               data-testid={`link-to-phase-${displayPhase}`}
-              className={`flex items-center justify-center rounded-none h-10 w-full px-6 text-foreground no-underline bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active focus-visible:outline-none transition-colors duration-150`}
+              className={`flex items-center justify-center rounded-none h-10 w-full ${counts ? 'px-2' : 'px-6'} text-foreground no-underline bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active focus-visible:outline-none transition-colors duration-150`}
               style={{ clipPath: getRingClipPath(index, displayPhases.length) }}
               onMouseEnter={() => setHoveredPhase(displayPhase)}
               onFocus={() => setHoveredPhase(displayPhase)}
             >
               <Icon type={phaseType} size="1.25rem" aria-hidden="true" />
+              {count !== undefined && <span className="pl-1.5 text-sm font-medium">{count}</span>}
               <span
                 className={`grid transition-[grid-template-columns] duration-300 ease-in-out ${isExpanded ? 'grid-cols-[1fr]' : 'grid-cols-[0fr]'}`}
               >

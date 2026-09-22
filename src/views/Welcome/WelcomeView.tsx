@@ -3,8 +3,8 @@ import { Stack } from '@mui/material';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePageTitle } from '@/hooks/usePageTitle';
+import Rooms from '@/v2/views/private/Rooms';
 import Dashboard from './Dashboard';
-import RoomsView from './RoomsView';
 
 const WelcomeView = () => {
   const { t } = useTranslation();
@@ -18,7 +18,7 @@ const WelcomeView = () => {
   return (
     <Stack flex={1} role="main" aria-label={t('ui.navigation.home')} sx={{ minHeight: 0, overflowX: 'hidden' }}>
       <Dashboard />
-      <RoomsView />
+      <Rooms />
     </Stack>
   );
 };

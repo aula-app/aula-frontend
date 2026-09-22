@@ -135,6 +135,10 @@
           "decision": "Approval",
           "reason": "Reason for rejection"
         }
+      },
+      "rooms": {
+        "singular": "Room",
+        "plural": "Rooms"
       }
     },
     "ui": {
@@ -255,9 +259,11 @@
       },
       "navigation": "Navigation menu",
       "moveToPhase": "Move to {{phase}}",
+      "roomPhase": "{{room}}: {{var}}",
       "phases": "Phase navigation",
       "sort": {
         "label": "Sort by",
+        "default": "Default order",
         "asc": "Sort ascending",
         "desc": "Sort descending",
         "created": "Creation date",
