@@ -21,7 +21,6 @@ const IdeaField: React.FC<Props> = ({
   room,
   defaultValues,
   onChange,
-  hasError = false,
   disabled = false,
   ...restOfProps
 }) => {

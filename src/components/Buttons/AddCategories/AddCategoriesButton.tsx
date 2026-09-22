@@ -29,7 +29,7 @@ export interface AddCategoryRefProps {
 }
 
 const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
-  ({ ideas = [], disabled = false, ...restOfProps }, ref) => {
+  ({ ideas = [], ...restOfProps }, ref) => {
     const { t } = useTranslation();
 
     const [open, setOpen] = useState(false);
