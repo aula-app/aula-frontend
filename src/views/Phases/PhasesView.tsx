@@ -29,7 +29,7 @@ const PhasesView = () => {
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [data, setData] = useState<IdeaType[]>([]);
-  const [edit, setEdit] = useState<IdeaType | boolean>();
+  const [, setEdit] = useState<IdeaType | boolean>();
 
   // Get phase-specific data source and title
   const phaseData = useMemo(() => {

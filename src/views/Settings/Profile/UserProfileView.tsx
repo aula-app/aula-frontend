@@ -23,9 +23,9 @@ const UserView = () => {
   const isSsoManaged = useSsoManaged();
   usePageTitle('pageTitles.settings.profile');
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [user, setUser] = useState<UserType>();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
 
   const fetchUser = useCallback(async () => {
     setLoading(true);

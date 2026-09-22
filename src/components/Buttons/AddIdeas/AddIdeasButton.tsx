@@ -29,7 +29,7 @@ const AddIdeasButton = forwardRef<HTMLButtonElement, Props>(({ ideas = [], onClo
 
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [roomIdeas, setIdeas] = useState<IdeaType[]>([]);
   const [selectedIdeas, setSelectedIdeas] = useState<IdeaType[]>(ideas);
 
