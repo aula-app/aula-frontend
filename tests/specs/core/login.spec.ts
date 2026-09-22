@@ -98,7 +98,7 @@ test('Login form', async ({ browser, dbInstanceCode, baselineLoaded: _ }) => {
     await page.fill('input[name="password"]', ADMIN_PASSWORD);
     await page.getByTestId('submit-login').click();
 
-    await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: 20000 });
+    await expect(page.getByTestId(TEST_IDS.SCOPE_TITLE)).toBeVisible({ timeout: 20000 });
   });
 
   await page.close();

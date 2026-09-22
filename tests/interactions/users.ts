@@ -72,7 +72,7 @@ export const login = async (page: Page, data: { username: string; password: stri
   await loginAttempt(page, data);
   await page.waitForLoadState('networkidle');
   await expect(page.getByTestId(TEST_IDS.TOAST_ERROR)).not.toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
-  await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: TIMEOUTS.FIVE_SECONDS });
+  await expect(page.getByTestId(TEST_IDS.SCOPE_TITLE)).toBeVisible({ timeout: TIMEOUTS.FIVE_SECONDS });
 };
 
 // Helper function to log out a user
@@ -100,7 +100,7 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
     await page.getByTestId('submit-set-password').click();
 
     // Check if we're on the home page (logged in) or need to login again
-    const isLoggedIn = await page.locator('#rooms-heading').isVisible();
+    const isLoggedIn = await page.getByTestId(TEST_IDS.SCOPE_TITLE).isVisible();
 
     if (!isLoggedIn) {
       console.log('⚠️ User not automatically logged in after password change, attempting manual login');
@@ -109,7 +109,7 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
       await page.fill('input[name="username"]', data.username);
       await page.fill('input[name="password"]', data.password);
       await page.getByTestId('submit-login').click();
-      await expect(page.locator('#rooms-heading')).toBeVisible();
+      await expect(page.getByTestId(TEST_IDS.SCOPE_TITLE)).toBeVisible();
     }
 
     console.log('✅ Successfully registered user:', data.username);
