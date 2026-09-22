@@ -1,7 +1,6 @@
-import { RoomType } from '@/types/Scopes';
 import { renderHook, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { useRoomPhaseCounts } from './useRoomPhaseCounts';
+import { useRoomCounts, useRoomPhaseCounts } from './useRoomPhaseCounts';
 
 const getIdeasByRoom = vi.fn();
 const getBoxesByPhase = vi.fn();
@@ -9,7 +8,6 @@ const getBoxesByPhase = vi.fn();
 vi.mock('@/services/ideas', () => ({ getIdeasByRoom: (...args: unknown[]) => getIdeasByRoom(...args) }));
 vi.mock('@/services/boxes', () => ({ getBoxesByPhase: (...args: unknown[]) => getBoxesByPhase(...args) }));
 
-const rooms = (...ids: string[]) => ids.map((hash_id) => ({ hash_id }) as RoomType);
 const boxesIn = (...phases: number[]) => phases.map((phase_id) => ({ phase_id }));
 
 beforeEach(() => {
@@ -22,14 +20,14 @@ describe('useRoomPhaseCounts', () => {
     getIdeasByRoom.mockResolvedValue({ data: [{}, {}, {}] });
     getBoxesByPhase.mockResolvedValue({ data: boxesIn(10, 10, 20, 40) });
 
-    const { result } = renderHook(() => useRoomPhaseCounts(rooms('r1')));
+    const { result } = renderHook(() => useRoomPhaseCounts(['r1']));
 
     await waitFor(() => expect(result.current.r1).toBeDefined());
     expect(result.current.r1).toEqual({ '0': 3, '10': 2, '20': 1, '30': 0, '40': 1 });
   });
 
   it('asks for every phase at once rather than one request per phase', async () => {
-    renderHook(() => useRoomPhaseCounts(rooms('r1')));
+    renderHook(() => useRoomPhaseCounts(['r1']));
 
     await waitFor(() => expect(getBoxesByPhase).toHaveBeenCalled());
     expect(getBoxesByPhase).toHaveBeenCalledTimes(1);
@@ -40,7 +38,7 @@ describe('useRoomPhaseCounts', () => {
     getIdeasByRoom.mockResolvedValue({ error_code: 2, data: false });
     getBoxesByPhase.mockResolvedValue({ error_code: 2, data: false });
 
-    const { result } = renderHook(() => useRoomPhaseCounts(rooms('r1')));
+    const { result } = renderHook(() => useRoomPhaseCounts(['r1']));
 
     await waitFor(() => expect(result.current.r1).toBeDefined());
     expect(result.current.r1).toEqual({ '0': 0, '10': 0, '20': 0, '30': 0, '40': 0 });
@@ -50,7 +48,7 @@ describe('useRoomPhaseCounts', () => {
     getIdeasByRoom.mockResolvedValue({ data: [{}] });
     getBoxesByPhase.mockResolvedValue({ error_code: 1, data: false });
 
-    const { result } = renderHook(() => useRoomPhaseCounts(rooms('r1')));
+    const { result } = renderHook(() => useRoomPhaseCounts(['r1']));
 
     await waitFor(() => expect(result.current.r1).toBeDefined());
     expect(result.current.r1).toEqual({ '0': 1 });
@@ -61,7 +59,7 @@ describe('useRoomPhaseCounts', () => {
       Promise.resolve({ data: room === 'r1' ? boxesIn(10) : boxesIn(30, 30) })
     );
 
-    const { result } = renderHook(() => useRoomPhaseCounts(rooms('r1', 'r2')));
+    const { result } = renderHook(() => useRoomPhaseCounts(['r1', 'r2']));
 
     await waitFor(() => expect(result.current.r2).toBeDefined());
     expect(result.current.r1?.['10']).toBe(1);
@@ -73,5 +71,38 @@ describe('useRoomPhaseCounts', () => {
 
     expect(getIdeasByRoom).not.toHaveBeenCalled();
     expect(getBoxesByPhase).not.toHaveBeenCalled();
+  });
+
+  it('refetches when the refresh key changes, but not on an unrelated rerender', async () => {
+    const { rerender } = renderHook(({ key }: { key: string }) => useRoomPhaseCounts(['r1'], key), {
+      initialProps: { key: '0' },
+    });
+
+    await waitFor(() => expect(getIdeasByRoom).toHaveBeenCalledTimes(1));
+
+    rerender({ key: '0' });
+    expect(getIdeasByRoom).toHaveBeenCalledTimes(1);
+
+    rerender({ key: '20' });
+    await waitFor(() => expect(getIdeasByRoom).toHaveBeenCalledTimes(2));
+  });
+});
+
+describe('useRoomCounts', () => {
+  it('returns the counts of the single room it was given', async () => {
+    getIdeasByRoom.mockResolvedValue({ data: [{}, {}] });
+    getBoxesByPhase.mockResolvedValue({ data: boxesIn(30) });
+
+    const { result } = renderHook(() => useRoomCounts('r1'));
+
+    await waitFor(() => expect(result.current).toBeDefined());
+    expect(result.current).toEqual({ '0': 2, '10': 0, '20': 0, '30': 1, '40': 0 });
+  });
+
+  it('asks for nothing without a room', () => {
+    const { result } = renderHook(() => useRoomCounts(undefined));
+
+    expect(result.current).toBeUndefined();
+    expect(getIdeasByRoom).not.toHaveBeenCalled();
   });
 });

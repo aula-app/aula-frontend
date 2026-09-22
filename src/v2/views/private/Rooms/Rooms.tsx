@@ -10,9 +10,9 @@ import Icon from '@/v2/components/ui/Icon/Icon';
 import ScopeTitle from '@/v2/components/ui/ScopeTitle';
 import ScrollList from '@/v2/components/ui/ScrollList';
 import { ListFilterConfig, useListFilter } from '@/v2/hooks/useListFilter';
+import { useRoomPhaseCounts } from '@/v2/hooks/useRoomPhaseCounts';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { useRoomPhaseCounts } from './useRoomPhaseCounts';
 import { useRooms } from './useRooms';
 
 const roomsFilterConfig: ListFilterConfig<RoomType> = {
@@ -34,8 +34,7 @@ const Rooms: React.FC = () => {
     setReversed,
   } = useListFilter(rooms, roomsFilterConfig, 'rooms');
 
-  // Keyed on the full list, not the filtered one, so searching does not refetch.
-  const counts = useRoomPhaseCounts(rooms);
+  const counts = useRoomPhaseCounts(rooms.map((room) => room.hash_id));
 
   return (
     <ListPageLayout

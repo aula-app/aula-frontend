@@ -28,8 +28,6 @@ function getClipPath(index: number, total: number): string {
   return `polygon(0% 0%, ${leftArrow}0% 100%, ${rightArrow})`;
 }
 
-// Same chevron as getClipPath, offset inward by RING_WIDTH so the gap to the wrapper
-// forms a uniform focus ring that traces the arrow.
 function getRingClipPath(index: number, total: number): string {
   const hasLeftArrow = index > 0;
   const hasRightArrow = index < total - 1;
@@ -60,7 +58,6 @@ function PhaseBar({ room, phase, counts, roomName }: PhaseBarProps) {
   const { t } = useTranslation();
   const [hoveredPhase, setHoveredPhase] = useState<string | null>(null);
 
-  // "10 idea boxes in discussion". Phase 0 has no sentence key, so it reads as its count alone.
   const countLabel = (displayPhase: `${RoomPhases}`, count?: number) => {
     if (count === undefined) return undefined;
     const scope = displayPhase === '0' ? 'ideas' : 'boxes';
@@ -70,7 +67,7 @@ function PhaseBar({ room, phase, counts, roomName }: PhaseBarProps) {
 
   return (
     <div
-      className="flex w-full overflow-hidden min-h-10 print:hidden"
+      className="@container flex w-full overflow-hidden min-h-10 print:hidden"
       role="navigation"
       aria-label={t('v2.ui.phases')}
       onMouseLeave={() => setHoveredPhase(null)}
@@ -88,7 +85,7 @@ function PhaseBar({ room, phase, counts, roomName }: PhaseBarProps) {
         return (
           <div
             key={displayPhase}
-            className={`-mr-4 last:mr-0 bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active has-[a:focus-visible]:bg-foreground transition-[flex] duration-300 ease-in-out ${isExpanded ? 'flex-3 z-10' : `${phase && index === displayPhases.length - 1 ? 'flex-[0.75]' : 'flex-1'} z-0`}`}
+            className={`-mr-4 last:mr-0 bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active has-[a:focus-visible]:bg-foreground transition-[flex] duration-300 ease-in-out ${isExpanded ? 'flex-2 z-10' : `${phase && index === displayPhases.length - 1 ? 'flex-1' : 'flex-1'} z-0`}`}
             style={{ clipPath: getClipPath(index, displayPhases.length) }}
           >
             <Link
@@ -97,7 +94,7 @@ function PhaseBar({ room, phase, counts, roomName }: PhaseBarProps) {
               aria-label={roomName ? t('v2.ui.roomPhase', { room: roomName, var: label }) : label}
               aria-current={isActive ? 'page' : undefined}
               data-testid={`link-to-phase-${displayPhase}`}
-              className={`flex items-center justify-center rounded-none h-10 w-full ${counts ? 'px-2' : 'px-6'} text-foreground no-underline bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active focus-visible:outline-none transition-colors duration-150`}
+              className={`flex items-center justify-center rounded-none h-10 w-full  text-foreground no-underline bg-${phaseType} hover:bg-${phaseType}-active active:bg-${phaseType}-active focus-visible:outline-none transition-colors duration-150`}
               style={{ clipPath: getRingClipPath(index, displayPhases.length) }}
               onMouseEnter={() => setHoveredPhase(displayPhase)}
               onFocus={() => setHoveredPhase(displayPhase)}
@@ -105,7 +102,7 @@ function PhaseBar({ room, phase, counts, roomName }: PhaseBarProps) {
               <Icon type={phaseType} size="1.25rem" aria-hidden="true" />
               {count !== undefined && <span className="pl-1.5 text-sm font-medium">{count}</span>}
               <span
-                className={`grid transition-[grid-template-columns] duration-300 ease-in-out ${isExpanded ? 'grid-cols-[1fr]' : 'grid-cols-[0fr]'}`}
+                className={`grid transition-[grid-template-columns] duration-300 ease-in-out ${isExpanded ? 'grid-cols-[0fr] @md:grid-cols-[1fr]' : 'grid-cols-[0fr]'}`}
               >
                 <span className="overflow-hidden text-ellipsis whitespace-nowrap text-sm font-medium pl-1.5">
                   {t(`phases.${phaseType}`)}

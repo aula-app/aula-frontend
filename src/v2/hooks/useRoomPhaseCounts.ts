@@ -1,6 +1,5 @@
 import { getBoxesByPhase } from '@/services/boxes';
 import { getIdeasByRoom } from '@/services/ideas';
-import { RoomType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { GenericResponse } from '@/services/requests';
 import { useCallback, useEffect, useState } from 'react';
@@ -12,26 +11,34 @@ const ALL_PHASES = -1;
 
 const BOX_PHASES = ['10', '20', '30', '40'] as const;
 
+// Ids and refresh key travel as one string: an inline array argument would refetch every render.
+const KEY_SEPARATOR = '|';
+
 // error_code 2 means "nothing found" — a room with no ideas or no boxes, not a failure.
 const failed = (response: GenericResponse) => !!response.error_code && response.error_code !== 2;
 
 /**
- * How much waits in each phase of each room, keyed by room hash_id: ideas in phase 0,
- * boxes in the rest. Two requests per room, both open to every role — the bulk endpoints
- * are restricted to admins and so cannot serve a student's room list.
+ * How much waits in each phase of each room, keyed by room hash_id: ideas in phase 0, boxes in the
+ * rest. Two requests per room rather than the bulk endpoints, which are restricted to admins.
+ *
+ * @param roomIds hash_ids of the rooms to count.
+ * @param refreshKey Changing it refetches.
  */
-export const useRoomPhaseCounts = (rooms: RoomType[]): Record<string, PhaseCounts> => {
+export const useRoomPhaseCounts = (
+  roomIds: string[],
+  refreshKey: string | number = ''
+): Record<string, PhaseCounts> => {
   const [counts, setCounts] = useState<Record<string, PhaseCounts>>({});
-  const roomIds = rooms.map((room) => room.hash_id).join(',');
+  const fetchKey = [refreshKey, ...roomIds].join(KEY_SEPARATOR);
 
   const fetchCounts = useCallback(async (): Promise<Record<string, PhaseCounts>> => {
-    if (!roomIds) return {};
+    const [, ...ids] = fetchKey.split(KEY_SEPARATOR);
+    if (!ids.length) return {};
 
     const entries = await Promise.all(
-      roomIds.split(',').map(async (hash_id): Promise<[string, PhaseCounts]> => {
+      ids.map(async (hash_id): Promise<[string, PhaseCounts]> => {
         const [ideas, boxes] = await Promise.all([getIdeasByRoom(hash_id), getBoxesByPhase(ALL_PHASES, hash_id)]);
 
-        // A phase left without a count reads as still loading, so a failed request adds none.
         const roomCounts: PhaseCounts = {};
 
         if (!failed(ideas)) roomCounts['0'] = Array.isArray(ideas.data) ? ideas.data.length : 0;
@@ -49,7 +56,7 @@ export const useRoomPhaseCounts = (rooms: RoomType[]): Record<string, PhaseCount
     );
 
     return Object.fromEntries(entries);
-  }, [roomIds]);
+  }, [fetchKey]);
 
   useEffect(() => {
     let active = true;
@@ -61,4 +68,11 @@ export const useRoomPhaseCounts = (rooms: RoomType[]): Record<string, PhaseCount
   }, [fetchCounts]);
 
   return counts;
+};
+
+/** The same counts for a single room, refetched whenever `refreshKey` changes. */
+export const useRoomCounts = (room_id?: string, refreshKey: string | number = ''): PhaseCounts | undefined => {
+  const counts = useRoomPhaseCounts(room_id ? [room_id] : [], refreshKey);
+
+  return room_id ? counts[room_id] : undefined;
 };

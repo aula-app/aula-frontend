@@ -2,6 +2,7 @@ import PhaseBar from '@/v2/components/ui/PhaseBar';
 import { getRoom } from '@/services/rooms';
 import { useAppStore } from '@/store/AppStore';
 import { RoomPhases } from '@/types/SettingsTypes';
+import { useRoomCounts } from '@/v2/hooks/useRoomPhaseCounts';
 import { phases } from '@/utils';
 import { useEffect } from 'react';
 import { Navigate, Outlet, useParams } from 'react-router-dom';
@@ -15,7 +16,8 @@ const RoomLayout = () => {
   // The phase-0 route is a literal path with no :phase param, so an absent one means Wild Ideas.
   const currentPhase = phase && isValidPhase(phase) ? phase : '0';
 
-  // The breadcrumb is the only place the room name surfaces on room pages
+  const counts = useRoomCounts(room_id, currentPhase);
+
   useEffect(() => {
     if (!room_id) return;
     getRoom(room_id).then((response) => {
@@ -33,7 +35,7 @@ const RoomLayout = () => {
 
   return (
     <div className="w-full h-full min-h-0 flex flex-col">
-      <PhaseBar room={room_id} phase={currentPhase} />
+      <PhaseBar room={room_id} phase={currentPhase} counts={counts} />
       <div className="flex-1 min-h-0">
         <Outlet />
       </div>
