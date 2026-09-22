@@ -6,12 +6,6 @@ import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
 import { BoxData } from '../../support/types';
 
-/**
- * Stale phase links
- *
- * The `:phase` segment is a snapshot of where the box was when the link was made, and
- * everything downstream reads it — so both views realign it on the box they landed on.
- */
 test('Stale phase links realign with the Box they point at', async ({ seededRoom, newPageFor }) => {
   const PHASES = { DISCUSSION: 10, APPROVAL: 20 } as const;
 

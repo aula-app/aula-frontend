@@ -103,10 +103,7 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
     });
   });
 
-  /**
-   * The room only offers ideas no box holds, so a removed idea becoming pickable again
-   * is what proves the detach reached the backend.
-   */
+  // The room only offers ideas no box holds, so being pickable again proves the detach landed.
   test('Admin assigns and removes Ideas from the Box card', async ({ seededRoom, newPageFor }) => {
     const userPage = await newPageFor('user');
     const adminPage = await newPageFor('admin');

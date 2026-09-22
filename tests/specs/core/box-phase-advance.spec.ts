@@ -6,13 +6,7 @@ import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
 import { BoxData } from '../../support/types';
 
-/**
- * Box Phase Advance
- *
- * A phase is spent when its countdown runs out (Discussion, Voting) or when every idea
- * has been ruled on (Approval). Only the second is reachable here: back-dating
- * phase_start needs DB access the tests do not have.
- */
+// The countdown route to a spent phase is untestable here: back-dating phase_start needs DB access.
 test('Box offers the next phase once every Idea is ruled on', async ({ seededRoom, newPageFor }) => {
   const PHASES = { DISCUSSION: 10, APPROVAL: 20, VOTING: 30 } as const;
 
