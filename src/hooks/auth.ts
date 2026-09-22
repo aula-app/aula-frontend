@@ -138,7 +138,7 @@ export const useConsentSync = (isAuthenticated: boolean, locationKey: string) =>
         action: 'HAS_CONSENT',
         payload: result.data !== 0,
       });
-    } catch (error) {
+    } catch {
       dispatch({
         action: 'HAS_CONSENT',
         payload: false,

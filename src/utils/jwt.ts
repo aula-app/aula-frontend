@@ -40,7 +40,7 @@ export function parseJwt(token: String): {
 
     // Parse the JSON string into an object
     return JSON.parse(jsonPayload);
-  } catch (e) {
+  } catch {
     // Return null if token is invalid or parsing fails
     return null;
   }

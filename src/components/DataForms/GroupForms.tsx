@@ -152,7 +152,7 @@ const GroupForms: React.FC<GroupFormsProps> = ({ defaultValues, onClose }) => {
             const userIds = response.data.map((user) => user.hash_id);
             setExistingUsers(userIds);
           }
-        } catch (error) {
+        } catch {
           // Error fetching group users
         } finally {
           setIsLoading(false);

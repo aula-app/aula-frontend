@@ -183,7 +183,7 @@ export const baseRequest = async <T = unknown>(
       count: response.count,
       error: null,
     };
-  } catch (e) {
+  } catch {
     return {
       data: null,
       count: null,
