@@ -135,6 +135,10 @@
           "decision": "Freigabe",
           "reason": "Grund für die Ablehnung"
         }
+      },
+      "rooms": {
+        "singular": "Raum",
+        "plural": "Räume"
       }
     },
     "ui": {
@@ -255,9 +259,11 @@
       },
       "navigation": "Navigationsmenü",
       "moveToPhase": "Zu {{phase}} wechseln",
+      "roomPhase": "{{room}}: {{var}}",
       "phases": "Phasennavigation",
       "sort": {
         "label": "Sortieren nach",
+        "default": "Standardreihenfolge",
         "asc": "Aufsteigend sortieren",
         "desc": "Absteigend sortieren",
         "created": "Erstelldatum",
