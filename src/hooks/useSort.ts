@@ -83,3 +83,17 @@ export function createImportanceSortFunction<T extends { order_importance: numbe
 export function createDateSortFunction<T extends { created: string }>(): SortFunction<T> {
   return (a, b) => new Date(b.created).getTime() - new Date(a.created).getTime();
 }
+
+/**
+ * Sort function for rooms by type and then by name
+ */
+export function createRoomSortFunction<T extends { type: 0 | 1; room_name: string }>(): SortFunction<T> {
+  return (a, b) => {
+    // First sort by type (0 before 1)
+    if (a.type !== b.type) {
+      return a.type - b.type;
+    }
+    // Then sort by name alphabetically
+    return a.room_name.localeCompare(b.room_name);
+  };
+}

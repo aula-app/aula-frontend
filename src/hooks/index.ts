@@ -6,6 +6,7 @@ export * from './layout';
 export * from './useAndroidBackButton';
 export * from './useDeepLinks';
 export * from './useFilter';
+export * from './useFilters';
 export * from './useMenuKeyboardNavigation';
 export * from './useRipple';
 export * from './useSort';
