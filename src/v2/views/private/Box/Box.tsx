@@ -267,7 +267,11 @@ const Box: React.FC = () => {
 
                 {archivedIdeas.length > 0 && (
                   <li>
-                    <section aria-labelledby={archiveId} className="flex flex-col gap-4 pt-4 border-t border-neutral">
+                    <section
+                      aria-labelledby={archiveId}
+                      data-testid="box-rejected-ideas"
+                      className="flex flex-col gap-4 pt-4 border-t border-neutral"
+                    >
                       <h2 id={archiveId} className="text-sm font-semibold text-muted">
                         {t('phases.rejected', { var: archivedIdeas.length })}
                       </h2>

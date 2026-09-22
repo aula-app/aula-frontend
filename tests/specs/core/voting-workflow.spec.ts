@@ -65,8 +65,8 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
     await adminPage.getByTestId('box-form-cancel').click();
   });
 
-  // Assigning existing Ideas to a Box lives in Settings; the box card's edit dialog
-  // only covers room/name/description/phase.
+  // Arranged through Settings; assigning from the box card's own edit dialog is covered
+  // by 'Admin assigns and removes Ideas from the Box card' in boxes.spec.ts.
   await test.step("Admin adds both user's Ideas to Box", async () => {
     await boxes.edit(adminPage, { ...box, ideas: [idea1, idea2] } as BoxData);
   });
@@ -203,5 +203,52 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
   await test.step('Verify results section is displayed', async () => {
     // The distribution itself — exact counts may vary, so only its presence is asserted
     await expect(userPage.getByTestId(TEST_IDS.VOTE_RESULTS)).toBeVisible();
+  });
+
+  await test.step('Rejected Idea is archived, out of the Box list proper', async () => {
+    await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.RESULTS);
+    await navigation.clickOnPageItem(userPage, box.name);
+
+    // A rejection ends an idea's run: from voting on it is out of every count, and
+    // the results phase keeps it in its own archive below the ideas still standing.
+    const archive = userPage.getByTestId('box-rejected-ideas');
+    await expect(archive).toBeVisible();
+    await expect(archive.getByTestId(`idea-${idea2.name}`)).toBeVisible();
+    await expect(archive.getByTestId(`idea-${idea1.name}`)).toHaveCount(0);
+  });
+
+  await test.step('Admin marks the surviving Idea as taken forward', async () => {
+    await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.RESULTS);
+    await navigation.clickOnPageItem(adminPage, box.name);
+
+    const idea1Card = adminPage.getByTestId(`idea-${idea1.name}`);
+    await expect(idea1Card).toBeVisible();
+    await idea1Card.click();
+    await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
+
+    const winnerButton = adminPage.getByTestId(TEST_IDS.WINNER_BUTTON);
+    await expect(winnerButton).toBeVisible();
+    await winnerButton.click();
+    await expect(winnerButton).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  await test.step('The verdict survives a reload', async () => {
+    // The bar decides optimistically and reverts on failure, so only a reload shows
+    // whether the verdict was actually written.
+    await adminPage.reload();
+    await expect(adminPage.getByTestId(TEST_IDS.WINNER_BUTTON)).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  await test.step('A User without setWinner permission only reads the outcome', async () => {
+    await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.RESULTS);
+    await navigation.clickOnPageItem(userPage, box.name);
+
+    const idea1Card = userPage.getByTestId(`idea-${idea1.name}`);
+    await expect(idea1Card).toBeVisible();
+    await idea1Card.click();
+    await userPage.waitForURL((url) => url.pathname.includes('/idea'));
+
+    await expect(userPage.getByTestId(TEST_IDS.VOTE_RESULTS)).toBeVisible();
+    await expect(userPage.getByTestId(TEST_IDS.WINNER_BUTTON)).toBeHidden();
   });
 });

@@ -1,6 +1,8 @@
+import { TEST_IDS } from '../../../src/test-ids';
 import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
 import * as boxes from '../../interactions/boxes';
+import * as formInteractions from '../../interactions/forms';
 import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
 import { BoxData } from '../../support/types';
@@ -65,8 +67,8 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
       await boxes.create(adminPage, box);
     });
 
-    // Assigning an existing Idea to a Box lives in Settings; the box card's edit
-    // dialog only covers room/name/description/phase.
+    // Arranged through Settings; assigning from the box card's own edit dialog is
+    // covered by 'Admin assigns and removes Ideas from the Box card' below.
     await test.step('Admin assigns Idea to a Box', async () => {
       const boxNewPhaseObject = { ...box, ideas: [idea] } as BoxData;
 
@@ -99,6 +101,88 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
     await test.step('User verify Box is no longer visible', async () => {
       await navigation.goToRoomPhase(userPage, seededRoom.name, 10);
       await expect(userPage.getByText(box.name)).toBeHidden();
+    });
+  });
+
+  /**
+   * The v2 BoxForm assigns ideas from the box card itself, writing the difference
+   * between what was picked and what the box already held (see syncBoxIdeas). The
+   * removed idea has to become pickable again, because the room only offers ideas
+   * that no box holds.
+   */
+  test('Admin assigns and removes Ideas from the Box card', async ({ seededRoom, newPageFor }) => {
+    const userPage = await newPageFor('user');
+    const adminPage = await newPageFor('admin');
+
+    const box = entities.createBox('box-card-assignment', seededRoom);
+    const keptIdea = entities.createIdea('stays-in-the-box');
+    const droppedIdea = entities.createIdea('leaves-the-box');
+
+    const openEditDialog = async () => {
+      const card = adminPage.getByTestId(TEST_IDS.BOX_CARD).filter({ hasText: box.name });
+      await card.getByTestId(TEST_IDS.BOX_MORE_MENU).click();
+      await card.getByTestId(TEST_IDS.EDIT_BUTTON).click();
+      await expect(adminPage.getByTestId('box-form')).toBeVisible();
+    };
+
+    // The autocomplete lists the room's unassigned ideas; the picked ones sit in the
+    // form's own list, the only plain list inside it.
+    const pickedIdeas = () => adminPage.getByTestId('box-form').getByRole('list');
+
+    await test.step('User creates two Ideas in the Room', async () => {
+      await navigation.goToRoom(userPage, seededRoom.name);
+      await ideas.create(userPage, keptIdea);
+      await ideas.create(userPage, droppedIdea);
+    });
+
+    await test.step('Admin creates an empty Box in the Room', async () => {
+      await boxes.create(adminPage, box);
+    });
+
+    await test.step('Admin adds both Ideas from the Box card edit dialog', async () => {
+      await boxes.open(adminPage, seededRoom, 10, box);
+      await openEditDialog();
+
+      await formInteractions.pickAutocompleteOption(adminPage, 'box-form-ideas', keptIdea.name);
+      await formInteractions.pickAutocompleteOption(adminPage, 'box-form-ideas', droppedIdea.name);
+      await expect(pickedIdeas().getByRole('listitem')).toHaveCount(2);
+
+      await formInteractions.clickButton(adminPage, 'box-form-submit');
+      await expect(adminPage.getByTestId('box-form')).toBeHidden();
+    });
+
+    await test.step('Both Ideas are in the Box', async () => {
+      await boxes.open(adminPage, seededRoom, 10, box);
+      await expect(adminPage.getByTestId(`idea-${keptIdea.name}`)).toBeVisible();
+      await expect(adminPage.getByTestId(`idea-${droppedIdea.name}`)).toBeVisible();
+    });
+
+    await test.step('Admin removes one Idea in the same dialog', async () => {
+      await openEditDialog();
+      await expect(pickedIdeas().getByRole('listitem')).toHaveCount(2);
+
+      await pickedIdeas().getByRole('listitem').filter({ hasText: droppedIdea.name }).getByRole('button').click();
+      await expect(pickedIdeas().getByRole('listitem')).toHaveCount(1);
+
+      await formInteractions.clickButton(adminPage, 'box-form-submit');
+      await expect(adminPage.getByTestId('box-form')).toBeHidden();
+    });
+
+    await test.step('Only the kept Idea is left in the Box', async () => {
+      await boxes.open(adminPage, seededRoom, 10, box);
+      await expect(adminPage.getByTestId(`idea-${keptIdea.name}`)).toBeVisible();
+      await expect(adminPage.getByTestId(`idea-${droppedIdea.name}`)).toHaveCount(0);
+    });
+
+    await test.step('The removed Idea can be picked again', async () => {
+      await openEditDialog();
+
+      const field = adminPage.getByTestId('box-form-ideas');
+      await field.fill(droppedIdea.name);
+      await expect(adminPage.getByRole('option', { name: droppedIdea.name })).toBeVisible();
+
+      await formInteractions.clickButton(adminPage, 'box-form-cancel');
+      await expect(adminPage.getByTestId('box-form')).toBeHidden();
     });
   });
 });

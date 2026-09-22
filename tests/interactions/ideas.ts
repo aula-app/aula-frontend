@@ -78,6 +78,24 @@ const createV1 = async (page: Page, idea: types.IdeaData) => {
   await expect(page.getByTestId('add-idea-form')).toBeHidden();
 };
 
+/** Opens an Idea from the Box page it is listed on. */
+export const openInBox = async (page: Page, idea: types.IdeaData) => {
+  const card = page.getByTestId(`idea-${idea.name}`);
+  await expect(card).toBeVisible();
+  await card.click();
+  await page.waitForURL((url) => url.pathname.includes('/idea/'));
+};
+
+/** Approves an Idea from its own page. Approving takes effect on click — only a rejection asks for more. */
+export const approve = async (page: Page, idea: types.IdeaData) => {
+  await openInBox(page, idea);
+
+  const approveButton = page.getByTestId(TEST_IDS.APPROVE_BUTTON);
+  await expect(approveButton).toBeVisible();
+  await approveButton.click();
+  await expect(approveButton).toHaveAttribute('aria-pressed', 'true');
+};
+
 export const remove = async (
   page: Page, //
   room: types.RoomData,
