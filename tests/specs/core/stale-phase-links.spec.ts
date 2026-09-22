@@ -9,10 +9,8 @@ import { BoxData } from '../../support/types';
 /**
  * Stale phase links
  *
- * The `:phase` segment of a box or idea URL is a snapshot of where the box was when
- * the link was made, and goes stale as soon as the box is moved on. Everything
- * downstream reads the param — idea styling, the approval bar, the nested idea route —
- * so both views realign the URL on the box they actually landed on.
+ * The `:phase` segment is a snapshot of where the box was when the link was made, and
+ * everything downstream reads it — so both views realign it on the box they landed on.
  */
 test('Stale phase links realign with the Box they point at', async ({ seededRoom, newPageFor }) => {
   const PHASES = { DISCUSSION: 10, APPROVAL: 20 } as const;
@@ -72,8 +70,7 @@ test('Stale phase links realign with the Box they point at', async ({ seededRoom
   });
 
   await test.step('The realigned Idea page is the one the new phase calls for', async () => {
-    // The approval bar only shows in phase 20, so its presence proves the page is
-    // reading the box's phase rather than the stale one the link carried.
+    // The approval bar only renders in phase 20.
     await expect(adminPage.getByTestId(TEST_IDS.APPROVE_BUTTON)).toBeVisible();
   });
 });

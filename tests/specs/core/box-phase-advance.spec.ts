@@ -9,11 +9,9 @@ import { BoxData } from '../../support/types';
 /**
  * Box Phase Advance
  *
- * A box card offers the next phase once the current one has run its course, so a
- * moderator can move it on without going through Box Settings. A phase is spent
- * either when its countdown runs out (Discussion, Voting) or when every idea in it
- * has been ruled on (Approval) — only the second is reachable through the UI, since
- * back-dating phase_start needs DB access the tests do not have.
+ * A phase is spent when its countdown runs out (Discussion, Voting) or when every idea
+ * has been ruled on (Approval). Only the second is reachable here: back-dating
+ * phase_start needs DB access the tests do not have.
  */
 test('Box offers the next phase once every Idea is ruled on', async ({ seededRoom, newPageFor }) => {
   const PHASES = { DISCUSSION: 10, APPROVAL: 20, VOTING: 30 } as const;

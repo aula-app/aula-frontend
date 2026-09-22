@@ -45,9 +45,7 @@ const openSelectDropdown = async (page: Page, testId: string) => {
   const trigger = isRealInput ? namedInput : field;
   const list = page.getByTestId(`${testId}-list`);
 
-  // The popup is mounted on click, so a click landing while the select is still
-  // settling (options loading, re-render) opens nothing. Retried once, since a
-  // second click on an open popup would close it again.
+  // Guarded retry: a second click on an already-open popup would close it.
   await trigger.click();
   try {
     await list.waitFor({ state: 'visible', timeout: TIMEOUTS.THREE_SECONDS });
@@ -84,10 +82,7 @@ export const selectAutocompleteOption = async (page: Page, testId: string, optio
   await expect(displayedValue).toHaveValue(optionLabel);
 };
 
-/**
- * Picks an option in a v2 AutocompleteInput by typing part of its label. Unlike the MUI
- * autocomplete above, the field itself carries the testId and the listbox is built from roles.
- */
+/** Picks an option in a v2 AutocompleteInput, where the testId is on the field itself. */
 export const pickAutocompleteOption = async (page: Page, testId: string, optionLabel: string) => {
   const field = page.getByTestId(testId);
   await expect(field).toBeVisible();

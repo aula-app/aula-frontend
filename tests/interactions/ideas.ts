@@ -86,7 +86,7 @@ export const openInBox = async (page: Page, idea: types.IdeaData) => {
   await page.waitForURL((url) => url.pathname.includes('/idea/'));
 };
 
-/** Approves an Idea from its own page. Approving takes effect on click — only a rejection asks for more. */
+/** Approves an Idea from its own page. */
 export const approve = async (page: Page, idea: types.IdeaData) => {
   await openInBox(page, idea);
 

@@ -67,8 +67,7 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
       await boxes.create(adminPage, box);
     });
 
-    // Arranged through Settings; assigning from the box card's own edit dialog is
-    // covered by 'Admin assigns and removes Ideas from the Box card' below.
+    // Assignment from the box card's own dialog is covered below.
     await test.step('Admin assigns Idea to a Box', async () => {
       const boxNewPhaseObject = { ...box, ideas: [idea] } as BoxData;
 
@@ -105,10 +104,8 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
   });
 
   /**
-   * The v2 BoxForm assigns ideas from the box card itself, writing the difference
-   * between what was picked and what the box already held (see syncBoxIdeas). The
-   * removed idea has to become pickable again, because the room only offers ideas
-   * that no box holds.
+   * The room only offers ideas no box holds, so a removed idea becoming pickable again
+   * is what proves the detach reached the backend.
    */
   test('Admin assigns and removes Ideas from the Box card', async ({ seededRoom, newPageFor }) => {
     const userPage = await newPageFor('user');
@@ -125,8 +122,7 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
       await expect(adminPage.getByTestId('box-form')).toBeVisible();
     };
 
-    // The autocomplete lists the room's unassigned ideas; the picked ones sit in the
-    // form's own list, the only plain list inside it.
+    // The picked ideas are the only plain list in the form; the autocomplete's is a listbox.
     const pickedIdeas = () => adminPage.getByTestId('box-form').getByRole('list');
 
     await test.step('User creates two Ideas in the Room', async () => {
