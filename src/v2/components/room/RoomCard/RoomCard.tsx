@@ -26,7 +26,7 @@ const RoomCard = ({ room, counts }: RoomCardProps) => {
   return (
     <div
       data-testid={TEST_IDS.ROOM_CARD}
-      className="flex flex-col overflow-hidden rounded-2xl border border-secondary bg-background focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-foreground [&_a:focus-visible]:outline-none"
+      className="flex flex-col overflow-hidden rounded-2xl bg-surface focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-foreground [&_a:focus-visible]:outline-none"
     >
       <Link
         to={`/room/${room.hash_id}/phase/0`}
