@@ -2,15 +2,10 @@ import { MergeCandidate } from '@/services/idpMigration';
 import { useEffect, useState } from 'react';
 import { isAulaOnly, isProviderOnly } from './candidates';
 
-/** Clicking inside anything carrying this attribute does not drop the pick. */
+/** Clicks inside this keep the pick. */
 const KEEPS_PICK = '[data-keeps-pick]';
 
-/**
- * Picking a record up and dropping it on the opposite side's free half.
- *
- * A pick is held here rather than on the row so it survives paging: the aula
- * record and the provider record it belongs to are rarely on the same page.
- */
+/** Held here, not on the row, so a pick survives paging. */
 export const useMatching = (onAssign: (row: MergeCandidate, localId: number | null) => void) => {
   const [picked, setPicked] = useState<MergeCandidate | null>(null);
   const [over, setOver] = useState<number | null>(null);
@@ -37,7 +32,6 @@ export const useMatching = (onAssign: (row: MergeCandidate, localId: number | nu
 
   const isPicked = (row: MergeCandidate) => picked?.id === row.id;
 
-  /** Only the opposite side's free half can take the pick. */
   const isTarget = (row: MergeCandidate) =>
     !!picked &&
     !isPicked(row) &&
@@ -46,7 +40,7 @@ export const useMatching = (onAssign: (row: MergeCandidate, localId: number | nu
   const select = (row: MergeCandidate) => setPicked(row);
   const pick = (row: MergeCandidate) => setPicked(isPicked(row) ? null : row);
 
-  /** Either drag direction lands on the same call: the provider row is repointed. */
+  /** Either direction repoints the provider row. */
   const place = (target: MergeCandidate) => {
     if (!picked) return;
 

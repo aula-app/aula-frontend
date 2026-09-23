@@ -22,9 +22,21 @@
         "connectReturned": "Signed in at the provider. Your aula account is now linked and the school is identified.",
         "reviewWarning": "Please check these matches. A wrong merge gives one person another's account, including everything they have written.",
         "rooms": "Classes and rooms",
+        "steps": "Review steps",
+        "filterRoom": "Class",
+        "allRooms": "All classes",
+        "filterPerson": "Person",
+        "allPeople": "Everybody",
+        "members_one": "{{count}} person",
+        "members_other": "{{count}} people",
+        "showMembers": "Show people",
+        "memberKind": {
+          "merge": "matched",
+          "create": "only at the provider",
+          "keep": "only in aula"
+        },
         "users": "People",
         "search": "Search",
-        "willBeCreated": "will be created",
         "staysInAula": "stays as it is",
         "progressTitle": "Progress",
         "progressBody": "{{linked}} accounts linked, {{remaining}} still to go.",
@@ -37,10 +49,6 @@
         "state": {
           "confident": "confident",
           "ambiguous": "ambiguous",
-          "none": "no match",
-          "notLinked": "will not be linked",
-          "orphaned": "Nobody will be able to sign in to this account.",
-          "emptyUser": "An empty account will be created.",
           "pseudonym": "pseudonym only"
         },
         "columns": {
@@ -53,6 +61,7 @@
           "connect": "Connect",
           "prepare": "Prepare",
           "apply": "Apply matches and import",
+          "continue": "Save and continue",
           "reset": "Reset",
           "refresh": "Refresh",
           "open": "Review",
@@ -101,6 +110,15 @@
         },
         "guide": "Each row is an aula record, its match at the provider, and the account you end up with. Drag a card onto an empty slot, or select it and pick where it goes, to match them by hand. A row holding both sides will be merged; unlink it to keep the two accounts apart.",
         "resetWarning": "Resetting discards every match you have made and rebuilds the table from the provider’s data, exactly as it was at the start."
+      }
+    },
+    "form": {
+      "validation": {
+        "required": "This field is required"
+      },
+      "password": {
+        "show": "Show password",
+        "hide": "Hide password"
       }
     }
   },

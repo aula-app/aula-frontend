@@ -1,31 +1,36 @@
 import { localStorageGet } from '@/utils';
 
-/**
- * Migrating a school that already uses aula onto an identity provider.
- *
- * Everything here is admin-only on the backend: these calls decide which
- * accounts end up owned by which people.
- */
-
 export type MigrationStatus = 'flagged' | 'connected' | 'reviewing' | 'importing' | 'linking' | 'completed' | null;
 
 export type CandidateKind = 'user' | 'room';
 
 export type CandidateOutcome = 'confident' | 'ambiguous' | 'none';
 
+export interface RoomRef {
+  id: number;
+  name: string;
+}
+
+export interface GroupRef {
+  id: string;
+  name: string;
+}
+
 export interface MergeCandidate {
   id: number;
   kind: CandidateKind;
-  /** Null for an account that exists in aula alone. */
   idp_id: string | null;
   idp_name: string | null;
-  /** A pseudonym can never be matched by name — the review has to say why. */
   idp_name_kind: 'real' | 'pseudonym' | null;
-  /** Null for someone who exists on the provider alone. */
   local_id: number | null;
   local_name: string | null;
-  /** Users only, and aula only: a room has one name, and the provider has no display name for anybody. */
+  /** Users only. */
   local_displayname?: string | null;
+  local_realname?: string | null;
+  local_avatar?: string | null;
+  /** Users only. */
+  local_rooms?: RoomRef[] | null;
+  idp_groups?: GroupRef[] | null;
   outcome: CandidateOutcome;
   decision: 'merge' | 'create' | null;
 }
@@ -66,19 +71,13 @@ const request = async <T>(path: string, init: RequestInit = {}): Promise<T | nul
   }
 };
 
-/**
- * Where to send the admin so they can prove who they are at the provider.
- *
- * This is what establishes which school the tenant is: the id comes from their
- * own token rather than from anyone choosing it.
- */
 export const startIdpConnect = async (): Promise<string | null> => {
   const response = await request<{ url: string }>('/api/v2/auth/idp/connect');
 
   return response?.url ?? null;
 };
 
-/** Build a fresh proposal, discarding any earlier one. */
+/** Discards any earlier proposal. */
 export const buildProposal = async (): Promise<Record<string, number> | null> => {
   const response = await request<{ counts: Record<string, number> }>('/api/v2/auth/idp/merge-proposal', {
     method: 'POST',
@@ -90,24 +89,39 @@ export const buildProposal = async (): Promise<Record<string, number> | null> =>
 export const getProposal = async (params: {
   kind?: CandidateKind;
   bucket?: 'merges' | 'idp_only' | 'aula_only';
-  search?: string;
   page?: number;
   perPage?: number;
 }): Promise<CandidatePage | null> => {
   const query = new URLSearchParams();
   if (params.kind) query.set('kind', params.kind);
   if (params.bucket) query.set('bucket', params.bucket);
-  if (params.search) query.set('search', params.search);
   if (params.page) query.set('page', String(params.page));
   query.set('per_page', String(params.perPage ?? 50));
 
   return request<CandidatePage>(`/api/v2/auth/idp/merge-proposal?${query.toString()}`);
 };
 
-/**
- * Record what the admin decided. `local_id` repoints a row, which is the only
- * way to match somebody the name comparison could not reach.
- */
+/** Backend limit. */
+const MAX_PER_PAGE = 200;
+
+export const getAllProposals = async (kind: CandidateKind): Promise<MergeCandidate[] | null> => {
+  const first = await getProposal({ kind, page: 1, perPage: MAX_PER_PAGE });
+
+  if (!first) return null;
+
+  const pageCount = Math.ceil(first.total / MAX_PER_PAGE);
+  const rest = await Promise.all(
+    Array.from({ length: Math.max(pageCount - 1, 0) }, (_, index) =>
+      getProposal({ kind, page: index + 2, perPage: MAX_PER_PAGE })
+    )
+  );
+
+  if (rest.includes(null)) return null;
+
+  return [first, ...rest].flatMap((page) => page?.data ?? []);
+};
+
+/** `local_id` repoints a row at another aula record. */
 export const saveDecisions = async (
   decisions: Array<{ id: number; decision: 'merge' | 'create' | null; local_id?: number | null }>
 ): Promise<boolean> => {
@@ -119,12 +133,7 @@ export const saveDecisions = async (
   return response?.success === true;
 };
 
-/**
- * Stamp the confirmed pairings and start the import.
- *
- * Returns the per-row problems when the backend refuses: a proposal that would
- * fold two people into one account is rejected whole rather than half-applied.
- */
+/** Rejected whole when any row is invalid; returns the per-row problems. */
 export const applyProposal = async (): Promise<
   { ok: true; applied: Record<string, number> } | { ok: false; problems: Record<string, string> }
 > => {
@@ -147,13 +156,7 @@ export const applyProposal = async (): Promise<
 export const getMigrationProgress = async (): Promise<MigrationProgress | null> =>
   request<MigrationProgress>('/api/v2/auth/idp/migration-progress');
 
-/**
- * Which identity provider this school syncs from, if any.
- *
- * Held for the life of the page: it is a property of the school and cannot
- * change under a signed-in session, and the users table would otherwise ask
- * once per rendered row.
- */
+/** Cached for the page's lifetime: it cannot change within a session. */
 let providerPromise: Promise<string | null> | null = null;
 
 export const getIdpProvider = (): Promise<string | null> => {
@@ -164,13 +167,7 @@ export const getIdpProvider = (): Promise<string | null> => {
   return providerPromise;
 };
 
-/**
- * Finish an SSO login as somebody who has no aula account yet.
- *
- * Carries no bearer token on purpose — the point is that this person has no
- * aula credentials, and the one-shot link token is the only thing proving they
- * just authenticated at the provider.
- */
+/** No bearer token: the one-shot link token is the only credential. */
 export const declineAccountClaim = async (ssoLinkToken: string): Promise<string | null> => {
   try {
     const response = await fetch(`${apiUrl()}/api/v2/auth/sso/link/decline`, {

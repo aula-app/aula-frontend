@@ -108,6 +108,7 @@
 
   /* Neutral surface + secondary text, from the v2 palette. */
   --color-surface: hsl(215, 10%, 95%);
+  --color-foreground: hsl(236, 42%, 15%);
   --color-muted: hsl(215, 10%, 30%);
 
   --color-text-primary: hsl(236.17, 42%, 22%);
@@ -216,6 +217,7 @@
   --color-requests: hsl(0, 0%, 36%);
 
   --color-surface: hsl(215, 25%, 10%);
+  --color-foreground: hsl(215, 20%, 95%);
   --color-muted: hsl(215, 15%, 75%);
 
   --color-text-primary: hsl(0, 0%, 100%);
@@ -326,6 +328,7 @@
   --color-requests: var(--color-requests);
 
   --color-surface: var(--color-surface);
+  --color-foreground: var(--color-foreground);
   --color-muted: var(--color-muted);
 
   --color-text-primary: var(--color-text-primary);

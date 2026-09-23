@@ -22,9 +22,21 @@
         "connectReturned": "Beim Anbieter angemeldet. Dein aula-Konto ist jetzt verknüpft und die Schule erkannt.",
         "reviewWarning": "Bitte prüfe die Zuordnungen. Eine falsche Zusammenführung gibt einer Person das Konto einer anderen — inklusive aller Beiträge.",
         "rooms": "Klassen und Räume",
+        "steps": "Schritte der Prüfung",
+        "filterRoom": "Klasse",
+        "allRooms": "Alle Klassen",
+        "filterPerson": "Person",
+        "allPeople": "Alle Personen",
+        "members_one": "{{count}} Person",
+        "members_other": "{{count}} Personen",
+        "showMembers": "Personen anzeigen",
+        "memberKind": {
+          "merge": "zugeordnet",
+          "create": "nur beim Anbieter",
+          "keep": "nur in aula"
+        },
         "users": "Personen",
         "search": "Suchen",
-        "willBeCreated": "wird neu angelegt",
         "staysInAula": "bleibt unverändert",
         "progressTitle": "Fortschritt",
         "progressBody": "{{linked}} Konten verknüpft, {{remaining}} noch offen.",
@@ -37,10 +49,6 @@
         "state": {
           "confident": "eindeutig",
           "ambiguous": "mehrdeutig",
-          "none": "kein Treffer",
-          "notLinked": "wird nicht verknüpft",
-          "orphaned": "Niemand kann sich mehr in diesem Konto anmelden.",
-          "emptyUser": "Es wird ein leeres Konto angelegt.",
           "pseudonym": "nur Pseudonym"
         },
         "columns": {
@@ -53,6 +61,7 @@
           "connect": "Verbinden",
           "prepare": "Vorbereiten",
           "apply": "Zuordnungen übernehmen und importieren",
+          "continue": "Speichern und weiter",
           "reset": "Zurücksetzen",
           "refresh": "Aktualisieren",
           "open": "Prüfen",
@@ -101,6 +110,15 @@
         },
         "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel –, um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
         "resetWarning": "Beim Zurücksetzen gehen alle von Ihnen vorgenommenen Zuordnungen verloren. Die Tabelle wird aus den Daten des Anbieters neu aufgebaut, genau wie zu Beginn."
+      }
+    },
+    "form": {
+      "validation": {
+        "required": "Dieses Feld ist erforderlich"
+      },
+      "password": {
+        "show": "Passwort anzeigen",
+        "hide": "Passwort verbergen"
       }
     }
   },

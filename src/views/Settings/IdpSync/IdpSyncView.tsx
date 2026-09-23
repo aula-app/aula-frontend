@@ -2,8 +2,8 @@ import {
   applyProposal,
   buildProposal,
   CandidateKind,
+  getAllProposals,
   getMigrationProgress,
-  getProposal,
   MergeCandidate,
   MigrationProgress,
   saveDecisions,
@@ -13,13 +13,16 @@ import { completeSsoLink } from '@/services/sso';
 import { localStorageGet } from '@/utils';
 import Icon from '@/components/new/Icon/Icon';
 import Button from '@/v2/components/button/Button';
+import Tabs from '@/v2/components/ui/Tabs';
 import Alert from '@/v2/components/ui/Alert';
 import Dialog from '@/v2/components/ui/Dialog';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
-import { useCallback, useEffect, useId, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
+import CandidateFilter from './CandidateFilter';
 import ReviewTable from './ReviewTable';
+import { arrange, membersByRoom, realName, resultName, searchRows } from './ReviewTable/candidates';
 
 const PER_PAGE = 50;
 
@@ -32,7 +35,7 @@ const IdpSyncView: React.FC = () => {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
-  // Outlives `asking` so the dialog keeps its text while it animates out.
+  // Outlives `asking` so the dialog keeps its text while closing.
   const [confirming, setConfirming] = useState<'apply' | 'reset' | null>(null);
   const [asking, setAsking] = useState(false);
   const confirmBodyId = useId();
@@ -42,26 +45,22 @@ const IdpSyncView: React.FC = () => {
     setAsking(true);
   };
 
+  // All rows: memberships are derived from them.
   const [rows, setRows] = useState<Record<CandidateKind, MergeCandidate[]>>({ room: [], user: [] });
-  const [totals, setTotals] = useState<Record<CandidateKind, number>>({ room: 0, user: 0 });
   const [pages, setPages] = useState<Record<CandidateKind, number>>({ room: 1, user: 1 });
   const [search, setSearch] = useState<Record<CandidateKind, string>>({ room: '', user: '' });
+  const [roomFilter, setRoomFilter] = useState<number | null>(null);
+  const [personFilter, setPersonFilter] = useState<number | null>(null);
 
   const refreshProgress = useCallback(async () => {
     setProgress(await getMigrationProgress());
   }, []);
 
-  const loadKind = useCallback(
-    async (kind: CandidateKind) => {
-      const page = await getProposal({ kind, page: pages[kind], search: search[kind], perPage: PER_PAGE });
+  const loadKind = useCallback(async (kind: CandidateKind) => {
+    const all = await getAllProposals(kind);
 
-      if (!page) return;
-
-      setRows((current) => ({ ...current, [kind]: page.data }));
-      setTotals((current) => ({ ...current, [kind]: page.total }));
-    },
-    [pages, search]
-  );
+    if (all) setRows((current) => ({ ...current, [kind]: all }));
+  }, []);
 
   useEffect(() => {
     refreshProgress();
@@ -91,13 +90,12 @@ const IdpSyncView: React.FC = () => {
     const jwt = localStorageGet('token') ?? '';
 
     completeSsoLink(apiUrl, linkToken, jwt).then(async (result) => {
-      // Spent either way; left in the URL it turns every reload into a failed retry.
+      // One-shot token: drop it so a reload does not retry.
       setSearchParams({}, { replace: true });
 
       const current = await getMigrationProgress();
       setProgress(current);
 
-      // A redeemed token reads as missing on reload, so trust the tenant's state.
       if (!result.success && current?.migration_status === 'flagged') {
         setError(t(`errors.sso.${result.error}`, t('v2.ui.idpSync.errors.connect')));
 
@@ -138,8 +136,7 @@ const IdpSyncView: React.FC = () => {
     await refreshProgress();
   };
 
-  // The save reports only success, so reload rather than guess what became of
-  // the row the record came from.
+  // The save returns no rows, so reload.
   const assign = async (row: MergeCandidate, localId: number | null) => {
     await saveDecisions([{ id: row.id, decision: localId === null ? null : 'merge', local_id: localId }]);
     await loadKind(row.kind);
@@ -163,17 +160,88 @@ const IdpSyncView: React.FC = () => {
 
   const status = progress?.migration_status ?? null;
 
-  const table = (kind: CandidateKind) => (
-    <ReviewTable
-      kind={kind}
-      rows={rows[kind]}
-      total={totals[kind]}
-      page={pages[kind]}
-      perPage={PER_PAGE}
-      search={search[kind]}
-      onSearch={(value) => setSearch((current) => ({ ...current, [kind]: value }))}
-      onPage={(page) => setPages((current) => ({ ...current, [kind]: page }))}
-      onAssign={assign}
+  const step: CandidateKind = searchParams.get('step') === 'user' ? 'user' : 'room';
+
+  const selectStep = (next: CandidateKind) => {
+    setSearchParams(next === 'room' ? {} : { step: next }, { replace: true });
+  };
+
+  const rooms = useMemo(() => arrange(rows.room), [rows.room]);
+  const people = useMemo(() => arrange(rows.user), [rows.user]);
+  const members = useMemo(() => membersByRoom(rooms, people), [rooms, people]);
+
+  const shownRooms = useMemo(
+    () =>
+      searchRows(rooms, search.room).filter(
+        (room) => personFilter === null || !!members.get(room.id)?.ids.has(personFilter)
+      ),
+    [rooms, members, personFilter, search.room]
+  );
+
+  const shownPeople = useMemo(
+    () =>
+      searchRows(people, search.user).filter(
+        (person) => roomFilter === null || !!members.get(roomFilter)?.ids.has(person.id)
+      ),
+    [people, members, roomFilter, search.user]
+  );
+
+  const roomEntries = useMemo(
+    () =>
+      rooms
+        .filter((room) => !!members.get(room.id)?.ids.size)
+        .map((room) => ({ value: String(room.id), label: resultName(room) })),
+    [rooms, members]
+  );
+
+  const personEntries = useMemo(() => {
+    const enrolled = new Set([...members.values()].flatMap(({ ids }) => [...ids]));
+
+    return people
+      .filter((person) => enrolled.has(person.id))
+      .map((person) => ({ value: String(person.id), label: realName(person) }));
+  }, [people, members]);
+
+  const firstPage = (kind: CandidateKind) => setPages((current) => ({ ...current, [kind]: 1 }));
+
+  const tableProps = (kind: CandidateKind) => ({
+    kind,
+    page: pages[kind],
+    perPage: PER_PAGE,
+    search: search[kind],
+    onSearch: (value: string) => {
+      setSearch((current) => ({ ...current, [kind]: value }));
+      firstPage(kind);
+    },
+    onPage: (page: number) => setPages((current) => ({ ...current, [kind]: page })),
+    onAssign: assign,
+  });
+
+  const peopleFilter = (
+    <CandidateFilter
+      label={t('v2.ui.idpSync.filterPerson')}
+      allLabel={t('v2.ui.idpSync.allPeople')}
+      entries={personEntries}
+      value={personFilter}
+      onChange={(value) => {
+        setPersonFilter(value);
+        firstPage('room');
+      }}
+      data-testid="idp-review-person-filter"
+    />
+  );
+
+  const roomsFilter = (
+    <CandidateFilter
+      label={t('v2.ui.idpSync.filterRoom')}
+      allLabel={t('v2.ui.idpSync.allRooms')}
+      entries={roomEntries}
+      value={roomFilter}
+      onChange={(value) => {
+        setRoomFilter(value);
+        firstPage('user');
+      }}
+      data-testid="idp-review-room-filter"
     />
   );
 
@@ -219,20 +287,39 @@ const IdpSyncView: React.FC = () => {
         <div className="flex flex-col gap-6">
           <p className="text-sm opacity-70">{t('v2.ui.idpSync.guide')}</p>
 
-          <section className="flex flex-col gap-2">
-            <h2 className="text-xl">{t('v2.ui.idpSync.rooms')}</h2>
-            {table('room')}
-          </section>
-
-          <section className="flex flex-col gap-2">
-            <h2 className="text-xl">{t('v2.ui.idpSync.users')}</h2>
-            {table('user')}
-          </section>
+          <Tabs
+            value={step}
+            onChange={selectStep}
+            label={t('v2.ui.idpSync.steps')}
+            data-testid="idp-sync-tabs"
+            tabs={[
+              {
+                value: 'room',
+                label: t('v2.ui.idpSync.rooms'),
+                icon: 'rooms',
+                panel: (
+                  <ReviewTable {...tableProps('room')} rows={shownRooms} members={members} filter={peopleFilter} />
+                ),
+              },
+              {
+                value: 'user',
+                label: t('v2.ui.idpSync.users'),
+                icon: 'users',
+                panel: <ReviewTable {...tableProps('user')} rows={shownPeople} filter={roomsFilter} />,
+              },
+            ]}
+          />
 
           <div className="flex flex-wrap items-center gap-2">
-            <Button disabled={busy} onClick={() => ask('apply')} data-testid="idp-sync-apply">
-              {t('v2.ui.idpSync.actions.apply')}
-            </Button>
+            {step === 'room' ? (
+              <Button disabled={busy} onClick={() => selectStep('user')} data-testid="idp-sync-continue">
+                {t('v2.ui.idpSync.actions.continue')}
+              </Button>
+            ) : (
+              <Button disabled={busy} onClick={() => ask('apply')} data-testid="idp-sync-apply">
+                {t('v2.ui.idpSync.actions.apply')}
+              </Button>
+            )}
             <Button
               text
               color="error"
