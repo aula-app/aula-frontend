@@ -1,4 +1,127 @@
 {
+  "v2": {
+    "alt": {
+      "logo": "Aula: Bildungsplattform-Logo",
+      "microphone": "Eine Illustration einer Eule mit einem Mikrofon, die die Ankündigungsfunktion repräsentiert",
+      "sad": "Eine Illustration einer traurigen Eule, die die Fehlerseite repräsentiert",
+      "sleeping": "Schlafende Eulen-Illustration",
+      "winking": "Eine Illustration einer zwinkernden Eule, die die Fehlerseite repräsentiert"
+    },
+    "ui": {
+      "sort": {
+        "label": "Sortieren nach",
+        "asc": "Aufsteigend sortieren",
+        "desc": "Absteigend sortieren",
+        "name": "Name",
+        "status": "Status",
+        "confidence": "Treffergenauigkeit"
+      },
+      "idpSync": {
+        "title": "Mit dem Identitätsanbieter abgleichen",
+        "notEnabled": "Für diese Schule ist kein Abgleich aktiviert. Die Verwaltung kann ihn im aula-manager einschalten.",
+        "connectReturned": "Beim Anbieter angemeldet. Dein aula-Konto ist jetzt verknüpft und die Schule erkannt.",
+        "reviewWarning": "Bitte prüfe die Zuordnungen. Eine falsche Zusammenführung gibt einer Person das Konto einer anderen — inklusive aller Beiträge.",
+        "rooms": "Klassen und Räume",
+        "steps": "Schritte der Prüfung",
+        "filterRoom": "Klasse",
+        "allRooms": "Alle Klassen",
+        "filterPerson": "Person",
+        "allPeople": "Alle Personen",
+        "members_one": "{{count}} Person",
+        "members_other": "{{count}} Personen",
+        "showMembers": "Personen anzeigen",
+        "memberKind": {
+          "merge": "zugeordnet",
+          "create": "nur beim Anbieter",
+          "keep": "nur in aula"
+        },
+        "users": "Personen",
+        "search": "Suchen",
+        "staysInAula": "bleibt unverändert",
+        "progressTitle": "Fortschritt",
+        "progressBody": "{{linked}} Konten verknüpft, {{remaining}} noch offen.",
+        "progressHint": "Erst wenn niemand mehr offen ist, kann die Anmeldung per Passwort abgeschaltet werden.",
+        "step": {
+          "connect": "Melde dich zuerst beim Anbieter an. Damit wird dein aula-Konto verknüpft und die Schule erkannt.",
+          "prepare": "Jetzt können Klassen und Personen des Anbieters mit den vorhandenen aula-Daten abgeglichen werden.",
+          "importing": "Die Daten werden übertragen …"
+        },
+        "state": {
+          "confident": "eindeutig",
+          "ambiguous": "mehrdeutig",
+          "pseudonym": "nur Pseudonym"
+        },
+        "columns": {
+          "aula": "In aula",
+          "provider": "Beim Anbieter",
+          "state": "Zuordnung",
+          "merged": "Zusammengeführt"
+        },
+        "actions": {
+          "connect": "Verbinden",
+          "prepare": "Vorbereiten",
+          "apply": "Zuordnungen übernehmen und importieren",
+          "continue": "Speichern und weiter",
+          "reset": "Zurücksetzen",
+          "refresh": "Aktualisieren",
+          "open": "Prüfen",
+          "pick": "Auswählen",
+          "place": "Hier zuordnen",
+          "unlink": "Trennen"
+        },
+        "errors": {
+          "connect": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",
+          "prepare": "Der Abgleich konnte nicht vorbereitet werden.",
+          "apply": "{{count}} Zuordnungen sind nicht gültig. Bitte prüfe die markierten Zeilen."
+        },
+        "actionNeeded": "Aktion erforderlich:",
+        "states": {
+          "flagged": {
+            "title": "Diese Schule ist noch nicht verbunden",
+            "body": "Melden Sie sich beim Identitätsanbieter an, um Ihr aula-Konto zu verknüpfen und die Schule zu identifizieren. Für alle anderen ändert sich noch nichts."
+          },
+          "connected": {
+            "title": "Bereit zum Abgleich Ihrer Daten",
+            "body": "aula kann die Klassen und Personen des Anbieters mit den vorhandenen Daten dieser Schule vergleichen. Es wird nichts importiert, bevor Sie die Zuordnungen bestätigen."
+          },
+          "reviewing": {
+            "title": "Zuordnungen warten auf Prüfung",
+            "body": "Jede Zuordnung entscheidet, wem welches Konto gehört, und lässt sich nach dem Import nicht mehr rückgängig machen."
+          },
+          "importing": {
+            "title": "Schuldaten werden importiert",
+            "body": "Die Klassen und Personen des Anbieters werden angelegt. Dieser Hinweis aktualisiert sich selbst."
+          },
+          "linking": {
+            "title": "Warten auf Anmeldungen",
+            "body": "{{linked}} Konten verknüpft, {{remaining}} noch offen. Jede Person wird bei der ersten Anmeldung über den Anbieter verknüpft."
+          },
+          "completed": {
+            "title": "Abgleich abgeschlossen",
+            "body": "Alle sind mit dem Identitätsanbieter verknüpft. Die Passwort-Anmeldung kann jetzt deaktiviert werden."
+          }
+        },
+        "stepper": {
+          "label": "Fortschritt des Abgleichs",
+          "connect": "Verbinden",
+          "prepare": "Vorbereiten",
+          "review": "Prüfen",
+          "import": "Importieren"
+        },
+        "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel –, um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
+        "resetWarning": "Beim Zurücksetzen gehen alle von Ihnen vorgenommenen Zuordnungen verloren. Die Tabelle wird aus den Daten des Anbieters neu aufgebaut, genau wie zu Beginn."
+      }
+    },
+    "form": {
+      "validation": {
+        "required": "Dieses Feld ist erforderlich"
+      },
+      "password": {
+        "show": "Passwort anzeigen",
+        "hide": "Passwort verbergen"
+      }
+    }
+  },
   "actions": {
     "activate": "{{var}} aktivieren",
     "add": "Neue {{var}}",
@@ -892,53 +1015,6 @@
     "wednesday": "Mittwoch"
   },
   "idp": {
-    "sync": {
-      "title": "Mit dem Identitätsanbieter abgleichen",
-      "notEnabled": "Für diese Schule ist kein Abgleich aktiviert. Die Verwaltung kann ihn im aula-manager einschalten.",
-      "connectReturned": "Beim Anbieter angemeldet. Dein aula-Konto ist jetzt verknüpft und die Schule erkannt.",
-      "reviewWarning": "Bitte prüfe die Zuordnungen. Eine falsche Zusammenführung gibt einer Person das Konto einer anderen — inklusive aller Beiträge.",
-      "rooms": "Klassen und Räume",
-      "users": "Personen",
-      "search": "Suchen",
-      "willBeCreated": "wird neu angelegt",
-      "staysInAula": "bleibt unverändert",
-      "progressTitle": "Fortschritt",
-      "progressBody": "{{linked}} Konten verknüpft, {{remaining}} noch offen.",
-      "progressHint": "Erst wenn niemand mehr offen ist, kann die Anmeldung per Passwort abgeschaltet werden.",
-      "step": {
-        "connect": "Melde dich zuerst beim Anbieter an. Damit wird dein aula-Konto verknüpft und die Schule erkannt.",
-        "prepare": "Jetzt können Klassen und Personen des Anbieters mit den vorhandenen aula-Daten abgeglichen werden.",
-        "importing": "Die Daten werden übertragen …"
-      },
-      "state": {
-        "confident": "eindeutig",
-        "ambiguous": "mehrdeutig",
-        "none": "kein Treffer",
-        "pseudonym": "nur Pseudonym"
-      },
-      "columns": {
-        "aula": "In aula",
-        "provider": "Beim Anbieter",
-        "state": "Zuordnung",
-        "merge": "Zusammenführen?"
-      },
-      "actions": {
-        "connect": "Mein Konto verknüpfen",
-        "prepare": "Abgleich vorbereiten",
-        "apply": "Zuordnungen übernehmen und importieren",
-        "rebuild": "Neu berechnen",
-        "refresh": "Aktualisieren",
-        "open": "Mit dem Identity Provider synchronisieren"
-      },
-      "errors": {
-        "connect": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",
-        "prepare": "Der Abgleich konnte nicht vorbereitet werden.",
-        "apply": "{{count}} Zuordnungen sind nicht gültig. Bitte prüfe die markierten Zeilen."
-      },
-      "entry": {
-        "body": "Diese Schule wird auf ihren Identity Provider umgestellt. Ordnen Sie die vorhandenen Klassen und Personen vor dem Import zu."
-      }
-    },
     "claim": {
       "banner": "Hast du schon ein aula-Konto? Melde dich einmal mit deinem aula-Passwort an, damit deine Beiträge erhalten bleiben.",
       "noAccount": "Ich habe noch kein aula-Konto",
