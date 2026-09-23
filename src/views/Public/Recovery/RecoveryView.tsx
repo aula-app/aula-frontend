@@ -18,7 +18,7 @@ const RecoveryPasswordView = () => {
   const navigate = useNavigate();
   const [, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   const schema = yup.object().shape({
     email: yup.string().email(t('forms.validation.email')).required(t('forms.validation.required')),
@@ -54,7 +54,7 @@ const RecoveryPasswordView = () => {
       } else {
         dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
       }
-    } catch (error) {
+    } catch {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
     } finally {
       setLoading(false);

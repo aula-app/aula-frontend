@@ -2,7 +2,7 @@ import OfflineView from '@/views/OfflineView';
 import { FunctionComponent, useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import LayoutContainer from './LayoutContainer';
-import { useIsOnline } from '@/hooks/auth';
+import { fetchIsOnline } from '@/hooks/auth';
 
 /**
  * Renders "Private Layout" composition
@@ -14,7 +14,7 @@ const PrivateLayout: FunctionComponent<{ children?: React.ReactNode }> = ({ chil
   const [online, setOnline] = useState(true);
 
   useEffect(() => {
-    useIsOnline().then(setOnline);
+    fetchIsOnline().then(setOnline);
   }, [location]);
 
   return !online ? <OfflineView /> : <LayoutContainer>{children}</LayoutContainer>;

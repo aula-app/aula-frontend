@@ -43,7 +43,7 @@ const AnnouncementsView: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.announcements'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.announcements'), '']] });
   }, [dispatch, t]);
 
   const extraFilters = (

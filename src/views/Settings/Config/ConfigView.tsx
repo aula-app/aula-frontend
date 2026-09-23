@@ -21,7 +21,7 @@ import SystemSettings from './SystemSettings';
  */
 const ConfigView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const [settings, setSettings] = useState<InstanceResponse>();
   const [expanded, setExpanded] = useState<string>();
 
@@ -43,7 +43,7 @@ const ConfigView = () => {
   const closePanels = () => setExpanded(undefined);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.configuration'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.configuration'), '']] });
     loadData();
   }, []);
 

@@ -6,7 +6,6 @@ import { getRequests } from '@/services/messages';
 import { StatusTypes } from '@/types/Generics';
 import { MessageType, PossibleFields } from '@/types/Scopes';
 import { useAppStore } from '@/store/AppStore';
-import { Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -16,7 +15,7 @@ import { useTranslation } from 'react-i18next';
  */
 const RequestsView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const [isLoading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [requests, setRequests] = useState<MessageType[]>([]);
@@ -25,6 +24,7 @@ const RequestsView = () => {
   const [filter, setFilter] = useState<[keyof PossibleFields, string]>(['', '']);
 
   const filterOptions = ['headline', 'body'] as Array<keyof MessageType>;
+  const filterKey = JSON.stringify(filter);
 
   const fetchRequests = useCallback(async () => {
     setLoading(true);
@@ -32,12 +32,12 @@ const RequestsView = () => {
     if (response.error) setError(response.error);
     setRequests(response.data || []);
     setLoading(false);
-  }, [JSON.stringify(filter), status]);
+  }, [filterKey, status]);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.requests'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.requests'), '']] });
     fetchRequests();
-  }, [JSON.stringify(filter), status]);
+  }, [filterKey, status]);
 
   return (
     <Stack width="100%" height="100%" p={2} gap={2}>

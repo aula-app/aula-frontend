@@ -2,6 +2,7 @@ import { DATE_FORMATS, DEFAULT_FORMAT_DATE_ONLY, DEFAULT_FORMAT_DATE_TIME } from
 import dayjs from 'dayjs';
 import timezone from 'dayjs/plugin/timezone';
 import utc from 'dayjs/plugin/utc';
+import i18n from 'i18next';
 import { useTranslation } from 'react-i18next';
 
 // Extend dayjs with timezone and UTC plugins
@@ -20,20 +21,7 @@ dayjs.extend(timezone);
  * Get date format based on current language
  */
 export function getDateFormat(type: 'dateTime' | 'dateOnly' = 'dateTime'): string {
-  try {
-    // This will only work inside React components
-    const { i18n } = useTranslation();
-    const language = i18n.languages[0] as keyof typeof DATE_FORMATS; // Get base language (en from en-US)
-
-    if (language in DATE_FORMATS) {
-      return DATE_FORMATS[language][type];
-    }
-  } catch (error) {
-    // Fallback for non-React contexts
-  }
-
-  // Fallback to default formats
-  return type === 'dateTime' ? DEFAULT_FORMAT_DATE_TIME : DEFAULT_FORMAT_DATE_ONLY;
+  return getDateFormatForLanguage(i18n.language || '', type);
 }
 
 /**

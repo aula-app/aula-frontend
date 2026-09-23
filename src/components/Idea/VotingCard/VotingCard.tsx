@@ -1,5 +1,4 @@
 import AppIcon from '@/components/AppIcon';
-import DelegateButton from '@/components/Buttons/DelegateButton';
 import { getDelegations } from '@/services/users';
 import { addVote, getVote } from '@/services/vote';
 import { checkPermissions, Vote, votingOptions } from '@/utils';
@@ -21,7 +20,7 @@ const VotingCard = ({ onChange }: Props) => {
   const { idea_id, box_id } = useParams();
 
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [vote, setVote] = useState<Vote>();
   const [hasVoted, setHasVoted] = useState(false);
   const [hasDelegate, setHasDelegate] = useState(false);
