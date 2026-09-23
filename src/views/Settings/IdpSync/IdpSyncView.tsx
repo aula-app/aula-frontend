@@ -10,6 +10,7 @@ import {
   startIdpConnect,
 } from '@/services/idpMigration';
 import { completeSsoLink } from '@/services/sso';
+import { useAppStore } from '@/store/AppStore';
 import { localStorageGet } from '@/utils';
 import Icon from '@/components/new/Icon/Icon';
 import Button from '@/v2/components/button/Button';
@@ -30,6 +31,7 @@ const IMPORT_POLL_MS = 3000;
 
 const IdpSyncView: React.FC = () => {
   const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
   const [searchParams, setSearchParams] = useSearchParams();
   const [progress, setProgress] = useState<MigrationProgress | null>(null);
   const [busy, setBusy] = useState(false);
@@ -61,6 +63,16 @@ const IdpSyncView: React.FC = () => {
 
     if (all) setRows((current) => ({ ...current, [kind]: all }));
   }, []);
+
+  useEffect(() => {
+    dispatch({
+      type: 'SET_BREADCRUMB',
+      breadcrumb: [
+        [t('ui.navigation.configuration'), '/settings/configuration'],
+        [t('v2.ui.idpSync.title'), ''],
+      ],
+    });
+  }, [dispatch, t]);
 
   useEffect(() => {
     refreshProgress();
