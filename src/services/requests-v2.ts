@@ -50,3 +50,24 @@ const baseVersionsRequest = async (versionsUrl: string, version: string) => {
     return DEFAULT_VERSIONS_RESPONSE;
   }
 };
+
+// TODO: split into own file once there is a critical mass
+
+export interface SchoolItem {
+  instance_code: string,
+  name: string
+};
+
+export type GetSchoolInstancesResponse = SchoolItem[];
+
+export const getSchoolInstancesRequest = async (): Promise<GetSchoolInstancesResponse> => {
+  const instanceApiUrl = localStorageGet('api_url');
+  return fetch(`${instanceApiUrl}/public/schools`)
+    .then((response) => {
+      if (response && response.ok) {
+        return response.json();
+      }
+      console.error('error fetching schools', response);
+      throw new Error('error fetching schools');
+    });
+}
