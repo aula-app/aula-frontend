@@ -1,3 +1,4 @@
+import { getRuntimeConfig } from '@/config';
 import { localStorageGet } from '../utils/localStorage';
 
 export interface VersionsResponse {
@@ -61,8 +62,8 @@ export interface SchoolItem {
 export type GetSchoolInstancesResponse = SchoolItem[];
 
 export const getSchoolInstancesRequest = async (): Promise<GetSchoolInstancesResponse> => {
-  const instanceApiUrl = localStorageGet('api_url');
-  return fetch(`${instanceApiUrl}/public/schools`)
+  const centralApiUrl = getRuntimeConfig().CENTRAL_API_URL;
+  return fetch(`${centralApiUrl}public/schools`)
     .then((response) => {
       if (response && response.ok) {
         return response.json();
