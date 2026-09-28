@@ -9,6 +9,7 @@ import { getSchoolInstancesRequest, SchoolItem, GetSchoolInstancesResponse } fro
 
 interface SchoolItemOption extends SchoolItem {
   inputValue?: string;
+  isInstanceCodeHint?: boolean;
 }
 
 const filter = createFilterOptions<SchoolItemOption>({
@@ -156,7 +157,8 @@ const InstanceCodeView = () => {
             filtered.push({
               inputValue,
               instance_code: inputValue,
-              name: t('instance.autocompleteHint', { code: inputValue })
+              isInstanceCodeHint: true,
+              name: inputValue,
             });
           }
           return filtered;
@@ -165,7 +167,14 @@ const InstanceCodeView = () => {
           const { key, ...optionProps } = props;
           return (
             <li key={key} {...optionProps}>
-              {option.name}
+              {option.isInstanceCodeHint
+                ? <>
+                  {t('instance.autocompleteHint')}
+                  {/* TODO probably fix bg-secondary for v2 / dark mode */}
+                  <kbd className="bg-secondary/30 rounded px-1 ml-1">{option.name}</kbd>
+                  </>
+                : option.name
+              }
             </li>
           );
         }}
