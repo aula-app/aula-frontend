@@ -87,11 +87,7 @@ const InstanceCodeView = () => {
   return (
     <Stack spacing={2} sx={{ maxWidth: '100%', margin: '0 auto', p: 2 }}>
       <label htmlFor="instanceCode">
-        {t('instance.headline1')}
-        <Typography variant="body2" component="div">
-          {t('instance.headlineSep')}
-        </Typography>
-        {t('instance.headline2')}
+        {t('instance.headline')}
       </label>
       {/* following the MUI Autocomplete/FreeSolo/Creatable pattern:
           https://mui.com/material-ui/react-autocomplete/#creatable
