@@ -245,7 +245,7 @@
     "headline": "Name der Schule (oder Instanzcode)",
     "placeholder": "Paulaschule (oder aBcXy)",
     "autocompleteHint": "Instanzcode",
-    "fetchSchoolsError": "Fehler bei Übetragung; es stehen keine Schulnamen zur Verfügung, nur Instanzcodes",
+    "fetchTenantsError": "Fehler bei Übetragung; es stehen keine Schulnamen zur Verfügung, nur Instanzcodes",
     "label": "Instanzcode",
     "status": "Instanzstatus"
   },

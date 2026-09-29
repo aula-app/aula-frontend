@@ -54,21 +54,21 @@ const baseVersionsRequest = async (versionsUrl: string, version: string) => {
 
 // TODO: split into own file once there is a critical mass
 
-export interface SchoolItem {
+export interface TenantInstance {
   instance_code: string,
   name: string
 };
 
-export type GetSchoolInstancesResponse = SchoolItem[];
+export type GetTenantInstancesResponse = TenantInstance[];
 
-export const getSchoolInstancesRequest = async (): Promise<GetSchoolInstancesResponse> => {
+export const getTenantInstancesRequest = async (): Promise<GetTenantInstancesResponse> => {
   const centralApiUrl = getRuntimeConfig().CENTRAL_API_URL;
-  return fetch(`${centralApiUrl}public/schools`)
+  return fetch(`${centralApiUrl}/api/v2/tenants`)
     .then((response) => {
       if (response && response.ok) {
         return response.json();
       }
-      console.error('error fetching schools', response);
-      throw new Error('error fetching schools');
+      console.error('error fetching tenants', response);
+      throw new Error('error fetching tenants');
     });
 }

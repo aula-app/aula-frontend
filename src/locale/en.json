@@ -245,7 +245,7 @@
     "headline": "School name (or Instance Code)",
     "placeholder": "Paula Elementary (or aBcXy)",
     "autocompleteHint": "Instance Code",
-    "fetchSchoolsError": "Error while fetching school names; only instance codes available",
+    "fetchTenantsError": "Error while fetching school names; only instance codes available",
     "label": "Instance code",
     "status": "Instance status"
   },

@@ -5,14 +5,14 @@ import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { validateAndSaveInstanceCode } from '@/services/instance';
-import { getSchoolInstancesRequest, SchoolItem, GetSchoolInstancesResponse } from '@/services/requests-v2';
+import { getTenantInstancesRequest, TenantInstance, GetTenantInstancesResponse } from '@/services/requests-v2';
 
-interface SchoolItemOption extends SchoolItem {
+interface TenantInstanceOption extends TenantInstance {
   inputValue?: string;
   isInstanceCodeHint?: boolean;
 }
 
-const filter = createFilterOptions<SchoolItemOption>({
+const filter = createFilterOptions<TenantInstanceOption>({
   ignoreAccents: true,
   ignoreCase: true
 });
@@ -25,29 +25,29 @@ const InstanceCodeView = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
-  const [value, setValue] = useState<SchoolItemOption | null>(null);
+  const [value, setValue] = useState<TenantInstanceOption | null>(null);
 
-  const [schools, setSchools] = useState<GetSchoolInstancesResponse>([]);
-  const [isFetchingSchools, setIsFetchingSchools] = useState(false);
-  const [fetchSchoolsError, setFetchSchoolsError] = useState('');
+  const [tenants, setTenants] = useState<GetTenantInstancesResponse>([]);
+  const [isFetchingTenants, setIsFetchingTenants] = useState(false);
+  const [fetchTenantsError, setFetchTenantsError] = useState('');
 
-  const fetchSchools = useCallback(async () => {
-    setIsFetchingSchools(true);
-    return getSchoolInstancesRequest()
-      .then((schools) => setSchools(schools))
+  const fetchTenants = useCallback(async () => {
+    setIsFetchingTenants(true);
+    return getTenantInstancesRequest()
+      .then((tenants) => setTenants(tenants))
       .catch((e) => {
         console.error(e);
-        setFetchSchoolsError(t('instance.fetchSchoolsError'));
+        setFetchTenantsError(t('instance.fetchTenantsError'));
       })
       .finally(() => {
-        setIsFetchingSchools(false);
+        setIsFetchingTenants(false);
       });
   }, [t]);
 
   useEffect(() => {
     // TODO fix/appease react linter
-    fetchSchools();
-  }, [fetchSchools])
+    fetchTenants();
+  }, [fetchTenants])
 
   const handleSubmit = async () => {
     const code = value?.instance_code?.trim();
@@ -100,7 +100,7 @@ const InstanceCodeView = () => {
         sx={{ width: '20em', maxWidth: '100%' }}
         value={value}
         options={[
-          ...schools.map((school) => school as SchoolItemOption)
+          ...tenants.map((tenant) => tenant as TenantInstanceOption)
         ]}
         id="instanceCode"
         freeSolo
@@ -109,7 +109,7 @@ const InstanceCodeView = () => {
         handleHomeEndKeys
         autoHighlight
         autoSelect
-        loading={isFetchingSchools}
+        loading={isFetchingTenants}
         renderInput={(params) =>
           <TextField
             data-testid="input-instance-code"
@@ -179,8 +179,8 @@ const InstanceCodeView = () => {
           );
         }}
       />
-      {fetchSchoolsError &&
-        <Alert severity='warning'>{fetchSchoolsError}</Alert>
+      {fetchTenantsError &&
+        <Alert severity='warning'>{fetchTenantsError}</Alert>
       }
       <Button
         sx={{ width: '100%' }}
