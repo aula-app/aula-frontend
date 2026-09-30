@@ -41,7 +41,6 @@ export const getRooms = async (
 ): Promise<GetRoomsResponse> => {
   // Check if user has Super Moderator (40) access to view all rooms
   const hasSuperModAccess = checkPermissions('rooms', 'viewAll');
-  if (hasSuperModAccess) delete args.type;
 
   const response = await databaseRequest(
     {
