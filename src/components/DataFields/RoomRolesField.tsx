@@ -45,7 +45,7 @@ const RoomRolesField: React.FC<Props> = ({ user, disabled = false, onUpdate, ...
   const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes | 0 }[]>([]);
 
   // Create role options based on user level
-  const getRoleOptions = (room: RoomType) => {
+  const getRoleOptions = () => {
     const options = [
       { value: 0, label: t('roles.empty') },
       ...roles
@@ -151,7 +151,7 @@ const RoomRolesField: React.FC<Props> = ({ user, disabled = false, onUpdate, ...
               userRoles.find((role) => role.room === room.hash_id)?.role ??
               0;
 
-            const roleOptions = getRoleOptions(room);
+            const roleOptions = getRoleOptions();
             const isAdminLocked = (user?.userlevel ?? 0) >= 50 && room.type === 1;
 
             return (
