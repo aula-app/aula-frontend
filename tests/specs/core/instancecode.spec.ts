@@ -28,6 +28,7 @@ test.describe('Name search / instance code', () => {
     await page.keyboard.press('Enter');
     const currentInstanceCode = page.getByTestId('current-instance-code');
     await expect(currentInstanceCode).toBeVisible();
+    await expect(currentInstanceCode).toContainText('db000');
   });
 
   test.skip('Enter instance code', async ({ page }) => {
@@ -40,7 +41,9 @@ test.describe('Name search / instance code', () => {
     await expect(page.getByRole('option', { name: 'E2E.0' })).toBeHidden();
     await option.click();
     await page.getByTestId('submit-instance-code').click();
-    await expect(page.getByTestId('current-instance-code')).toBeVisible();
+    const currentInstanceCode = page.getByTestId('current-instance-code');
+    await expect(currentInstanceCode).toBeVisible();
+    await expect(currentInstanceCode).toContainText('db000');
   });
 
   test.skip('Enter non-existing instance code', async ({ page }) => {
