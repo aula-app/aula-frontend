@@ -100,7 +100,9 @@ const InstanceCodeView = () => {
         sx={{ width: '20em', maxWidth: '100%' }}
         value={value}
         options={[
-          ...tenants.map((tenant) => tenant as TenantInstanceOption)
+          ...tenants
+            .sort((a, b) => a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 1)
+            .map((tenant) => tenant as TenantInstanceOption)
         ]}
         id="instanceCode"
         freeSolo
