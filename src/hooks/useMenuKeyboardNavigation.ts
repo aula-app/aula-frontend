@@ -38,7 +38,7 @@ export const useMenuKeyboardNavigation = <T>({
   const handleKeyDown = useCallback(
     (event: KeyboardEvent<HTMLElement>, index: number) => {
       const itemCount = items.length;
-      let nextIndex = index;
+      let nextIndex: number;
 
       switch (event.key) {
         case 'ArrowDown':

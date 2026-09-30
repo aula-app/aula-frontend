@@ -1,6 +1,4 @@
 import AppIcon from '@/components/AppIcon';
-import { StatusTypes } from '@/types/Generics';
-import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { announceToScreenReader, checkPermissions } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
@@ -17,10 +15,6 @@ import {
 import React, { useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface FilterOptionsType {
-  status: StatusTypes;
-  filter: [keyof PossibleFields, string];
-}
 
 type Props = {
   extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;

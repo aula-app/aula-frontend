@@ -2,7 +2,7 @@ import AppIcon from '@/components/AppIcon';
 import { getRuntimeConfig } from '@/config';
 import { useAppStore } from '@/store';
 import { announceToScreenReader, localStorageGet } from '@/utils';
-import { Button, ButtonProps, Divider } from '@mui/material';
+import { Button, ButtonProps } from '@mui/material';
 import { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 

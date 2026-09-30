@@ -19,11 +19,11 @@ import {
 import { forwardRef, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
+const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [users, setUsers] = useState<UserType[]>([]);
   const [onlyTempPass, setOnlyTempPass] = useState<boolean>(true);
   const [roomId, setRoomId] = useState<string>('all');
@@ -58,7 +58,7 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
     const instanceCode = localStorageGet('code');
     const rows = chunkArray(filteredUsers, columns);
 
-    let usersPasswords = rows
+    const usersPasswords = rows
       .map((row) => {
         const cells = row
           .map((user) => {
@@ -168,11 +168,8 @@ const PrintUsers = forwardRef<ButtonProps>(({ ...restOfProps }, ref) => {
 
     // Write the HTML content to the new window
     if (printWindow && printWindow.document) {
-      // @ts-ignore
       printWindow.document.open();
-      // @ts-ignore
       printWindow.document.write(htmlContent);
-      // @ts-ignore
       printWindow.document.close();
     }
     //setOpen(false);

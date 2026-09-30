@@ -96,6 +96,12 @@ export const useDataTableState = <T extends SettingType>({
     setLoading(false);
   }, [asc, limit, offset, orderby, filters, fetchFn]);
 
+  // Handle close/reload
+  const handleClose = useCallback(() => {
+    setEdit(false);
+    fetchData();
+  }, [fetchData]);
+
   // Delete items
   const deleteItems = useCallback(
     async (itemIds: Array<string>) => {
@@ -108,14 +114,8 @@ export const useDataTableState = <T extends SettingType>({
         })
       );
     },
-    [deleteFn]
+    [deleteFn, handleClose]
   );
-
-  // Handle close/reload
-  const handleClose = useCallback(() => {
-    setEdit(false);
-    fetchData();
-  }, [fetchData]);
 
   // Update filters
   const setFilters = useCallback((newFilters: Partial<DataTableFilters>) => {

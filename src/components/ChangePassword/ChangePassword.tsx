@@ -16,12 +16,11 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import AppIconButton from '../AppIconButton';
-import AppIcon from '../AppIcon';
 import { useNavigate } from 'react-router-dom';
 import { useAppStore } from '@/store';
 
@@ -37,10 +36,6 @@ interface Props {
   tmp_token?: string;
   disabled?: boolean;
   passwordComplexity?: PasswordComplexity;
-}
-
-interface ChangePasswordMethods {
-  displayMessage: (isSuccess: boolean) => void;
 }
 
 /**
@@ -69,29 +64,6 @@ const ChangePassword: React.FC<Props> = ({
     confirmPassword: false,
     newPassword: false,
   });
-
-  const createPasswordValidation = () => {
-    let validation = yup.string().required(t('forms.validation.required'));
-
-    validation = validation.min(
-      passwordComplexity.minLength,
-      t('forms.validation.minLength', { var: passwordComplexity.minLength })
-    );
-
-    if (passwordComplexity.requireUppercase) {
-      validation = validation.matches(/[A-Z]/, t('forms.validation.passwordRequireUppercase'));
-    }
-
-    if (passwordComplexity.requireNumber) {
-      validation = validation.matches(/[0-9]/, t('forms.validation.passwordRequireNumber'));
-    }
-
-    if (passwordComplexity.requireSymbol) {
-      validation = validation.matches(/[^A-Za-z0-9]/, t('forms.validation.passwordRequireSymbol'));
-    }
-
-    return validation.max(64, t('forms.validation.maxLength', { var: 64 }));
-  };
 
   const schema = yup
     .object({
@@ -274,29 +246,14 @@ const ChangePassword: React.FC<Props> = ({
 export const usePasswordRequirements = (
   password: string,
   passwordComplexity: PasswordComplexity,
-  t: (key: string, options?: any) => string
+  t: (key: string, options?: Record<string, unknown>) => string
 ) => {
-  const [passwordRequirements, setPasswordRequirements] = useState({
-    length: false,
-    uppercase: false,
-    number: false,
-    symbol: false,
-  });
-
-  useEffect(() => {
-    setPasswordRequirements({
-      length: password.length >= passwordComplexity.minLength,
-      uppercase: passwordComplexity.requireUppercase ? /[A-Z]/.test(password) : true,
-      number: passwordComplexity.requireNumber ? /[0-9]/.test(password) : true,
-      symbol: passwordComplexity.requireSymbol ? /[^A-Za-z0-9]/.test(password) : true,
-    });
-  }, [
-    password,
-    passwordComplexity.minLength,
-    passwordComplexity.requireUppercase,
-    passwordComplexity.requireNumber,
-    passwordComplexity.requireSymbol,
-  ]);
+  const passwordRequirements = {
+    length: password.length >= passwordComplexity.minLength,
+    uppercase: passwordComplexity.requireUppercase ? /[A-Z]/.test(password) : true,
+    number: passwordComplexity.requireNumber ? /[0-9]/.test(password) : true,
+    symbol: passwordComplexity.requireSymbol ? /[^A-Za-z0-9]/.test(password) : true,
+  };
 
   const renderPasswordRequirements = () => {
     const requirements = [

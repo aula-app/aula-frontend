@@ -1,7 +1,7 @@
 import { ErrorBoundary } from '@/components';
 import SkipNavigation from '@/components/SkipNavigation';
 import { Stack, useTheme } from '@mui/material';
-import { FunctionComponent, PropsWithChildren, useEffect } from 'react';
+import { FunctionComponent, PropsWithChildren } from 'react';
 import AulaLogo from './AulaLogo';
 import PublicLayoutHeader from './PublicLayoutHeader';
 

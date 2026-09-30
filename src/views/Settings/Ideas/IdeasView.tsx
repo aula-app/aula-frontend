@@ -40,7 +40,7 @@ const IdeasView: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.ideas'), '/']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.ideas'), '/']] });
   }, [dispatch, t]);
 
   return (

@@ -121,10 +121,6 @@ const ImageEditor: React.FC<Props> = ({ id, width = 200, height = 200, rounded =
       // Clear the canvas
       ctx.clearRect(0, 0, width, height);
 
-      // Calculate the scaled dimensions
-      const scaledWidth = img.width * zoom;
-      const scaledHeight = img.height * zoom;
-
       // Calculate source (crop) coordinates
       const sourceX = -crop.x / zoom;
       const sourceY = -crop.y / zoom;

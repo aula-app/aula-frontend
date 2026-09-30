@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
  * @component LocaleSwitch
  */
 const LocaleSwitch = ({ ...restOfProps }) => {
-  const { t, i18n } = useTranslation();
+  const { i18n } = useTranslation();
 
   const handleChange = (event: SelectChangeEvent) => {
     event.stopPropagation();

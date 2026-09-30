@@ -23,8 +23,6 @@ interface SideBarProps {
  * @param {function} [props.onClose] - Optional callback when drawer closes (for mobile)
  * @returns {JSX.Element} Rendered SideBar component
  */
-const emptyEvent: Record<string, never> = Object.freeze({});
-
 const SideBar = ({ onClose }: SideBarProps = {}): JSX.Element => {
   const { t } = useTranslation();
   const location = useLocation();

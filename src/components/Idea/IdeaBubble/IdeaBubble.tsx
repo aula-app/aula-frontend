@@ -5,7 +5,7 @@ import ChatBubble from '@/components/ChatBubble';
 import MarkdownReader from '@/components/MarkdownReader';
 import MoreOptions from '@/components/MoreOptions';
 import { IdeaType } from '@/types/Scopes';
-import { checkPermissions, phases } from '@/utils';
+import { checkPermissions } from '@/utils';
 import { Stack, StackProps, Typography } from '@mui/material';
 import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
