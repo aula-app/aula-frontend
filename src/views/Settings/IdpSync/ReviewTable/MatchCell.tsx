@@ -2,7 +2,7 @@ import Icon from '@/components/new/Icon/Icon';
 import { MergeCandidate } from '@/services/idpMigration';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
-import { isAulaOnly, isPair, isProviderOnly, Members } from './candidates';
+import { avatarUrl, isAulaOnly, isProviderOnly, Members, rowKind } from './candidates';
 import MemberCount from './MemberCount';
 import EntityMeta from './EntityMeta';
 import { CARD, CONTENT, PLAIN } from './styles';
@@ -53,12 +53,16 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
         ),
       }
     : side === 'aula'
-      ? { detail: row.local_displayname ?? row.local_name ?? undefined, avatar: row.local_name ?? undefined }
+      ? {
+          detail: row.local_displayname ?? row.local_name ?? undefined,
+          avatar: row.local_name ?? undefined,
+          avatarSrc: avatarUrl(row.local_avatar),
+        }
       : { detail: row.idp_name_kind === 'pseudonym' ? t('v2.ui.idpSync.state.pseudonym') : undefined };
 
   const content = name ? (
     <>
-      {isPair(row) && <Icon type="check" size="1.25em" className="shrink-0" />}
+      {rowKind(row) === 'merge' && <Icon type="check" size="1.25em" className="shrink-0" />}
       <EntityMeta name={name} {...meta} />
     </>
   ) : droppable ? (

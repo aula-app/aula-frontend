@@ -33,7 +33,8 @@
         "memberKind": {
           "merge": "matched",
           "create": "only at the provider",
-          "keep": "only in aula"
+          "keep": "only in aula",
+          "pending": "proposed"
         },
         "users": "People",
         "search": "Search",
@@ -67,12 +68,14 @@
           "open": "Review",
           "pick": "Pick",
           "place": "Match here",
-          "unlink": "Unlink"
+          "unlink": "Unlink",
+          "confirm": "Confirm"
         },
         "errors": {
           "connect": "Could not start the provider sign-in.",
           "prepare": "Could not prepare the sync.",
-          "apply": "{{count}} matches are not valid. Please check the flagged rows."
+          "apply": "{{count}} matches are not valid. Please check the flagged rows.",
+          "save": "Could not save the change. Please try again."
         },
         "actionNeeded": "Action needed:",
         "states": {
@@ -109,7 +112,16 @@
           "import": "Import"
         },
         "guide": "Each row is an aula record, its match at the provider, and the account you end up with. Drag a card onto an empty slot, or select it and pick where it goes, to match them by hand. A row holding both sides will be merged; unlink it to keep the two accounts apart.",
-        "resetWarning": "Resetting discards every match you have made and rebuilds the table from the provider’s data, exactly as it was at the start."
+        "resetWarning": "Resetting discards every match you have made and rebuilds the table from the provider’s data, exactly as it was at the start.",
+        "pending": "Proposed, not confirmed: only a confirmed match is merged.",
+        "pendingContested_one": "Also proposed for {{count}} other person. Confirming this one unlinks the other.",
+        "pendingContested_other": "Also proposed for {{count}} other people. Confirming this one unlinks the others.",
+        "problems": {
+          "default": "This match is not valid.",
+          "no_local_row": "No aula record is selected for this match.",
+          "local_row_claimed_twice": "This aula record is matched more than once.",
+          "local_row_already_linked": "This aula record is already linked to someone else at the provider."
+        }
       }
     },
     "form": {

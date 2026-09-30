@@ -8,11 +8,12 @@ interface Props {
   detailEnd?: ReactNode;
   /** Name for the initials; omit for no avatar. */
   avatar?: string;
+  avatarSrc?: string;
 }
 
-const EntityMeta = ({ name, detail, detailEnd, avatar }: Props) => (
+const EntityMeta = ({ name, detail, detailEnd, avatar, avatarSrc }: Props) => (
   <span className="flex items-center gap-2 min-w-0">
-    {!!avatar && <Avatar name={avatar} size={28} />}
+    {!!avatar && <Avatar name={avatar} src={avatarSrc} size={28} />}
     <span className="flex flex-col min-w-0">
       <span className="truncate font-bold">{name}</span>
       {(!!detail || !!detailEnd) && (

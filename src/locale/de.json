@@ -33,7 +33,8 @@
         "memberKind": {
           "merge": "zugeordnet",
           "create": "nur beim Anbieter",
-          "keep": "nur in aula"
+          "keep": "nur in aula",
+          "pending": "vorgeschlagen"
         },
         "users": "Personen",
         "search": "Suchen",
@@ -67,12 +68,14 @@
           "open": "Prüfen",
           "pick": "Auswählen",
           "place": "Hier zuordnen",
-          "unlink": "Trennen"
+          "unlink": "Trennen",
+          "confirm": "Bestätigen"
         },
         "errors": {
           "connect": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",
           "prepare": "Der Abgleich konnte nicht vorbereitet werden.",
-          "apply": "{{count}} Zuordnungen sind nicht gültig. Bitte prüfe die markierten Zeilen."
+          "apply": "{{count}} Zuordnungen sind nicht gültig. Bitte prüfe die markierten Zeilen.",
+          "save": "Die Änderung konnte nicht gespeichert werden. Bitte versuche es noch einmal."
         },
         "actionNeeded": "Aktion erforderlich:",
         "states": {
@@ -109,7 +112,16 @@
           "import": "Importieren"
         },
         "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel –, um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
-        "resetWarning": "Beim Zurücksetzen gehen alle von Ihnen vorgenommenen Zuordnungen verloren. Die Tabelle wird aus den Daten des Anbieters neu aufgebaut, genau wie zu Beginn."
+        "resetWarning": "Beim Zurücksetzen gehen alle von Ihnen vorgenommenen Zuordnungen verloren. Die Tabelle wird aus den Daten des Anbieters neu aufgebaut, genau wie zu Beginn.",
+        "pending": "Vorgeschlagen, nicht bestätigt: Nur bestätigte Zuordnungen werden zusammengeführt.",
+        "pendingContested_one": "Auch für {{count}} weitere Person vorgeschlagen. Wenn du diese bestätigst, wird die andere getrennt.",
+        "pendingContested_other": "Auch für {{count}} weitere Personen vorgeschlagen. Wenn du diese bestätigst, werden die anderen getrennt.",
+        "problems": {
+          "default": "Diese Zuordnung ist nicht gültig.",
+          "no_local_row": "Für diese Zuordnung ist kein aula-Datensatz ausgewählt.",
+          "local_row_claimed_twice": "Dieser aula-Datensatz ist mehrfach zugeordnet.",
+          "local_row_already_linked": "Dieser aula-Datensatz ist beim Anbieter schon mit jemand anderem verknüpft."
+        }
       }
     },
     "form": {

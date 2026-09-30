@@ -23,7 +23,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 import CandidateFilter from './CandidateFilter';
 import ReviewTable from './ReviewTable';
-import { arrange, membersByRoom, realName, resultName, searchRows } from './ReviewTable/candidates';
+import { arrange, membersByRoom, realName, resultName, rivalsOf, searchRows } from './ReviewTable/candidates';
 
 const PER_PAGE = 50;
 
@@ -53,6 +53,8 @@ const IdpSyncView: React.FC = () => {
   const [search, setSearch] = useState<Record<CandidateKind, string>>({ room: '', user: '' });
   const [roomFilter, setRoomFilter] = useState<number | null>(null);
   const [personFilter, setPersonFilter] = useState<number | null>(null);
+  // Cleared on the next save: the admin re-applies to recheck.
+  const [problems, setProblems] = useState<Record<number, string>>({});
 
   const refreshProgress = useCallback(async () => {
     setProgress(await getMigrationProgress());
@@ -145,14 +147,30 @@ const IdpSyncView: React.FC = () => {
       return;
     }
 
+    setProblems({});
     await refreshProgress();
+    // Status stays `reviewing` on a reset, so the load effect does not rerun.
+    await Promise.all([loadKind('room'), loadKind('user')]);
   };
 
   // The save returns no rows, so reload.
-  const assign = async (row: MergeCandidate, localId: number | null) => {
-    await saveDecisions([{ id: row.id, decision: localId === null ? null : 'merge', local_id: localId }]);
-    await loadKind(row.kind);
+  const save = async (kind: CandidateKind, decisions: Parameters<typeof saveDecisions>[0]) => {
+    const saved = await saveDecisions(decisions);
+
+    setError(saved ? null : t('v2.ui.idpSync.errors.save'));
+    setProblems({});
+    await loadKind(kind);
   };
+
+  const assign = (row: MergeCandidate, localId: number | null) =>
+    save(row.kind, [{ id: row.id, decision: localId === null ? null : 'merge', local_id: localId }]);
+
+  // One aula record takes one match: confirming unlinks the other rows proposing it.
+  const confirm = (row: MergeCandidate) =>
+    save(row.kind, [
+      { id: row.id, decision: 'merge' },
+      ...rivalsOf(rows[row.kind], row).map((rival) => ({ id: rival.id, decision: null, local_id: null })),
+    ]);
 
   const apply = async () => {
     setBusy(true);
@@ -162,6 +180,7 @@ const IdpSyncView: React.FC = () => {
     setBusy(false);
 
     if (!result.ok) {
+      setProblems(Object.fromEntries(Object.entries(result.problems).map(([id, code]) => [Number(id), code])));
       setError(t('v2.ui.idpSync.errors.apply', { count: Object.keys(result.problems).length }));
 
       return;
@@ -226,7 +245,10 @@ const IdpSyncView: React.FC = () => {
       firstPage(kind);
     },
     onPage: (page: number) => setPages((current) => ({ ...current, [kind]: page })),
+    all: kind === 'room' ? rooms : people,
     onAssign: assign,
+    onConfirm: confirm,
+    problems,
   });
 
   const peopleFilter = (

@@ -9,14 +9,17 @@ const SUCCESS = 'bg-success text-success-fg border-success-fg/25';
 const INFO = 'bg-info text-info-fg border-info-fg/25';
 const WARNING = 'bg-warning text-warning-fg border-warning-fg/25';
 const ERROR = 'bg-error text-error-fg border-error-fg/25';
+/** The merge tone, outlined: proposed, not yet confirmed. */
+const PENDING = 'bg-paper text-success-fg border-2 border-dashed border-success-fg/60';
 
-const PERSON: Record<RowKind, string> = { merge: SUCCESS, create: WARNING, keep: ERROR };
-const SOURCE: Record<RowKind, string> = { merge: SUCCESS, create: INFO, keep: WARNING };
+const PERSON: Record<RowKind, string> = { merge: SUCCESS, pending: PENDING, create: WARNING, keep: ERROR };
+const SOURCE: Record<RowKind, string> = { merge: SUCCESS, pending: PENDING, create: INFO, keep: WARNING };
 
 export const toneFor = (kind: RowKind, isPerson: boolean) => (isPerson ? PERSON : SOURCE)[kind];
 
 export const SOURCE_TEXT: Record<RowKind, string> = {
   merge: 'text-success-fg',
+  pending: 'text-success-fg opacity-70',
   create: 'text-info-fg',
   keep: 'text-warning-fg',
 };

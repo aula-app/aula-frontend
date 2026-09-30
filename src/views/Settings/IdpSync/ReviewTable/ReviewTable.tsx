@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import SortSelect from '@/v2/components/input/SortSelect';
 import TextInput from '@/v2/components/input/TextInput';
 import { useListSort } from '@/v2/hooks/useListSort';
-import { isPair, Members, resultOf, rowKind, SORTS } from './candidates';
+import { isPair, Members, resultOf, rivalsOf, rowKind, SORTS } from './candidates';
 import MatchCell from './MatchCell';
 import MemberCount from './MemberCount';
 import EntityMeta from './EntityMeta';
@@ -20,8 +20,14 @@ type Props = {
   search: string;
   onSearch: (value: string) => void;
   onPage: (page: number) => void;
+  /** Arranged and unfiltered, for other pairs proposing the same aula record. */
+  all: MergeCandidate[];
   /** Repoints `row` at an aula record, or frees it when given null. */
   onAssign: (row: MergeCandidate, localId: number | null) => void;
+  /** Confirms a proposed pair. */
+  onConfirm: (row: MergeCandidate) => void;
+  /** Why apply refused a row, by row id. */
+  problems?: Record<number, string>;
   filter?: React.ReactNode;
   /** Rooms only, by row id. */
   members?: Map<number, Members>;
@@ -35,7 +41,10 @@ const ReviewTable: React.FC<Props> = ({
   search,
   onSearch,
   onPage,
+  all,
   onAssign,
+  onConfirm,
+  problems = {},
   filter,
   members,
 }) => {
@@ -45,9 +54,11 @@ const ReviewTable: React.FC<Props> = ({
   const isPerson = kind === 'user';
   const { sorted, orderBy, setOrderBy, reversed, setReversed } = useListSort(rows, SORTS, 'name');
   // While picking, show only valid targets; the pick itself comes first so search can't hide it.
+  // Rows apply refused come first, so they can be found.
+  const flagged = [...sorted.filter((row) => problems[row.id]), ...sorted.filter((row) => !problems[row.id])];
   const visible = matching.picked
-    ? [matching.picked, ...sorted.filter((row) => !matching.isPicked(row) && matching.isTarget(row))]
-    : sorted;
+    ? [matching.picked, ...flagged.filter((row) => !matching.isPicked(row) && matching.isTarget(row))]
+    : flagged;
 
   const pages = Math.max(1, Math.ceil(visible.length / perPage));
   const current = Math.min(page, pages);
@@ -102,8 +113,11 @@ const ReviewTable: React.FC<Props> = ({
           </thead>
           <tbody>
             {shown.map((row) => {
-              const tone = toneFor(rowKind(row), isPerson);
+              const kindOfRow = rowKind(row);
+              const tone = toneFor(kindOfRow, isPerson);
               const rowMembers = members?.get(row.id);
+              const rivals = kindOfRow === 'pending' ? rivalsOf(all, row).length : 0;
+              const problem = problems[row.id];
 
               return (
                 <tr key={row.id} data-testid={`idp-review-row-${row.id}`}>
@@ -126,7 +140,7 @@ const ReviewTable: React.FC<Props> = ({
                     members={rowMembers}
                   />
 
-                  <td className={`${CARD} ${tone}`}>
+                  <td className={`${CARD} ${tone} ${problem ? 'ring-2 ring-error-fg' : ''}`}>
                     <span className={`flex items-center gap-2 min-w-0 ${CONTENT}`}>
                       <EntityMeta
                         {...resultOf(row, isPerson)}
@@ -141,17 +155,39 @@ const ReviewTable: React.FC<Props> = ({
                         }
                       />
                       {isPair(row) && (
-                        <button
-                          type="button"
-                          className={`${CHIP} ml-auto flex shrink-0 items-center gap-1`}
-                          onClick={() => onAssign(row, null)}
-                          data-testid={`idp-review-unlink-${row.id}`}
-                        >
-                          <Icon type="unlink" size="1.1em" />
-                          {t('v2.ui.idpSync.actions.unlink')}
-                        </button>
+                        <span className="ml-auto flex shrink-0 items-center gap-1">
+                          {kindOfRow === 'pending' && (
+                            <button
+                              type="button"
+                              className={`${CHIP} flex items-center gap-1`}
+                              onClick={() => onConfirm(row)}
+                              data-testid={`idp-review-confirm-${row.id}`}
+                            >
+                              <Icon type="check" size="1.1em" />
+                              {t('v2.ui.idpSync.actions.confirm')}
+                            </button>
+                          )}
+                          <button
+                            type="button"
+                            className={`${CHIP} flex items-center gap-1`}
+                            onClick={() => onAssign(row, null)}
+                            data-testid={`idp-review-unlink-${row.id}`}
+                          >
+                            <Icon type="unlink" size="1.1em" />
+                            {t('v2.ui.idpSync.actions.unlink')}
+                          </button>
+                        </span>
                       )}
                     </span>
+                    {(kindOfRow === 'pending' || !!problem) && (
+                      <p className="px-3 pb-2 text-xs font-bold" data-testid={`idp-review-note-${row.id}`}>
+                        {problem
+                          ? t(`v2.ui.idpSync.problems.${problem}`, t('v2.ui.idpSync.problems.default'))
+                          : rivals > 0
+                            ? t('v2.ui.idpSync.pendingContested', { count: rivals })
+                            : t('v2.ui.idpSync.pending')}
+                      </p>
+                    )}
                   </td>
                 </tr>
               );

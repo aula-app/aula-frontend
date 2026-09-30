@@ -1,14 +1,25 @@
 import { createTextFilter } from '@/hooks/useFilter';
 import { MergeCandidate } from '@/services/idpMigration';
+import { localStorageGet } from '@/utils';
 import { Comparators } from '@/v2/hooks/useListSort';
 
 export const isPair = (row: MergeCandidate) => !!row.local_id && !!row.idp_id;
 export const isAulaOnly = (row: MergeCandidate) => !!row.local_id && !row.idp_id;
 export const isProviderOnly = (row: MergeCandidate) => !!row.idp_id && !row.local_id;
 
-export type RowKind = 'merge' | 'create' | 'keep';
+/** `pending`: a proposed pair the admin has not confirmed; apply leaves it unmerged. */
+export type RowKind = 'merge' | 'pending' | 'create' | 'keep';
 
-export const rowKind = (row: MergeCandidate): RowKind => (isPair(row) ? 'merge' : row.idp_id ? 'create' : 'keep');
+export const rowKind = (row: MergeCandidate): RowKind =>
+  isPair(row) ? (row.decision === 'merge' ? 'merge' : 'pending') : row.idp_id ? 'create' : 'keep';
+
+/** Other pairs proposing the same aula record. */
+export const rivalsOf = (rows: MergeCandidate[], row: MergeCandidate): MergeCandidate[] =>
+  isPair(row) ? rows.filter((other) => other.id !== row.id && isPair(other) && other.local_id === row.local_id) : [];
+
+/** Resolved against the legacy file endpoint, as UserAvatar does. */
+export const avatarUrl = (filename?: string | null): string | undefined =>
+  filename ? `${localStorageGet('api_url')}/api/files/${localStorageGet('code')}/${filename}` : undefined;
 
 /** Drops the half a manual match leaves behind, so each record shows once. */
 export const arrange = (rows: MergeCandidate[]): MergeCandidate[] => {
@@ -34,7 +45,7 @@ export const compareNames = new Intl.Collator().compare;
 
 const byName = (a: MergeCandidate, b: MergeCandidate) => compareNames(realName(a), realName(b));
 
-const STATUS: Record<RowKind, number> = { keep: 0, create: 1, merge: 2 };
+const STATUS: Record<RowKind, number> = { pending: 0, keep: 1, create: 2, merge: 3 };
 
 const CONFIDENCE: Record<MergeCandidate['outcome'], number> = { ambiguous: 0, none: 1, confident: 2 };
 
@@ -50,6 +61,7 @@ export const resultOf = (row: MergeCandidate, isPerson: boolean) => ({
   name: resultName(row),
   detail: isPerson ? (row.local_displayname ?? row.local_name ?? row.idp_name ?? undefined) : undefined,
   avatar: isPerson ? (row.local_name ?? row.idp_name ?? undefined) : undefined,
+  avatarSrc: isPerson ? avatarUrl(row.local_avatar) : undefined,
 });
 
 const searchNames = createTextFilter<MergeCandidate>(['local_name', 'idp_name']);
