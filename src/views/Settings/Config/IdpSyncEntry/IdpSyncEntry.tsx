@@ -1,7 +1,8 @@
 import Icon from '@/components/new/Icon/Icon';
+import { MigrationStatus } from '@/services/idpMigration';
 import Alert, { AlertSeverity } from '@/v2/components/ui/Alert';
 import Stepper from '@/v2/components/ui/Stepper';
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useIdpSyncEntry } from './useIdpSyncEntry';
@@ -19,12 +20,13 @@ const STEP_INDEX: Record<string, number> = {
   completed: STEPS.length,
 };
 
-/**
- * The merge screen is not ready to ship: a deployed build shows the steps and
- * their copy, but cannot start or open the review, or a school would be moved
- * into `reviewing` with no way through it.
- */
-const REVIEW_ENABLED = import.meta.env.DEV;
+/** Every status each step can stand for, so a dev can reach all six from four buttons. */
+const STEP_STATUSES: MigrationStatus[][] = [
+  ['flagged'],
+  ['connected'],
+  ['reviewing'],
+  ['importing', 'linking', 'completed'],
+];
 
 // inline-flex, not the default: an <a> is display:inline, where vertical padding
 // does not grow the box, so the Link would sit tighter than the <button>s.
@@ -42,12 +44,22 @@ const ACTION_CLASS =
  */
 const IdpSyncEntry: React.FC = () => {
   const { t } = useTranslation();
-  const { status, progress, busy, failed, connect, prepare, refresh } = useIdpSyncEntry();
+  const { status: liveStatus, progress, busy, failed, connect, prepare, refresh } = useIdpSyncEntry();
+  // Lets a step be picked to preview its copy. Changes nothing on the backend, so
+  // it is kept out of production builds rather than shipped as a real control.
+  const [preview, setPreview] = useState<MigrationStatus>(null);
+  const status = preview ?? liveStatus;
 
   if (!status) return null;
 
-  const button = (label: string, onClick: () => void, testId: string, enabled = true) => (
-    <button type="button" className={ACTION_CLASS} disabled={busy || !enabled} onClick={onClick} data-testid={testId}>
+  const selectStep = (index: number) => {
+    const group = STEP_STATUSES[index];
+
+    setPreview(group[(group.indexOf(status) + 1) % group.length]);
+  };
+
+  const button = (label: string, onClick: () => void, testId: string) => (
+    <button type="button" className={ACTION_CLASS} disabled={busy} onClick={onClick} data-testid={testId}>
       {label}
     </button>
   );
@@ -59,18 +71,14 @@ const IdpSyncEntry: React.FC = () => {
     },
     connected: {
       severity: 'info' as const,
-      action: button(t('v2.ui.idpSync.actions.prepare'), prepare, 'idp-sync-prepare', REVIEW_ENABLED),
+      action: button(t('v2.ui.idpSync.actions.prepare'), prepare, 'idp-sync-prepare'),
     },
     reviewing: {
       severity: 'warning' as const,
-      action: REVIEW_ENABLED ? (
+      action: (
         <Link to="/settings/idp-sync" className={ACTION_CLASS} data-testid="config-idp-sync-open">
           {t('v2.ui.idpSync.actions.open')}
         </Link>
-      ) : (
-        <button type="button" className={ACTION_CLASS} disabled data-testid="config-idp-sync-open">
-          {t('v2.ui.idpSync.actions.open')}
-        </button>
       ),
     },
     // The import and everything after it: the risky decisions are already behind.
