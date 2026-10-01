@@ -43,6 +43,10 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
   // Both cells share the row id; only the half holding the record is picked.
   const picked = isPicked(row) && source;
 
+  // Two people of one name are told apart by their classes.
+  const classList = (entries?: { name: string }[] | null) =>
+    entries?.length ? entries.map(({ name: entry }) => entry).join(', ') : t('v2.ui.idpSync.noClasses');
+
   const list = members?.[side];
   const listId = useId();
 
@@ -57,8 +61,12 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
           detail: row.local_displayname ?? row.local_name ?? undefined,
           avatar: row.local_name ?? undefined,
           avatarSrc: avatarUrl(row.local_avatar),
+          classes: classList(row.local_rooms),
         }
-      : { detail: row.idp_name_kind === 'pseudonym' ? t('v2.ui.idpSync.state.pseudonym') : undefined };
+      : {
+          detail: row.idp_name_kind === 'pseudonym' ? t('v2.ui.idpSync.state.pseudonym') : undefined,
+          classes: classList(row.idp_groups),
+        };
 
   const content = name ? (
     <>

@@ -25,6 +25,7 @@
         "steps": "Schritte der Prüfung",
         "filterRoom": "Klasse",
         "allRooms": "Alle Klassen",
+        "noClasses": "Keine Klasse",
         "filterPerson": "Person",
         "allPeople": "Alle Personen",
         "members_one": "{{count}} Person",

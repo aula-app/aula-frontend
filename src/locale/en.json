@@ -25,6 +25,7 @@
         "steps": "Review steps",
         "filterRoom": "Class",
         "allRooms": "All classes",
+        "noClasses": "No class",
         "filterPerson": "Person",
         "allPeople": "Everybody",
         "members_one": "{{count}} person",
