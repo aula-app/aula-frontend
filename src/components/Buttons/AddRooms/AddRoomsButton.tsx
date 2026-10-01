@@ -1,5 +1,5 @@
 import AppIcon from '@/components/AppIcon';
-import { getRooms } from '@/services/rooms';
+import { getAllRooms } from '@/services/rooms';
 import { addUserRoom, getUserRooms, removeUserRoom } from '@/services/users';
 import { RoomType } from '@/types/Scopes';
 import { UpdtesObject } from '@/types/SettingsTypes';
@@ -42,7 +42,7 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
   const [updates, setUpdates] = useState<UpdtesObject>({ add: [], remove: [] });
 
   const fetchRooms = useCallback(async () => {
-    const response = await getRooms();
+    const response = await getAllRooms();
     setLoading(false);
     if (response.error) setError(response.error);
     if (!response.error && response.data) setRooms(response.data);
