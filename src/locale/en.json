@@ -112,6 +112,7 @@
           "import": "Import"
         },
         "guide": "Each row is an aula record, its match at the provider, and the account you end up with. Drag a card onto an empty slot, or select it and pick where it goes, to match them by hand. A row holding both sides will be merged; unlink it to keep the two accounts apart.",
+        "staleNote": "This list was prepared from the data as it was when you started the review. Changes to users, classes or memberships made since then are not shown here. To include them, use Reset, which also discards the matches you have made.",
         "resetWarning": "Resetting discards every match you have made and rebuilds the table from the provider’s data, exactly as it was at the start.",
         "pending": "Proposed, not confirmed: only a confirmed match is merged.",
         "pendingContested_one": "Also proposed for {{count}} other person. Confirming this one unlinks the other.",

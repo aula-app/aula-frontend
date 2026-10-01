@@ -319,7 +319,13 @@ const IdpSyncView: React.FC = () => {
 
       {status === 'reviewing' && (
         <div className="flex flex-col gap-6">
-          <p className="text-sm opacity-70">{t('v2.ui.idpSync.guide')}</p>
+          <div className="flex flex-col gap-2 text-sm">
+            <p className="opacity-70">{t('v2.ui.idpSync.guide')}</p>
+            <p className="flex items-start gap-2" data-testid="idp-sync-stale-note">
+              <Icon type="about" size="1.2em" className="shrink-0" />
+              {t('v2.ui.idpSync.staleNote')}
+            </p>
+          </div>
 
           <Tabs
             value={step}

@@ -112,6 +112,7 @@
           "import": "Importieren"
         },
         "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel –, um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
+        "staleNote": "Diese Liste wurde aus den Daten erstellt, wie sie zu Beginn der Prüfung waren. Seitdem vorgenommene Änderungen an Personen, Klassen oder Mitgliedschaften werden hier nicht angezeigt. Um sie zu übernehmen, nutze „Zurücksetzen“. Dabei gehen auch deine bisherigen Zuordnungen verloren.",
         "resetWarning": "Beim Zurücksetzen gehen alle von Ihnen vorgenommenen Zuordnungen verloren. Die Tabelle wird aus den Daten des Anbieters neu aufgebaut, genau wie zu Beginn.",
         "pending": "Vorgeschlagen, nicht bestätigt: Nur bestätigte Zuordnungen werden zusammengeführt.",
         "pendingContested_one": "Auch für {{count}} weitere Person vorgeschlagen. Wenn du diese bestätigst, wird die andere getrennt.",
