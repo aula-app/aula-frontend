@@ -286,8 +286,16 @@ const IdpSyncView: React.FC = () => {
         {t('v2.ui.idpSync.title')}
       </h1>
 
-      {!!error && <Alert severity="error">{error}</Alert>}
-      {!!notice && <Alert severity="info">{notice}</Alert>}
+      {!!error && (
+        <Alert severity="error" className="flex-none">
+          {error}
+        </Alert>
+      )}
+      {!!notice && (
+        <Alert severity="info" className="flex-none">
+          {notice}
+        </Alert>
+      )}
 
       {status === null && (
         <FeedbackState
