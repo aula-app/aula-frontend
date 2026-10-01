@@ -20,6 +20,8 @@ const INITIAL_STATE: OutdatedState = {
   isOutdated: false,
 };
 
+// FIXME? will bail silently if api_url is not set yet
+//   (e.g. on local/dev, where this is not really *necessary* but also weird w.r.t. coverage)
 export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
   const [state, setState] = useState<OutdatedState>(INITIAL_STATE);
   const lastCheckedRef = useRef<{ key: string; timestamp: number } | null>(null);

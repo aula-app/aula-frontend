@@ -242,7 +242,10 @@
   "instance": {
     "chip": "Code",
     "error": "The instance code is invalid",
-    "headline": "Enter the instance code",
+    "headline": "School name (or Instance Code)",
+    "placeholder": "Paula Elementary (or aBcXy)",
+    "autocompleteHint": "Instance Code",
+    "fetchTenantsError": "Error while fetching school names; only instance codes available",
     "label": "Instance code",
     "status": "Instance status"
   },

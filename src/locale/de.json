@@ -242,7 +242,10 @@
   "instance": {
     "chip": "Code",
     "error": "Der Instanzcode ist ungültig",
-    "headline": "Geben Sie den Instanzcode ein",
+    "headline": "Name der Schule (oder Instanzcode)",
+    "placeholder": "Paulaschule (oder aBcXy)",
+    "autocompleteHint": "Instanzcode",
+    "fetchTenantsError": "Fehler bei Übetragung; es stehen keine Schulnamen zur Verfügung, nur Instanzcodes",
     "label": "Instanzcode",
     "status": "Instanzstatus"
   },
