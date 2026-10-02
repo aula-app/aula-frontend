@@ -297,10 +297,8 @@
     },
     "denied": "Your data change request has been denied. Please contact the school admin for further information.",
     "exportData": {
-      "body": "A data export procedure was requested for user {{var}}",
-      "button": "Request data export",
-      "info": "According to data protection requirements (GDPR), online services must provide their users with all stored data upon request.",
-      "title": "Account data export request for {{var}}"
+      "button": "Download data export",
+      "info": "According to data protection requirements (GDPR), online services must provide their users with all stored data upon request."
     },
     "label": "Requests",
     "updateData": {
