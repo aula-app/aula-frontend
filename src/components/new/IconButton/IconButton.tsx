@@ -70,7 +70,8 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(({
 
   // Render as Link if 'to' prop is provided
   if (to) {
-    const { to: _to, ...linkProps } = restOfProps as any;
+    const linkProps = { ...(restOfProps as any) };
+    delete linkProps.to;
     return (
       <Link
         to={to}

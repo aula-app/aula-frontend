@@ -74,7 +74,7 @@ const OAuthLogin = () => {
         localStorage.removeItem('sso_force_login');
         navigate('/', { replace: true });
         dispatch({ type: 'LOG_IN' });
-      } catch (error) {
+      } catch {
         navigate('/login', { replace: true });
       }
     })();

@@ -42,7 +42,6 @@ const DataTable: React.FC<Props> = ({
   orderAsc,
   orderBy,
   limit,
-  offset,
   isLoading,
   extraTools,
   hideAdd,

@@ -76,7 +76,7 @@ const ResetMultiplePasswordsButton = forwardRef<HTMLButtonElement, Props>(
       requestClose();
     };
 
-    const handleDialogClose = (_event: object, _reason: 'backdropClick' | 'escapeKeyDown') => {
+    const handleDialogClose = () => {
       requestClose();
     };
 

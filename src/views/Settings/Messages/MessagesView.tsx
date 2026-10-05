@@ -30,7 +30,7 @@ const MessagesView: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.messages'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.messages'), '']] });
   }, [dispatch, t]);
 
   return (

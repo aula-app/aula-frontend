@@ -3,13 +3,12 @@ import { localStorageGet } from '@/utils';
 import { useEffect, useState } from 'react';
 
 export function useSsoManaged(): boolean {
-  const [managed, setManaged] = useState(false);
+  const [managed, setManaged] = useState(
+    () => typeof window !== 'undefined' && localStorage.getItem('sso_managed_override') === 'true'
+  );
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && localStorage.getItem('sso_managed_override') === 'true') {
-      setManaged(true);
-      return;
-    }
+    if (typeof window !== 'undefined' && localStorage.getItem('sso_managed_override') === 'true') return;
 
     const apiUrl = localStorageGet('api_url');
     if (!apiUrl) return;

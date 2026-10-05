@@ -23,7 +23,6 @@ export const TestConstants = {
     PRINCIPAL: 44,
     PRINCIPAL_V: 45,
     ADMIN: 50,
-    TECH_ADMIN: 60,
   },
 
   // Common selectors (if needed)

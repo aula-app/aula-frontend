@@ -1,20 +1,20 @@
 import { getGroups } from '@/services/groups';
 import { SelectOptionsType } from '@/types/SettingsTypes';
-import { Autocomplete, BaseTextFieldProps, CircularProgress, TextField } from '@mui/material';
+import { Autocomplete, BaseTextFieldProps, TextField } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-interface Props extends BaseTextFieldProps {
+interface Props<T extends FieldValues = FieldValues> extends BaseTextFieldProps {
   disabled?: boolean;
-  control: Control<any, any>;
+  control: Control<T>;
 }
 
 /**
  * Renders "GroupField" component
  */
 
-const GroupField: React.FC<Props> = ({ control, disabled = false, ...restOfProps }) => {
+const GroupField = <T extends FieldValues = FieldValues>({ control, disabled = false, ...restOfProps }: Props<T>) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -35,7 +35,7 @@ const GroupField: React.FC<Props> = ({ control, disabled = false, ...restOfProps
 
   return (
     <Controller
-      name="target_group"
+      name={'target_group' as Path<T>}
       control={control}
       render={({ field, fieldState }) => {
         // Find the option object that matches the current field value

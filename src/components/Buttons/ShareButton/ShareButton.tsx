@@ -36,12 +36,12 @@ const ShareButton = forwardRef<HTMLButtonElement, Props>(({ idea, disabled }, re
             await navigator.clipboard.writeText(absoluteUrl);
             successAlert(t('clipboard.linkCopied'), dispatch);
           }
-        } catch (e) {
+        } catch {
           // fallback to copying even if Web Share API fails mid-way
           try {
             await navigator.clipboard.writeText(absoluteUrl);
             successAlert(t('clipboard.linkCopied'), dispatch);
-          } catch (_) {
+          } catch {
             /* ignore */
           }
         }

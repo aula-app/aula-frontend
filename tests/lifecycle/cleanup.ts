@@ -5,7 +5,7 @@ export async function cleanupTestData(opts: { keepAdminContext: boolean } = { ke
   const authStatesDir = path.join(process.cwd(), 'tests/auth-states');
   const generatedTestDataDir = path.join(process.cwd(), 'tests/generated-test-data');
   try {
-    for (let dir of [authStatesDir, generatedTestDataDir]) {
+    for (const dir of [authStatesDir, generatedTestDataDir]) {
       if (fs.existsSync(dir)) {
         for (const file of fs.readdirSync(dir)) {
           if (opts.keepAdminContext && file.endsWith('admin-context.json')) {

@@ -119,15 +119,16 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
       return <>{formatDateTime(String(value))}</>;
 
     // Enum/Status fields
-    case 'phase_id':
+    case 'phase_id': {
       const currentPhase = value as `${keyof typeof phases}`;
       return <>{phases[currentPhase] ? t(`phases.${phases[currentPhase]}`) : ''}</>;
+    }
     case 'status':
       return <>{t(STATUS[Number(value)].label)}</>;
     case 'userlevel':
-      return <>{t(`roles.${value}` || '')}</>;
+      return <>{t(`roles.${value}`)}</>;
     case 'user_needs_to_consent':
-      return <>{t(`consent.${messageConsentValues[Number(value)]}` || '')}</>;
+      return <>{t(`consent.${messageConsentValues[Number(value)]}`)}</>;
 
     // Markdown fields that need to be rendered as HTML (without line breaks for table display)
     case 'description_public':
@@ -137,7 +138,7 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
       return <MarkdownReader>{String(value).replace(/\n/g, ' ')}</MarkdownReader>;
 
     // Special fields
-    case 'temp_pw':
+    case 'temp_pw': {
       const toggleHidden = (event: SyntheticEvent) => {
         event.stopPropagation();
         setHidden(!hidden);
@@ -172,6 +173,7 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
           <Stack className="printOnly">{t('auth.messages.email')}</Stack>
         </Stack>
       ) : null;
+    }
 
     // Where the account comes from: "aula" for one made here, "sso: <provider>"
     // for one the directory owns.

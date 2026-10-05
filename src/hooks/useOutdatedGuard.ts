@@ -82,7 +82,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
 
           if (belowRecommended && !outdated && shouldShowPopup) {
             dispatch({
-              action: 'ADD_POPUP',
+              type: 'ADD_POPUP',
               message: {
                 type: 'info',
                 message: t('errors.appBelowRecommended', {

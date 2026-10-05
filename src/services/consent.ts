@@ -32,7 +32,7 @@ export const getUserConsent = async (token: string, signal?: AbortSignal): Promi
     if (error instanceof Error) {
       throw error;
     }
-    throw new Error('Unknown error occurred');
+    throw new Error('Unknown error occurred', { cause: error });
   }
 };
 
