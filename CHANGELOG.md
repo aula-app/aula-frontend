@@ -1,5 +1,7 @@
 ## Unreleased
 
+- **New features**
+    - users' data exports do not require admin approval any more
 - **Technical improvements**
     - remove Tech Admin role, clean up related permissions, notably regarding the listing+viewing+selection of rooms
 
