@@ -233,6 +233,12 @@ ${message}`,
             </Dialog>
           </>
         )}
+        {metadata && metadata.responseTo === 'requestData' && (
+          <p>
+            {/* this will show up for users who requested an export when it still required admin approval */}
+            {t('requests.exportData.legacyHint')}
+          </p>
+        )}
       </CardContent>
     </Card>
   );
