@@ -24,6 +24,7 @@ test('Instance Offline', async ({ newPageFor, seededUser }) => {
     // navigation; when the instance is offline it renders <OfflineView />, which calls
     // logout() (clears the token) and the router falls back to the public /offline
     // route where <PublicOfflineView data-testid="school-offline-view"> is rendered.
+    // FIXME: this wait sometimes fails
     await userPage.goto(shared.getHost(), { waitUntil: 'domcontentloaded' });
     const offlineDiv = userPage.getByTestId(TEST_IDS.SCHOOL_OFFLINE_VIEW);
     await expect(offlineDiv).toBeVisible({ timeout: 20000 });
