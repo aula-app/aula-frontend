@@ -331,9 +331,10 @@ const IdpSyncView: React.FC = () => {
       >
         <div className="flex flex-col gap-4 p-6" data-testid="idp-sync-confirm-leave">
           <h2 className="text-xl">{t('v2.ui.idpSync.leaveTitle')}</h2>
-          <p id={leaveBodyId} className="text-sm">
-            {t('v2.ui.idpSync.leaveWarning')}
-          </p>
+          <div id={leaveBodyId} className="flex flex-col gap-2 text-sm">
+            <p className="mb-0!">{t('v2.ui.idpSync.leaveWarning')}</p>
+            <p className="mb-0! opacity-70">{t('v2.ui.idpSync.leaveRebuild')}</p>
+          </div>
           <div className="flex flex-wrap items-center gap-2">
             <Button text color="error" className="mr-auto" onClick={leaving.stay} data-testid="idp-sync-leave-cancel">
               {t('actions.cancel')}
@@ -432,7 +433,7 @@ const IdpSyncView: React.FC = () => {
           >
             <div className="flex flex-col gap-4 p-6" data-testid={`idp-sync-confirm-${confirming}`}>
               <h2 className="text-xl">{t(`v2.ui.idpSync.actions.${confirming ?? 'apply'}`)}</h2>
-              <p id={confirmBodyId} className="text-sm">
+              <p id={confirmBodyId} className="mb-0! text-sm">
                 {t(confirming === 'reset' ? 'v2.ui.idpSync.resetWarning' : 'v2.ui.idpSync.reviewWarning')}
               </p>
               <div className="flex flex-wrap items-center gap-2">
