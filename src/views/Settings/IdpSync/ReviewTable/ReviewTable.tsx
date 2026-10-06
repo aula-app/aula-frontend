@@ -181,7 +181,7 @@ const ReviewTable: React.FC<Props> = ({
                       )}
                     </span>
                     {(kindOfRow === 'pending' || !!problem) && (
-                      <p className="px-3 pb-2 text-xs font-bold" data-testid={`idp-review-note-${row.id}`}>
+                      <p className="mb-0! px-3 pb-2 text-xs font-bold" data-testid={`idp-review-note-${row.id}`}>
                         {problem
                           ? t(`v2.ui.idpSync.problems.${problem}`, t('v2.ui.idpSync.problems.default'))
                           : rivals > 0

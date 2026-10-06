@@ -28,7 +28,8 @@ interface Props {
   /** Small lead-in above the title, e.g. "Action needed:". */
   eyebrow?: string;
   title?: string;
-  children: ReactNode;
+  /** The detail under the title. A title alone stands on its own line. */
+  children?: ReactNode;
   /** Rendered below the body: the action this alert is asking for. */
   action?: ReactNode;
   /** Full-bleed strip across the top, clipped to the top rounded corners. */
@@ -57,6 +58,8 @@ const Alert = ({
   'data-testid': dataTestId,
 }: Props) => {
   const { t } = useTranslation();
+  const headed = !!eyebrow || !!title;
+  const icon = <Icon type={SEVERITY_ICONS[severity]} size="1.25em" className="shrink-0" />;
 
   return (
     <div
@@ -65,17 +68,31 @@ const Alert = ({
       className={`flex flex-1 flex-col min-w-0 rounded-2xl ${SEVERITY_STYLES[severity]} ${className}`}
     >
       {!!header && <div className="overflow-hidden rounded-t-2xl">{header}</div>}
-      <div className="flex flex-col items-start gap-1 p-4">
-        <p className="font-bold text-lg flex items-center gap-1">
-          <Icon type={SEVERITY_ICONS[severity]} size="1.25em" className="shrink-0" />
-          {!!eyebrow && <span>{eyebrow}</span>}
-          {!!title && <span>{title}</span>}
-        </p>
-        <p className="text-sm">{children}</p>
-        {!!action && <div className="mt-2">{action}</div>}
+      {/* mb-0!: a global `p { margin-bottom: 1em }` sits outside the cascade layers and wins. */}
+      <div className="flex items-start gap-2 p-4">
+        <div className="flex min-w-0 flex-1 flex-col items-start gap-1">
+          {headed ? (
+            <>
+              <p className="mb-0! flex items-center gap-1 text-lg font-bold">
+                {icon}
+                {!!eyebrow && <span>{eyebrow}</span>}
+                {!!title && <span>{title}</span>}
+              </p>
+              {!!children && <p className="mb-0! text-sm">{children}</p>}
+            </>
+          ) : (
+            // Nothing to head: the icon rides with the message rather than holding an empty line.
+            <p className="mb-0! flex items-start gap-2 text-sm">
+              {icon}
+              {children}
+            </p>
+          )}
+          {!!action && <div className="mt-2">{action}</div>}
+        </div>
         {!!onDismiss && (
+          // Beside the title, not under the message: the way out stays where the eye starts.
           <IconButton
-            className="shrink-0 -mt-1 -mr-1"
+            className="-mt-1 -mr-1 shrink-0"
             title={t('ui.common.dismiss')}
             aria-label={t('ui.common.dismiss')}
             onClick={onDismiss}

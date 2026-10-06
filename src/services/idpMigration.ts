@@ -77,13 +77,25 @@ export const startIdpConnect = async (): Promise<string | null> => {
   return response?.url ?? null;
 };
 
-/** Discards any earlier proposal. */
-export const buildProposal = async (): Promise<Record<string, number> | null> => {
-  const response = await request<{ counts: Record<string, number> }>('/api/v2/auth/idp/merge-proposal', {
-    method: 'POST',
-  });
+/** `detail` is the backend's own reason, untranslated: the only clue to a provider-side refusal. */
+export type ProposalResult = { ok: true; counts: Record<string, number> } | { ok: false; detail: string | null };
 
-  return response?.counts ?? null;
+/** Discards any earlier proposal. */
+export const buildProposal = async (): Promise<ProposalResult> => {
+  try {
+    const response = await fetch(`${apiUrl()}/api/v2/auth/idp/merge-proposal`, {
+      method: 'POST',
+      headers: headers(),
+    });
+
+    const body = await response.json().catch(() => ({}));
+
+    if (!response.ok) return { ok: false, detail: typeof body?.detail === 'string' ? body.detail : null };
+
+    return { ok: true, counts: body?.counts ?? {} };
+  } catch {
+    return { ok: false, detail: null };
+  }
 };
 
 export const getProposal = async (params: {

@@ -18,16 +18,20 @@ import Tabs from '@/v2/components/ui/Tabs';
 import Alert from '@/v2/components/ui/Alert';
 import Dialog from '@/v2/components/ui/Dialog';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
-import { useCallback, useEffect, useId, useMemo, useState } from 'react';
+import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import CandidateFilter from './CandidateFilter';
 import ReviewTable from './ReviewTable';
+import { useLeaveGuard } from './useLeaveGuard';
 import { arrange, membersByRoom, realName, resultName, rivalsOf, searchRows } from './ReviewTable/candidates';
 
 const PER_PAGE = 50;
 
 const IMPORT_POLL_MS = 3000;
+
+/** What went wrong, what to do about it, and the backend's own words where it gave them. */
+type Message = { title: string; body: string; detail?: string | null };
 
 const IdpSyncView: React.FC = () => {
   const { t } = useTranslation();
@@ -35,12 +39,16 @@ const IdpSyncView: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [progress, setProgress] = useState<MigrationProgress | null>(null);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<Message | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   // Outlives `asking` so the dialog keeps its text while closing.
   const [confirming, setConfirming] = useState<'apply' | 'reset' | null>(null);
   const [asking, setAsking] = useState(false);
   const confirmBodyId = useId();
+  const leaveBodyId = useId();
+  const navigate = useNavigate();
+  /** The entry rebuild runs once, and not on top of a build this session already made. */
+  const restarted = useRef(false);
 
   const ask = (kind: 'apply' | 'reset') => {
     setConfirming(kind);
@@ -81,13 +89,6 @@ const IdpSyncView: React.FC = () => {
   }, [refreshProgress]);
 
   useEffect(() => {
-    if (progress?.migration_status === 'reviewing') {
-      loadKind('room');
-      loadKind('user');
-    }
-  }, [progress?.migration_status, loadKind]);
-
-  useEffect(() => {
     if (progress?.migration_status !== 'importing') return;
 
     const timer = setInterval(refreshProgress, IMPORT_POLL_MS);
@@ -111,7 +112,11 @@ const IdpSyncView: React.FC = () => {
       setProgress(current);
 
       if (!result.success && current?.migration_status === 'flagged') {
-        setError(t(`errors.sso.${result.error}`, t('v2.ui.idpSync.errors.connect')));
+        setError({
+          title: t('v2.ui.idpSync.errors.connect.title'),
+          // The provider's own reason, where we have wording for it.
+          body: t(`errors.sso.${result.error}`, t('v2.ui.idpSync.errors.connect.body')),
+        });
 
         return;
       }
@@ -126,7 +131,7 @@ const IdpSyncView: React.FC = () => {
     setBusy(false);
 
     if (!url) {
-      setError(t('v2.ui.idpSync.errors.connect'));
+      setError({ title: t('v2.ui.idpSync.errors.connect.title'), body: t('v2.ui.idpSync.errors.connect.body') });
 
       return;
     }
@@ -134,30 +139,41 @@ const IdpSyncView: React.FC = () => {
     window.location.href = url;
   };
 
-  const prepare = async () => {
+  const prepare = useCallback(async () => {
+    restarted.current = true;
     setBusy(true);
     setError(null);
     setAsking(false);
-    const counts = await buildProposal();
+    const result = await buildProposal();
     setBusy(false);
 
-    if (!counts) {
-      setError(t('v2.ui.idpSync.errors.prepare'));
+    if (!result.ok) {
+      setError({
+        title: t('v2.ui.idpSync.errors.prepare.title'),
+        body: t('v2.ui.idpSync.errors.prepare.body'),
+        detail: result.detail,
+      });
 
       return;
     }
 
     setProblems({});
     await refreshProgress();
-    // Status stays `reviewing` on a reset, so the load effect does not rerun.
     await Promise.all([loadKind('room'), loadKind('user')]);
-  };
+  }, [loadKind, refreshProgress, t]);
+
+  // Opening the review rebuilds it: the table has to carry whatever changed in aula meanwhile.
+  useEffect(() => {
+    if (progress?.migration_status !== 'reviewing' || restarted.current) return;
+
+    prepare();
+  }, [progress?.migration_status, prepare]);
 
   // The save returns no rows, so reload.
   const save = async (kind: CandidateKind, decisions: Parameters<typeof saveDecisions>[0]) => {
     const saved = await saveDecisions(decisions);
 
-    setError(saved ? null : t('v2.ui.idpSync.errors.save'));
+    setError(saved ? null : { title: t('v2.ui.idpSync.errors.save.title'), body: t('v2.ui.idpSync.errors.save.body') });
     setProblems({});
     await loadKind(kind);
   };
@@ -181,7 +197,10 @@ const IdpSyncView: React.FC = () => {
 
     if (!result.ok) {
       setProblems(Object.fromEntries(Object.entries(result.problems).map(([id, code]) => [Number(id), code])));
-      setError(t('v2.ui.idpSync.errors.apply', { count: Object.keys(result.problems).length }));
+      setError({
+        title: t('v2.ui.idpSync.errors.apply.title', { count: Object.keys(result.problems).length }),
+        body: t('v2.ui.idpSync.errors.apply.body'),
+      });
 
       return;
     }
@@ -190,6 +209,15 @@ const IdpSyncView: React.FC = () => {
   };
 
   const status = progress?.migration_status ?? null;
+  const leaving = useLeaveGuard(status === 'reviewing');
+
+  const leave = () => {
+    const to = leaving.pending;
+
+    leaving.stay();
+
+    if (to) navigate(to);
+  };
 
   const step: CandidateKind = searchParams.get('step') === 'user' ? 'user' : 'room';
 
@@ -287,15 +315,35 @@ const IdpSyncView: React.FC = () => {
       </h1>
 
       {!!error && (
-        <Alert severity="error" className="flex-none">
-          {error}
+        <Alert severity="error" title={error.title} onDismiss={() => setError(null)} className="flex-none">
+          {error.body}
+          {!!error.detail && <span className="mt-1 block text-xs opacity-70">{error.detail}</span>}
         </Alert>
       )}
-      {!!notice && (
-        <Alert severity="info" className="flex-none">
-          {notice}
-        </Alert>
-      )}
+      {!!notice && <Alert severity="info" title={notice} onDismiss={() => setNotice(null)} className="flex-none" />}
+
+      <Dialog
+        open={!!leaving.pending}
+        onClose={leaving.stay}
+        role="alertdialog"
+        describedBy={leaveBodyId}
+        title={t('v2.ui.idpSync.leaveTitle')}
+      >
+        <div className="flex flex-col gap-4 p-6" data-testid="idp-sync-confirm-leave">
+          <h2 className="text-xl">{t('v2.ui.idpSync.leaveTitle')}</h2>
+          <p id={leaveBodyId} className="text-sm">
+            {t('v2.ui.idpSync.leaveWarning')}
+          </p>
+          <div className="flex flex-wrap items-center gap-2">
+            <Button text color="error" className="mr-auto" onClick={leaving.stay} data-testid="idp-sync-leave-cancel">
+              {t('actions.cancel')}
+            </Button>
+            <Button color="error" onClick={leave} data-testid="idp-sync-leave-confirm">
+              {t('v2.ui.idpSync.actions.leave')}
+            </Button>
+          </div>
+        </div>
+      </Dialog>
 
       {status === null && (
         <FeedbackState
@@ -327,13 +375,7 @@ const IdpSyncView: React.FC = () => {
 
       {status === 'reviewing' && (
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2 text-sm">
-            <p className="opacity-70">{t('v2.ui.idpSync.guide')}</p>
-            <p className="flex items-start gap-2" data-testid="idp-sync-stale-note">
-              <Icon type="about" size="1.2em" className="shrink-0" />
-              {t('v2.ui.idpSync.staleNote')}
-            </p>
-          </div>
+          <p className="text-sm opacity-70">{t('v2.ui.idpSync.guide')}</p>
 
           <Tabs
             value={step}

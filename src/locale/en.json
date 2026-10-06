@@ -63,7 +63,8 @@
           "connect": "Connect",
           "prepare": "Prepare",
           "apply": "Apply matches and import",
-          "continue": "Save and continue",
+          "continue": "Continue",
+          "leave": "Leave the review",
           "reset": "Reset",
           "refresh": "Refresh",
           "open": "Review",
@@ -74,10 +75,23 @@
           "confirm": "Confirm"
         },
         "errors": {
-          "connect": "Could not start the provider sign-in.",
-          "prepare": "Could not prepare the sync.",
-          "apply": "{{count}} matches are not valid. Please check the flagged rows.",
-          "save": "Could not save the change. Please try again."
+          "connect": {
+            "title": "Could not start the provider sign-in.",
+            "body": "Try again. If it keeps failing, check the connection settings in aula-manager."
+          },
+          "prepare": {
+            "title": "Could not prepare the sync.",
+            "body": "Try again. If it keeps failing, check that the provider is reachable."
+          },
+          "apply": {
+            "title_one": "{{count}} match is not valid.",
+            "title_other": "{{count}} matches are not valid.",
+            "body": "Check the flagged rows, then apply again."
+          },
+          "save": {
+            "title": "Could not save the change.",
+            "body": "Nothing was changed. Try again."
+          }
         },
         "actionNeeded": "Action needed:",
         "states": {
@@ -114,7 +128,8 @@
           "import": "Import"
         },
         "guide": "Each row is an aula record, its match at the provider, and the account you end up with. Drag a card onto an empty slot, or select it and pick where it goes, to match them by hand. A row holding both sides will be merged; unlink it to keep the two accounts apart.",
-        "staleNote": "This list was prepared from the data as it was when you started the review. Changes to users, classes or memberships made since then are not shown here. To include them, use Reset, which also discards the matches you have made.",
+        "leaveTitle": "Leave the review?",
+        "leaveWarning": "The matches you have made are not kept. This list was built when the review started, so opening it again builds a fresh one from the people, classes and memberships as they are then.",
         "resetWarning": "Resetting discards every match you have made and rebuilds the table from the provider’s data, exactly as it was at the start.",
         "pending": "Proposed, not confirmed: only a confirmed match is merged.",
         "pendingContested_one": "Also proposed for {{count}} other person. Confirming this one unlinks the other.",

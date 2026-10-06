@@ -63,7 +63,8 @@
           "connect": "Verbinden",
           "prepare": "Vorbereiten",
           "apply": "Zuordnungen übernehmen und importieren",
-          "continue": "Speichern und weiter",
+          "continue": "Weiter",
+          "leave": "Prüfung verlassen",
           "reset": "Zurücksetzen",
           "refresh": "Aktualisieren",
           "open": "Prüfen",
@@ -74,10 +75,23 @@
           "confirm": "Bestätigen"
         },
         "errors": {
-          "connect": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",
-          "prepare": "Der Abgleich konnte nicht vorbereitet werden.",
-          "apply": "{{count}} Zuordnungen sind nicht gültig. Bitte prüfe die markierten Zeilen.",
-          "save": "Die Änderung konnte nicht gespeichert werden. Bitte versuche es noch einmal."
+          "connect": {
+            "title": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",
+            "body": "Versuche es noch einmal. Wenn es weiterhin fehlschlägt, prüfe die Verbindungseinstellungen im aula-manager."
+          },
+          "prepare": {
+            "title": "Der Abgleich konnte nicht vorbereitet werden.",
+            "body": "Versuche es noch einmal. Wenn es weiterhin fehlschlägt, prüfe, ob der Anbieter erreichbar ist."
+          },
+          "apply": {
+            "title_one": "{{count}} Zuordnung ist nicht gültig.",
+            "title_other": "{{count}} Zuordnungen sind nicht gültig.",
+            "body": "Prüfe die markierten Zeilen und übernimm sie dann erneut."
+          },
+          "save": {
+            "title": "Die Änderung konnte nicht gespeichert werden.",
+            "body": "Es wurde nichts geändert. Versuche es noch einmal."
+          }
         },
         "actionNeeded": "Aktion erforderlich:",
         "states": {
@@ -114,7 +128,8 @@
           "import": "Importieren"
         },
         "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel –, um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
-        "staleNote": "Diese Liste wurde aus den Daten erstellt, wie sie zu Beginn der Prüfung waren. Seitdem vorgenommene Änderungen an Personen, Klassen oder Mitgliedschaften werden hier nicht angezeigt. Um sie zu übernehmen, nutze „Zurücksetzen“. Dabei gehen auch deine bisherigen Zuordnungen verloren.",
+        "leaveTitle": "Prüfung verlassen?",
+        "leaveWarning": "Die von dir gemachten Zuordnungen werden nicht gespeichert. Diese Liste entstand zu Beginn der Prüfung — beim erneuten Öffnen wird sie aus den dann aktuellen Personen, Klassen und Mitgliedschaften neu aufgebaut.",
         "resetWarning": "Beim Zurücksetzen gehen alle von Ihnen vorgenommenen Zuordnungen verloren. Die Tabelle wird aus den Daten des Anbieters neu aufgebaut, genau wie zu Beginn.",
         "pending": "Vorgeschlagen, nicht bestätigt: Nur bestätigte Zuordnungen werden zusammengeführt.",
         "pendingContested_one": "Auch für {{count}} weitere Person vorgeschlagen. Wenn du diese bestätigst, wird die andere getrennt.",
