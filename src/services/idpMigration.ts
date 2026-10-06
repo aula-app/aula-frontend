@@ -77,7 +77,7 @@ export const startIdpConnect = async (): Promise<string | null> => {
   return response?.url ?? null;
 };
 
-/** `detail` is the backend's own reason, untranslated: the only clue to a provider-side refusal. */
+/** `detail` is the backend's own reason, untranslated. */
 export type ProposalResult = { ok: true; counts: Record<string, number> } | { ok: false; detail: string | null };
 
 /** Discards any earlier proposal. */

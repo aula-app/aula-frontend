@@ -21,17 +21,12 @@ const Connector = ({ icon }: { icon: 'plus' | 'equals' }) => (
   </span>
 );
 
-/**
- * A table cell makes an unreliable drag image: browsers resolve the cursor offset against a box
- * of their own choosing, dropping the card far from the pointer. A detached block copy is read
- * the same everywhere. Inherited text styles have to come along; classes still resolve.
- */
+/** A table cell makes an unreliable drag image: browsers place it well off the cursor. */
 const dragImage = (card: HTMLElement) => {
   const { width, height } = card.getBoundingClientRect();
   const { fontFamily, fontSize, fontWeight, lineHeight, color } = getComputedStyle(card);
   const ghost = card.cloneNode(true) as HTMLElement;
 
-  // Straddles the gutter between the cells, so it belongs to neither card.
   ghost.querySelector('[data-connector]')?.remove();
 
   Object.assign(ghost.style, {
@@ -49,7 +44,7 @@ const dragImage = (card: HTMLElement) => {
   });
 
   document.body.append(ghost);
-  // Rasterized once the handler returns; its only job is done by the next tick.
+  // Rasterized once the handler returns.
   setTimeout(() => ghost.remove());
 
   return ghost;
@@ -76,7 +71,6 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
   const droppable = isTarget(row) && !name;
   // Both cells share the row id; only the half holding the record is picked.
   const picked = isPicked(row) && source;
-  // The card is in the air: its slot stands open until it is placed or put back.
   const dropTarget = droppable || picked;
   const interactive = source || droppable;
 
@@ -170,7 +164,6 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
             // Firefox needs a payload to start the drag.
             event.dataTransfer.setData('text/plain', String(row.id));
             event.dataTransfer.effectAllowed = 'link';
-            // The button has no background of its own; the card around it is the cell.
             const card = event.currentTarget.closest('td');
 
             if (card) {
@@ -179,13 +172,11 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
               event.dataTransfer.setDragImage(dragImage(card), event.clientX - left, event.clientY - top);
             }
 
-            // Not a toggle: dragging a picked card keeps it picked. Deferred because a cell that
-            // empties into its cancel slot mid-dragstart can abort the drag outright.
+            // Deferred: a cell that empties mid-dragstart can abort the drag.
             setTimeout(() => select(row));
           }}
           onDragEnd={() => {
             setOver(null);
-            // Letting go ends the gesture, placed or not. A pick made by clicking stays.
             cancel();
           }}
           onClick={() => (droppable ? place(row) : picked ? cancel() : pick(row))}

@@ -53,8 +53,8 @@ const ReviewTable: React.FC<Props> = ({
 
   const isPerson = kind === 'user';
   const { sorted, orderBy, setOrderBy, reversed, setReversed } = useListSort(rows, SORTS, 'name');
-  // Rows apply refused come first, so they can be found. Picking does not reorder or drop rows:
-  // the table has to hold still while a card is in the air, so invalid rows stay as faded holes.
+  // Rows apply refused come first, so they can be found. Picking never reorders: the table has
+  // to hold still while a card is in the air.
   const visible = [...sorted.filter((row) => problems[row.id]), ...sorted.filter((row) => !problems[row.id])];
 
   const pages = Math.max(1, Math.ceil(visible.length / perPage));

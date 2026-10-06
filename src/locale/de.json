@@ -128,6 +128,10 @@
           "import": "Importieren"
         },
         "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel –, um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
+        "loading": {
+          "title": "Prüfung wird aufgebaut",
+          "body": "Klassen und Personen beim Anbieter werden gelesen und mit denen dieser Schule abgeglichen."
+        },
         "leaveTitle": "Prüfung verlassen?",
         "leaveWarning": "Möchtest du diese Ansicht wirklich verlassen? Deine gesamte Arbeit geht dabei verloren.",
         "leaveRebuild": "Diese Liste entstand zu Beginn der Prüfung — beim erneuten Öffnen wird sie aus den dann aktuellen Personen, Klassen und Mitgliedschaften neu aufgebaut.",

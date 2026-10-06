@@ -128,6 +128,10 @@
           "import": "Import"
         },
         "guide": "Each row is an aula record, its match at the provider, and the account you end up with. Drag a card onto an empty slot, or select it and pick where it goes, to match them by hand. A row holding both sides will be merged; unlink it to keep the two accounts apart.",
+        "loading": {
+          "title": "Building the review",
+          "body": "Reading the classes and people at the provider, and matching them against this school's."
+        },
         "leaveTitle": "Leave the review?",
         "leaveWarning": "Are you sure you want to exit this view? All your work will be lost.",
         "leaveRebuild": "This list was built when the review started, so opening it again builds a fresh one from the people, classes and memberships as they are then.",

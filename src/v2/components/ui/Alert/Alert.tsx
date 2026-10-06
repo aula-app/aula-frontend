@@ -81,7 +81,6 @@ const Alert = ({
               {!!children && <p className="mb-0! text-sm">{children}</p>}
             </>
           ) : (
-            // Nothing to head: the icon rides with the message rather than holding an empty line.
             <p className="mb-0! flex items-start gap-2 text-sm">
               {icon}
               {children}
@@ -90,7 +89,6 @@ const Alert = ({
           {!!action && <div className="mt-2">{action}</div>}
         </div>
         {!!onDismiss && (
-          // Beside the title, not under the message: the way out stays where the eye starts.
           <IconButton
             className="-mt-1 -mr-1 shrink-0"
             title={t('ui.common.dismiss')}

@@ -21,9 +21,8 @@ export const useMatching = (onAssign: (row: MergeCandidate, localId: number | nu
       if (event.key === 'Escape') setPicked(null);
     };
 
-    // A refused drop snaps the card home and ends the drag only once it has landed, leaving the
-    // slot reading "cancel" all the way through. Taking the drop wherever it falls ends it at the
-    // release instead; the cells run their own drop first, and place() has cleared the pick by now.
+    // A refused drop snaps the card home and only then ends the drag, leaving the slot reading
+    // "cancel" throughout. Taking it wherever it falls ends the gesture at the release instead.
     const onDragOver = (event: DragEvent) => {
       event.preventDefault();
 
@@ -55,7 +54,6 @@ export const useMatching = (onAssign: (row: MergeCandidate, localId: number | nu
     !isPicked(row) &&
     ((isAulaOnly(picked) && isProviderOnly(row)) || (isProviderOnly(picked) && isAulaOnly(row)));
 
-  /** Invalid while picking: left in place, but faded. */
   const isMuted = (row: MergeCandidate) => !!picked && !isPicked(row) && !isTarget(row);
 
   const select = (row: MergeCandidate) => setPicked(row);

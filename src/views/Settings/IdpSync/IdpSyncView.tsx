@@ -18,9 +18,10 @@ import Tabs from '@/v2/components/ui/Tabs';
 import Alert from '@/v2/components/ui/Alert';
 import Dialog from '@/v2/components/ui/Dialog';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
+import Loading from '@/v2/components/ui/Loading';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import CandidateFilter from './CandidateFilter';
 import ReviewTable from './ReviewTable';
 import { useLeaveGuard } from './useLeaveGuard';
@@ -30,7 +31,6 @@ const PER_PAGE = 50;
 
 const IMPORT_POLL_MS = 3000;
 
-/** What went wrong, what to do about it, and the backend's own words where it gave them. */
 type Message = { title: string; body: string; detail?: string | null };
 
 const IdpSyncView: React.FC = () => {
@@ -39,6 +39,7 @@ const IdpSyncView: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [progress, setProgress] = useState<MigrationProgress | null>(null);
   const [busy, setBusy] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Message | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   // Outlives `asking` so the dialog keeps its text while closing.
@@ -46,7 +47,6 @@ const IdpSyncView: React.FC = () => {
   const [asking, setAsking] = useState(false);
   const confirmBodyId = useId();
   const leaveBodyId = useId();
-  const navigate = useNavigate();
   /** The entry rebuild runs once, and not on top of a build this session already made. */
   const restarted = useRef(false);
 
@@ -114,7 +114,6 @@ const IdpSyncView: React.FC = () => {
       if (!result.success && current?.migration_status === 'flagged') {
         setError({
           title: t('v2.ui.idpSync.errors.connect.title'),
-          // The provider's own reason, where we have wording for it.
           body: t(`errors.sso.${result.error}`, t('v2.ui.idpSync.errors.connect.body')),
         });
 
@@ -141,6 +140,7 @@ const IdpSyncView: React.FC = () => {
 
   const prepare = useCallback(async () => {
     restarted.current = true;
+    setLoading(true);
     setBusy(true);
     setError(null);
     setAsking(false);
@@ -153,6 +153,7 @@ const IdpSyncView: React.FC = () => {
         body: t('v2.ui.idpSync.errors.prepare.body'),
         detail: result.detail,
       });
+      setLoading(false);
 
       return;
     }
@@ -160,9 +161,10 @@ const IdpSyncView: React.FC = () => {
     setProblems({});
     await refreshProgress();
     await Promise.all([loadKind('room'), loadKind('user')]);
+    setLoading(false);
   }, [loadKind, refreshProgress, t]);
 
-  // Opening the review rebuilds it: the table has to carry whatever changed in aula meanwhile.
+  // Opening the review rebuilds it: the table has to carry whatever changed meanwhile.
   useEffect(() => {
     if (progress?.migration_status !== 'reviewing' || restarted.current) return;
 
@@ -210,14 +212,6 @@ const IdpSyncView: React.FC = () => {
 
   const status = progress?.migration_status ?? null;
   const leaving = useLeaveGuard(status === 'reviewing');
-
-  const leave = () => {
-    const to = leaving.pending;
-
-    leaving.stay();
-
-    if (to) navigate(to);
-  };
 
   const step: CandidateKind = searchParams.get('step') === 'user' ? 'user' : 'room';
 
@@ -293,6 +287,14 @@ const IdpSyncView: React.FC = () => {
     />
   );
 
+  const waiting = (kind: CandidateKind) => (
+    <Loading
+      label={t('v2.ui.idpSync.loading.title')}
+      detail={t('v2.ui.idpSync.loading.body')}
+      data-testid={`idp-sync-loading-${kind}`}
+    />
+  );
+
   const roomsFilter = (
     <CandidateFilter
       label={t('v2.ui.idpSync.filterRoom')}
@@ -323,7 +325,7 @@ const IdpSyncView: React.FC = () => {
       {!!notice && <Alert severity="info" title={notice} onDismiss={() => setNotice(null)} className="flex-none" />}
 
       <Dialog
-        open={!!leaving.pending}
+        open={leaving.asking}
         onClose={leaving.stay}
         role="alertdialog"
         describedBy={leaveBodyId}
@@ -339,7 +341,7 @@ const IdpSyncView: React.FC = () => {
             <Button text color="error" className="mr-auto" onClick={leaving.stay} data-testid="idp-sync-leave-cancel">
               {t('actions.cancel')}
             </Button>
-            <Button color="error" onClick={leave} data-testid="idp-sync-leave-confirm">
+            <Button color="error" onClick={leaving.leave} data-testid="idp-sync-leave-confirm">
               {t('v2.ui.idpSync.actions.leave')}
             </Button>
           </div>
@@ -388,7 +390,9 @@ const IdpSyncView: React.FC = () => {
                 value: 'room',
                 label: t('v2.ui.idpSync.rooms'),
                 icon: 'rooms',
-                panel: (
+                panel: loading ? (
+                  waiting('room')
+                ) : (
                   <ReviewTable {...tableProps('room')} rows={shownRooms} members={members} filter={peopleFilter} />
                 ),
               },
@@ -396,18 +400,22 @@ const IdpSyncView: React.FC = () => {
                 value: 'user',
                 label: t('v2.ui.idpSync.users'),
                 icon: 'users',
-                panel: <ReviewTable {...tableProps('user')} rows={shownPeople} filter={roomsFilter} />,
+                panel: loading ? (
+                  waiting('user')
+                ) : (
+                  <ReviewTable {...tableProps('user')} rows={shownPeople} filter={roomsFilter} />
+                ),
               },
             ]}
           />
 
           <div className="flex flex-wrap items-center gap-2">
             {step === 'room' ? (
-              <Button disabled={busy} onClick={() => selectStep('user')} data-testid="idp-sync-continue">
+              <Button disabled={busy || loading} onClick={() => selectStep('user')} data-testid="idp-sync-continue">
                 {t('v2.ui.idpSync.actions.continue')}
               </Button>
             ) : (
-              <Button disabled={busy} onClick={() => ask('apply')} data-testid="idp-sync-apply">
+              <Button disabled={busy || loading} onClick={() => ask('apply')} data-testid="idp-sync-apply">
                 {t('v2.ui.idpSync.actions.apply')}
               </Button>
             )}
@@ -415,7 +423,7 @@ const IdpSyncView: React.FC = () => {
               text
               color="error"
               className="ml-auto"
-              disabled={busy}
+              disabled={busy || loading}
               onClick={() => ask('reset')}
               data-testid="idp-sync-reset"
             >
