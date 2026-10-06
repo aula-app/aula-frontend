@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { avatarUrl, isAulaOnly, isProviderOnly, Members, rowKind } from './candidates';
 import MemberCount from './MemberCount';
 import EntityMeta from './EntityMeta';
-import { CARD, CONTENT, PLAIN } from './styles';
+import { CARD, CONTENT, HOLE, PLAIN } from './styles';
 import { Matching } from './useMatching';
 
 type Side = 'aula' | 'provider';
@@ -15,10 +15,45 @@ const Connector = ({ icon }: { icon: 'plus' | 'equals' }) => (
     // -mr must track border-spacing-x to centre in the gutter.
     className="absolute top-1/2 right-0 z-1 -mr-0.5 flex -translate-y-1/2 translate-x-1/2 items-center justify-center rounded-full bg-background p-0.5 opacity-70 sm:-mr-1"
     aria-hidden="true"
+    data-connector
   >
     <Icon type={icon} size="1.2em" />
   </span>
 );
+
+/**
+ * A table cell makes an unreliable drag image: browsers resolve the cursor offset against a box
+ * of their own choosing, dropping the card far from the pointer. A detached block copy is read
+ * the same everywhere. Inherited text styles have to come along; classes still resolve.
+ */
+const dragImage = (card: HTMLElement) => {
+  const { width, height } = card.getBoundingClientRect();
+  const { fontFamily, fontSize, fontWeight, lineHeight, color } = getComputedStyle(card);
+  const ghost = card.cloneNode(true) as HTMLElement;
+
+  // Straddles the gutter between the cells, so it belongs to neither card.
+  ghost.querySelector('[data-connector]')?.remove();
+
+  Object.assign(ghost.style, {
+    position: 'fixed',
+    top: '0',
+    left: '-100vw',
+    display: 'block',
+    width: `${width}px`,
+    height: `${height}px`,
+    fontFamily,
+    fontSize,
+    fontWeight,
+    lineHeight,
+    color,
+  });
+
+  document.body.append(ghost);
+  // Rasterized once the handler returns; its only job is done by the next tick.
+  setTimeout(() => ghost.remove());
+
+  return ghost;
+};
 
 interface Props {
   row: MergeCandidate;
@@ -34,14 +69,16 @@ interface Props {
 /** Module scope: declared in a render body, it would remount and abort a drag. */
 const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: Props) => {
   const { t } = useTranslation();
-  const { over, setOver, isPicked, isTarget, select, pick, place } = matching;
+  const { over, setOver, isPicked, isTarget, select, pick, cancel, place } = matching;
 
   const name = side === 'aula' ? row.local_name : row.idp_name;
   const source = side === 'aula' ? isAulaOnly(row) : isProviderOnly(row);
   const droppable = isTarget(row) && !name;
-  const interactive = source || droppable;
   // Both cells share the row id; only the half holding the record is picked.
   const picked = isPicked(row) && source;
+  // The card is in the air: its slot stands open until it is placed or put back.
+  const dropTarget = droppable || picked;
+  const interactive = source || droppable;
 
   // Two people of one name are told apart by their classes.
   const classList = (entries?: { name: string }[] | null) =>
@@ -68,7 +105,12 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
           classes: classList(row.idp_groups),
         };
 
-  const content = name ? (
+  const content = picked ? (
+    <span className="flex items-center gap-2 font-bold">
+      <Icon type="close" size="1em" className="shrink-0" />
+      {t('v2.ui.idpSync.actions.cancel')}
+    </span>
+  ) : name ? (
     <>
       {rowKind(row) === 'merge' && <Icon type="check" size="1.25em" className="shrink-0" />}
       <EntityMeta name={name} {...meta} />
@@ -82,17 +124,14 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
 
   return (
     <td
-      className={`${CARD} relative transition-colors ${name ? tone : `${PLAIN} ${droppable ? '' : 'border-dashed'}`} ${
-        picked ? 'ring-2 ring-current' : ''
-      } ${
-        droppable
-          ? // data-[over]: a bare `bg-current/10` loses to the tone's background.
-            'outline-2 outline-dashed outline-current/50 hover:outline-solid hover:bg-current/10 focus-within:outline-solid focus-within:bg-current/10 data-[over]:outline-solid data-[over]:bg-current/10'
-          : ''
+      className={`${CARD} relative transition-colors ${
+        picked
+          ? `${PLAIN} ${HOLE} text-error-fg`
+          : `${name ? tone : `${PLAIN} ${droppable ? '' : 'border-dashed'}`} ${droppable ? HOLE : ''}`
       }`}
-      data-over={over === row.id && droppable ? '' : undefined}
+      data-over={over === row.id && dropTarget ? '' : undefined}
       onDragOver={
-        droppable
+        dropTarget
           ? (event) => {
               // Required for the drop to be allowed.
               event.preventDefault();
@@ -102,7 +141,7 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
           : undefined
       }
       onDragLeave={
-        droppable
+        dropTarget
           ? (event) => {
               // Moving onto a child still fires dragleave.
               if (!event.currentTarget.contains(event.relatedTarget as Node)) setOver(null);
@@ -110,11 +149,12 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
           : undefined
       }
       onDrop={
-        droppable
+        dropTarget
           ? (event) => {
               event.preventDefault();
               setOver(null);
-              place(row);
+              if (droppable) place(row);
+              else cancel();
             }
           : undefined
       }
@@ -122,22 +162,38 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
       {interactive ? (
         <button
           type="button"
-          className={`flex w-full items-center gap-2 text-left ${CONTENT} ${source ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}`}
+          className={`flex w-full items-center gap-2 text-left ${CONTENT} ${
+            source && !picked ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'
+          }`}
           draggable={source}
           onDragStart={(event) => {
             // Firefox needs a payload to start the drag.
             event.dataTransfer.setData('text/plain', String(row.id));
             event.dataTransfer.effectAllowed = 'link';
-            // Not a toggle: dragging a picked card keeps it picked.
-            select(row);
+            // The button has no background of its own; the card around it is the cell.
+            const card = event.currentTarget.closest('td');
+
+            if (card) {
+              const { left, top } = card.getBoundingClientRect();
+
+              event.dataTransfer.setDragImage(dragImage(card), event.clientX - left, event.clientY - top);
+            }
+
+            // Not a toggle: dragging a picked card keeps it picked. Deferred because a cell that
+            // empties into its cancel slot mid-dragstart can abort the drag outright.
+            setTimeout(() => select(row));
           }}
-          onDragEnd={() => setOver(null)}
-          onClick={() => (droppable ? place(row) : pick(row))}
-          aria-describedby={list?.length ? listId : undefined}
+          onDragEnd={() => {
+            setOver(null);
+            // Letting go ends the gesture, placed or not. A pick made by clicking stays.
+            cancel();
+          }}
+          onClick={() => (droppable ? place(row) : picked ? cancel() : pick(row))}
+          aria-describedby={!picked && list?.length ? listId : undefined}
           data-keeps-pick
-          data-testid={`idp-review-${droppable ? 'place' : 'pick'}-${row.id}`}
+          data-testid={`idp-review-${droppable ? 'place' : picked ? 'cancel' : 'pick'}-${row.id}`}
         >
-          {source && <Icon type="drag" size="1.1em" className="shrink-0 opacity-40" />}
+          {source && !picked && <Icon type="drag" size="1.1em" className="shrink-0 opacity-40" />}
           {content}
         </button>
       ) : (

@@ -53,12 +53,9 @@ const ReviewTable: React.FC<Props> = ({
 
   const isPerson = kind === 'user';
   const { sorted, orderBy, setOrderBy, reversed, setReversed } = useListSort(rows, SORTS, 'name');
-  // While picking, show only valid targets; the pick itself comes first so search can't hide it.
-  // Rows apply refused come first, so they can be found.
-  const flagged = [...sorted.filter((row) => problems[row.id]), ...sorted.filter((row) => !problems[row.id])];
-  const visible = matching.picked
-    ? [matching.picked, ...flagged.filter((row) => !matching.isPicked(row) && matching.isTarget(row))]
-    : flagged;
+  // Rows apply refused come first, so they can be found. Picking does not reorder or drop rows:
+  // the table has to hold still while a card is in the air, so invalid rows stay as faded holes.
+  const visible = [...sorted.filter((row) => problems[row.id]), ...sorted.filter((row) => !problems[row.id])];
 
   const pages = Math.max(1, Math.ceil(visible.length / perPage));
   const current = Math.min(page, pages);
@@ -120,7 +117,11 @@ const ReviewTable: React.FC<Props> = ({
               const problem = problems[row.id];
 
               return (
-                <tr key={row.id} data-testid={`idp-review-row-${row.id}`}>
+                <tr
+                  key={row.id}
+                  className={`transition-opacity ${matching.isMuted(row) ? 'opacity-40' : ''}`}
+                  data-testid={`idp-review-row-${row.id}`}
+                >
                   <MatchCell
                     row={row}
                     side="aula"

@@ -69,6 +69,7 @@
           "open": "Review",
           "pick": "Pick",
           "place": "Match here",
+          "cancel": "Cancel",
           "unlink": "Unlink",
           "confirm": "Confirm"
         },

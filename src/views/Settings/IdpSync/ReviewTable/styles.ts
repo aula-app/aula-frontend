@@ -4,6 +4,9 @@ export const CARD = 'rounded-xl border align-middle';
 export const PLAIN = 'bg-paper border-current/15';
 export const CHIP = 'rounded-full px-3 py-1 text-xs font-bold bg-current/10 hover:bg-current/20';
 export const CONTENT = 'px-3 py-2';
+/** An open slot: the dashes firm up and fill on hover, focus and drag-over. */
+export const HOLE =
+  'outline-2 outline-dashed outline-current/50 hover:outline-solid hover:bg-current/10 focus-within:outline-solid focus-within:bg-current/10 data-[over]:outline-solid data-[over]:bg-current/10';
 
 const SUCCESS = 'bg-success text-success-fg border-success-fg/25';
 const INFO = 'bg-info text-info-fg border-info-fg/25';

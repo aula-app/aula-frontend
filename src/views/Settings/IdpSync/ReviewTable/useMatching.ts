@@ -21,12 +21,30 @@ export const useMatching = (onAssign: (row: MergeCandidate, localId: number | nu
       if (event.key === 'Escape') setPicked(null);
     };
 
+    // A refused drop snaps the card home and ends the drag only once it has landed, leaving the
+    // slot reading "cancel" all the way through. Taking the drop wherever it falls ends it at the
+    // release instead; the cells run their own drop first, and place() has cleared the pick by now.
+    const onDragOver = (event: DragEvent) => {
+      event.preventDefault();
+
+      if (event.dataTransfer) event.dataTransfer.dropEffect = 'link';
+    };
+
+    const onDrop = (event: DragEvent) => {
+      event.preventDefault();
+      setPicked(null);
+    };
+
     document.addEventListener('pointerdown', onPointerDown);
     document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('dragover', onDragOver);
+    document.addEventListener('drop', onDrop);
 
     return () => {
       document.removeEventListener('pointerdown', onPointerDown);
       document.removeEventListener('keydown', onKeyDown);
+      document.removeEventListener('dragover', onDragOver);
+      document.removeEventListener('drop', onDrop);
     };
   }, [picked]);
 
@@ -37,8 +55,12 @@ export const useMatching = (onAssign: (row: MergeCandidate, localId: number | nu
     !isPicked(row) &&
     ((isAulaOnly(picked) && isProviderOnly(row)) || (isProviderOnly(picked) && isAulaOnly(row)));
 
+  /** Invalid while picking: left in place, but faded. */
+  const isMuted = (row: MergeCandidate) => !!picked && !isPicked(row) && !isTarget(row);
+
   const select = (row: MergeCandidate) => setPicked(row);
   const pick = (row: MergeCandidate) => setPicked(isPicked(row) ? null : row);
+  const cancel = () => setPicked(null);
 
   /** Either direction repoints the provider row. */
   const place = (target: MergeCandidate) => {
@@ -52,7 +74,7 @@ export const useMatching = (onAssign: (row: MergeCandidate, localId: number | nu
     setPicked(null);
   };
 
-  return { picked, over, setOver, isPicked, isTarget, select, pick, place };
+  return { picked, over, setOver, isPicked, isTarget, isMuted, select, pick, cancel, place };
 };
 
 export type Matching = ReturnType<typeof useMatching>;
