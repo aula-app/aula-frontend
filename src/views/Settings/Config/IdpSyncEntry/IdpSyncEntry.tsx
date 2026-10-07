@@ -6,58 +6,45 @@ import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useIdpSyncEntry } from './useIdpSyncEntry';
 
-const STEPS = ['connect', 'prepare', 'review', 'import'] as const;
+const STEPS = ['connect', 'review', 'merged'] as const;
 
-/** The last three statuses are all the import running its course. */
 const STEP_INDEX: Record<string, number> = {
   flagged: 0,
   connected: 1,
-  reviewing: 2,
-  importing: 3,
-  linking: 3,
-  completed: STEPS.length,
+  reviewing: 1,
+  importing: 2,
+  linking: 2,
+  completed: 2,
 };
 
 const IdpSyncEntry: React.FC = () => {
   const { t } = useTranslation();
-  const { status: liveStatus, progress, busy, failed, connect, prepare, refresh } = useIdpSyncEntry();
-  const status = liveStatus;
+  const { status, progress, busy, failed, connect } = useIdpSyncEntry();
 
   if (!status) return null;
 
-  const button = (label: string, onClick: () => void, testId: string) => (
-    <Button type="button" className="rounded-full" disabled={busy} onClick={onClick} data-testid={testId}>
-      {label}
+  const openReview = (
+    <Button to="/settings/idp-sync" className="rounded-full" data-testid="config-idp-sync-open">
+      {t('v2.ui.idpSync.actions.open')}
     </Button>
   );
 
   const step: { severity: AlertSeverity; action?: ReactNode } = {
     flagged: {
       severity: 'info' as const,
-      action: button(t('v2.ui.idpSync.actions.connect'), connect, 'idp-sync-connect'),
-    },
-    connected: {
-      severity: 'info' as const,
-      action: button(t('v2.ui.idpSync.actions.prepare'), prepare, 'idp-sync-prepare'),
-    },
-    reviewing: {
-      severity: 'warning' as const,
       action: (
-        <Button to="/settings/idp-sync" className="rounded-full" data-testid="config-idp-sync-open">
-          {t('v2.ui.idpSync.actions.open')}
+        <Button type="button" className="rounded-full" disabled={busy} onClick={connect} data-testid="idp-sync-connect">
+          {t('v2.ui.idpSync.actions.connect')}
         </Button>
       ),
     },
-    // The import and everything after it: the risky decisions are already behind.
+    connected: { severity: 'info' as const, action: openReview },
+    reviewing: { severity: 'warning' as const, action: openReview },
     importing: { severity: 'success' as const },
-    linking: {
-      severity: 'success' as const,
-      action: button(t('v2.ui.idpSync.actions.refresh'), refresh, 'idp-sync-refresh'),
-    },
+    linking: { severity: 'success' as const },
     completed: { severity: 'success' as const },
   }[status];
 
-  // Only the steps the admin can act on are announced as needing them.
   const needsAction = status === 'flagged' || status === 'connected' || status === 'reviewing';
 
   return (
@@ -87,7 +74,7 @@ const IdpSyncEntry: React.FC = () => {
             remaining: progress?.not_yet_linked ?? 0,
           })}
         </span>
-        {!!failed && <p className="mt-2 font-bold">{t(`v2.ui.idpSync.errors.${failed}`)}</p>}
+        {!!failed && <p className="mt-2 font-bold">{t(`v2.ui.idpSync.errors.${failed}.title`)}</p>}
       </Alert>
     </section>
   );

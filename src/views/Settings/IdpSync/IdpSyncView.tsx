@@ -21,7 +21,7 @@ import FeedbackState from '@/v2/components/ui/FeedbackState';
 import Loading from '@/v2/components/ui/Loading';
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import CandidateFilter from './CandidateFilter';
 import ReviewTable from './ReviewTable';
 import { useLeaveGuard } from './useLeaveGuard';
@@ -29,13 +29,12 @@ import { arrange, membersByRoom, realName, resultName, rivalsOf, searchRows } fr
 
 const PER_PAGE = 50;
 
-const IMPORT_POLL_MS = 3000;
-
 type Message = { title: string; body: string; detail?: string | null };
 
 const IdpSyncView: React.FC = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [progress, setProgress] = useState<MigrationProgress | null>(null);
   const [busy, setBusy] = useState(false);
@@ -87,14 +86,6 @@ const IdpSyncView: React.FC = () => {
   useEffect(() => {
     refreshProgress();
   }, [refreshProgress]);
-
-  useEffect(() => {
-    if (progress?.migration_status !== 'importing') return;
-
-    const timer = setInterval(refreshProgress, IMPORT_POLL_MS);
-
-    return () => clearInterval(timer);
-  }, [progress?.migration_status, refreshProgress]);
 
   useEffect(() => {
     const linkToken = searchParams.get('sso_link');
@@ -164,9 +155,11 @@ const IdpSyncView: React.FC = () => {
     setLoading(false);
   }, [loadKind, refreshProgress, t]);
 
-  // Opening the review rebuilds it: the table has to carry whatever changed meanwhile.
+  // Opening the review builds it afresh: the table has to carry whatever changed meanwhile.
   useEffect(() => {
-    if (progress?.migration_status !== 'reviewing' || restarted.current) return;
+    const status = progress?.migration_status;
+
+    if ((status !== 'connected' && status !== 'reviewing') || restarted.current) return;
 
     prepare();
   }, [progress?.migration_status, prepare]);
@@ -212,6 +205,12 @@ const IdpSyncView: React.FC = () => {
 
   const status = progress?.migration_status ?? null;
   const leaving = useLeaveGuard(status === 'reviewing');
+  const merged = status === 'importing' || status === 'linking' || status === 'completed';
+
+  // The Configuration card follows the merge from here on.
+  useEffect(() => {
+    if (merged) navigate('/settings/configuration', { replace: true });
+  }, [merged, navigate]);
 
   const step: CandidateKind = searchParams.get('step') === 'user' ? 'user' : 'room';
 
@@ -367,16 +366,13 @@ const IdpSyncView: React.FC = () => {
         </section>
       )}
 
-      {status === 'connected' && (
-        <section className="flex flex-col items-start gap-3">
-          <p>{t('v2.ui.idpSync.step.prepare')}</p>
-          <Button disabled={busy} onClick={prepare} data-testid="idp-sync-prepare">
-            {t('v2.ui.idpSync.actions.prepare')}
-          </Button>
-        </section>
+      {status === 'connected' && !loading && (
+        <Button className="self-start" disabled={busy} onClick={prepare} data-testid="idp-sync-retry">
+          {t('actions.retry')}
+        </Button>
       )}
 
-      {status === 'reviewing' && (
+      {(status === 'reviewing' || (status === 'connected' && loading)) && (
         <div className="flex flex-col gap-6">
           <p className="text-sm opacity-70">{t('v2.ui.idpSync.guide')}</p>
 
@@ -467,29 +463,6 @@ const IdpSyncView: React.FC = () => {
             </div>
           </Dialog>
         </div>
-      )}
-
-      {(status === 'importing' || status === 'linking' || status === 'completed') && (
-        <section className="flex flex-col items-start gap-3">
-          {status === 'importing' && (
-            <p role="status" className="flex items-center gap-2">
-              <span aria-hidden="true">…</span>
-              {t('v2.ui.idpSync.step.importing')}
-            </p>
-          )}
-
-          <h2 className="text-xl">{t('v2.ui.idpSync.progressTitle')}</h2>
-          <p data-testid="idp-sync-progress">
-            {t('v2.ui.idpSync.progressBody', {
-              linked: progress?.linked ?? 0,
-              remaining: progress?.not_yet_linked ?? 0,
-            })}
-          </p>
-          <p className="text-sm opacity-70">{t('v2.ui.idpSync.progressHint')}</p>
-          <Button outlined onClick={refreshProgress} data-testid="idp-sync-refresh">
-            {t('v2.ui.idpSync.actions.refresh')}
-          </Button>
-        </section>
       )}
     </div>
   );

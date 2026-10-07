@@ -40,13 +40,8 @@
         "users": "Personen",
         "search": "Suchen",
         "staysInAula": "bleibt unverändert",
-        "progressTitle": "Fortschritt",
-        "progressBody": "{{linked}} Konten verknüpft, {{remaining}} noch offen.",
-        "progressHint": "Erst wenn niemand mehr offen ist, kann die Anmeldung per Passwort abgeschaltet werden.",
         "step": {
-          "connect": "Melde dich zuerst beim Anbieter an. Damit wird dein aula-Konto verknüpft und die Schule erkannt.",
-          "prepare": "Jetzt können Klassen und Personen des Anbieters mit den vorhandenen aula-Daten abgeglichen werden.",
-          "importing": "Die Daten werden übertragen …"
+          "connect": "Melde dich zuerst beim Anbieter an. Damit wird dein aula-Konto verknüpft und die Schule erkannt."
         },
         "state": {
           "confident": "eindeutig",
@@ -61,12 +56,10 @@
         },
         "actions": {
           "connect": "Verbinden",
-          "prepare": "Vorbereiten",
           "apply": "Zuordnungen übernehmen und importieren",
           "continue": "Weiter",
           "leave": "Prüfung verlassen",
           "reset": "Zurücksetzen",
-          "refresh": "Aktualisieren",
           "open": "Prüfen",
           "pick": "Auswählen",
           "place": "Hier zuordnen",
@@ -108,24 +101,23 @@
             "body": "Jede Zuordnung entscheidet, wem welches Konto gehört, und lässt sich nach dem Import nicht mehr rückgängig machen."
           },
           "importing": {
-            "title": "Schuldaten werden importiert",
-            "body": "Die Klassen und Personen des Anbieters werden angelegt. Dieser Hinweis aktualisiert sich selbst."
+            "title": "Schuldaten werden zusammengeführt",
+            "body": "Ihre Zuordnungen werden übernommen. Dieser Hinweis aktualisiert sich selbst."
           },
           "linking": {
-            "title": "Warten auf Anmeldungen",
-            "body": "{{linked}} Konten verknüpft, {{remaining}} noch offen. Jede Person wird bei der ersten Anmeldung über den Anbieter verknüpft."
+            "title": "Zusammenführung abgeschlossen",
+            "body": "{{linked}} Konten verknüpft, {{remaining}} noch nicht angemeldet. Jede Person wird bei der ersten Anmeldung über den Anbieter verknüpft."
           },
           "completed": {
-            "title": "Abgleich abgeschlossen",
-            "body": "Alle sind mit dem Identitätsanbieter verknüpft. Die Passwort-Anmeldung kann jetzt deaktiviert werden."
+            "title": "Zusammenführung abgeschlossen",
+            "body": "Alle sind mit dem Identitätsanbieter verknüpft."
           }
         },
         "stepper": {
           "label": "Fortschritt des Abgleichs",
           "connect": "Verbinden",
-          "prepare": "Vorbereiten",
           "review": "Prüfen",
-          "import": "Importieren"
+          "merged": "Zusammengeführt"
         },
         "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel –, um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
         "loading": {
