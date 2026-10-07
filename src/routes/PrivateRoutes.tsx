@@ -85,9 +85,6 @@ const PrivateRoutes = () => {
       )}
       {checkPermissions('boxes', 'viewAll') && <Route path="settings/boxes" element={<BoxesView />} />}
       {checkPermissions('configs', 'viewAll') && <Route path="settings/configuration" element={<ConfigView />} />}
-      {/* Migrating the school onto an identity provider decides who ends up
-          owning which account, so it sits behind the same gate as the rest of
-          the system configuration. */}
       {checkPermissions('configs', 'viewAll') && <Route path="settings/idp-sync" element={<IdpSyncView />} />}
       {checkPermissions('ideas', 'viewAll') && <Route path="settings/ideas" element={<IdeasView />} />}
       {checkPermissions('messages', 'viewAll') && <Route path="settings/messages" element={<MessagesView />} />}

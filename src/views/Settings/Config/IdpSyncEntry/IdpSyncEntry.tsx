@@ -1,10 +1,9 @@
 import Icon from '@/components/new/Icon/Icon';
-import { MigrationStatus } from '@/services/idpMigration';
 import Alert, { AlertSeverity } from '@/v2/components/ui/Alert';
+import Button from '@/v2/components/button/Button';
 import Stepper from '@/v2/components/ui/Stepper';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
 import { useIdpSyncEntry } from './useIdpSyncEntry';
 
 const STEPS = ['connect', 'prepare', 'review', 'import'] as const;
@@ -16,52 +15,20 @@ const STEP_INDEX: Record<string, number> = {
   reviewing: 2,
   importing: 3,
   linking: 3,
-  // Past the last step: nothing is in hand any more, so every step reads as done.
   completed: STEPS.length,
 };
 
-/** Every status each step can stand for, so a dev can reach all six from four buttons. */
-const STEP_STATUSES: MigrationStatus[][] = [
-  ['flagged'],
-  ['connected'],
-  ['reviewing'],
-  ['importing', 'linking', 'completed'],
-];
-
-// inline-flex, not the default: an <a> is display:inline, where vertical padding
-// does not grow the box, so the Link would sit tighter than the <button>s.
-const ACTION_CLASS =
-  'inline-flex items-center justify-center rounded-full px-4 py-1.5 text-sm font-bold ' +
-  'bg-primary text-text-primary disabled:opacity-50 disabled:cursor-not-allowed';
-
-/**
- * The migration, on the page an admin already goes to.
- *
- * It shows itself only once an operator has flagged the school in aula-manager,
- * and then says where the school actually is rather than that something is
- * happening somewhere. Each step asks for its own next action in place; the
- * review is the one that needs a screen of its own.
- */
 const IdpSyncEntry: React.FC = () => {
   const { t } = useTranslation();
   const { status: liveStatus, progress, busy, failed, connect, prepare, refresh } = useIdpSyncEntry();
-  // Lets a step be picked to preview its copy. Changes nothing on the backend, so
-  // it is kept out of production builds rather than shipped as a real control.
-  const [preview, setPreview] = useState<MigrationStatus>(null);
-  const status = preview ?? liveStatus;
+  const status = liveStatus;
 
   if (!status) return null;
 
-  const selectStep = (index: number) => {
-    const group = STEP_STATUSES[index];
-
-    setPreview(group[(group.indexOf(status) + 1) % group.length]);
-  };
-
   const button = (label: string, onClick: () => void, testId: string) => (
-    <button type="button" className={ACTION_CLASS} disabled={busy} onClick={onClick} data-testid={testId}>
+    <Button type="button" className="rounded-full" disabled={busy} onClick={onClick} data-testid={testId}>
       {label}
-    </button>
+    </Button>
   );
 
   const step: { severity: AlertSeverity; action?: ReactNode } = {
@@ -76,9 +43,9 @@ const IdpSyncEntry: React.FC = () => {
     reviewing: {
       severity: 'warning' as const,
       action: (
-        <Link to="/settings/idp-sync" className={ACTION_CLASS} data-testid="config-idp-sync-open">
+        <Button to="/settings/idp-sync" className="rounded-full" data-testid="config-idp-sync-open">
           {t('v2.ui.idpSync.actions.open')}
-        </Link>
+        </Button>
       ),
     },
     // The import and everything after it: the risky decisions are already behind.
