@@ -1,0 +1,8 @@
+#!/bin/sh
+docker compose exec -it backend-v2 php artisan "$@"
+
+# to support muscle memory `php artisan` this could also be
+#!/usr/bin/env/php
+#shell/exec... $_SERVER['argv']
+
+# TODO: but this depends on how standalone backend should be

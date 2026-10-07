@@ -38,7 +38,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
    */
   dbInstanceCode: [async ({ }, use, { parallelIndex }) => {
     const idx = parallelIndex ?? '0';
-    const name = `db00${idx}`;
+    const name = `TEST${idx}`;
     await use(name);
   }, { scope: 'worker' }],
 
