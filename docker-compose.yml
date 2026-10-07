@@ -1,0 +1,161 @@
+name: aula
+
+services:
+
+  mariadb:
+    image: mariadb:11.7
+    environment:
+      MARIADB_DATABASE: aula_database
+      MARIADB_ROOT_PASSWORD: example
+      MARIADB_USER: aula_user
+      MARIADB_PASSWORD: example
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      # provides a script to GRANT privileges necessary for tenancy
+      # NOTE: this path is coupled to the backend repo structure (docker/mariadb/).
+      # If that folder moves in aula-backend, this volume mapping must be updated here too.
+      - ${BACKEND_DIR}/docker/mariadb/:/docker-entrypoint-initdb.d:ro
+      # TODO provide a host bind here for mariadb data
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      start_period: 10s
+      interval: 5s
+      timeout: 5s
+      retries: 24
+
+  backend-v2:
+    build:
+      context: ${BACKEND_DIR}
+      args:
+        - DOCKER_TAG=local
+    ports:
+      - "8000:80"
+    env_file: ${BACKEND_DIR}/.env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    extra_hosts:
+      # for resolution on Linux
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ${BACKEND_DIR}/app:/opt/laravel/app
+      - ${BACKEND_DIR}/config:/opt/laravel/config
+      - ${BACKEND_DIR}/public:/opt/laravel/public
+      - ${BACKEND_DIR}/resources:/opt/laravel/resources
+      - ${BACKEND_DIR}/routes:/opt/laravel/routes
+      - ${BACKEND_DIR}/database:/opt/laravel/database
+      - ${BACKEND_DIR}/bootstrap:/opt/laravel/bootstrap
+      # dockerized and cli/artisan (with require-dev) seem to need separate caches
+      - type: tmpfs
+        target: /opt/laravel/bootstrap/cache
+        tmpfs:
+          mode: 0o01777
+      - type: bind
+        source: ${BACKEND_DIR}/.env
+        target: /opt/laravel/.env
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${BACKEND_DIR}/storage/oauth-private.key
+        target: /opt/laravel/storage/oauth-private.key
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${BACKEND_DIR}/storage/oauth-public.key
+        target: /opt/laravel/storage/oauth-public.key
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${BACKEND_DIR}/legacy/docker-local/_generated_files_data/
+        target: /mnt/aula-backend-legacy/files
+        bind:
+          create_host_path: true
+
+  nginx:
+    image: nginx:stable-alpine-slim
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx-reverse-proxy.conf:/etc/nginx/nginx.conf
+
+  backend-legacy:
+    build:
+      context: ${BACKEND_DIR}/legacy
+      args:
+        - DOCKER_TAG=local
+    environment:
+      APP_ENV: local
+      APACHE_SERVER_NAME: localhost
+      CENTRAL_DB_HOST: ${CENTRAL_DB_HOST:-mariadb}
+      CENTRAL_DB_PORT: ${CENTRAL_DB_PORT:-3306}
+      CENTRAL_DB_NAME: ${CENTRAL_DB_NAME:-aula_database}
+      CENTRAL_DB_USER: ${CENTRAL_DB_USER:-aula_user}
+      CENTRAL_DB_PASS: ${CENTRAL_DB_PASS:-example}
+    depends_on:
+      mariadb:
+        condition: service_healthy
+      backend-v2:
+        condition: service_healthy
+    volumes:
+      - ./docker-local/_generated_files_data:/var/www/html/files:rw
+      - type: bind
+        source: ${BACKEND_DIR}/legacy/src
+        target: /var/www/html/api
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${BACKEND_DIR}/legacy/config/
+        target: /var/www/html/config
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${BACKEND_DIR}/legacy/docker-local/php.ini-development
+        target: /etc/php/8.3/apache2/php.ini
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ${BACKEND_DIR}/legacy/docker-local/php-xdebug-docker.ini
+        target: /etc/php/8.3/apache2/conf.d/21-xdebug-docker.ini
+        bind:
+          create_host_path: true
+      - type: bind
+        source: ${BACKEND_DIR}/legacy/docker-local/php-xdebug-docker.ini
+        target: /etc/php/8.3/cli/conf.d/21-xdebug-docker.ini
+        bind:
+          create_host_path: true
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    # alpine won't let us use volumes (esp. node_modules, but also package.json)
+    # and will fail with cryptically "node_modules mount path must be absolute"
+    image: node:22.22-trixie
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      VITE_APP_API_URL: http://127.0.0.1:8080
+      VITE_APP_MULTI_AULA: https://neu.aula.de/instances
+      VITE_APP_MULTI: true
+      VITE_APP_OAUTH: false
+      VITE_APP_SSO: true
+      APP_FRONTEND_URL: http://127.0.0.1:3000
+      APP_FRONTEND_HOST: http://127.0.0.1
+    volumes:
+      - ./package.json:/app/package.json
+      - ./yarn.lock:/app/yarn.lock
+      - ./tailwind.config.js:/app/tailwind.config.js
+      - ./tsconfig.json:/app/tsconfig.json
+      - ./vite.config.mts:/app/vite.config.mts
+      - ./public:/app/public
+      - ./index.html:/app/index.html
+      - ./src:/app/src
+      - /app/node_modules
+    command: sh -c "cd /app; yarn; yarn dev --host=0.0.0.0 --no-open"
+
+  redis:
+    image: redis:latest
+    ports:
+      - 6380:6379
