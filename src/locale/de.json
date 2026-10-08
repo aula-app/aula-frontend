@@ -14,13 +14,13 @@
         "desc": "Absteigend sortieren",
         "name": "Name",
         "status": "Status",
-        "confidence": "Treffergenauigkeit"
+        "confidence": "Wahrscheinlichkeit der Übereinstimmung"
       },
       "idpSync": {
-        "title": "Mit dem Identitätsanbieter abgleichen",
-        "notEnabled": "Für diese Schule ist kein Abgleich aktiviert. Die Verwaltung kann ihn im aula-manager einschalten.",
+        "title": "Mit dem Identitätsanbieter synchroisieren",
+        "notEnabled": "Für diese Schule ist keine Synchronisation mit einem Identitätsanbieter (z. B. IServ/Eduplaces) aktiviert. Wende dich an das aula-Team, um diese zu aktivieren.",
         "connectReturned": "Beim Anbieter angemeldet. Dein aula-Konto ist jetzt verknüpft und die Schule erkannt.",
-        "reviewWarning": "Bitte prüfe die Zuordnungen. Eine falsche Zusammenführung gibt einer Person das Konto einer anderen — inklusive aller Beiträge.",
+        "reviewWarning": "Bitte prüfe die Zuordnungen. Eine falsche Zusammenführung gibt einer Person das Konto einer anderen — inklusive aller Beiträge(z.B. Ideen, Verbesserungsvorschläge usw.).",
         "rooms": "Klassen und Räume",
         "steps": "Schritte der Prüfung",
         "filterRoom": "Klasse",
@@ -69,12 +69,12 @@
         },
         "errors": {
           "connect": {
-            "title": "Die Anmeldung beim Anbieter konnte nicht gestartet werden.",
-            "body": "Versuche es noch einmal. Wenn es weiterhin fehlschlägt, prüfe die Verbindungseinstellungen im aula-manager."
+            "title": "Die Anmeldung beim Identitätsanbieter konnte nicht gestartet werden.",
+            "body": "Versuche es noch einmal. Wenn es weiterhin fehlschlägt, melde dich beim aula support."
           },
           "prepare": {
-            "title": "Der Abgleich konnte nicht vorbereitet werden.",
-            "body": "Versuche es noch einmal. Wenn es weiterhin fehlschlägt, prüfe, ob der Anbieter erreichbar ist."
+            "title": "Die Synchronisation konnte nicht vorbereitet werden.",
+            "body": "Versuche es noch einmal. Wenn es weiterhin fehlschlägt, prüfe, ob der Identitätsanbieter erreichbar ist."
           },
           "apply": {
             "title_one": "{{count}} Zuordnung ist nicht gültig.",
@@ -93,8 +93,8 @@
             "body": "Melden Sie sich beim Identitätsanbieter an, um Ihr aula-Konto zu verknüpfen und die Schule zu identifizieren. Für alle anderen ändert sich noch nichts."
           },
           "connected": {
-            "title": "Bereit zum Abgleich Ihrer Daten",
-            "body": "aula kann die Klassen und Personen des Anbieters mit den vorhandenen Daten dieser Schule vergleichen. Es wird nichts importiert, bevor Sie die Zuordnungen bestätigen."
+            "title": "Bereit zum Abgleichen Ihrer Daten",
+            "body": "aula kann die Klassen und Personen des Identitätsanbieters mit den vorhandenen Daten dieser Schule vergleichen. Es wird nichts importiert, bevor Sie die Zuordnungen bestätigen."
           },
           "reviewing": {
             "title": "Zuordnungen warten auf Prüfung",
@@ -106,7 +106,7 @@
           },
           "linking": {
             "title": "Zusammenführung abgeschlossen",
-            "body": "{{linked}} Konten verknüpft, {{remaining}} noch nicht angemeldet. Jede Person wird bei der ersten Anmeldung über den Anbieter verknüpft."
+            "body": "{{linked}} Konten verknüpft, {{remaining}} noch nicht angemeldet. Jede Person wird bei der ersten Anmeldung über dem Identitätsanbieter verknüpft."
           },
           "completed": {
             "title": "Zusammenführung abgeschlossen",
@@ -122,7 +122,7 @@
         "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel –, um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
         "loading": {
           "title": "Prüfung wird aufgebaut",
-          "body": "Klassen und Personen beim Anbieter werden gelesen und mit denen dieser Schule abgeglichen."
+          "body": "Klassen und Personen beim Identitätsanbieter werden gelesen und mit denen dieser Schule abgeglichen."
         },
         "leaveTitle": "Prüfung verlassen?",
         "leaveWarning": "Möchtest du diese Ansicht wirklich verlassen? Deine gesamte Arbeit geht dabei verloren.",
