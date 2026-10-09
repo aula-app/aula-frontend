@@ -67,8 +67,9 @@ const PhaseAdvance = ({ box, onAdvanced, className }: PhaseAdvanceProps) => {
           className
         )}
       >
-        <Icon type={color} size="1rem" aria-hidden="true" />
         {t('v2.scopes.boxes.moveTo', { var: name })}
+        <Icon type={color} size="1rem" aria-hidden="true" className="ml-1" />
+        <Icon type="chevronRight" size="1rem" aria-hidden="true" />
       </Button>
 
       <Dialog open={open} onClose={() => setOpen(false)} role="alertdialog" title={t('v2.ui.dialog.phase.title')}>
