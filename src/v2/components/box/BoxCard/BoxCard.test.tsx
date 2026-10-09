@@ -2,8 +2,10 @@ import { BoxType, IdeaType } from '@/types/Scopes';
 import { render } from '@testing-library/react';
 import { ComponentProps } from 'react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import BoxCard from './BoxCard';
+
+const permissions = vi.hoisted(() => ({ granted: true }));
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -12,10 +14,14 @@ vi.mock('react-i18next', () => ({
 }));
 vi.mock('@/utils', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/utils')>()),
-  checkPermissions: () => true,
+  checkPermissions: () => permissions.granted,
 }));
 vi.mock('@/v2/components/ui/MoreOptions', () => ({ default: () => null }));
 vi.mock('@/v2/components/ui/Markdown', () => ({ default: () => null }));
+
+beforeEach(() => {
+  permissions.granted = true;
+});
 
 const boxAt = (phase_id: number) =>
   ({
@@ -37,6 +43,7 @@ const renderCard = (phase_id: number, props: Partial<ComponentProps<typeof BoxCa
   );
 
 const bar = (container: HTMLElement) => container.querySelector('[role="progressbar"]');
+const advance = (container: HTMLElement) => container.querySelector('[data-testid="advance-phase-button"]');
 const rows = (container: HTMLElement) => Array.from(container.querySelectorAll('[data-testid="box-idea-list"] li'));
 const readouts = (row: Element) => Array.from(row.querySelectorAll('.sr-only')).map((node) => node.textContent);
 
@@ -199,10 +206,33 @@ describe('BoxCard approval progress', () => {
     expect(bar(container)?.getAttribute('aria-label')).toContain('v2.scopes.boxes.reviewed');
   });
 
-  it('draws a full bar once every idea has been decided', () => {
+  it('draws a full bar once every idea has been decided, for those who cannot change the phase', () => {
+    permissions.granted = false;
     const { container } = renderCard(20, { progress: { settled: 5, total: 5 } });
 
     expect(bar(container)?.getAttribute('aria-valuenow')).toBe('100');
+    expect(advance(container)).toBeNull();
+  });
+
+  it('says every idea is reviewed and offers the next phase beside it, for those who can change the phase', () => {
+    const { container } = renderCard(20, { progress: { settled: 5, total: 5 } });
+
+    expect(bar(container)?.getAttribute('aria-label')).toBe('v2.scopes.boxes.allReviewed');
+    expect(advance(container)?.textContent).toContain('v2.scopes.boxes.moveTo');
+  });
+
+  it('keeps the bar while ideas are still waiting', () => {
+    const { container } = renderCard(20, { progress: { settled: 4, total: 5 } });
+
+    expect(bar(container)).toBeTruthy();
+    expect(advance(container)).toBeNull();
+  });
+
+  it('never offers a phase past results', () => {
+    const { container } = renderCard(40, { progress: { settled: 5, total: 5 } });
+
+    expect(bar(container)).toBeTruthy();
+    expect(advance(container)).toBeNull();
   });
 
   it('draws nothing when the caller cannot supply the counts', () => {
@@ -257,8 +287,29 @@ describe('BoxCard countdown', () => {
   });
 
   it('reads full once the phase has run out, rather than empty', () => {
+    permissions.granted = false;
     const { container } = countdownAt(daysAgo(14), 10);
 
     expect(Number(bar(container)?.getAttribute('aria-valuenow'))).toBe(100);
+  });
+
+  it('says the phase ended and offers the next phase beside it, for those who can change the phase', () => {
+    const { container } = countdownAt(daysAgo(14), 10);
+
+    expect(bar(container)?.getAttribute('aria-label')).toBe('phases.ended');
+    expect(advance(container)?.textContent).toContain('v2.scopes.boxes.moveTo');
+  });
+
+  it('stays a countdown while time is left', () => {
+    const { container } = countdownAt(daysAgo(5), 10);
+
+    expect(bar(container)).toBeTruthy();
+    expect(advance(container)).toBeNull();
+  });
+
+  it('never runs out for a box with no configured duration', () => {
+    const { container } = countdownAt(daysAgo(14), 0);
+
+    expect(advance(container)).toBeNull();
   });
 });

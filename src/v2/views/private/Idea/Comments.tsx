@@ -165,7 +165,7 @@ const Comments: React.FC<CommentsProps> = ({ idea_id, phase }) => {
       )}
 
       {!isLoading && !error && visibleComments.length > 0 && (
-        <ul className="flex flex-col gap-1 p-2 sm:p-4">
+        <ul className="flex flex-col p-2 sm:p-4">
           {visibleComments.map((comment) => (
             <li key={comment.id}>
               <Comment comment={comment} onChanged={refetch} />

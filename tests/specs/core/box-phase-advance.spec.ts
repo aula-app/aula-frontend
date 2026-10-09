@@ -34,7 +34,7 @@ test('Box offers the next phase once every Idea is ruled on', async ({ seededRoo
     await boxes.edit(adminPage, box);
   });
 
-  await test.step('No advance band while the Idea is still undecided', async () => {
+  await test.step('No phase change button while the Idea is still undecided', async () => {
     await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.APPROVAL);
     await expect(boxCard(adminPage)).toBeVisible();
     await expect(boxCard(adminPage).getByTestId(TEST_IDS.ADVANCE_PHASE_BUTTON)).toBeHidden();

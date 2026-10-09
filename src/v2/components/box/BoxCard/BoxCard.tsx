@@ -72,11 +72,15 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
   // A box with no configured duration has no clock to run out, so time never settles it.
   const spent = showCountdown ? days > 0 && remaining <= 0 : showProgress && settled!.settled === settled!.total;
   const canAdvance = spent && !isResults && checkPermissions('boxes', 'changePhase');
-  const barRadius = canAdvance ? 'flex-1' : 'rounded-b-2xl flex-1';
-  const settledLabel = t(isResults ? 'v2.scopes.boxes.decided' : 'v2.scopes.boxes.reviewed', {
-    count: settled?.settled ?? 0,
-    total: settled?.total ?? 0,
-  });
+  const barRadius = canAdvance ? 'flex-1 rounded-bl-2xl' : 'flex-1 rounded-b-2xl';
+  const countdownLabel = remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended');
+  const settledLabel =
+    spent && !isResults
+      ? t('v2.scopes.boxes.allReviewed')
+      : t(isResults ? 'v2.scopes.boxes.decided' : 'v2.scopes.boxes.reviewed', {
+          count: settled?.settled ?? 0,
+          total: settled?.total ?? 0,
+        });
 
   return (
     <div data-testid={TEST_IDS.BOX_CARD} className="flex flex-col gap-1">
@@ -160,16 +164,11 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
         />
       )}
 
-      <div className="flex gap-2">
+      <div className="flex gap-1">
         {showCountdown && (
-          <ProgressBar
-            value={fillPercent}
-            color={phaseColor}
-            label={remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
-            className={barRadius}
-          >
+          <ProgressBar value={fillPercent} color={phaseColor} label={countdownLabel} className={barRadius}>
             <Icon type="clock" size="1rem" />
-            {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
+            {countdownLabel}
           </ProgressBar>
         )}
         {showProgress && (
@@ -178,9 +177,8 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
             {settledLabel}
           </ProgressBar>
         )}
+        {canAdvance && <PhaseAdvance box={box} onAdvanced={onChanged} className="rounded-br-2xl" />}
       </div>
-
-      {canAdvance && <PhaseAdvance box={box} onAdvanced={onChanged} className="rounded-b-2xl" />}
     </div>
   );
 };

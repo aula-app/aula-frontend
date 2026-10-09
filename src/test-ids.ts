@@ -21,6 +21,7 @@ export const TEST_IDS = {
   SORT_BUTTON: 'sort-button',
   SORT_DIRECTION_BUTTON: 'sort-direction-button',
   SCOPE_CONTROLS: 'scope-controls',
+  SCOPE_TITLE: 'scope-title',
 
   // Filtering (FilterBar)
   FILTER_TOGGLE_BUTTON: 'filter-toggle-button',

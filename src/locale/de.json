@@ -98,7 +98,8 @@
         "plural": "Boxen",
         "reviewed": "{{count}} von {{total}} geprüft",
         "singular": "Box",
-        "phaseReady": "Bereit für {{var}}",
+        "allReviewed": "Alle Ideen geprüft",
+        "moveTo": "Weiter zu {{var}}",
         "advance": "Weiter"
       },
       "comments": {
@@ -135,6 +136,10 @@
           "decision": "Freigabe",
           "reason": "Grund für die Ablehnung"
         }
+      },
+      "rooms": {
+        "singular": "Raum",
+        "plural": "Räume"
       }
     },
     "ui": {
@@ -255,9 +260,11 @@
       },
       "navigation": "Navigationsmenü",
       "moveToPhase": "Zu {{phase}} wechseln",
+      "roomPhase": "{{room}}: {{var}}",
       "phases": "Phasennavigation",
       "sort": {
         "label": "Sortieren nach",
+        "default": "Standardreihenfolge",
         "asc": "Aufsteigend sortieren",
         "desc": "Absteigend sortieren",
         "created": "Erstelldatum",

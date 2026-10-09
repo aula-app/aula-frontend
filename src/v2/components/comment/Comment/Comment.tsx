@@ -44,51 +44,53 @@ const Comment = ({ comment, className, onChanged }: CommentProps) => {
     >
       <Avatar name={comment.displayname} />
 
-      <div className="flex items-start justify-between gap-2 min-w-0 mr-1">
-        <UserMeta name={comment.displayname} />
-        <MoreOptions
-          className="-mt-2"
-          panelClassName="ml-auto"
-          menuTestId={TEST_IDS.COMMENT_MORE_MENU}
-          panelTestId={TEST_IDS.COMMENT_MORE_OPTIONS_PANEL}
-        >
-          {(close) => (
-            <>
-              <EditButton
-                scopeLabel={scopeLabel}
-                subject={comment.displayname}
-                hidden={!checkPermissions('comments', 'edit', comment.user_hash_id)}
-                onSave={(data) => editComment({ comment_id: comment.hash_id, content: data.content })}
-                renderForm={({ onSubmit, onCancel }) => (
-                  <CommentForm defaultValues={comment} onSubmit={onSubmit} onCancel={onCancel} />
-                )}
-                onChanged={onChanged}
-                onOpen={close}
-              />
-              <DeleteButton
-                scopeLabel={scopeLabel}
-                subject={comment.displayname}
-                hidden={!checkPermissions('comments', 'delete', comment.user_hash_id)}
-                onConfirm={() => deleteComment(comment.id)}
-                onDeleted={onChanged}
-                onOpen={close}
-                confirmTestId={TEST_IDS.CONFIRM_BUTTON}
-                cancelTestId={TEST_IDS.CANCEL_BUTTON}
-              />
-              <ReportButton scopeLabel={scopeLabel} subject={comment.content} onOpen={close} />
-              <ShareButton path={pathname} onOpen={close} />
-            </>
-          )}
-        </MoreOptions>
+      <div className="flex items-center justify-between gap-2 min-w-0 mr-1">
+        <span className="flex gap-2 items-baseline min-w-0">
+          <UserMeta name={comment.displayname} />
+          <span aria-hidden="true" className="shrink-0 text-xs text-muted min-w-0 truncate">
+            -
+          </span>
+          <DateText date={comment.created} className="min-w-0 truncate" />
+        </span>
+        <span className="flex shrink-0 gap-1 items-center">
+          <MoreOptions
+            panelClassName="ml-auto"
+            menuTestId={TEST_IDS.COMMENT_MORE_MENU}
+            panelTestId={TEST_IDS.COMMENT_MORE_OPTIONS_PANEL}
+          >
+            {(close) => (
+              <>
+                <EditButton
+                  scopeLabel={scopeLabel}
+                  subject={comment.displayname}
+                  hidden={!checkPermissions('comments', 'edit', comment.user_hash_id)}
+                  onSave={(data) => editComment({ comment_id: comment.hash_id, content: data.content })}
+                  renderForm={({ onSubmit, onCancel }) => (
+                    <CommentForm defaultValues={comment} onSubmit={onSubmit} onCancel={onCancel} />
+                  )}
+                  onChanged={onChanged}
+                  onOpen={close}
+                />
+                <DeleteButton
+                  scopeLabel={scopeLabel}
+                  subject={comment.displayname}
+                  hidden={!checkPermissions('comments', 'delete', comment.user_hash_id)}
+                  onConfirm={() => deleteComment(comment.id)}
+                  onDeleted={onChanged}
+                  onOpen={close}
+                  confirmTestId={TEST_IDS.CONFIRM_BUTTON}
+                  cancelTestId={TEST_IDS.CANCEL_BUTTON}
+                />
+                <ReportButton scopeLabel={scopeLabel} subject={comment.content} onOpen={close} />
+              </>
+            )}
+          </MoreOptions>
+          <LikeStat like={like} readOnly={!canLike} data-testid={TEST_IDS.LIKE_BUTTON} />
+        </span>
       </div>
 
       <div className="-mt-2 col-start-2 min-w-0 py-2 px-4 rounded-2xl rounded-tl-none bg-neutral text-neutral-fg">
         <Markdown className="prose text-inherit">{comment.content}</Markdown>
-      </div>
-
-      <div className="col-start-2 flex justify-between items-center gap-6 mx-1">
-        <DateText date={comment.created} className="pb-3" />
-        <LikeStat like={like} readOnly={!canLike} data-testid={TEST_IDS.LIKE_BUTTON} />
       </div>
     </article>
   );

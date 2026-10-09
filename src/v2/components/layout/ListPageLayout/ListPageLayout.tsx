@@ -10,7 +10,7 @@ type ListPageLayoutProps = {
 };
 
 const ListPageLayout = ({ header, toolbar, action, children }: ListPageLayoutProps) => (
-  <div className="flex flex-col h-full">
+  <div className="flex flex-1 flex-col h-full min-h-0 min-w-0">
     {header}
     {toolbar}
     {action}
