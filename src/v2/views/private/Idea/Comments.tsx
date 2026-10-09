@@ -82,7 +82,7 @@ const Comments: React.FC<CommentsProps> = ({ idea_id, phase }) => {
           label={t('v2.ui.actions.search')}
           startAdornment={<Icon type="search" />}
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={setSearchQuery}
           className="flex-1 min-w-20"
           data-testid={TEST_IDS.SEARCH_FIELD}
         />

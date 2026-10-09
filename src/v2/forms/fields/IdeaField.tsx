@@ -1,11 +1,8 @@
 import { getIdeasByRoom } from '@/services/ideas';
-import IconButton from '@/v2/components/button/IconButton';
-import AutocompleteInput from '@/v2/components/input/AutocompleteInput';
+import ComboBox from '@/v2/components/input/ComboBox';
 import { SelectOption } from '@/v2/components/input/SelectInput';
-import Icon from '@/v2/components/ui/Icon/Icon';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { twMerge } from 'tailwind-merge';
 
 interface IdeaFieldProps {
   /** Room the pickable ideas come from. */
@@ -18,6 +15,9 @@ interface IdeaFieldProps {
   disabled?: boolean;
   'data-testid'?: string;
 }
+
+const uniqueOptions = (list: SelectOption[]) =>
+  list.filter((option, index) => list.findIndex((other) => other.value === option.value) === index);
 
 /** Picks ideas out of a room and lists the picked ones, each removable. */
 const IdeaField = ({
@@ -50,30 +50,27 @@ const IdeaField = ({
     };
   }, [roomId]);
 
-  // The room only lists unassigned ideas, so a removed one has to be kept to stay pickable.
+  // The room only lists unassigned ideas, so assigned and removed ones are kept in the pool to stay pickable.
   const [removed, setRemoved] = useState<SelectOption[]>([]);
+  const pool = uniqueOptions([...options, ...value, ...removed]);
 
-  const selectedIds = value.map((idea) => idea.value);
-  const pool = options.concat(removed.filter((idea) => !options.some((option) => option.value === idea.value)));
-  const available = pool.filter((option) => !selectedIds.includes(option.value));
-
-  const add = (ideaId: string) => {
-    const option = pool.find((o) => o.value === ideaId);
-    if (option) onChange([...value, option]);
-  };
-
-  const remove = (ideaId: string) => {
-    const option = value.find((idea) => idea.value === ideaId);
-    if (option) setRemoved((current) => (current.some((o) => o.value === ideaId) ? current : [...current, option]));
-    onChange(value.filter((idea) => idea.value !== ideaId));
+  const handleChange = (ids: string[]) => {
+    const dropped = value.filter((idea) => !ids.includes(idea.value));
+    if (dropped.length > 0) setRemoved((current) => uniqueOptions([...current, ...dropped]));
+    onChange(
+      pool.filter((option) => ids.includes(option.value)).sort((a, b) => ids.indexOf(a.value) - ids.indexOf(b.value))
+    );
   };
 
   return (
     <div className="flex flex-col gap-1">
-      <AutocompleteInput
-        label={t('v2.ui.actions.add', { var: t('v2.scopes.ideas.singular') })}
-        options={available}
-        onSelect={add}
+      <ComboBox
+        label={t('scopes.ideas.plural')}
+        placeholder={t('v2.ui.actions.select', { var: t('v2.scopes.ideas.plural') })}
+        tagsLabel={t('v2.scopes.boxes.ideasInBox')}
+        options={pool}
+        value={value.map((idea) => idea.value)}
+        onChange={handleChange}
         loading={loading}
         disabled={disabled}
         data-testid={dataTestId}
@@ -83,32 +80,6 @@ const IdeaField = ({
         <p role="status" className="px-1 text-xs text-muted">
           {t('status.loading')}
         </p>
-      )}
-
-      {value.length > 0 && (
-        <ul
-          aria-label={t('v2.scopes.boxes.ideasInBox')}
-          className="flex max-h-40 flex-col gap-0.5 overflow-y-auto"
-          data-testid={`${dataTestId}-list`}
-        >
-          {value.map((idea) => (
-            <li key={idea.value} className="flex items-stretch gap-0.5 rounded-md bg-shadow">
-              <span className={twMerge('flex min-w-0 flex-1 items-center px-3 py-1.5 text-sm')}>
-                <span className="truncate">{idea.label}</span>
-              </span>
-              <IconButton
-                type="button"
-                aria-label={t('v2.ui.actions.remove', { var: idea.label })}
-                disabled={disabled}
-                onClick={() => remove(idea.value)}
-                className={twMerge('aspect-auto shrink-0 px-2')}
-                data-testid={`${dataTestId}-remove-${idea.value}`}
-              >
-                <Icon type="close" size="1.1rem" />
-              </IconButton>
-            </li>
-          ))}
-        </ul>
       )}
     </div>
   );

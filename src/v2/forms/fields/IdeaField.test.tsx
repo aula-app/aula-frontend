@@ -1,5 +1,6 @@
 import { IdeaType } from '@/types/Scopes';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import IdeaField from './IdeaField';
 
@@ -21,54 +22,53 @@ vi.mock('@/services/ideas', () => ({
 const renderField = (value: { value: string; label: string }[] = []) => {
   const onChange = vi.fn();
   const view = render(<IdeaField roomId="r1" value={value} onChange={onChange} />);
-  return { ...view, onChange };
+  return { ...view, onChange, user: userEvent.setup() };
+};
+
+const readyInput = async () => {
+  const input = await screen.findByTestId('idea-field');
+  await waitFor(() => expect(input).toBeEnabled());
+  return input;
 };
 
 describe('IdeaField', () => {
   it('offers the room ideas and adds the picked one', async () => {
-    const { onChange } = renderField();
+    const { onChange, user } = renderField();
 
-    const input = await screen.findByTestId('idea-field');
-    fireEvent.focus(input);
-
-    await waitFor(() => expect(screen.getByTestId('idea-field-option-i2')).toBeInTheDocument());
-    fireEvent.mouseDown(screen.getByTestId('idea-field-option-i2'));
+    await user.click(await readyInput());
+    await user.click(await screen.findByTestId('idea-field-option-i2'));
 
     expect(onChange).toHaveBeenCalledWith([{ value: 'i2', label: 'Skate ramp' }]);
   });
 
   it('filters the options by what is typed', async () => {
-    renderField();
+    const { user } = renderField();
 
-    const input = await screen.findByTestId('idea-field');
-    fireEvent.change(input, { target: { value: 'skate' } });
+    await user.type(await readyInput(), 'skate');
 
     await waitFor(() => expect(screen.getByTestId('idea-field-option-i2')).toBeInTheDocument());
     expect(screen.queryByTestId('idea-field-option-i1')).not.toBeInTheDocument();
   });
 
-  it('leaves out ideas that are already selected', async () => {
-    renderField([{ value: 'i1', label: 'Longer lunch break' }]);
+  it('marks ideas that are already selected', async () => {
+    const { user } = renderField([{ value: 'i1', label: 'Longer lunch break' }]);
 
-    const input = await screen.findByTestId('idea-field');
-    fireEvent.focus(input);
+    await user.click(await readyInput());
 
-    await waitFor(() => expect(screen.getByTestId('idea-field-option-i2')).toBeInTheDocument());
-    expect(screen.queryByTestId('idea-field-option-i1')).not.toBeInTheDocument();
+    expect(await screen.findByTestId('idea-field-option-i1')).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByTestId('idea-field-option-i2')).toHaveAttribute('aria-selected', 'false');
   });
 
   it('offers a removed idea again, even one the room does not list', async () => {
     const assigned = { value: 'i9', label: 'Already in the box' };
-    const { rerender, onChange } = renderField([assigned]);
+    const { rerender, onChange, user } = renderField([assigned]);
 
-    fireEvent.click(await screen.findByTestId('idea-field-remove-i9'));
+    await user.click(await screen.findByTestId('idea-field-remove-i9'));
     expect(onChange).toHaveBeenCalledWith([]);
 
     rerender(<IdeaField roomId="r1" value={[]} onChange={onChange} />);
-    fireEvent.focus(screen.getByTestId('idea-field'));
-
-    await waitFor(() => expect(screen.getByTestId('idea-field-option-i9')).toBeInTheDocument());
-    fireEvent.mouseDown(screen.getByTestId('idea-field-option-i9'));
+    await user.click(await readyInput());
+    await user.click(await screen.findByTestId('idea-field-option-i9'));
     expect(onChange).toHaveBeenLastCalledWith([assigned]);
   });
 
@@ -77,9 +77,9 @@ describe('IdeaField', () => {
       { value: 'i1', label: 'Longer lunch break' },
       { value: 'i2', label: 'Skate ramp' },
     ];
-    const { onChange } = renderField(selection);
+    const { onChange, user } = renderField(selection);
 
-    fireEvent.click(await screen.findByTestId('idea-field-remove-i1'));
+    await user.click(await screen.findByTestId('idea-field-remove-i1'));
 
     expect(onChange).toHaveBeenCalledWith([{ value: 'i2', label: 'Skate ramp' }]);
   });
