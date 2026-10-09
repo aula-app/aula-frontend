@@ -98,7 +98,8 @@
         "plural": "boxes",
         "reviewed": "{{count}} of {{total}} reviewed",
         "singular": "box",
-        "phaseReady": "Ready for {{var}}",
+        "allReviewed": "All ideas reviewed",
+        "moveTo": "Move to {{var}}",
         "advance": "Move on"
       },
       "comments": {

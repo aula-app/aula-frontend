@@ -17,7 +17,7 @@ interface PhaseAdvanceProps {
   box: BoxType;
   /** Called once the box has moved, so the surrounding list refetches. */
   onAdvanced?: () => void;
-  /** Corner radius is the caller's, since the band closes the box card. */
+  /** Corner radius is the caller's, since the button sits in the box card's footer. */
   className?: string;
 }
 
@@ -57,26 +57,19 @@ const PhaseAdvance = ({ box, onAdvanced, className }: PhaseAdvanceProps) => {
 
   return (
     <>
-      <div
+      <Button
+        aria-haspopup="dialog"
+        data-testid={TEST_IDS.ADVANCE_PHASE_BUTTON}
+        onClick={() => setOpen(true)}
         className={twMerge(
-          'flex flex-wrap items-center justify-between gap-2 px-3 py-1.5',
+          'shrink-0 gap-1 whitespace-nowrap rounded-none px-3 py-1 shadow-none',
           `bg-${color}-light text-${color}-fg`,
           className
         )}
       >
-        <span className="flex items-center gap-2 text-sm font-medium">
-          <Icon type={color} size="1.25rem" aria-hidden="true" />
-          {t('v2.scopes.boxes.phaseReady', { var: name })}
-        </span>
-        <Button
-          aria-haspopup="dialog"
-          data-testid={TEST_IDS.ADVANCE_PHASE_BUTTON}
-          onClick={() => setOpen(true)}
-          className="py-1 text-sm"
-        >
-          {t('v2.scopes.boxes.advance')}
-        </Button>
-      </div>
+        <Icon type={color} size="1rem" aria-hidden="true" />
+        {t('v2.scopes.boxes.moveTo', { var: name })}
+      </Button>
 
       <Dialog open={open} onClose={() => setOpen(false)} role="alertdialog" title={t('v2.ui.dialog.phase.title')}>
         <div className="flex flex-col gap-4 p-4">

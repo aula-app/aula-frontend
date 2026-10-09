@@ -98,7 +98,8 @@
         "plural": "Boxen",
         "reviewed": "{{count}} von {{total}} geprüft",
         "singular": "Box",
-        "phaseReady": "Bereit für {{var}}",
+        "allReviewed": "Alle Ideen geprüft",
+        "moveTo": "Weiter zu {{var}}",
         "advance": "Weiter"
       },
       "comments": {
