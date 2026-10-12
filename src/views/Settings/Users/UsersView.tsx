@@ -4,7 +4,7 @@ import { UserForms } from '@/components/DataForms';
 import PrintUsers from '@/components/PrintUsers/PrintUsers';
 import SelectRoom from '@/components/SelectRoom';
 import SettingsView from '@/components/SettingsView';
-import { useDataTableState, useSsoManaged } from '@/hooks';
+import { useDataTableState, useSsoManaged, useSsoRequired } from '@/hooks';
 import { deleteUser, getUsers } from '@/services/users';
 import { useAppStore } from '@/store/AppStore';
 import { UserType } from '@/types/Scopes';
@@ -36,10 +36,11 @@ const UsersView: React.FC = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const isSsoManaged = useSsoManaged();
+  const isSsoRequired = useSsoRequired();
   const [room_id, setRoom] = useState<string>('');
   const [userlevel, setRole] = useState<RoleTypes | 0>(0);
 
-  const columns = isSsoManaged ? COLUMNS.filter((column) => column.name !== 'temp_pw') : COLUMNS;
+  const columns = isSsoRequired ? COLUMNS.filter((column) => column.name !== 'temp_pw') : COLUMNS;
 
   // Create role options including "All" option
   const roleOptions = [
@@ -124,7 +125,8 @@ const UsersView: React.FC = () => {
       FormComponent={UserForms as React.ComponentType<{ onClose: () => void; defaultValues?: unknown }>}
       extraTools={extraTools}
       extraFilters={extraFilters}
-      hideAdd={isSsoManaged}
+      hideAdd={isSsoRequired}
+      hideDelete={isSsoRequired}
     />
   );
 };
