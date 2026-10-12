@@ -1,5 +1,7 @@
 ## Unreleased
 
+- **New features**
+    - users can now log in by (autocompleted) school name as well as instance code
 - **Technical improvements**
     - remove Tech Admin role, clean up related permissions, notably regarding the listing+viewing+selection of rooms
 
