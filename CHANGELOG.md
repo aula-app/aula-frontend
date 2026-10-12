@@ -1,3 +1,8 @@
+## Unreleased
+
+- **Technical improvements**
+    - remove Tech Admin role, clean up related permissions, notably regarding the listing+viewing+selection of rooms
+
 ## 1.10.2
 
 - **Bug fixes**

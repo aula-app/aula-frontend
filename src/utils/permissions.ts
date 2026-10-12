@@ -12,10 +12,9 @@ import { localStorageGet } from './localStorage';
  * 44 => "principal",
  * 45 => "principal_v",
  * 50 => "admin",
- * 60 => "tech_admin"
  */
 
-export const roles = [10, 20, 30, 31, 40, 41, 44, 45, 50, 60] as Array<RoleTypes>;
+export const roles = [10, 20, 30, 31, 40, 41, 44, 45, 50] as Array<RoleTypes>;
 
 const USER_ROLES = [20, 30, 31, 40, 41, 44, 45];
 const VOTING_ROLES = [20, 31, 41, 45];
@@ -102,14 +101,13 @@ const permissions = {
     create: { role: 50 },
     edit: { role: 40 },
     delete: { role: 50 },
-    viewAll: { role: 40 },
+    viewAll: { role: [40, ...ADMIN] },
     status: { role: 50 },
   },
   system: {
     profile: { role: 20 },
     access: { role: 50 },
     edit: { role: 40 },
-    hide: { role: 60 },
   },
   users: {
     addRole: { role: 50 },
