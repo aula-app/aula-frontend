@@ -111,6 +111,12 @@ services:
         bind:
           create_host_path: false
       - type: bind
+        source: ${BACKEND_DIR}/storage/oauth-public.key
+        target: /var/www/html/config/oauth-public.key
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
         source: ${BACKEND_DIR}/legacy/docker-local/php.ini-development
         target: /etc/php/8.3/apache2/php.ini
         bind:
