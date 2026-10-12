@@ -15,6 +15,12 @@ const defaultConfig: RuntimeConfig = {
   BASENAME: '/',
 };
 
+/** Root index.ts runs async loadRuntimeConfig before *everything* (root React render),
+ * usually getRuntimeConfig() should do,
+ * but there are only few cases where we need to call it explicitly:
+ * - SetPasswordView.tsx needs to do some juggling because it needs to figure out the instance it checks against
+ * - instance.ts validateAndSaveInstanceCode, questionably?
+ */
 export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
   let config: RuntimeConfig;
 
