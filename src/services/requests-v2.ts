@@ -1,3 +1,4 @@
+import { getRuntimeConfig } from '@/config';
 import { localStorageGet } from '../utils/localStorage';
 
 export interface VersionsResponse {
@@ -50,3 +51,24 @@ const baseVersionsRequest = async (versionsUrl: string, version: string) => {
     return DEFAULT_VERSIONS_RESPONSE;
   }
 };
+
+// TODO: split into own file once there is a critical mass
+
+export interface TenantInstance {
+  instance_code: string,
+  name: string
+};
+
+export type GetTenantInstancesResponse = TenantInstance[];
+
+export const getTenantInstancesRequest = async (): Promise<GetTenantInstancesResponse> => {
+  const centralApiUrl = getRuntimeConfig().CENTRAL_API_URL;
+  return fetch(`${centralApiUrl}/api/v2/tenants`)
+    .then((response) => {
+      if (response && response.ok) {
+        return response.json();
+      }
+      console.error('error fetching tenants', response);
+      throw new Error('error fetching tenants');
+    });
+}
