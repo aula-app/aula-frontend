@@ -24,9 +24,11 @@ type Props = {
   setDelete: (ideas: Array<string>) => void;
   /** Hides the "add" action, e.g. when the scope's records are owned externally. */
   hideAdd?: boolean;
+  /** Hides the "delete" action, e.g. when the scope's records are owned externally. */
+  hideDelete?: boolean;
 };
 
-const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDelete, hideAdd }) => {
+const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDelete, hideAdd, hideDelete }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const [isOpen, setOpen] = useState(false);
@@ -146,7 +148,7 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
           </Button>
         )}
         {extraTools && extraTools({ items: selected })}
-        {checkPermissions(scope, 'delete') && (
+        {checkPermissions(scope, 'delete') && !hideDelete && (
           <Button
             variant="outlined"
             color="error"
