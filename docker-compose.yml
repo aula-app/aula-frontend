@@ -12,11 +12,11 @@ services:
     ports:
       - "127.0.0.1:3307:3306"
     volumes:
+      - ${BACKEND_DIR}/db:/var/lib/mysql
       # provides a script to GRANT privileges necessary for tenancy
       # NOTE: this path is coupled to the backend repo structure (docker/mariadb/).
       # If that folder moves in aula-backend, this volume mapping must be updated here too.
       - ${BACKEND_DIR}/docker/mariadb/:/docker-entrypoint-initdb.d:ro
-      # TODO provide a host bind here for mariadb data
     healthcheck:
       test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
       start_period: 10s
