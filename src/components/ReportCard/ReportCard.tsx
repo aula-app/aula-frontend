@@ -1,5 +1,5 @@
 import { addMessage, setMessageStatus } from '@/services/messages';
-import { deleteUser, editSelfRestricted, exportSelfData } from '@/services/users';
+import { deleteUser, editSelfRestricted } from '@/services/users';
 import { useAppStore } from '@/store';
 import { MessageType } from '@/types/Scopes';
 import { errorAlert, successAlert } from '@/utils';
@@ -232,6 +232,12 @@ ${message}`,
               </DialogActions>
             </Dialog>
           </>
+        )}
+        {metadata && metadata.responseTo === 'requestData' && (
+          <p>
+            {/* this will show up for users who requested an export when it still required admin approval */}
+            {t('requests.exportData.legacyHint')}
+          </p>
         )}
       </CardContent>
     </Card>

@@ -2,6 +2,7 @@ import { AppIcon } from '@/components';
 import { getInstanceSettings } from '@/services/config';
 import { useAppStore } from '@/store/AppStore';
 import { InstanceResponse } from '@/types/Generics';
+import { useSsoRequired } from '@/hooks';
 import { checkPermissions } from '@/utils';
 import { Accordion, AccordionDetails, AccordionSummary, Stack, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
@@ -21,9 +22,10 @@ import SystemSettings from './SystemSettings';
  */
 const ConfigView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   const [settings, setSettings] = useState<InstanceResponse>();
   const [expanded, setExpanded] = useState<string>();
+  const isSsoRequired = useSsoRequired();
 
   const getSettings = async () => {
     const response = await getInstanceSettings();
@@ -43,14 +45,14 @@ const ConfigView = () => {
   const closePanels = () => setExpanded(undefined);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.configuration'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.configuration'), '']] });
     loadData();
   }, []);
 
   const panels = [
     { name: 'idea', component: <IdeaSettings onReload={closePanels} /> },
     { name: 'vote', component: <QuorumSettings onReload={closePanels} /> },
-    { name: 'user', component: <UsersSettings onReload={closePanels} /> },
+    ...(isSsoRequired ? [] : [{ name: 'user', component: <UsersSettings onReload={closePanels} /> }]),
     { name: 'group', component: <Groups /> },
     // { name: 'time', component: <TimeSettings config={config} onReload={getConfig} /> },
     // { name: 'login', component: <LoginSettings config={config} settings={settings} onReload={loadData} /> },

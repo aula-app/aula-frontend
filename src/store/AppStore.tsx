@@ -30,6 +30,18 @@ export interface AppStoreState {
   lastScroll: number;
   lastIdeaList: string;
 }
+export type AppAction =
+  | { type: 'LOG_IN' }
+  | { type: 'LOG_OUT' }
+  | { type: 'CURRENT_USER'; currentUser?: object; payload?: object }
+  | { type: 'SAVE_SCROLL'; lastScroll: number; lastIdeaList: string }
+  | { type: 'HAS_CONSENT'; payload: boolean }
+  | { type: 'SET_BREADCRUMB'; breadcrumb: [string, string][] }
+  | { type: 'DARK_MODE'; payload: boolean }
+  | { type: 'ADD_POPUP'; message: PopupType }
+  | { type: 'REMOVE_POPUP'; index: number }
+  | { type: 'REMOVE_ALL_POPUP' };
+
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
@@ -43,7 +55,7 @@ const INITIAL_APP_STATE: AppStoreState = {
 /**
  * Instance of React Context for global AppStore
  */
-type AppContextReturningType = [AppStoreState, Dispatch<any>];
+type AppContextReturningType = [AppStoreState, Dispatch<AppAction>];
 const AppContext = createContext<AppContextReturningType>([INITIAL_APP_STATE, () => null]);
 
 /**

@@ -61,9 +61,9 @@ VALUES
   50, 'e2e admin user', 2, 1, NOW(), NOW(), 1, 1, '[]'
 ),
 (
-  2, 'e2e.tech-admin', 'Tech Adminović','tech_admin','dev+e2e-tech_admin@aula.de',
-  '$2a$04$AgQajDMd4MKQcMSW3nNphuO9jRxU.udCk5DYzecof7u/Tl1Ax.atC', 'e2eAdmin60abcdefghij0123456789ab',
-  60, 'e2e admin user', 2, 1, NOW(), NOW(), 1, 1, '[]'
+  2, 'e2e.admin2', 'Admin II. Adminović','admin2','dev+e2e-admin2@aula.de',
+  '$2a$04$AgQajDMd4MKQcMSW3nNphuO9jRxU.udCk5DYzecof7u/Tl1Ax.atC', 'e2eAdminII50abcdefghij0123456789',
+  50, 'e2e admin user', 2, 1, NOW(), NOW(), 1, 1, '[]'
 ),
 (
   3, 'e2e.user', 'User Userić', 'user', 'dev+e2e-user@aula.de',

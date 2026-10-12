@@ -1,4 +1,3 @@
-import { addMessage } from '@/services/messages';
 import { useAppStore } from '@/store';
 import { UserType } from '@/types/Scopes';
 import { errorAlert, successAlert } from '@/utils';
@@ -21,9 +20,6 @@ const DataExport: React.FC<Props> = ({ user, onReload }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
 
-  // if we could pass tenant code by querystring, we could below just do
-  //   const userGDPRDataUrl = getUserGDPRDataUrl(user.hash_id)
-  //   <Button download="foo.json.txt" href={userGDPRDataUrl}> */}
   const downloadUserGDPRData = () => {
     getUserGDPRData(user.hash_id)
       .then((response) => {

@@ -1,6 +1,4 @@
 import AppIcon from '@/components/AppIcon';
-import { StatusTypes } from '@/types/Generics';
-import { PossibleFields } from '@/types/Scopes';
 import { SettingNamesType } from '@/types/SettingsTypes';
 import { announceToScreenReader, checkPermissions } from '@/utils';
 import { WarningAmber } from '@mui/icons-material';
@@ -17,10 +15,6 @@ import {
 import React, { useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-interface FilterOptionsType {
-  status: StatusTypes;
-  filter: [keyof PossibleFields, string];
-}
 
 type Props = {
   extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;
@@ -30,9 +24,11 @@ type Props = {
   setDelete: (ideas: Array<string>) => void;
   /** Hides the "add" action, e.g. when the scope's records are owned externally. */
   hideAdd?: boolean;
+  /** Hides the "delete" action, e.g. when the scope's records are owned externally. */
+  hideDelete?: boolean;
 };
 
-const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDelete, hideAdd }) => {
+const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDelete, hideAdd, hideDelete }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const [isOpen, setOpen] = useState(false);
@@ -152,7 +148,7 @@ const ToolBar: React.FC<Props> = ({ extraTools, scope, selected, setEdit, setDel
           </Button>
         )}
         {extraTools && extraTools({ items: selected })}
-        {checkPermissions(scope, 'delete') && (
+        {checkPermissions(scope, 'delete') && !hideDelete && (
           <Button
             variant="outlined"
             color="error"
