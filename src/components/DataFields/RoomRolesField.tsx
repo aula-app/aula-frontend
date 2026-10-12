@@ -33,32 +33,24 @@ interface Props extends ButtonProps {
   onUpdate: (updates: { room: string; role: RoleTypes | 0 }[]) => void;
 }
 
-const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled = false, onUpdate, ...restOfProps }) => {
+const RoomRolesField: React.FC<Props> = ({ user, disabled = false, onUpdate, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [schoolRooms, setRooms] = useState<RoomType[]>([]);
 
   const [userRoles, setUserRoles] = useState<{ room: string; role: RoleTypes }[]>(JSON.parse(user?.roles || '[]'));
   const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes | 0 }[]>([]);
 
-  // Create role options based on room type and user level
-  const getRoleOptions = (room: RoomType) => {
-    const isStandardRoom = room.type === 1;
-    const isAdmin = (user?.userlevel ?? 0) >= 50;
-
+  // Create role options based on user level
+  const getRoleOptions = () => {
     const options = [
       { value: 0, label: t('roles.empty') },
       ...roles
-        .filter((role) => {
-          // Filter based on room type and admin status
-          if (isAdmin && isStandardRoom) {
-            return role < 60; // Admins can see all roles except super admin for standard rooms
-          }
-          return role < 40; // Non-admins see only basic roles
-        })
+        // only users that aren't admins or supermoderators can have room-specific roles
+        .filter((role) => role < 40)
         .map((r) => ({ value: r, label: t(`roles.${r}`) })),
     ];
 
@@ -159,7 +151,7 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
               userRoles.find((role) => role.room === room.hash_id)?.role ??
               0;
 
-            const roleOptions = getRoleOptions(room);
+            const roleOptions = getRoleOptions();
             const isAdminLocked = (user?.userlevel ?? 0) >= 50 && room.type === 1;
 
             return (

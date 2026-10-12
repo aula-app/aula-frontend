@@ -13,7 +13,6 @@ import {
   ListItemButton,
   ListItemText,
   Skeleton,
-  Typography,
 } from '@mui/material';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,12 +29,12 @@ export interface AddCategoryRefProps {
 }
 
 const AddCategoryButton = forwardRef<AddCategoryRefProps, Props>(
-  ({ ideas = [], disabled = false, ...restOfProps }, ref) => {
+  ({ ideas = [], ...restOfProps }, ref) => {
     const { t } = useTranslation();
 
     const [open, setOpen] = useState(false);
     const [isLoading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const [, setError] = useState<string | null>(null);
     const [categories, setCategories] = useState<CategoryType[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<CategoryType>();
     const [originalCategory, setOriginalCategory] = useState<CategoryType>();
