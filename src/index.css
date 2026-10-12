@@ -2,9 +2,8 @@
 @import url('/font/tahoma/tahoma.css');
 @import url('/font/inconsolata/inconsolata.css');
 
-@import "tailwindcss";
-@import "./theme/tailwind-theme.css";
-
+@import 'tailwindcss';
+@import './theme/tailwind-theme.css';
 
 /* MUI-like ripple animation */
 @keyframes ripple {
@@ -32,14 +31,23 @@
   --safe-area-inset-left: env(safe-area-inset-left);
 }
 
-html, body, #root {
+html,
+body,
+#root {
   height: 100%;
   color: var(--text-primary);
 }
 
 body {
   margin: 0;
-  font-family: 'Vision', 'Tahoma', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+  font-family:
+    'Vision',
+    'Tahoma',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Helvetica Neue',
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -50,7 +58,12 @@ p {
 
 /* WCAG 1.4.12: Ensure containers expand with content — no fixed heights on text wrappers */
 /* Buttons, nav items, and form fields use min-height so text can grow with spacing overrides */
-button, [role="button"], a, label, [role="menuitem"], [role="option"] {
+button,
+[role='button'],
+a,
+label,
+[role='menuitem'],
+[role='option'] {
   min-height: unset;
 }
 
@@ -58,7 +71,12 @@ code {
   font-family: 'inconsolata', source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Tahoma';
   @apply font-bold my-2;
 }
@@ -78,7 +96,12 @@ h4 {
 
 /* WCAG 1.4.12: Must come after individual text-* @apply rules — Tailwind utilities inline
    their line-height at that point, so we re-assert spacing after all heading size rules */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1.5;
 }
 
@@ -92,10 +115,30 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .point {
-  clip-path: polygon(20% 0%, 0% 100%, 100% 0%)
+  clip-path: polygon(20% 0%, 0% 100%, 100% 0%);
 }
 
-.printOnly { display: none; }
+/* Modal scrim. Lives here rather than on the component: ::backdrop is a
+   pseudo-element of the top layer, so a utility class on <dialog> cannot reach it. */
+dialog::backdrop {
+  background: var(--color-shade);
+  opacity: 0.5;
+  transition: opacity 300ms ease;
+}
+
+@starting-style {
+  dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+dialog[data-closing]::backdrop {
+  opacity: 0;
+}
+
+.printOnly {
+  display: none;
+}
 
 .editor-toolbar {
   background-color: transparent !important;
@@ -103,7 +146,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Fix for MDXEditor toolbar groups when CSS modules hash changes */
-[class*="toolbarGroupOfGroups"] {
+[class*='toolbarGroupOfGroups'] {
   display: flex !important;
   margin: 0 var(--spacing-1);
 }
@@ -116,7 +159,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* Alternative approach: ensure popup containers don't interfere with page scrolling */
-.mdxeditor-popup-container > div, .mdxeditor-popup-container > span {
+.mdxeditor-popup-container > div,
+.mdxeditor-popup-container > span {
   overflow: visible !important;
 }
 
