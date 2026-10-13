@@ -525,17 +525,15 @@
       "approve": "Genehmigen",
       "approved": "Diese Idee wurde genehmigt.",
       "inPhase": "{{var}} in {{phase}} Phase",
-      "marked_not_winner": "Diese Idee wird nicht als angenommen ausgewählt.",
-      "marked_winner": "Diese Idee wird als angenommen ausgewählt.",
       "name": "Idee",
       "noQuorum": "Kein Quorum festgelegt.",
-      "not_marked_yet": "Noch nicht als angenommen markiert.",
       "placeholder": "Ideen durchsuchen...",
       "plural": "Ideen",
       "reject": "Ablehnen",
       "rejected": "Diese Idee wurde nicht angenommen",
       "waiting": "Diese Idee wartet auf Genehmigung",
-      "winner": "Diese Idee wurde als Abstimmungsgewinner bestätigt."
+      "winner": "Diese Idee wurde angenommen.",
+      "mark_winner": "Als angenommen markieren"
     },
     "messages": {
       "name": "Nachricht",
@@ -643,7 +641,6 @@
       "infinite_votes": "Unendliche Stimmen",
       "info": "Info",
       "internal_info": "Interne Info",
-      "is_winner": "Als angenommen markieren",
       "language_id": "Sprache",
       "last_login": "Letzte Anmeldung",
       "last_update": "Letzte Aktualisierung",
