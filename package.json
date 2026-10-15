@@ -33,7 +33,7 @@
     "format": "prettier ./src --write",
     "format:all": "prettier . --write",
     "check": "tsc",
-    "test": "NODE_OPTIONS=--max-old-space-size=15000 playwright test",
+    "test": "./artisan tenants:create-test --fresh && NODE_OPTIONS=--max-old-space-size=15000 playwright test",
     "test:ui": "NODE_OPTIONS=--max-old-space-size=15000 playwright test --ui",
     "type": "tsc",
     "knip": "knip",
