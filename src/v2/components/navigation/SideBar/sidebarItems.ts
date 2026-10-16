@@ -14,7 +14,7 @@ export const SIDEBAR_ITEMS: NavItem[] = [
   {
     title: 'updates',
     path: '/updates',
-    icon: 'heart',
+    icon: 'bell',
     permission: () => true,
   },
   {

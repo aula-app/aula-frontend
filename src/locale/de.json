@@ -403,6 +403,10 @@
           "local_row_claimed_twice": "Dieser aula-Datensatz ist mehrfach zugeordnet.",
           "local_row_already_linked": "Dieser aula-Datensatz ist beim Anbieter schon mit jemand anderem verknüpft."
         }
+      },
+      "dashboard": {
+        "title": "Meine Aktivitäten",
+        "newCount": "{{label}}: {{count}} neu"
       }
     }
   },

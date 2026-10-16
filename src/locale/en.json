@@ -403,6 +403,10 @@
           "local_row_claimed_twice": "This aula record is matched more than once.",
           "local_row_already_linked": "This aula record is already linked to someone else at the provider."
         }
+      },
+      "dashboard": {
+        "title": "My activity",
+        "newCount": "{{label}}: {{count}} new"
       }
     }
   },
