@@ -15,7 +15,7 @@ const AboutViewEN = () => {
   }, []);
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.about'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.about'), '']] });
     fetchVersions();
   }, []);
 

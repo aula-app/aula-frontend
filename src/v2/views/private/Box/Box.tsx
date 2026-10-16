@@ -79,7 +79,7 @@ const Box: React.FC = () => {
     getRoom(room_id).then((response) => {
       const roomName = response.data?.room_name || 'aula';
       dispatch({
-        action: 'SET_BREADCRUMB',
+        type: 'SET_BREADCRUMB',
         breadcrumb: [
           [roomName, `/room/${room_id}/phase/0`],
           [t(`phases.name-${box.phase_id}`), `/room/${room_id}/phase/${box.phase_id}`],

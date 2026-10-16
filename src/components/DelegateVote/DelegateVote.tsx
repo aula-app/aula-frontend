@@ -6,7 +6,7 @@ import { useAppStore } from '@/store';
 import { localStorageGet, parseJwt } from '@/utils';
 import { Button, FilledInput, Slide, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
@@ -29,7 +29,6 @@ const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
   const jwt_token = localStorageGet('token');
   const jwt_payload = parseJwt(jwt_token);
   const [, dispatch] = useAppStore();
-  const dialogRef = useRef<HTMLDivElement>(null);
 
   const [users, setUsers] = useState<DelegateType[]>([]);
   const [selected, setSelected] = useState<DelegateType>();

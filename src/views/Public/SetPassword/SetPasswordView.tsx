@@ -1,6 +1,5 @@
 import { AppIconButton } from '@/components';
-import AppIcon from '@/components/AppIcon';
-import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig, RuntimeConfigNotFoundError } from '@/config';
+import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from '@/config';
 import { localStorageGet, localStorageSet } from '@/utils';
 import { validateAndSaveInstanceCode } from '@/services/instance';
 import { checkPasswordKey, setPassword } from '@/services/login';
@@ -113,7 +112,7 @@ const SetPasswordView = () => {
     try {
       // load config from localStorage (cache)
       runtimeConfig = getRuntimeConfig();
-    } catch (err) {
+    } catch {
       // load config from envvars or from //public-config.json
       runtimeConfig = await loadRuntimeConfig();
     }
@@ -134,7 +133,7 @@ const SetPasswordView = () => {
       if (response.error) {
         setValid(false);
       }
-    } catch (error) {
+    } catch {
       dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
       setValid(false);
     }

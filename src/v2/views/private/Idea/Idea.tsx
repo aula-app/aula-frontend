@@ -60,13 +60,13 @@ const Idea: React.FC = () => {
     if (!idea || !room_id) return;
     getRoom(room_id).then((response) => {
       const roomName = response.data?.room_name || 'aula';
-      const breadcrumb: string[][] = [
+      const breadcrumb: [string, string][] = [
         [roomName, `/room/${room_id}/phase/0`],
         [t(`phases.name-${ideaPhase}`), `/room/${room_id}/phase/${ideaPhase}`],
       ];
       if (box) breadcrumb.push([box.name, listPath]);
       breadcrumb.push([idea.title, '']);
-      dispatch({ action: 'SET_BREADCRUMB', breadcrumb });
+      dispatch({ type: 'SET_BREADCRUMB', breadcrumb });
     });
   }, [idea, box, room_id, ideaPhase, listPath, t, dispatch]);
 

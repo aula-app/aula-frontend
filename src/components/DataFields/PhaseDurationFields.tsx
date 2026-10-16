@@ -3,17 +3,17 @@ import { getRoom } from '@/services/rooms';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { FormControl, FormHelperText, FormLabel, InputAdornment, Stack, TextField, useTheme } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Control, Controller, UseFormSetValue } from 'react-hook-form-mui';
+import { Control, Controller, FieldValues, Path, PathValue, UseFormSetValue } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
-interface Props {
+interface Props<T extends FieldValues = FieldValues> {
   room?: string;
-  control: Control<any, any>;
+  control: Control<T>;
   disabled?: boolean;
   required?: boolean;
-  setValue: UseFormSetValue<any>;
-  onChange?: (...event: any[]) => void;
+  setValue: UseFormSetValue<T>;
+  onChange?: (...event: unknown[]) => void;
 }
 
 const SYSTEM_DEFAULT_DURATION = 14; // Default duration in days if not specified
@@ -22,14 +22,14 @@ const SYSTEM_DEFAULT_DURATION = 14; // Default duration in days if not specified
  * Renders "PhaseDurationFields" component
  */
 
-const PhaseDurationFields: React.FC<Props> = ({
+const PhaseDurationFields = <T extends FieldValues = FieldValues>({
   control,
   disabled = false,
   required = false,
   room,
   setValue,
   ...restOfProps
-}) => {
+}: Props<T>) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const { room_id } = useParams();
@@ -44,9 +44,9 @@ const PhaseDurationFields: React.FC<Props> = ({
   const getDurations = async () => {
     await Promise.all(
       fields.map(async (field) => {
-        if (control._defaultValues[field.name]) return; // Skip if already set
+        if ((control._defaultValues as FieldValues)[field.name]) return; // Skip if already set
         const duration = await getDefaultDuration(field.name);
-        setValue(field.name, duration);
+        setValue(field.name as Path<T>, duration as PathValue<T, Path<T>>);
       })
     );
   };
@@ -99,7 +99,7 @@ const PhaseDurationFields: React.FC<Props> = ({
         {fields.map((field) => (
           <Controller
             key={field.name}
-            name={field.name}
+            name={field.name as Path<T>}
             control={control}
             render={({ field: fieldProps, fieldState }) => {
               if (fieldState.error) setError(fieldState.error.message);

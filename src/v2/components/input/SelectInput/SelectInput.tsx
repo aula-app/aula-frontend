@@ -1,5 +1,6 @@
 import { FieldHint, FieldLabel, fieldBoxClasses, listBoxClasses, popoverClasses } from '@/v2/components/input/Field';
 import Icon from '@/v2/components/ui/Icon';
+import { ReactNode } from 'react';
 import { Button, Key, ListBox, ListBoxItem, Popover, Select, SelectValue } from 'react-aria-components';
 import { twMerge } from 'tailwind-merge';
 
@@ -19,6 +20,8 @@ export interface SelectInputProps {
   disabled?: boolean;
   required?: boolean;
   dense?: boolean;
+  /** Interactive content at the end of the field, outside the trigger. */
+  endAdornment?: ReactNode;
   className?: string;
   'data-testid'?: string;
 }
@@ -34,10 +37,12 @@ const SelectInput = ({
   disabled = false,
   required = false,
   dense = false,
+  endAdornment,
   className,
   'data-testid': dataTestId,
 }: SelectInputProps) => {
   const hasValue = options.some((option) => option.value === value);
+  const trail = endAdornment ? (dense ? 'pr-12' : 'pr-16') : undefined;
 
   return (
     <Select
@@ -55,7 +60,7 @@ const SelectInput = ({
           <div className="relative w-full">
             <Button
               data-testid={dataTestId}
-              className={twMerge(fieldBoxClasses({ dense, invalid: !!error }), 'flex items-center text-left')}
+              className={twMerge(fieldBoxClasses({ dense, invalid: !!error }), 'flex items-center text-left', trail)}
             >
               <SelectValue className="text-nowrap pr-6">
                 {({ isPlaceholder, selectedText }) =>
@@ -70,7 +75,7 @@ const SelectInput = ({
               {options.map((option) => (
                 <div
                   key={option.value}
-                  className={twMerge('text-sm font-medium text-nowrap pr-6', dense ? 'px-3' : 'px-4')}
+                  className={twMerge('text-sm font-medium text-nowrap pr-6', dense ? 'px-3' : 'px-4', trail)}
                 >
                   {option.label}
                 </div>
@@ -84,12 +89,19 @@ const SelectInput = ({
             <span
               aria-hidden="true"
               className={twMerge(
-                'pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transition-transform duration-200',
+                'pointer-events-none absolute top-1/2 -translate-y-1/2 transition-transform duration-200',
+                endAdornment ? (dense ? 'right-12' : 'right-15') : 'right-3',
                 isOpen && 'rotate-180'
               )}
             >
               <Icon type="chevronDown" size="0.75em" className="text-muted mt-0.5" />
             </span>
+
+            {endAdornment && (
+              <div className="absolute inset-y-px right-px flex items-center border-l border-input-border">
+                {endAdornment}
+              </div>
+            )}
           </div>
 
           <FieldHint error={error} helperText={helperText} />
