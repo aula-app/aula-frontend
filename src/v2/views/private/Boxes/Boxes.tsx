@@ -4,8 +4,7 @@ import { BoxType } from '@/types/Scopes';
 import { RoomPhases } from '@/types/SettingsTypes';
 import { checkPermissions } from '@/utils';
 import Fab from '@/v2/components/button/Fab/Fab';
-import IconButton from '@/v2/components/button/IconButton';
-import SelectInput from '@/v2/components/input/SelectInput';
+import SortSelect from '@/v2/components/input/SortSelect';
 import TextInput from '@/v2/components/input/TextInput';
 import ListPageLayout from '@/v2/components/layout/ListPageLayout';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
@@ -111,25 +110,14 @@ const Boxes: React.FC = () => {
             className="flex-1 min-w-20"
             data-testid={TEST_IDS.SEARCH_FIELD}
           />
-          <SelectInput
-            dense
-            label={t('v2.ui.sort.label')}
+          <SortSelect
             options={orderOptions}
             value={orderBy}
             onChange={setOrderBy}
+            reversed={reversed}
+            onReversedChange={setReversed}
             data-testid={TEST_IDS.SORT_SELECT}
           />
-          <IconButton
-            dense
-            hint={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
-            aria-label={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
-            aria-pressed={reversed}
-            data-testid={TEST_IDS.SORT_DIRECTION_BUTTON}
-            onClick={() => setReversed(!reversed)}
-            className="min-w-6"
-          >
-            <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="1.5em" />
-          </IconButton>
         </ScopeTitle>
       }
       action={

@@ -83,7 +83,7 @@ const ReviewTable: React.FC<Props> = ({
           value={orderBy}
           onChange={setOrderBy}
           reversed={reversed}
-          onReverse={() => setReversed(!reversed)}
+          onReversedChange={setReversed}
           data-testid={`idp-review-sort-${kind}`}
         />
       </div>
