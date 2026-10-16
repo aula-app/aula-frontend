@@ -98,7 +98,7 @@ const ScopeTitle = ({
             onClick={toggle}
             className="shrink-0"
           >
-            <Icon type={isOpen ? 'close' : 'search'} size="1.5em" />
+            <Icon type={isOpen ? 'filterOff' : 'filter'} size="1.5em" />
           </IconButton>
         )}
       </div>
