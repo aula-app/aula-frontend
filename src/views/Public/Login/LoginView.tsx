@@ -1,6 +1,5 @@
 import { AppIconButton, AppLink } from '@/components';
 import Eduplaces from '@/components/Buttons/Eduplaces/Eduplaces';
-import { getRuntimeConfig } from '@/config';
 import { handleOAuthLogin } from '@/services/auth';
 import { declineAccountClaim } from '@/services/idpMigration';
 import { loginUser } from '@/services/login';
@@ -57,12 +56,12 @@ const LoginView = () => {
   const [instanceSso, setInstanceSso] = useState<boolean | null | undefined>(undefined);
   const [ssoRequired, setSsoRequired] = useState<boolean>(false);
 
-  const ssoAvailable = getRuntimeConfig().IS_SSO_ENABLED && instanceSso === true;
+  const ssoAvailable = instanceSso === true;
   const ssoEnforced = ssoAvailable && ssoRequired;
   const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
   const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
 
-  const ssoStatusPending = getRuntimeConfig().IS_SSO_ENABLED && instanceSso === undefined && ssoLinkToken === null;
+  const ssoStatusPending = instanceSso === undefined && ssoLinkToken === null;
 
   const schema = yup
     .object({
@@ -172,7 +171,7 @@ const LoginView = () => {
   const handleSsoLogin = async (options: { loginHint?: string } = {}) => {
     const instanceApiUrl = localStorageGet('api_url');
     if (!instanceApiUrl) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.noServer'), type: 'error' } });
       return;
     }
     try {
@@ -190,7 +189,7 @@ const LoginView = () => {
 
       window.location.href = url;
     } catch {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
     }
   };
 

@@ -23,7 +23,7 @@ export function localStorageGet(name: string, defaultValue: any = ''): any {
     if (['boolean', 'number', 'bigint', 'string', 'object'].includes(typeof jsonParsed)) {
       return jsonParsed; // We successfully parse JS value from the store
     }
-  } catch (error) {
+  } catch {
     // Do nothing
   }
 

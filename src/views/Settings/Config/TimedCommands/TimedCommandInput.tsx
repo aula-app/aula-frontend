@@ -1,4 +1,3 @@
-import { useDateFormatters } from '@/hooks';
 import { addCommand } from '@/services/config';
 import { getGroups } from '@/services/groups';
 import { getUsers } from '@/services/users';
@@ -6,7 +5,7 @@ import { TEST_IDS } from '@/test-ids';
 import { SelectOptionsType } from '@/types/SettingsTypes';
 import { LanguageTypes } from '@/types/Translation';
 import { Commands } from '@/utils/commands';
-import { DATE_FORMATS, DEFAULT_FORMAT_DATE_ONLY, DEFAULT_FORMAT_DATE_TIME } from '@/utils/units';
+import { DATE_FORMATS, DEFAULT_FORMAT_DATE_ONLY } from '@/utils/units';
 import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -24,7 +23,6 @@ interface Props {
 
 const TimeCommandInput = ({ onReload }: Props) => {
   const { t } = useTranslation();
-  const { formatDateTime } = useDateFormatters();
 
   // must not set commands in the past; use (client's) now / today
   // (actions are scheduled midnight; an action scheduled for "today's midnight",

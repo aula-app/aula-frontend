@@ -1,26 +1,26 @@
 import { Button, ButtonGroup, ButtonGroupProps, Stack, Typography } from '@mui/material';
-import { Control, Controller } from 'react-hook-form-mui';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import AppIcon from '../AppIcon';
 
-interface Props extends ButtonGroupProps {
-  control: Control<any, any>;
+interface Props<T extends FieldValues = FieldValues> extends ButtonGroupProps {
+  control: Control<T>;
   disabled?: boolean;
-  onChange?: (...event: any[]) => void;
+  onChange?: (...event: unknown[]) => void;
 }
 
 /**
  * Renders "ApproveField" component
  */
 
-const ApproveField: React.FC<Props> = ({ control, disabled = false, ...restOfProps }) => {
+const ApproveField = <T extends FieldValues = FieldValues>({ control, disabled = false, ...restOfProps }: Props<T>) => {
   const { t } = useTranslation();
 
   const approvalMessages = ['reject', 'waiting', 'approve'];
 
   return (
     <Controller
-      name="approved"
+      name={'approved' as Path<T>}
       control={control}
       render={({ field, fieldState }) => (
         <Stack direction="row" alignItems="center" gap={1}>
