@@ -1,3 +1,4 @@
+export * from './useCollapseOnScroll';
 export * from './useDraftStorage';
 export * from './useIdeaVotes';
 export * from './useIsDrawerMode';

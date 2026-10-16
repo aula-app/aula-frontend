@@ -12,7 +12,6 @@ import AnnouncementView from '@/views/Messages/Announcement';
 import MessageView from '@/views/Messages/Message';
 import ReportView from '@/views/Messages/Report';
 import OfflineView from '@/views/OfflineView';
-import PhasesView from '@/views/Phases';
 import SchoolSetupView from '@/views/Public/SchoolSetupView';
 import AnnouncementsView from '@/views/Settings/Announcements';
 import BoxesView from '@/views/Settings/Boxes';
@@ -33,6 +32,7 @@ import RestrictedRoutes from './RestrictedRoutes';
 import Box from '@/v2/views/private/Box';
 import Idea from '@/v2/views/private/Idea';
 import Home from '@/v2/views/private/Home';
+import Phase from '@/v2/views/private/Phase';
 
 const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
@@ -65,7 +65,7 @@ const PrivateRoutes = () => {
       <Route path="reports/:report_id" element={<ReportView />} />
       <Route path="bugs/:report_id" element={<ReportView />} />
       <Route path="requests/:report_id" element={<ReportView />} />
-      <Route path="phase/:phase" element={<PhasesView />} />
+      <Route path="phase/:phase" element={<Phase />} />
       <Route path="room/:room_id/" element={<RoomLayout />}>
         <Route path="phase/0" element={<Ideas />} />
         <Route path="phase/:phase" element={<Boxes />} />
