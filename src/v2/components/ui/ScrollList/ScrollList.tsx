@@ -7,13 +7,18 @@ type ScrollListProps = {
   storageKey: string;
   children: ReactNode;
   className?: string;
+  onScroll?: React.UIEventHandler<HTMLUListElement>;
 };
 
-const ScrollList = ({ storageKey, children, className }: ScrollListProps) => {
+const ScrollList = ({ storageKey, children, className, onScroll }: ScrollListProps) => {
   const listRef = useScrollRestoration<HTMLUListElement>(storageKey, true);
 
   return (
-    <ul ref={listRef} className={twMerge('flex-1 flex flex-col gap-4 p-2 sm:p-4 overflow-y-auto', className)}>
+    <ul
+      ref={listRef}
+      onScroll={onScroll}
+      className={twMerge('flex-1 flex flex-col gap-4 p-2 sm:p-4 overflow-y-auto', className)}
+    >
       {children}
     </ul>
   );
