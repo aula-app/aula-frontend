@@ -1,9 +1,14 @@
+import { useSsoStatus } from '@/hooks';
+import { handleOAuthLogin } from '@/services/auth';
+import { declineAccountClaim } from '@/services/idpMigration';
 import { loginUser } from '@/services/login';
-import { completeSsoLink, getSsoStatus, initiateSso } from '@/services/sso';
+import { completeSsoLink, initiateSso } from '@/services/sso';
 import { useAppStore } from '@/store';
-import { localStorageGet, localStorageSet, parseJwt } from '@/utils';
+import { isSsoBrowserSupported, localStorageGet, localStorageSet, parseJwt } from '@/utils';
 import { useToast } from '@/v2/hooks';
-import { useEffect, useState } from 'react';
+import { Browser } from '@capacitor/browser';
+import { Capacitor } from '@capacitor/core';
+import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -23,7 +28,16 @@ export const useLoginSubmit = () => {
   const [loginError, setError] = useState<string>('');
   const [linkBanner, setLinkBanner] = useState<string>('');
   const [ssoLinkToken, setSsoLinkToken] = useState<string | null>(null);
-  const [ssoAvailable, setSsoAvailable] = useState(false);
+  /** True when nobody knows yet whether this person has an aula account. */
+  const [claimable, setClaimable] = useState(false);
+
+  const ssoStatus = useSsoStatus();
+  const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
+
+  const ssoAvailable = ssoStatus?.enabled === true;
+  const ssoEnforced = ssoAvailable && ssoStatus?.required === true;
+  const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
+  const ssoStatusPending = ssoLinkToken === null && ssoStatus === undefined;
 
   useEffect(() => {
     const ssoError = searchParams.get('sso_error');
@@ -31,8 +45,13 @@ export const useLoginSubmit = () => {
 
     if (ssoError === 'account_link_required' && ssoLink) {
       setSsoLinkToken(ssoLink);
+      // A claimable link comes from a school mid-migration: nobody knows yet
+      // whether this person already has an aula account, so they have to be
+      // able to say they do not.
+      const isClaimable = searchParams.get('claimable') === '1';
+      setClaimable(isClaimable);
       setLinkBanner(
-        t('errors.sso.account_link_required', {
+        t(isClaimable ? 'idp.claim.banner' : 'errors.sso.account_link_required', {
           defaultValue:
             'We found an existing account for the email returned by your SSO provider. Log in once with your aula password to link the accounts; future SSO logins will go through directly.',
         })
@@ -44,15 +63,6 @@ export const useLoginSubmit = () => {
       setError(t(`errors.sso.${ssoError}`, { defaultValue: t('errors.default') }));
     }
   }, [searchParams, t]);
-
-  useEffect(() => {
-    (async () => {
-      const instanceApiUrl = localStorageGet('api_url');
-      if (!instanceApiUrl) return;
-      const status = await getSsoStatus(instanceApiUrl);
-      setSsoAvailable(status?.enabled === true);
-    })();
-  }, []);
 
   const onSubmit = async (formData: LoginFormValues) => {
     const instanceApiUrl = await localStorageGet('api_url');
@@ -129,7 +139,7 @@ export const useLoginSubmit = () => {
     }
   };
 
-  const handleSsoLogin = async () => {
+  const handleSsoLogin = async (options: { loginHint?: string } = {}) => {
     const instanceApiUrl = localStorageGet('api_url');
     if (!instanceApiUrl) {
       toast.error(t('errors.noServer'));
@@ -137,12 +147,64 @@ export const useLoginSubmit = () => {
     }
     try {
       setSsoLoading(true);
-      window.location.href = await initiateSso(instanceApiUrl);
+      const url = await initiateSso(instanceApiUrl, options);
+
+      if (Capacitor.isNativePlatform()) {
+        // A Custom Tab keeps the login layered over the app; assigning
+        // window.location here would send the WebView off-origin and Capacitor
+        // would hand it to the system browser, stranding the user outside.
+        await Browser.open({ url });
+        return;
+      }
+
+      window.location.href = url;
     } catch {
       setSsoLoading(false);
       toast.error(t('errors.default'));
     }
   };
 
-  return { onSubmit, isLoading, isSsoLoading, loginError, setError, linkBanner, setLinkBanner, ssoAvailable, handleSsoLogin };
+  // IdP-initiated entry (e.g. Eduplaces marketplace launch) lands here with
+  // ?via=eduplaces. Trigger SSO automatically, preserving the upstream
+  // login_hint so the user is not asked to identify themselves again.
+  useEffect(() => {
+    if (searchParams.get('via') !== 'eduplaces') return;
+    if (ssoStatus === undefined) return;
+    if (!ssoAvailable) return;
+    if (!ssoBrowserSupported) return;
+    const loginHint = searchParams.get('login_hint') ?? undefined;
+    handleSsoLogin({ loginHint });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams, ssoAvailable, ssoStatus]);
+
+  const declineClaim = async () => {
+    if (!ssoLinkToken) return;
+    const jwt = await declineAccountClaim(ssoLinkToken);
+    if (!jwt) {
+      setError(t('idp.claim.declineFailed'));
+      return;
+    }
+    handleOAuthLogin(jwt);
+    dispatch({ type: 'LOG_IN' });
+    navigate('/', { replace: true });
+  };
+
+  return {
+    onSubmit,
+    isLoading,
+    isSsoLoading,
+    loginError,
+    setError,
+    linkBanner,
+    setLinkBanner,
+    handleSsoLogin,
+    ssoAvailable,
+    ssoEnforced,
+    showPasswordLogin,
+    ssoStatusPending,
+    ssoBrowserSupported,
+    ssoLinkToken,
+    claimable,
+    declineClaim,
+  };
 };
