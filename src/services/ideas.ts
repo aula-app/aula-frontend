@@ -92,7 +92,7 @@ export async function getUserIdeasByPhase(phase_id: number): Promise<GetIdeasRes
     {
       model: 'Idea',
       method: 'getUserIdeasByPhase',
-      arguments: { phase_id, status: 1 },
+      arguments: { phase_id },
     },
     ['user_id']
   );
