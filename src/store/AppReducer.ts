@@ -1,5 +1,5 @@
 import { localStorageSet } from '@/utils';
-import { AppStoreState, ToastMessage } from './AppStore';
+import { AppAction, AppStoreState, ToastMessage } from './AppStore';
 
 // Session-unique id for local UI state (e.g. toasts). Avoids crypto.randomUUID(),
 // which is unavailable in non-secure contexts (e.g. testing over the local network).
@@ -12,8 +12,8 @@ const nextToastId = () => `toast-${Date.now().toString(36)}-${(toastSeq++).toStr
  * @param {string} action.type - unique name of the action
  * @param {*} [action.payload] - optional data object or the function to get data object
  */
-const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
-  switch (action.type || action.action) {
+const AppReducer: React.Reducer<AppStoreState, AppAction> = (state, action) => {
+  switch (action.type) {
     case 'CURRENT_USER':
       return {
         ...state,
@@ -43,25 +43,13 @@ const AppReducer: React.Reducer<AppStoreState, any> = (state, action) => {
         ...state,
         hasConsent: action.payload,
       };
-    case 'ADD_BREADCRUMB_PHASE':
-      let new_phase = [];
-      if (state.breadcrumb.length == 2) {
-        new_phase = [state.breadcrumb[0], action.path];
-      } else {
-        new_phase = [...state.breadcrumb, action.path];
-      }
-      return {
-        ...state,
-        breadcrumb: new_phase,
-      };
-
     case 'SET_BREADCRUMB':
       return {
         ...state,
         breadcrumb: action.breadcrumb,
       };
     case 'DARK_MODE': {
-      const darkMode = action?.darkMode ?? action?.payload;
+      const darkMode = action.payload;
       localStorageSet('darkMode', darkMode);
       return {
         ...state,

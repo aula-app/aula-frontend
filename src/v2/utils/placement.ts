@@ -42,7 +42,7 @@ export function getZones(el: HTMLElement, rect: DOMRect): { x: XZone; y: YZone }
 const cornerClasses: Record<YZone, Record<XZone, string>> = {
   top: { right: 'rounded-tr-none', left: 'rounded-tl-none', center: '' },
   bottom: { right: 'rounded-br-none', left: 'rounded-bl-none', center: '' },
-  middle: { right: '', left: '', center: '' },
+  middle: { right: 'rounded-tr-none', left: 'rounded-tl-none', center: '' },
 };
 
 const originClasses: Record<YZone, Record<XZone, string>> = {

@@ -1,11 +1,10 @@
-import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from '@/config';
 import { useSsoStatus } from '@/hooks';
 import { handleOAuthLogin } from '@/services/auth';
 import { declineAccountClaim } from '@/services/idpMigration';
 import { loginUser } from '@/services/login';
 import { completeSsoLink, initiateSso } from '@/services/sso';
 import { useAppStore } from '@/store';
-import { isSsoBrowserSupported, localStorageGet, localStorageSet, MIN_SSO_SAFARI_VERSION, parseJwt } from '@/utils';
+import { isSsoBrowserSupported, localStorageGet, localStorageSet, parseJwt } from '@/utils';
 import { useToast } from '@/v2/hooks';
 import { Browser } from '@capacitor/browser';
 import { Capacitor } from '@capacitor/core';
@@ -31,16 +30,14 @@ export const useLoginSubmit = () => {
   const [ssoLinkToken, setSsoLinkToken] = useState<string | null>(null);
   /** True when nobody knows yet whether this person has an aula account. */
   const [claimable, setClaimable] = useState(false);
-  const [config, setConfig] = useState<RuntimeConfig | null>(null);
 
   const ssoStatus = useSsoStatus();
   const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
 
-  const ssoAvailable = !!config?.IS_SSO_ENABLED && ssoStatus?.enabled === true;
+  const ssoAvailable = ssoStatus?.enabled === true;
   const ssoEnforced = ssoAvailable && ssoStatus?.required === true;
   const showPasswordLogin = !ssoEnforced || ssoLinkToken !== null;
-  const ssoStatusPending =
-    ssoLinkToken === null && (config === null || (!!config.IS_SSO_ENABLED && ssoStatus === undefined));
+  const ssoStatusPending = ssoLinkToken === null && ssoStatus === undefined;
 
   useEffect(() => {
     const ssoError = searchParams.get('sso_error');
@@ -66,18 +63,6 @@ export const useLoginSubmit = () => {
       setError(t(`errors.sso.${ssoError}`, { defaultValue: t('errors.default') }));
     }
   }, [searchParams, t]);
-
-  useEffect(() => {
-    (async () => {
-      let runtimeConfig: RuntimeConfig;
-      try {
-        runtimeConfig = getRuntimeConfig();
-      } catch {
-        runtimeConfig = await loadRuntimeConfig();
-      }
-      setConfig(runtimeConfig);
-    })();
-  }, []);
 
   const onSubmit = async (formData: LoginFormValues) => {
     const instanceApiUrl = await localStorageGet('api_url');
@@ -212,7 +197,6 @@ export const useLoginSubmit = () => {
     setError,
     linkBanner,
     setLinkBanner,
-    config,
     handleSsoLogin,
     ssoAvailable,
     ssoEnforced,
