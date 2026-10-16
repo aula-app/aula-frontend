@@ -89,7 +89,7 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
 
     await test.step('User verify Box is in new phase', async () => {
       await navigation.goToRoomPhase(userPage, seededRoom.name, 20);
-      const boxTitle = userPage.getByTestId('box-card').getByText(box.name);
+      const boxTitle = userPage.getByTestId(`box-${box.name}`);
       await expect(boxTitle).toBeVisible();
     });
 

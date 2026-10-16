@@ -14,12 +14,13 @@ export const TEST_IDS = {
   // Content reporting (ReportButton)
   REPORT_DIALOG: 'report-dialog',
 
-  // Search & sort (ScopeHeader)
+  // Search & sort (ScopeHeader, v2 ScopeTitle)
   SEARCH_FIELD: 'search-field',
   SEARCH_BUTTON: 'search-button',
   SORT_SELECT: 'sort-select',
   SORT_BUTTON: 'sort-button',
   SORT_DIRECTION_BUTTON: 'sort-direction-button',
+  SCOPE_CONTROLS: 'scope-controls',
 
   // Filtering (FilterBar)
   FILTER_TOGGLE_BUTTON: 'filter-toggle-button',
@@ -33,9 +34,43 @@ export const TEST_IDS = {
   CANCEL_BUTTON: 'cancel-button',
   DELETE_BUTTON: 'delete-button',
 
+  // Box actions (v2 Boxes / BoxCard MoreOptions)
+  ADD_BOX_BUTTON: 'add-box-button',
+  BOX_MORE_MENU: 'box-more-menu',
+  BOX_MORE_OPTIONS_PANEL: 'box-more-options-panel',
+  DELETE_BOX_CONFIRM: 'delete-box-confirm',
+  DELETE_BOX_CANCEL: 'delete-box-cancel',
+
+  // Idea card actions (v2 Idea, Edit/Delete/ReportButton)
+  ADD_IDEA_BUTTON: 'add-idea-button',
+  IDEA_MORE_MENU: 'idea-more-menu',
+  IDEA_MORE_OPTIONS_PANEL: 'idea-more-options-panel',
+  LIKE_BUTTON: 'like-button',
+  EDIT_BUTTON: 'edit-button',
+  REPORT_BUTTON: 'report-button',
+  SHARE_BUTTON: 'share-button',
+  DELETE_IDEA_CONFIRM: 'delete-idea-confirm',
+  DELETE_IDEA_CANCEL: 'delete-idea-cancel',
+
   // Offline state (PublicOfflineView)
   SCHOOL_OFFLINE_VIEW: 'school-offline-view',
 
+  // Reports (ReportCard)
+  ARCHIVE_REPORT_BUTTON: 'archive-report-button',
+
+  // Toast notifications (Toast)
+  TOAST_ERROR: 'toast-error',
+  TOAST_SUCCESS: 'toast-success',
+  TOAST_WARNING: 'toast-warning',
+  TOAST_INFO: 'toast-info',
+
+  // Navigation layout (TopBar, SideBar, Breadcrumb, PrintButton)
+  TOPBAR_MENU_BUTTON: 'topbar-menu-button',
+  BREADCRUMB_NAV: 'breadcrumb-nav',
+  BREADCRUMB_TOGGLE: 'breadcrumb-toggle',
+  BREADCRUMB_MENU: 'breadcrumb-menu',
+  PRINT_BUTTON: 'print-button',
+  
   // Settings / timed actions (TimedCommands)
   TIMEDCOMMAND_CONFIRM_BUTTON: 'timedcommand-confirm-button',
   TIMEDCOMMAND_STARTDATE_INPUT: 'timedcommand-startdate-input',

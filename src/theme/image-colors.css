@@ -1,0 +1,87 @@
+/* Image color palette - used exclusively for image/illustration theming */
+
+/* ========== LIGHT MODE (default) ========== */
+:root {
+  --color-image-blue-light: hsl(210, 100%, 94%);
+  --color-image-blue: hsl(210, 100%, 86%);
+  --color-image-blue-dark: hsl(210, 88%, 67%);
+  --color-image-blue-darker: hsl(210, 72%, 42%);
+
+  --color-image-purple-light: hsl(270, 50%, 94%);
+  --color-image-purple: hsl(270, 50%, 82%);
+  --color-image-purple-dark: hsl(270, 50%, 70%);
+  --color-image-purple-darker: hsl(270, 45%, 40%);
+
+  --color-image-red-light: hsl(0, 100%, 94%);
+  --color-image-red: hsl(0, 84%, 76%);
+  --color-image-red-dark: hsl(0, 84%, 58%);
+  --color-image-red-darker: hsl(0, 65%, 38%);
+
+  --color-image-yellow-light: hsl(45, 100%, 90%);
+  --color-image-yellow: hsl(45, 100%, 79%);
+  --color-image-yellow-dark: hsl(45, 100%, 68%);
+  --color-image-yellow-darker: hsl(45, 90%, 48%);
+
+  --color-image-green-light: hsl(134, 72%, 94%);
+  --color-image-green: hsl(134, 72%, 83%);
+  --color-image-green-dark: hsl(134, 72%, 67%);
+  --color-image-green-darker: hsl(134, 58%, 38%);
+
+  --color-image-pink-light: hsl(320, 84%, 94%);
+  --color-image-pink: hsl(320, 84%, 82%);
+  --color-image-pink-dark: hsl(320, 80%, 65%);
+  --color-image-pink-darker: hsl(320, 60%, 40%);
+
+  --color-image-emerald-light: hsl(160, 72%, 94%);
+  --color-image-emerald: hsl(160, 72%, 82%);
+  --color-image-emerald-dark: hsl(160, 72%, 65%);
+  --color-image-emerald-darker: hsl(160, 58%, 38%);
+
+  --color-image-grey-light: hsl(215, 8%, 95%);
+  --color-image-grey: hsl(215, 8%, 88%);
+  --color-image-grey-dark: hsl(215, 8%, 75%);
+  --color-image-grey-darker: hsl(215, 6%, 58%);
+}
+
+/* ========== DARK MODE ========== */
+.dark {
+  --color-image-blue-light: hsl(210, 35%, 20%);
+  --color-image-blue: hsl(210, 45%, 28%);
+  --color-image-blue-dark: hsl(210, 75%, 55%);
+  --color-image-blue-darker: hsl(210, 88%, 72%);
+
+  --color-image-purple-light: hsl(270, 25%, 20%);
+  --color-image-purple: hsl(270, 32%, 30%);
+  --color-image-purple-dark: hsl(270, 55%, 58%);
+  --color-image-purple-darker: hsl(270, 65%, 74%);
+
+  --color-image-red-light: hsl(0, 30%, 20%);
+  --color-image-red: hsl(0, 45%, 30%);
+  --color-image-red-dark: hsl(0, 72%, 57%);
+  --color-image-red-darker: hsl(0, 80%, 72%);
+
+  --color-image-yellow-light: hsl(45, 30%, 20%);
+  --color-image-yellow: hsl(45, 50%, 28%);
+  --color-image-yellow-dark: hsl(45, 90%, 55%);
+  --color-image-yellow-darker: hsl(45, 95%, 70%);
+
+  --color-image-green-light: hsl(134, 25%, 18%);
+  --color-image-green: hsl(134, 32%, 26%);
+  --color-image-green-dark: hsl(134, 55%, 50%);
+  --color-image-green-darker: hsl(134, 62%, 68%);
+
+  --color-image-pink-light: hsl(320, 28%, 20%);
+  --color-image-pink: hsl(320, 38%, 30%);
+  --color-image-pink-dark: hsl(320, 65%, 58%);
+  --color-image-pink-darker: hsl(320, 72%, 74%);
+
+  --color-image-emerald-light: hsl(160, 28%, 18%);
+  --color-image-emerald: hsl(160, 38%, 26%);
+  --color-image-emerald-dark: hsl(160, 60%, 50%);
+  --color-image-emerald-darker: hsl(160, 65%, 66%);
+
+  --color-image-grey-light: hsl(215, 15%, 22%);
+  --color-image-grey: hsl(215, 12%, 32%);
+  --color-image-grey-dark: hsl(215, 10%, 48%);
+  --color-image-grey-darker: hsl(215, 8%, 65%);
+}
