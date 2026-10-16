@@ -16,6 +16,7 @@ type Props<T extends SettingType> = {
   extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;
   extraFilters?: ReactNode;
   hideAdd?: boolean;
+  hideDelete?: boolean;
   onFilterChange?: (filters: Partial<DataTableFilters>) => void;
 };
 
@@ -33,6 +34,7 @@ const SettingsView = <T extends SettingType>({
   extraTools,
   extraFilters,
   hideAdd,
+  hideDelete,
   onFilterChange,
 }: Props<T>) => {
   const {
@@ -43,7 +45,6 @@ const SettingsView = <T extends SettingType>({
     limit,
     offset,
     orderby,
-    filters,
     edit,
     setAsc,
     setLimit,
@@ -98,6 +99,7 @@ const SettingsView = <T extends SettingType>({
           setDelete={deleteItems}
           extraTools={extraTools}
           hideAdd={hideAdd}
+          hideDelete={hideDelete}
           isLoading={isLoading}
           onReload={fetchData}
         />

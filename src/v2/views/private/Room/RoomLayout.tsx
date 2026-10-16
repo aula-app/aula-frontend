@@ -23,7 +23,7 @@ const RoomLayout = () => {
     getRoom(room_id).then((response) => {
       if (response.error || !response.data) return;
       dispatch({
-        action: 'SET_BREADCRUMB',
+        type: 'SET_BREADCRUMB',
         breadcrumb: [[response.data.room_name, `/room/${room_id}/phase/0`]],
       });
     });

@@ -2,13 +2,13 @@ import { getAllRooms } from '@/services/rooms';
 import { RoomType } from '@/types/Scopes';
 import { SelectOptionsType } from '@/types/SettingsTypes';
 import { useEffect, useState } from 'react';
-import { Control, UseFormSetValue } from 'react-hook-form-mui';
+import { Control, FieldValues, Path, PathValue, UseFormSetValue } from 'react-hook-form-mui';
 import { useParams } from 'react-router-dom';
 import SelectField from './SelectField';
 
-interface Props {
-  control: Control<any, any>;
-  setValue: UseFormSetValue<any>;
+interface Props<T extends FieldValues = FieldValues> {
+  control: Control<T>;
+  setValue: UseFormSetValue<T>;
   disabled?: boolean;
 }
 
@@ -16,7 +16,12 @@ interface Props {
  * Renders "SelectInput" component
  */
 
-const SelectRoomField: React.FC<Props> = ({ control, setValue, disabled = false, ...restOfProps }) => {
+const SelectRoomField = <T extends FieldValues = FieldValues>({
+  control,
+  setValue,
+  disabled = false,
+  ...restOfProps
+}: Props<T>) => {
   const [rooms, setRooms] = useState<SelectOptionsType>([]);
   const { room_id } = useParams();
 
@@ -37,7 +42,9 @@ const SelectRoomField: React.FC<Props> = ({ control, setValue, disabled = false,
 
   const setDefault = (data: RoomType[]) => {
     const newDefault = data.find((room) => room.type === 1)?.hash_id;
-    if (newDefault) setValue('room_hash_id', room_id || newDefault);
+    if (newDefault) {
+      setValue('room_hash_id' as Path<T>, (room_id || newDefault) as PathValue<T, Path<T>>);
+    }
   };
 
   useEffect(() => {
@@ -48,7 +55,7 @@ const SelectRoomField: React.FC<Props> = ({ control, setValue, disabled = false,
     <SelectField
       control={control}
       options={rooms}
-      name="room_hash_id"
+      name={'room_hash_id' as Path<T>}
       disabled={disabled || rooms.length === 0}
       defaultValue={room_id || ''}
       {...restOfProps}

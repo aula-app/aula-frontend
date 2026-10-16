@@ -23,4 +23,4 @@ export const phaseOptions = [
   { label: 'phases.results', value: 40, disabled: false },
 ];
 
-export const dashboardPhases = { ...(({ ['40']: _, ...o }) => o)(phases) };
+export const dashboardPhases = Object.fromEntries(Object.entries(phases).filter(([key]) => key !== '40'));

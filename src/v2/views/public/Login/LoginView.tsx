@@ -15,7 +15,7 @@ const MAX_PASSWORD_LENGTH = 64;
 
 const LoginView: React.FC = () => {
   const { t } = useTranslation();
-  const { onSubmit, isLoading, isSsoLoading, config, handleSsoLogin } = useLoginSubmit();
+  const { onSubmit, isLoading, isSsoLoading, ssoAvailable, handleSsoLogin } = useLoginSubmit();
   const {
     instanceCode,
     setInstanceCode,
@@ -97,7 +97,7 @@ const LoginView: React.FC = () => {
         </Link>
       </div>
 
-      {config?.IS_SSO_ENABLED && (
+      {ssoAvailable && (
         <>
           <div className="flex items-center gap-2 text-muted">
             <div className="flex-1 border-t border-current" />
