@@ -1,17 +1,16 @@
-import { PossibleFields } from '@/types/Scopes';
 import { SelectOptionsType } from '@/types/SettingsTypes';
-import { FormControl, MenuItem, Paper, TextField } from '@mui/material';
-import { Control, Controller } from 'react-hook-form-mui';
+import { FormControl, MenuItem, TextField } from '@mui/material';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 
-interface Props extends React.ComponentProps<typeof TextField> {
-  name: keyof PossibleFields;
+interface Props<T extends FieldValues = FieldValues> extends React.ComponentProps<typeof TextField> {
+  name: Path<T>;
   options: SelectOptionsType;
-  control: Control<any, any>;
+  control: Control<T>;
   disabled?: boolean;
   required?: boolean;
   defaultValue?: string | number;
-  onChange?: (...event: any[]) => void;
+  onChange?: (...event: unknown[]) => void;
   /** Render the menu in place — portaled menus are unclickable inside a native `<dialog>` (v2 Modal). */
   disableMenuPortal?: boolean;
 }
@@ -20,7 +19,7 @@ interface Props extends React.ComponentProps<typeof TextField> {
  * Renders "SelectField" component
  */
 
-const SelectField: React.FC<Props> = ({
+const SelectField = <T extends FieldValues = FieldValues>({
   name,
   options,
   control,
@@ -30,14 +29,14 @@ const SelectField: React.FC<Props> = ({
   disableMenuPortal = false,
   sx,
   ...restOfProps
-}) => {
+}: Props<T>) => {
   const { t } = useTranslation();
 
   return (
     <Controller
       name={name}
       control={control}
-      defaultValue={control._defaultValues[name] || defaultValue}
+      defaultValue={(control._defaultValues as FieldValues)[name] || defaultValue}
       render={({ field, fieldState }) => (
         <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
           <TextField

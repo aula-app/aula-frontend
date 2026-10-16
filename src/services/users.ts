@@ -2,6 +2,7 @@ import { databaseRequest, GenericListRequest, GenericResponse } from '@/services
 import { StatusTypes } from '@/types/Generics';
 import { DelegationType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
+import { localStorageGet } from '@/utils';
 
 interface GetUserResponse extends GenericResponse {
   data: UserType | null;
@@ -174,20 +175,19 @@ export async function editSelfAbout(about_me: string): Promise<GenericResponse> 
 }
 
 /**
- * Get user GDPR data
+ * Fetch user GDPR data
  */
 
-export async function exportSelfData(): Promise<GetUserResponse> {
-  const response = await databaseRequest(
-    {
-      model: 'User',
-      method: 'getUserGDPRData',
-      arguments: {},
-    },
-    ['user_id']
-  );
-
-  return response as GetUserResponse;
+export function getUserGDPRData(userPublicId: string): Promise<Response> {
+  // TODO abstracize this somewhere, probably at the latest for FE/v2
+  const apiUrl =`${localStorageGet('api_url')}/api/v2/users/${userPublicId}/export`;
+  const token = localStorageGet('token');
+  return fetch(apiUrl, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'aula-instance-code': localStorageGet('code')
+    }
+  });
 }
 
 /**
@@ -234,55 +234,6 @@ export async function removeUserRoom(user_id: string, room_id: string): Promise<
     model: 'User',
     method: 'removeUserFromRoom',
     arguments: { user_id, room_id },
-  });
-
-  return response as GenericResponse;
-}
-
-/**
- * Get user rooms
- */
-
-interface GetUserGroupsResponse extends GenericResponse {
-  data: { hash_id: string }[] | null;
-}
-
-async function getUserGroups(user_id: string): Promise<GetUserGroupsResponse> {
-  const response = await databaseRequest({
-    model: 'User',
-    method: 'getUserGroups',
-    arguments: { user_id },
-  });
-
-  return response as GetUserGroupsResponse;
-}
-
-/**
- * Add user group
- */
-
-async function addUserGroup(user_id: string, group_id: string): Promise<GenericResponse> {
-  const response = await databaseRequest(
-    {
-      model: 'User',
-      method: 'addUserToGroup',
-      arguments: { user_id, group_id },
-    },
-    ['updater_id']
-  );
-
-  return response as GenericResponse;
-}
-
-/**
- * Remove user group
- */
-
-async function removeUserGroup(user_id: string, group_id: string): Promise<GenericResponse> {
-  const response = await databaseRequest({
-    model: 'User',
-    method: 'removeUserFromGroup',
-    arguments: { user_id, group_id },
   });
 
   return response as GenericResponse;

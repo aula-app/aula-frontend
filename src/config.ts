@@ -6,17 +6,21 @@ export const APP_TITLE = 'aula';
 export interface RuntimeConfig {
   CENTRAL_API_URL: string;
   IS_MULTI: boolean;
-  IS_SSO_ENABLED: boolean;
   BASENAME: string;
 }
 
 const defaultConfig: RuntimeConfig = {
   CENTRAL_API_URL: 'https://neu.aula.de/',
   IS_MULTI: true,
-  IS_SSO_ENABLED: false,
   BASENAME: '/',
 };
 
+/** Root index.ts runs async loadRuntimeConfig before *everything* (root React render),
+ * usually getRuntimeConfig() should do,
+ * but there are only few cases where we need to call it explicitly:
+ * - SetPasswordView.tsx needs to do some juggling because it needs to figure out the instance it checks against
+ * - instance.ts validateAndSaveInstanceCode, questionably?
+ */
 export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
   let config: RuntimeConfig;
 
@@ -24,8 +28,6 @@ export async function loadRuntimeConfig(): Promise<RuntimeConfig> {
     config = {
       CENTRAL_API_URL: import.meta.env.VITE_APP_API_URL,
       IS_MULTI: import.meta.env.VITE_APP_MULTI !== 'false' && import.meta.env.VITE_APP_MULTI !== false,
-      IS_SSO_ENABLED:
-        import.meta.env.VITE_APP_IS_SSO_ENABLED === 'true' || import.meta.env.VITE_APP_IS_SSO_ENABLED === true,
       BASENAME: import.meta.env.VITE_APP_BASENAME || '/',
     };
   } else {
