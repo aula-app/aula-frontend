@@ -10,7 +10,8 @@ export const fillForm = async (page: Page, testId: string, value: string) => {
 
 export const fillMarkdownForm = async (page: Page, testId: string, value: string) => {
   const field = page
-    .locator('form').first()
+    .locator('form')
+    .first()
     .getByTestId(`markdown-editor-${testId}`)
     .locator('[contenteditable="true"]');
   await expect(field).toBeVisible();
@@ -39,8 +40,7 @@ const openSelectDropdown = async (page: Page, testId: string) => {
   await expect(field).toBeVisible();
 
   const namedInput = page.getByTestId(`${testId}-input`);
-  const isRealInput =
-    (await namedInput.count()) > 0 && (await namedInput.getAttribute('aria-hidden')) !== 'true';
+  const isRealInput = (await namedInput.count()) > 0 && (await namedInput.getAttribute('aria-hidden')) !== 'true';
 
   const trigger = isRealInput ? namedInput : field;
   const list = page.getByTestId(`${testId}-list`);
@@ -82,7 +82,7 @@ export const selectAutocompleteOption = async (page: Page, testId: string, optio
   await expect(displayedValue).toHaveValue(optionLabel);
 };
 
-/** Picks an option in a v2 AutocompleteInput, where the testId is on the field itself. */
+/** Picks an option in a v2 ComboBox, where the testId is on the field itself. */
 export const pickAutocompleteOption = async (page: Page, testId: string, optionLabel: string) => {
   const field = page.getByTestId(testId);
   await expect(field).toBeVisible();

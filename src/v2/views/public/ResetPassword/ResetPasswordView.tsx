@@ -8,7 +8,7 @@ import InstanceCodeField from '@/v2/components/input/InstanceCodeField/InstanceC
 import { useInstanceCode } from '@/v2/components/input/InstanceCodeField/useInstanceCode';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { useResetPasswordSubmit, ResetPasswordFormValues } from './useResetPasswordSubmit';
@@ -52,12 +52,14 @@ const ResetPasswordView = () => {
   );
 
   const {
-    register,
     handleSubmit,
     reset,
     control,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: { oldPassword: '', newPassword: '', confirmPassword: '' },
+  });
 
   const wrappedSubmit = async (data: ResetPasswordFormValues) => {
     const codeOk = await validateCode();
@@ -96,41 +98,59 @@ const ResetPasswordView = () => {
       )}
 
       <div className="flex flex-col gap-2">
-        <TextInput
-          type="password"
-          label={t('v2.form.passwordTemporary.label')}
-          required
-          autoComplete="current-password"
-          error={errors.oldPassword?.message}
-          helperText={t('v2.form.passwordTemporary.helper')}
-          data-testid="oldPassword-input"
-          {...register('oldPassword')}
+        <Controller
+          name="oldPassword"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              type="password"
+              label={t('v2.form.passwordTemporary.label')}
+              required
+              autoComplete="current-password"
+              error={errors.oldPassword?.message}
+              helperText={t('v2.form.passwordTemporary.helper')}
+              data-testid="oldPassword-input"
+            />
+          )}
         />
 
-        <TextInput
-          type="password"
-          label={t('auth.password.newPassword')}
-          required
-          autoComplete="new-password"
-          error={errors.newPassword?.message}
-          helperText={
-            <span className="flex gap-1">
-              <Hint content={t('v2.form.passwordNew.hint')} />
-              {t('v2.form.passwordNew.helper', { var: MIN_PASSWORD_LENGTH })}
-            </span>
-          }
-          data-testid="newPassword-input"
-          {...register('newPassword')}
+        <Controller
+          name="newPassword"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              type="password"
+              label={t('auth.password.newPassword')}
+              required
+              autoComplete="new-password"
+              error={errors.newPassword?.message}
+              helperText={
+                <span className="flex gap-1">
+                  <Hint content={t('v2.form.passwordNew.hint')} />
+                  {t('v2.form.passwordNew.helper', { var: MIN_PASSWORD_LENGTH })}
+                </span>
+              }
+              data-testid="newPassword-input"
+            />
+          )}
         />
 
-        <TextInput
-          type="password"
-          label={t('auth.password.confirmPassword')}
-          required
-          autoComplete="new-password"
-          error={errors.confirmPassword?.message}
-          data-testid="confirmPassword-input"
-          {...register('confirmPassword')}
+        <Controller
+          name="confirmPassword"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              type="password"
+              label={t('auth.password.confirmPassword')}
+              required
+              autoComplete="new-password"
+              error={errors.confirmPassword?.message}
+              data-testid="confirmPassword-input"
+            />
+          )}
         />
       </div>
 

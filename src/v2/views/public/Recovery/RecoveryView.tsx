@@ -3,7 +3,7 @@ import Button from '@/v2/components/button/Button';
 import TextInput from '@/v2/components/input/TextInput';
 import InstanceCodeField from '@/v2/components/input/InstanceCodeField/InstanceCodeField';
 import { useInstanceCode } from '@/v2/components/input/InstanceCodeField/useInstanceCode';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { useRecoverySubmit } from './useRecoverySubmit';
@@ -33,11 +33,12 @@ const RecoveryPasswordView = () => {
   );
 
   const {
-    register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<{ email: string }>({
     resolver: yupResolver(schema),
+    defaultValues: { email: '' },
   });
 
   const wrappedSubmit = async (data: { email: string }) => {
@@ -63,14 +64,20 @@ const RecoveryPasswordView = () => {
             disabled={isLoading || codeLoading}
           />
         )}
-        <TextInput
-          required
-          disabled={isLoading}
-          label={t('v2.form.email.label')}
-          type="email"
-          autoComplete="email"
-          error={errors.email?.message}
-          {...register('email')}
+        <Controller
+          name="email"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              required
+              disabled={isLoading}
+              label={t('v2.form.email.label')}
+              type="email"
+              autoComplete="email"
+              error={errors.email?.message}
+            />
+          )}
         />
         <div className="flex items-center justify-end">
           <Button type="submit" disabled={isLoading || codeLoading}>

@@ -70,7 +70,7 @@ const ReviewTable: React.FC<Props> = ({
             type="search"
             label={t('v2.ui.idpSync.search')}
             value={search}
-            onChange={(event) => onSearch(event.target.value)}
+            onChange={onSearch}
             startAdornment={<Icon type="search" size="1.1em" />}
             data-testid={`idp-review-search-${kind}`}
           />
@@ -83,7 +83,7 @@ const ReviewTable: React.FC<Props> = ({
           value={orderBy}
           onChange={setOrderBy}
           reversed={reversed}
-          onReverse={() => setReversed(!reversed)}
+          onReversedChange={setReversed}
           data-testid={`idp-review-sort-${kind}`}
         />
       </div>

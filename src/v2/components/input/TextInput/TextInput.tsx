@@ -1,24 +1,33 @@
-import Icon from '@/components/new/Icon';
 import IconButton from '@/v2/components/button/IconButton';
-import Collapse from '@/v2/components/ui/Collapse';
-import { InputHTMLAttributes, ReactNode, forwardRef, useId, useState } from 'react';
+import { FieldHint, FieldLabel, fieldBoxClasses } from '@/v2/components/input/Field';
+import Icon from '@/v2/components/ui/Icon';
+import { InputHTMLAttributes, ReactNode, forwardRef, useState } from 'react';
+import { Input, TextField, TextFieldProps } from 'react-aria-components';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
-interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface TextInputProps extends Omit<
+  TextFieldProps,
+  'children' | 'className' | 'style' | 'isDisabled' | 'isRequired' | 'isInvalid' | 'validationBehavior'
+> {
   label: string;
   error?: string;
-  helperText?: string | ReactNode;
+  helperText?: ReactNode;
+  disabled?: boolean;
+  required?: boolean;
   dense?: boolean;
   /** Decorative content at the start of the input, e.g. an icon. Not interactive. */
   startAdornment?: ReactNode;
   endAdornment?: ReactNode;
+  /** Applied to the input element. */
+  className?: string;
+  autoCapitalize?: InputHTMLAttributes<HTMLInputElement>['autoCapitalize'];
+  'data-testid'?: string;
 }
 
 const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
   (
     {
-      id,
       label,
       error,
       helperText,
@@ -29,15 +38,13 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
       type,
       startAdornment,
       endAdornment,
+      autoCapitalize,
+      'data-testid': dataTestId,
       ...props
     },
     ref
   ) => {
     const { t } = useTranslation();
-    const generatedId = useId();
-    const inputId = id || generatedId;
-    const errorId = error ? `${inputId}-error` : undefined;
-    const helperId = !error && helperText ? `${inputId}-helper` : undefined;
 
     const isPassword = type === 'password';
     const [showPassword, setShowPassword] = useState(false);
@@ -58,31 +65,25 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
     );
 
     return (
-      <div className={twMerge('flex flex-col w-full')}>
+      <TextField
+        {...props}
+        type={resolvedType}
+        isDisabled={disabled}
+        isRequired={required}
+        isInvalid={!!error}
+        validationBehavior="aria"
+        className="flex flex-col w-full"
+      >
         <div className="relative">
-          <input
+          <Input
             ref={ref}
-            id={inputId}
-            type={resolvedType}
-            disabled={disabled}
-            required={required}
-            aria-required={required || undefined}
-            aria-disabled={disabled || undefined}
-            aria-describedby={[errorId, helperId].filter(Boolean).join(' ') || undefined}
-            aria-invalid={!!error}
             placeholder=" "
+            autoCapitalize={autoCapitalize}
+            data-testid={dataTestId}
             className={twMerge(
-              'peer block w-full rounded-lg border border-input-border bg-transparent shadow-inner focus-within:outline-1',
-              dense ? 'h-9 px-3' : 'h-12 px-4',
-              'text-sm text-foreground transition-colors duration-200',
-              'hover:border-input-border-hover',
-              startAdornment ? (dense ? 'pl-8' : 'pl-10') : '',
-              trailingContent ? (dense ? 'pr-8' : 'pr-10') : '',
-              error ? 'border-error-fg outline-error-fg' : 'outline-current focus:border-current',
-              disabled ? 'cursor-not-allowed opacity-50' : '',
+              fieldBoxClasses({ dense, invalid: !!error, hasStart: !!startAdornment, hasEnd: !!trailingContent }),
               className
             )}
-            {...props}
           />
           {startAdornment && (
             <div
@@ -94,47 +95,13 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
               {startAdornment}
             </div>
           )}
-          {label && (
-            <label
-              htmlFor={inputId}
-              className={twMerge(
-                'pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 origin-left text-sm transition-all duration-200',
-                'bg-background px-0.5',
-                'peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:scale-100',
-                'peer-focus:top-0 peer-focus:-translate-y-1/2 peer-focus:scale-75',
-                'peer-not-placeholder-shown:top-0 peer-not-placeholder-shown:-translate-y-1/2 peer-not-placeholder-shown:scale-75',
-                startAdornment
-                  ? twMerge(dense ? 'left-8' : 'left-10', 'peer-focus:left-3 peer-not-placeholder-shown:left-3')
-                  : '',
-                error ? 'text-error-fg peer-focus:text-error-fg' : 'text-muted peer-focus:text-current'
-              )}
-            >
-              {label}
-              {required && (
-                <>
-                  <span aria-hidden="true" className="ml-0.5">
-                    *
-                  </span>
-                  <span className="sr-only">{t('v2.form.validation.required')}</span>
-                </>
-              )}
-            </label>
-          )}
+          <FieldLabel required={required} invalid={!!error} dense={dense} hasStart={!!startAdornment}>
+            {label}
+          </FieldLabel>
           {trailingContent && <div className="absolute right-1 top-1/2 -translate-y-1/2">{trailingContent}</div>}
         </div>
-        <Collapse open={!!(error || helperText)}>
-          {error ? (
-            <span id={errorId} className="block pt-1 px-1 text-xs text-error-fg">
-              <Icon type="alert" className="inline-block mr-1 mb-0.5" />
-              {error}
-            </span>
-          ) : (
-            <span id={helperId} className="block pt-1 px-1 text-xs text-muted">
-              {helperText}
-            </span>
-          )}
-        </Collapse>
-      </div>
+        <FieldHint error={error} helperText={helperText} />
+      </TextField>
     );
   }
 );

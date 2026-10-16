@@ -158,7 +158,8 @@
         "print": "Print this page",
         "remove": "Remove {{var}}",
         "report": "Report a bug",
-        "search": "Search"
+        "search": "Search",
+        "select": "Select {{var}}"
       },
       "announcement": {
         "title": "Announcement",

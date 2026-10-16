@@ -47,7 +47,7 @@ const Announcement = () => {
             helperText={consentLevel === 2 ? t('v2.ui.announcement.helper') : undefined}
             disabled={isSubmitting}
             data-testid="checkbox-consent"
-            onChange={(e) => setIsChecked(e.target.checked)}
+            onChange={setIsChecked}
           />
         </div>
       )}

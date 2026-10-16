@@ -1,4 +1,5 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { BoxType, IdeaType } from '@/types/Scopes';
 import BoxForm from './BoxForm';
@@ -33,7 +34,7 @@ describe('BoxForm', () => {
       <BoxForm defaultValues={box} contextRoomId="room-1" onSubmit={noop} onCancel={() => {}} />
     );
 
-    await screen.findByTestId('box-form-ideas-list');
+    await screen.findByTestId('box-form-ideas-tag-i1');
     expect(getByTestId('box-form-phase').textContent).toContain('phases.approval');
   });
 
@@ -44,12 +45,15 @@ describe('BoxForm', () => {
   });
 
   it('submits added ideas for a new box', async () => {
+    const user = userEvent.setup();
     const onSubmit = vi.fn(async (_data: any) => true);
     render(<BoxForm contextRoomId="room-1" onSubmit={onSubmit} onCancel={() => {}} />);
 
-    fireEvent.change(screen.getByTestId('box-form-name'), { target: { value: 'New box' } });
-    fireEvent.focus(screen.getByTestId('box-form-ideas'));
-    fireEvent.mouseDown(await screen.findByTestId('box-form-ideas-option-i2'));
+    await user.type(screen.getByTestId('box-form-name'), 'New box');
+    const ideas = screen.getByTestId('box-form-ideas');
+    await waitFor(() => expect(ideas).toBeEnabled());
+    await user.click(ideas);
+    await user.click(await screen.findByTestId('box-form-ideas-option-i2'));
     fireEvent.click(screen.getByTestId('box-form-submit'));
 
     await waitFor(() => expect(onSubmit).toHaveBeenCalled());
