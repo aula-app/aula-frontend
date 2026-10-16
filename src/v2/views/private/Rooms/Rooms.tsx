@@ -19,7 +19,11 @@ const roomsFilterConfig: ListFilterConfig<RoomType> = {
   orderKeys: ['order_importance', 'room_name', 'created', 'last_update'],
 };
 
-const Rooms: React.FC = () => {
+type RoomsProps = {
+  onScroll?: React.UIEventHandler<HTMLUListElement>;
+};
+
+const Rooms: React.FC<RoomsProps> = ({ onScroll }) => {
   const { t } = useTranslation();
   const { rooms, isLoading, error } = useRooms();
   const {
@@ -106,6 +110,7 @@ const Rooms: React.FC = () => {
       {!isLoading && visibleRooms.length > 0 && (
         <ScrollList
           storageKey="rooms"
+          onScroll={onScroll}
           className="grid grid-cols-1 content-start sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
         >
           {visibleRooms.map((room) => (
