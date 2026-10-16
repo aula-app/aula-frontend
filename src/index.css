@@ -20,6 +20,7 @@
 @source inline("{bg,text}-{wild,discussion,approval,voting,results}");
 @source inline("{bg,text}-{wild,discussion,approval,voting,results}-active");
 @source inline("{hover,active}:bg-{wild,discussion,approval,voting,results}-active");
+@source inline("@md:bg-{wild,discussion,approval,voting,results}");
 @source inline("{bg,text}-{wild,discussion,approval,voting,results}-{light,fg}");
 @source inline("border-l-4");
 

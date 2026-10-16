@@ -75,7 +75,7 @@ const ScopeTitle = ({
   return (
     <div className="flex flex-col p-2 pb-0 sm:p-4 sm:pb-0">
       <div className="flex justify-between items-center">
-        <Heading className={twMerge('flex min-w-0 items-center gap-2', className)}>
+        <Heading data-testid={TEST_IDS.SCOPE_TITLE} className={twMerge('flex min-w-0 items-center gap-2', className)}>
           <Icon type={iconType} size=".9em" className="shrink-0" />
           {phase ? (
             <span className="truncate first-letter:capitalize">

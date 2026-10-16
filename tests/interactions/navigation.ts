@@ -77,7 +77,7 @@ export const goToHome = async (page: Page) => {
   // a fresh room list. Without this, a stale home page loaded before another
   // worker created a room never shows that room's card.
   await page.goto(host, { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('#rooms-heading')).toBeVisible();
+  await expect(page.getByTestId(TEST_IDS.SCOPE_TITLE)).toBeVisible();
 };
 
 export const goToRoom = async (page: Page, roomName: string) => {

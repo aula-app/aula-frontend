@@ -8,6 +8,8 @@ type SortableFields = {
   displayname?: string;
   title?: string;
   name?: string;
+  room_name?: string;
+  order_importance?: number;
   ideas_num?: number;
   sum_likes?: number;
 };
@@ -31,6 +33,14 @@ const orderConfig: Record<OrderKey, { labelKey: string; compare: (a: SortableFie
   },
   title: { labelKey: 'v2.ui.sort.title', compare: (a, b) => (a.title ?? '').localeCompare(b.title ?? '') },
   name: { labelKey: 'v2.ui.sort.name', compare: (a, b) => (a.name ?? '').localeCompare(b.name ?? '') },
+  room_name: {
+    labelKey: 'v2.ui.sort.name',
+    compare: (a, b) => (a.room_name ?? '').localeCompare(b.room_name ?? ''),
+  },
+  order_importance: {
+    labelKey: 'v2.ui.sort.default',
+    compare: (a, b) => (a.order_importance ?? 0) - (b.order_importance ?? 0),
+  },
   ideas_num: { labelKey: 'v2.ui.sort.ideas', compare: (a, b) => (b.ideas_num ?? 0) - (a.ideas_num ?? 0) },
   sum_likes: { labelKey: 'v2.ui.sort.likes', compare: (a, b) => (b.sum_likes ?? 0) - (a.sum_likes ?? 0) },
 };
