@@ -1,7 +1,7 @@
 import Icon from '@/components/new/Icon';
 import Collapse from '@/v2/components/ui/Collapse';
 import { usePlacement } from '@/v2/utils/placement';
-import { KeyboardEvent, useEffect, useId, useRef, useState } from 'react';
+import { KeyboardEvent, ReactNode, useEffect, useId, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
@@ -21,6 +21,8 @@ export interface SelectInputProps {
   disabled?: boolean;
   required?: boolean;
   dense?: boolean;
+  /** Interactive content at the end of the field, outside the trigger. */
+  endAdornment?: ReactNode;
   className?: string;
   'data-testid'?: string;
 }
@@ -36,6 +38,7 @@ const SelectInput = ({
   disabled = false,
   required = false,
   dense = false,
+  endAdornment,
   className,
   'data-testid': dataTestId,
 }: SelectInputProps) => {
@@ -54,6 +57,8 @@ const SelectInput = ({
   // Grow to content, but anchor to whichever edge keeps the list on-screen: right edge when the
   // trigger sits near the right of its clipping container, left edge otherwise.
   const horizontalClass = zones.x === 'right' ? 'right-0' : 'left-0';
+
+  const trail = endAdornment ? (dense ? 'pr-12' : 'pr-16') : dense ? 'pr-3' : 'pr-4';
 
   const selectedOption = options.find((o) => o.value === value);
   const hasValue = !!selectedOption;
@@ -147,7 +152,8 @@ const SelectInput = ({
           onKeyDown={handleKeyDown}
           className={[
             'peer flex w-full items-center rounded-lg border border-input-border bg-transparent shadow-inner focus-within:outline-1',
-            dense ? 'h-9 px-3' : 'h-12 px-4',
+            dense ? 'h-9 pl-3' : 'h-12 pl-4',
+            trail,
             'text-sm text-left text-foreground transition-colors duration-200',
             'hover:border-input-border-hover',
             'disabled:cursor-not-allowed disabled:opacity-50',
@@ -165,7 +171,11 @@ const SelectInput = ({
           {options.map((option) => (
             <div
               key={option.value}
-              className={twMerge('text-sm font-medium text-nowrap pr-6', dense ? 'px-3' : 'px-4')}
+              className={twMerge(
+                'text-sm font-medium text-nowrap pr-6',
+                dense ? 'px-3' : 'px-4',
+                endAdornment && trail
+              )}
             >
               {option.label}
             </div>
@@ -195,10 +205,16 @@ const SelectInput = ({
 
         <span
           aria-hidden="true"
-          className={`pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
+          className={`pointer-events-none absolute ${endAdornment ? (dense ? 'right-12' : 'right-15') : 'right-3'} top-1/2 -translate-y-1/2 transition-transform duration-200 ${open ? 'rotate-180' : ''}`}
         >
           <Icon type="chevronDown" size="0.75em" className="text-muted mt-0.5" />
         </span>
+
+        {endAdornment && (
+          <div className="absolute inset-y-px right-px flex items-center border-l border-input-border">
+            {endAdornment}
+          </div>
+        )}
 
         <Collapse open={open} className={twMerge('absolute z-50 min-w-full w-max', verticalClass, horizontalClass)}>
           <ul

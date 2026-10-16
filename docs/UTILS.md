@@ -166,7 +166,6 @@ Defines user permission levels as defined in `src/types/SettingsTypes.ts`:
 - 44: _Principal_ - Special role with approval rights
 - 45: _Principal_V_ - Principal with voting privileges
 - 50: _School Admin_ - Has access to admin settings (manage users, groups, categories)
-- 60: _Tech Admin_ - Technical settings access only
 
 ### Permission System
 

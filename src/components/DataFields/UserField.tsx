@@ -2,19 +2,19 @@ import { getUsers } from '@/services/users';
 import { UserOptionsType } from '@/types/SettingsTypes';
 import { Autocomplete, BaseTextFieldProps, TextField, Typography } from '@mui/material';
 import { useEffect, useState } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-interface Props extends BaseTextFieldProps {
+interface Props<T extends FieldValues = FieldValues> extends BaseTextFieldProps {
   disabled?: boolean;
-  control: Control<any, any>;
+  control: Control<T>;
 }
 
 /**
  * Renders "UserField" component
  */
 
-const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps }) => {
+const UserField = <T extends FieldValues = FieldValues>({ control, disabled = false, ...restOfProps }: Props<T>) => {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -58,7 +58,7 @@ const UserField: React.FC<Props> = ({ control, disabled = false, ...restOfProps 
 
   return (
     <Controller
-      name="target_id"
+      name={'target_id' as Path<T>}
       control={control}
       render={({ field, fieldState }) => {
         // Find the option object that matches the current field value
