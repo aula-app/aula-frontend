@@ -38,7 +38,7 @@ const AppLinkComponent: ForwardRefRenderFunction<HTMLAnchorElement, AppLinkProps
     ...(openInNewTab ? { target: '_blank', rel: 'noreferrer noopener' } : {}),
     ...restOfProps,
   };
-  
+
   return disabled ? (
     <>{children}</>
   ) : href ? (

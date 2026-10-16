@@ -35,10 +35,7 @@ const SkipNavigation: React.FC<SkipNavigationProps> = ({ mainContentId }) => {
   const { t } = useTranslation();
 
   return (
-    <SkipLink 
-      href={`#${mainContentId}`}
-      aria-label={t('ui.navigation.skipToContent')}
-    >
+    <SkipLink href={`#${mainContentId}`} aria-label={t('ui.navigation.skipToContent')}>
       {t('ui.navigation.skipToContent')}
     </SkipLink>
   );

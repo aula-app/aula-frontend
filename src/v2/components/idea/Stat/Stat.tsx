@@ -8,19 +8,34 @@ type StatProps = Omit<ComponentProps<typeof Chip>, 'children'> & {
   count: number;
   label: string;
   active?: boolean;
+  /** Renders a plain count instead of a control, for metrics the current phase has frozen. */
+  readOnly?: boolean;
 };
 
-const Stat = ({ icon, count, label, active = false, className, ...chipProps }: StatProps) => (
-  <Chip
-    aria-label={label}
-    aria-pressed={chipProps.onClick ? active : undefined}
-    condensed
-    className={twMerge('gap-1', active ? 'text-error-fg' : 'text-muted', className)}
-    startIcon={<Icon type={icon} className="text-xl" aria-hidden="true" />}
-    {...chipProps}
-  >
-    <span aria-hidden="true">{count}</span>
-  </Chip>
-);
+const Stat = ({ icon, count, label, active = false, readOnly = false, className, ...chipProps }: StatProps) => {
+  const tint = active ? 'text-error-fg' : 'text-muted';
+
+  if (readOnly)
+    return (
+      <span className={twMerge('inline-flex items-center gap-1 min-h-11 p-1 px-1.5', tint, className)}>
+        <Icon type={icon} className="text-xl" aria-hidden="true" />
+        <span aria-hidden="true">{count}</span>
+        <span className="sr-only">{label}</span>
+      </span>
+    );
+
+  return (
+    <Chip
+      aria-label={label}
+      aria-pressed={chipProps.onClick ? active : undefined}
+      condensed
+      className={twMerge('gap-1', tint, className)}
+      startIcon={<Icon type={icon} className="text-xl" aria-hidden="true" />}
+      {...chipProps}
+    >
+      <span aria-hidden="true">{count}</span>
+    </Chip>
+  );
+};
 
 export default Stat;

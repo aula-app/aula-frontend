@@ -59,5 +59,11 @@ export default defineConfig({
     setupFiles: './src/test/setup.ts',
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
     css: false,
+    server: {
+      // Pre-bundled dependencies bypass vi.mock, so their own imports cannot be
+      // stubbed. Inlining this one lets a test replace `is-emoji-supported`, whose
+      // canvas-based check cannot run under jsdom.
+      deps: { inline: ['@tiptap/extension-emoji'] },
+    },
   },
 });

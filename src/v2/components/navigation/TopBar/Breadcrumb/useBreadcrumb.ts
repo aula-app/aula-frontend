@@ -43,10 +43,7 @@ export const useBreadcrumb = () => {
 
   const isEmpty = filteredBreadcrumbs.length === 0;
   const currentPage = isEmpty ? '' : filteredBreadcrumbs[filteredBreadcrumbs.length - 1][0];
-  const navItems: BreadcrumbNavItem[] = [
-    [t('ui.navigation.home'), '/'],
-    ...filteredBreadcrumbs.slice(0, -1),
-  ];
+  const navItems: BreadcrumbNavItem[] = [[t('ui.navigation.home'), '/'], ...filteredBreadcrumbs.slice(0, -1)];
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

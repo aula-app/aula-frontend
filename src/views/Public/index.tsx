@@ -5,11 +5,4 @@ import OAuthLogin from './OAuthLogin/';
 import Recovery from './Recovery/';
 import SetPassword from './SetPassword/';
 
-export {
-  InstanceCodeView,
-  PublicNotFoundView,
-  Login,
-  OAuthLogin,
-  Recovery,
-  SetPassword,
-};
+export { InstanceCodeView, PublicNotFoundView, Login, OAuthLogin, Recovery, SetPassword };

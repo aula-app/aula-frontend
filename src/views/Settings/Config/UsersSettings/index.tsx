@@ -1,3 +1,3 @@
 import UsersSettings from './UsersSettings';
 
-export { UsersSettings as default,  };
+export { UsersSettings as default };

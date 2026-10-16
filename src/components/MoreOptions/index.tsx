@@ -1,3 +1,3 @@
 import MoreOptions from './MoreOptions';
 
-export { MoreOptions as default,  };
+export { MoreOptions as default };

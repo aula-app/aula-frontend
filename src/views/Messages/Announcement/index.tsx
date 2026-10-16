@@ -1,3 +1,3 @@
 import AnnouncementView from './AnnouncementView';
 
-export { AnnouncementView as default,  };
+export { AnnouncementView as default };

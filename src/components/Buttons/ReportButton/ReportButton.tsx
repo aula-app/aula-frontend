@@ -48,7 +48,13 @@ ${data.content || ''}
         {...restOfProps}
         onClick={() => setOpen(true)}
       />
-      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} data-testid={TEST_IDS.REPORT_DIALOG}>
+      <Drawer
+        anchor="bottom"
+        open={isOpen}
+        onClose={onClose}
+        sx={{ overflowY: 'auto' }}
+        data-testid={TEST_IDS.REPORT_DIALOG}
+      >
         <ReportForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>
     </>

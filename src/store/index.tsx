@@ -1,3 +1,3 @@
 import { AppStore, useAppStore } from './AppStore';
 
-export {  AppStore,  useAppStore,  };
+export { AppStore, useAppStore };

@@ -1,5 +1,5 @@
 import { useAppStore } from '@/store';
-import { Alert, Autocomplete, Button, CircularProgress, createFilterOptions, Stack, Typography } from '@mui/material';
+import { Alert, Autocomplete, Button, CircularProgress, createFilterOptions, Stack } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { KeyboardEvent, useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

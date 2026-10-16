@@ -80,6 +80,15 @@ async function gotoTooltipPage(page: import('@playwright/test').Page, dbInstance
   await ensureInstanceCode(page, dbInstanceCode);
 }
 
+// Tooltip only opens on :focus-visible, which Chromium grants to keyboard-initiated
+// focus. A bare .focus() after any mouse action does not qualify, so step off and
+// back with the keyboard to land on the trigger in keyboard modality.
+async function focusViaKeyboard(page: import('@playwright/test').Page, locator: import('@playwright/test').Locator) {
+  await locator.focus();
+  await page.keyboard.press('Shift+Tab');
+  await page.keyboard.press('Tab');
+}
+
 test('Tooltip - shows on hover and hides on mouse leave', async ({ page, dbInstanceCode }) => {
   await gotoTooltipPage(page, dbInstanceCode);
 
@@ -101,7 +110,7 @@ test('Tooltip - shows on focus and hides on blur', async ({ page, dbInstanceCode
   const tooltip = triggerButton.locator('xpath=..').locator('[role="tooltip"]');
 
   await expect(tooltip).toBeHidden();
-  await triggerButton.focus();
+  await focusViaKeyboard(page, triggerButton);
   await expect(tooltip).toBeVisible();
 
   await triggerButton.blur();
@@ -114,7 +123,7 @@ test('Tooltip - hides on Escape key', async ({ page, dbInstanceCode }) => {
   const triggerButton = page.getByTestId('dark-mode-toggle');
   const tooltip = triggerButton.locator('xpath=..').locator('[role="tooltip"]');
 
-  await triggerButton.focus();
+  await focusViaKeyboard(page, triggerButton);
   await expect(tooltip).toBeVisible();
 
   await page.keyboard.press('Escape');

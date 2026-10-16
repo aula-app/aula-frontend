@@ -1,3 +1,3 @@
-import NotFoundView from "./NotFoundView";
+import NotFoundView from './NotFoundView';
 
 export default NotFoundView;

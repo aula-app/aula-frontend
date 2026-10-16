@@ -7,7 +7,8 @@ import { useAnnouncement } from './useAnnouncement';
 
 const Announcement = () => {
   const { t } = useTranslation();
-  const { displayed, isOpen, isChecked, setIsChecked, isSubmitting, handleAction, bodyId, onExited } = useAnnouncement();
+  const { displayed, isOpen, isChecked, setIsChecked, isSubmitting, handleAction, bodyId, onExited } =
+    useAnnouncement();
 
   if (!displayed) return null;
 

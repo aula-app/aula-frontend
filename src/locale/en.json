@@ -8,6 +8,11 @@
       "winking": "An illustration of a winking owl, representing the error page"
     },
     "form": {
+      "autocomplete": {
+        "noOptions": "No matches",
+        "results_one": "{{count}} result",
+        "results_other": "{{count}} results"
+      },
       "code": {
         "label": "Instance code"
       },
@@ -87,8 +92,12 @@
     },
     "scopes": {
       "boxes": {
-        "singular": "box",
-        "plural": "boxes"
+        "decided": "{{count}} of {{total}} decided",
+        "ideasInBox": "Ideas in this box",
+        "noIdeas": "No ideas in this box yet",
+        "plural": "boxes",
+        "reviewed": "{{count}} of {{total}} reviewed",
+        "singular": "box"
       },
       "ideas": {
         "singular": "idea",
@@ -99,7 +108,21 @@
           "vote": "{{count}} vote",
           "votes": "{{count}} votes",
           "comment": "{{count}} comment",
-          "comments": "{{count}} comments"
+          "comments": "{{count}} comments",
+          "voteTurnout": "{{num}} of {{total}} people voted",
+          "likeTurnout": "{{num}} of {{total}} people liked this"
+        },
+        "status": {
+          "approved": "Approved",
+          "waiting": "Waiting",
+          "rejected": "Not approved",
+          "votedFor": "You voted for",
+          "votedNeutral": "You voted neutral",
+          "votedAgainst": "You voted against",
+          "winner": "Winner",
+          "quorumReached": "Quorum reached",
+          "quorumMissed": "Quorum missed",
+          "notSelected": "Not selected"
         }
       }
     },
@@ -117,6 +140,7 @@
         "add": "Add {{var}}",
         "agree": "Agree",
         "print": "Print this page",
+        "remove": "Remove {{var}}",
         "report": "Report a bug",
         "search": "Search"
       },

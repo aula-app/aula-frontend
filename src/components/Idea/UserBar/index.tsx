@@ -1,3 +1,3 @@
 import UserBar from './UserBar';
 
-export { UserBar as default,  };
+export { UserBar as default };

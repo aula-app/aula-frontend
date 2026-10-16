@@ -3,6 +3,9 @@ import { describe, expect, it, vi } from 'vitest';
 import ScopeTitle from './ScopeTitle';
 
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }));
+vi.mock('../Icon/Icon', () => ({
+  default: ({ type }: { type: string }) => <span data-testid={`icon-${type}`} />,
+}));
 
 describe('ScopeTitle', () => {
   it('renders the scope label and count without a toggle button by default', () => {
@@ -15,6 +18,22 @@ describe('ScopeTitle', () => {
   it('uses the singular label when count is 1', () => {
     const { getByText } = render(<ScopeTitle scope="ideas" count={1} />);
     expect(getByText('v2.scopes.ideas.singular')).toBeTruthy();
+  });
+
+  it('shows the scope icon when no phase is given', () => {
+    const { getByTestId } = render(<ScopeTitle scope="ideas" count={2} />);
+    expect(getByTestId('icon-ideas')).toBeTruthy();
+  });
+
+  it('shows the phase icon instead of the scope icon inside a phase sentence', () => {
+    const { getByTestId, queryByTestId } = render(<ScopeTitle scope="ideas" count={2} phase="10" />);
+    expect(getByTestId('icon-discussion')).toBeTruthy();
+    expect(queryByTestId('icon-ideas')).toBeNull();
+  });
+
+  it('falls back to the scope icon for an unknown phase', () => {
+    const { getByTestId } = render(<ScopeTitle scope="ideas" count={2} phase="99" />);
+    expect(getByTestId('icon-ideas')).toBeTruthy();
   });
 
   it('toggles the controls and focuses the first control when opened', () => {

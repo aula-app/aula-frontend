@@ -11,11 +11,11 @@ const PublicOfflineView: React.FC = () => {
 
   return (
     <Stack flex={1} alignItems="center" justifyContent="center" data-testid={TEST_IDS.SCHOOL_OFFLINE_VIEW}>
-      <img 
-        src="/img/Paula_schlafend.svg" 
-        alt={t('errors.schoolClosedImage')} 
-        role="img" 
-        loading="lazy" 
+      <img
+        src="/img/Paula_schlafend.svg"
+        alt={t('errors.schoolClosedImage')}
+        role="img"
+        loading="lazy"
         width={150}
         data-testid="school-offline-image"
       />

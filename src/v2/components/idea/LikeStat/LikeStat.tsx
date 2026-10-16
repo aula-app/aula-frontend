@@ -1,20 +1,20 @@
 import { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
-import { IdeaType } from '@/types/Scopes';
 import Stat from '@/v2/components/idea/Stat';
-import { useIdeaLike } from './useIdeaLike';
+import { IdeaLike } from './useIdeaLike';
 
 type LikeStatProps = Omit<ComponentProps<typeof Stat>, 'icon' | 'count' | 'label' | 'active' | 'onClick'> & {
-  idea: IdeaType;
+  /** State from `useIdeaLike`, owned by the caller so the count can drive other readouts too. */
+  like: IdeaLike;
 };
 
 /**
  * Like metric for an idea: a Stat wired to the like API. Clicking it toggles the
  * like, optimistically updating the count and swapping to the filled heart.
  */
-const LikeStat = ({ idea, ...props }: LikeStatProps) => {
+const LikeStat = ({ like, ...props }: LikeStatProps) => {
   const { t } = useTranslation();
-  const { liked, count, toggle, pending } = useIdeaLike(idea);
+  const { liked, count, toggle, pending } = like;
 
   return (
     <Stat

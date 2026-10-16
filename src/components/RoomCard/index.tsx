@@ -1,3 +1,3 @@
 import RoomCard from './RoomCard';
 
-export {  RoomCard };
+export { RoomCard };

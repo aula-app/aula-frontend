@@ -1,3 +1,3 @@
 import UpdatesView from './UpdatesView';
 
-export { UpdatesView as default,  };
+export { UpdatesView as default };
