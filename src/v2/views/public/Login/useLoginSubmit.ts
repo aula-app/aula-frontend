@@ -1,6 +1,5 @@
-import { getRuntimeConfig, loadRuntimeConfig, RuntimeConfig } from '@/config';
 import { loginUser } from '@/services/login';
-import { completeSsoLink, initiateSso } from '@/services/sso';
+import { completeSsoLink, getSsoStatus, initiateSso } from '@/services/sso';
 import { useAppStore } from '@/store';
 import { localStorageGet, localStorageSet, parseJwt } from '@/utils';
 import { useToast } from '@/v2/hooks';
@@ -24,7 +23,7 @@ export const useLoginSubmit = () => {
   const [loginError, setError] = useState<string>('');
   const [linkBanner, setLinkBanner] = useState<string>('');
   const [ssoLinkToken, setSsoLinkToken] = useState<string | null>(null);
-  const [config, setConfig] = useState<RuntimeConfig | null>(null);
+  const [ssoAvailable, setSsoAvailable] = useState(false);
 
   useEffect(() => {
     const ssoError = searchParams.get('sso_error');
@@ -48,13 +47,10 @@ export const useLoginSubmit = () => {
 
   useEffect(() => {
     (async () => {
-      let runtimeConfig: RuntimeConfig;
-      try {
-        runtimeConfig = getRuntimeConfig();
-      } catch {
-        runtimeConfig = await loadRuntimeConfig();
-      }
-      setConfig(runtimeConfig);
+      const instanceApiUrl = localStorageGet('api_url');
+      if (!instanceApiUrl) return;
+      const status = await getSsoStatus(instanceApiUrl);
+      setSsoAvailable(status?.enabled === true);
     })();
   }, []);
 
@@ -148,5 +144,5 @@ export const useLoginSubmit = () => {
     }
   };
 
-  return { onSubmit, isLoading, isSsoLoading, loginError, setError, linkBanner, setLinkBanner, config, handleSsoLogin };
+  return { onSubmit, isLoading, isSsoLoading, loginError, setError, linkBanner, setLinkBanner, ssoAvailable, handleSsoLogin };
 };
