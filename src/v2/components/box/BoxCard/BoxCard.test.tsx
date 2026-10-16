@@ -38,13 +38,15 @@ const renderCard = (phase_id: number, props: Partial<ComponentProps<typeof BoxCa
 
 const bar = (container: HTMLElement) => container.querySelector('[role="progressbar"]');
 const rows = (container: HTMLElement) => Array.from(container.querySelectorAll('[data-testid="box-idea-list"] li'));
+const readouts = (row: Element) => Array.from(row.querySelectorAll('.sr-only')).map((node) => node.textContent);
 
-const ideaList = (approvals: number[], likes: number[] = [], winners: number[] = []) =>
+const ideaList = (approvals: number[], likes: number[] = [], winners: number[] = [], comments: number[] = []) =>
   approvals.map((approved, i) => ({
     hash_id: `i${i}`,
     title: `Idea ${i}`,
     approved,
     sum_likes: likes[i] ?? 0,
+    sum_comments: comments[i] ?? 0,
     is_winner: winners[i] ?? 0,
   })) as IdeaType[];
 
@@ -90,8 +92,7 @@ describe('BoxCard idea preview', () => {
   it('shows each idea approval status, with phase_id arriving as a number as the API sends it', () => {
     const { container } = renderCard(20, { ideas: ideaList([1, -1, 0]) });
 
-    const labels = rows(container).map((li) => li.querySelector('[aria-label]')?.getAttribute('aria-label'));
-    expect(labels).toEqual([
+    expect(rows(container).map(readouts).flat()).toEqual([
       'v2.scopes.ideas.status.approved',
       'v2.scopes.ideas.status.rejected',
       'v2.scopes.ideas.status.waiting',
@@ -120,9 +121,9 @@ describe('BoxCard idea preview', () => {
   it('shows the status as an icon only, still labelled for screen readers', () => {
     const { container } = renderCard(20, { ideas: ideaList([1]) });
 
-    const badge = rows(container)[0].querySelector('[aria-label="v2.scopes.ideas.status.approved"]');
+    const badge = rows(container)[0].querySelector('a')?.lastElementChild;
     expect(badge?.querySelector('svg')).toBeTruthy();
-    expect(badge?.textContent).toBe('');
+    expect(badge?.textContent).toBe('v2.scopes.ideas.status.approved');
   });
 
   it('paints the row in its status color so the strip reads at a glance', () => {
@@ -144,21 +145,24 @@ describe('BoxCard idea preview', () => {
     expect(rows(withIcon.container)[0].firstElementChild?.className).toContain('bg-success');
   });
 
-  it('shows the like count in discussion, where there is no status to report', () => {
-    const { container } = renderCard(10, { ideas: ideaList([0, 0], [12, 1]) });
+  it('shows the comment and like counts in discussion, where there is no status to report', () => {
+    const { container } = renderCard(10, { ideas: ideaList([0, 0], [12, 1], [], [5, 1]) });
 
     const badge = (i: number) => rows(container)[i].lastElementChild;
+    const labels = (i: number) =>
+      Array.from(badge(i)?.querySelectorAll('.sr-only') ?? []).map((node) => node.textContent);
+
+    expect(badge(0)?.textContent).toContain('5');
     expect(badge(0)?.textContent).toContain('12');
-    expect(badge(0)?.querySelector('.sr-only')?.textContent).toContain('stats.likes');
-    expect(badge(1)?.querySelector('.sr-only')?.textContent).toContain('stats.like:');
+    expect(labels(0)).toEqual([expect.stringContaining('stats.comments'), expect.stringContaining('stats.likes')]);
+    expect(labels(1)).toEqual([expect.stringContaining('stats.comment:'), expect.stringContaining('stats.like:')]);
   });
 
   it('keeps the status badge in approval rather than the like count', () => {
     const { container } = renderCard(20, { ideas: ideaList([1], [9]) });
 
-    const badge = rows(container)[0].lastElementChild;
-    expect(badge?.getAttribute('aria-label')).toBe('v2.scopes.ideas.status.approved');
-    expect(badge?.textContent).not.toContain('9');
+    expect(readouts(rows(container)[0])).toEqual(['v2.scopes.ideas.status.approved']);
+    expect(rows(container)[0].textContent).not.toContain('9');
   });
 
   it("shows the viewer's own vote on each row during voting", () => {
@@ -167,8 +171,7 @@ describe('BoxCard idea preview', () => {
       votes: { i0: 1, i1: -1, i2: 0 },
     });
 
-    const labels = rows(container).map((li) => li.querySelector('[aria-label]')?.getAttribute('aria-label'));
-    expect(labels).toEqual([
+    expect(rows(container).map(readouts).flat()).toEqual([
       'v2.scopes.ideas.status.votedFor',
       'v2.scopes.ideas.status.votedAgainst',
       'v2.scopes.ideas.status.votedNeutral',
@@ -178,9 +181,7 @@ describe('BoxCard idea preview', () => {
   it('reads an idea the viewer has not voted on as waiting', () => {
     const { container } = renderCard(30, { ideas: ideaList([1]), votes: {} });
 
-    expect(rows(container)[0].querySelector('[aria-label]')?.getAttribute('aria-label')).toBe(
-      'v2.scopes.ideas.status.waiting'
-    );
+    expect(readouts(rows(container)[0])).toEqual(['v2.scopes.ideas.status.waiting']);
   });
 });
 

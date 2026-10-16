@@ -89,7 +89,6 @@ const Box: React.FC = () => {
     });
   }, [box, room_id, t, dispatch]);
 
-  // Deleting the box we are viewing leaves nothing to show — return to the phase.
   const handleBoxChanged = async () => {
     const updated = await refetch();
     if (!updated) navigate(`/room/${room_id}/phase/${phase}`);
@@ -268,7 +267,11 @@ const Box: React.FC = () => {
 
                 {archivedIdeas.length > 0 && (
                   <li>
-                    <section aria-labelledby={archiveId} className="flex flex-col gap-4 pt-4 border-t border-neutral">
+                    <section
+                      aria-labelledby={archiveId}
+                      data-testid="box-rejected-ideas"
+                      className="flex flex-col gap-4 pt-4 border-t border-neutral"
+                    >
                       <h2 id={archiveId} className="text-sm font-semibold text-muted">
                         {t('phases.rejected', { var: archivedIdeas.length })}
                       </h2>

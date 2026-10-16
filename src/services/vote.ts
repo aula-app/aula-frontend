@@ -26,7 +26,10 @@ export async function getVote(idea_id: string): Promise<GetVoteResponse> {
  * Get current vote distribution.
  */
 
-export type ResultResponse = Record<'votes_negative' | 'votes_neutral' | 'votes_positive' | 'total_votes', number>;
+export type ResultResponse = Record<
+  'votes_negative' | 'votes_neutral' | 'votes_positive' | 'total_votes' | 'voters_count',
+  number
+>;
 
 interface GetVoteResultResponse extends GenericResponse {
   data: ResultResponse | null;

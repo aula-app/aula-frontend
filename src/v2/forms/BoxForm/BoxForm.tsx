@@ -3,9 +3,7 @@ import Button from '@/v2/components/button/Button';
 import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { BoxType } from '@/types/Scopes';
-import { RoomPhases } from '@/types/SettingsTypes';
 import { getIdeasByBox } from '@/services/ideas';
-import { phases } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useEffect, useState } from 'react';
 import * as yup from 'yup';
@@ -97,7 +95,6 @@ const BoxForm: React.FC<BoxFormProps> = ({
   }, [defaultValues?.hash_id, setValue]);
 
   const roomId = contextRoomId || watch('room');
-  const phaseColor = phases[watch('phase_id') as `${RoomPhases}`] ?? 'wild';
 
   const { clearDraft } = useDraftStorage(form, {
     storageKey: `v2-boxform-draft-${contextRoomId ?? 'unknown'}`,
@@ -191,7 +188,6 @@ const BoxForm: React.FC<BoxFormProps> = ({
               roomId={roomId}
               value={field.value}
               onChange={field.onChange}
-              color={phaseColor}
               loadingValue={loadingIdeas}
               disabled={isLoading}
               data-testid="box-form-ideas"

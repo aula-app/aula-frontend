@@ -7,22 +7,20 @@ import { PhaseStatus as PhaseStatusType } from './getPhaseStatus';
 interface PhaseStatusProps {
   /** Descriptor from `getPhaseStatus`. */
   status: PhaseStatusType;
-  /** Drop the label and keep only the icon. Stays labelled for screen readers. */
-  iconOnly?: boolean;
   className?: string;
 }
 
 /** Phase status badge sitting on top of an idea bubble. */
-const PhaseStatus = ({ status, iconOnly = false, className }: PhaseStatusProps) => {
+const PhaseStatus = ({ status, className }: PhaseStatusProps) => {
   const { t } = useTranslation();
 
   return (
     <Chip
       aria-label={t(status.label)}
       className={twMerge('text-xs gap-1 font-medium rounded-b-none', status.colors, className)}
-      startIcon={<Icon type={status.icon} className={iconOnly ? undefined : '-mx-1'} aria-hidden="true" />}
+      startIcon={<Icon type={status.icon} className="-mx-1" aria-hidden="true" />}
     >
-      {!iconOnly && t(status.label)}
+      {t(status.label)}
     </Chip>
   );
 };

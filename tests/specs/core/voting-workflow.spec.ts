@@ -2,7 +2,6 @@ import { TEST_IDS } from '../../../src/test-ids';
 import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as entities from '../../helpers/entities';
 import * as boxes from '../../interactions/boxes';
-import * as forms from '../../interactions/forms';
 import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
 import { BoxData } from '../../support/types';
@@ -12,7 +11,6 @@ import { BoxData } from '../../support/types';
  * Tests complete voting workflow from creation to results (without delegation)
  */
 test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
-
   // Phase constants matching the application
   const PHASES = {
     WILD: 0,
@@ -105,15 +103,11 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
     await idea1Card.click();
     await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
 
-    // Click approve button
-    const approveButton = adminPage.getByTestId('approve-button');
+    // Approving takes effect on click — only a rejection asks for anything further
+    const approveButton = adminPage.getByTestId(TEST_IDS.APPROVE_BUTTON);
     await expect(approveButton).toBeVisible();
     await approveButton.click();
-
-    // Confirm approval
-    const confirmButton = adminPage.getByTestId(TEST_IDS.CONFIRM_BUTTON);
-    await expect(confirmButton).toBeVisible();
-    await confirmButton.click();
+    await expect(approveButton).toHaveAttribute('aria-pressed', 'true');
   });
 
   await test.step('Navigate back to box and reject second idea', async () => {
@@ -126,18 +120,18 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
     await idea2Card.click();
     await adminPage.waitForURL((url) => url.pathname.includes('/idea'));
 
-    // Click reject button
-    const rejectButton = adminPage.getByTestId('reject-button');
+    // Rejecting goes through a dialog: the argument is required before it is written
+    const rejectButton = adminPage.getByTestId(TEST_IDS.REJECT_BUTTON);
     await expect(rejectButton).toBeVisible();
     await rejectButton.click();
 
-    // Fill rejection justification
-    await forms.fillMarkdownForm(adminPage, 'approval_comment', 'This idea does not meet the requirements.');
+    await adminPage
+      .getByTestId('rejection-form-comment')
+      .locator('[contenteditable="true"]')
+      .fill('This idea does not meet the requirements.');
 
-    // Confirm rejection
-    const confirmButton = adminPage.getByTestId(TEST_IDS.CONFIRM_BUTTON);
-    await expect(confirmButton).toBeVisible();
-    await confirmButton.click();
+    await adminPage.getByTestId('rejection-form-submit').click();
+    await expect(rejectButton).toHaveAttribute('aria-pressed', 'true');
   });
 
   await test.step('Admin change Box phase to voting', async () => {
@@ -207,8 +201,7 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
   });
 
   await test.step('Verify results section is displayed', async () => {
-    // Just verify that results are visible - exact counts may vary
-    const resultsSection = userPage.getByText(/votes|stimmen|result/i).first();
-    await expect(resultsSection).toBeVisible();
+    // The distribution itself — exact counts may vary, so only its presence is asserted
+    await expect(userPage.getByTestId(TEST_IDS.VOTE_RESULTS)).toBeVisible();
   });
 });

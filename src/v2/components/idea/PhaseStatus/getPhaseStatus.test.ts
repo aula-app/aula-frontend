@@ -43,22 +43,9 @@ describe('getPhaseStatus', () => {
   it('archives a rejected idea in a muted badge once voting starts', () => {
     const archived = getPhaseStatus({ idea: idea({ approved: -1 }), phase: '30', vote: 1 });
     expect(archived?.label).toContain('rejected');
-    expect(archived?.colors).toBe('bg-neutral-light text-muted');
+    expect(archived?.colors).toBe('bg-neutral text-neutral-fg');
 
-    expect(getPhaseStatus({ idea: idea({ approved: -1 }), phase: '40', quorum: 50 })?.colors).toBe(
-      'bg-neutral-light text-muted'
-    );
-  });
-
-  it('keeps a rejection apart from the other muted results-phase outcomes', () => {
-    const rejected = getPhaseStatus({ idea: idea({ approved: -1 }), phase: '40', quorum: 50 })?.colors;
-    const notSelected = getPhaseStatus({ idea: idea(), phase: '40' })?.colors;
-    const quorumMissed = getPhaseStatus({ idea: idea(), phase: '40', quorum: 50 })?.colors;
-    const votedNeutral = getPhaseStatus({ idea: idea(), phase: '30', vote: 0 })?.colors;
-
-    expect(rejected).not.toBe(notSelected);
-    expect(rejected).not.toBe(quorumMissed);
-    expect(rejected).not.toBe(votedNeutral);
+    expect(getPhaseStatus({ idea: idea({ approved: -1 }), phase: '40' })?.colors).toBe('bg-neutral text-neutral-fg');
   });
 
   it('keeps the approval-phase rejection loud', () => {
@@ -69,35 +56,28 @@ describe('getPhaseStatus', () => {
     expect(getPhaseStatus({ idea: idea({ approved: -1 }), phase: '10' })).toBeNull();
   });
 
-  it('marks winners in the results phase', () => {
-    expect(getPhaseStatus({ idea: idea({ is_winner: 1 }), phase: '40', quorum: 50 })?.label).toContain('winner');
+  it('marks an idea the admin is taking forward', () => {
+    expect(getPhaseStatus({ idea: idea({ is_winner: 1 }), phase: '40' })?.label).toContain('takenForward');
   });
 
-  it('never calls a losing idea a winner, whatever shape the flag arrives in', () => {
-    for (const lost of [-1, '-1', 0, '0']) {
-      const status = getPhaseStatus({ idea: idea({ is_winner: lost as unknown as number }), phase: '40' });
-      expect(status?.label).not.toContain('winner');
-    }
+  it('marks an idea the admin turned down, whatever turnout it drew', () => {
+    const turned_down = idea({ is_winner: -1, number_of_votes: 9, number_of_users: 10 });
+    const status = getPhaseStatus({ idea: turned_down, phase: '40' });
+    expect(status?.label).toContain('notTakenForward');
+    expect(status?.colors).toBe('bg-error text-error-fg');
   });
 
-  it('still reads a winner sent as a string, as the API sends it', () => {
-    const status = getPhaseStatus({ idea: idea({ is_winner: '1' as unknown as number }), phase: '40' });
-    expect(status?.label).toContain('winner');
+  it('reads a verdict sent as a string, as the API sends it', () => {
+    expect(
+      getPhaseStatus({ idea: idea({ is_winner: '1' as unknown as IdeaType['is_winner'] }), phase: '40' })?.label
+    ).toContain('takenForward');
+    expect(
+      getPhaseStatus({ idea: idea({ is_winner: '-1' as unknown as IdeaType['is_winner'] }), phase: '40' })?.label
+    ).toContain('notTakenForward');
   });
 
-  it('weighs turnout against the quorum for non-winners', () => {
-    const turnout = idea({ number_of_votes: 6, number_of_users: 10 });
-    expect(getPhaseStatus({ idea: turnout, phase: '40', quorum: 50 })?.label).toContain('quorumReached');
-    expect(getPhaseStatus({ idea: turnout, phase: '40', quorum: 80 })?.label).toContain('quorumMissed');
-  });
-
-  it('does not claim a missed quorum when none is configured', () => {
-    expect(getPhaseStatus({ idea: idea({ number_of_votes: 6, number_of_users: 10 }), phase: '40' })?.label).toContain(
-      'notSelected'
-    );
-  });
-
-  it('does not divide by zero when a box has no eligible users', () => {
-    expect(getPhaseStatus({ idea: idea(), phase: '40', quorum: 50 })?.label).toContain('quorumMissed');
+  it('leaves an idea nobody has ruled on waiting, however it polled', () => {
+    const polled = idea({ number_of_votes: 9, number_of_users: 10 });
+    expect(getPhaseStatus({ idea: polled, phase: '40' })?.label).toContain('waiting');
   });
 });
