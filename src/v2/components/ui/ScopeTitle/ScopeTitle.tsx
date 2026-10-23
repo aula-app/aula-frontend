@@ -25,6 +25,8 @@ type ScopeTitleProps = {
   /** Phase id, e.g. '10'. When set, the title reads inside the phase sentence, e.g. "3 ideas in voting",
    * and the icon becomes the phase icon. */
   phase?: string;
+  /** Words after the noun, e.g. "on 4 ideas". Ignored inside a phase sentence. */
+  suffix?: string;
 };
 
 const ScopeTitle = ({
@@ -37,6 +39,7 @@ const ScopeTitle = ({
   onToggle,
   defaultOpen = false,
   phase,
+  suffix,
 }: ScopeTitleProps) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -85,6 +88,7 @@ const ScopeTitle = ({
             <>
               {countLabel !== undefined && <span className="shrink-0">{countLabel}</span>}
               <span className="truncate capitalize">{nounLabel}</span>
+              {suffix && <span className="truncate">{suffix}</span>}
             </>
           )}
         </Heading>

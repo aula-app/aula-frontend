@@ -12,6 +12,8 @@ export interface DefaultUpdate {
   phase_id: string | null;
   room_id: string;
   title: string;
+  /** Votes only: 1 for, -1 against, 0 neutral. */
+  vote_value?: number;
 }
 
 export type ConfigResponse = {
