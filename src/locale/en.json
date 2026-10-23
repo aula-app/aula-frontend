@@ -140,6 +140,27 @@
       "rooms": {
         "singular": "Room",
         "plural": "Rooms"
+      },
+      "messages": {
+        "singular": "message",
+        "plural": "messages",
+        "sentOn": "on",
+        "archived": "Message archived",
+        "reject": "Reject",
+        "date": "date",
+        "select": "Select a message to read it",
+        "notFound": {
+          "title": "This message isn't available",
+          "description": "It may have been archived."
+        },
+        "types": {
+          "label": "Type",
+          "selected": "Selected types",
+          "messages": "Messages",
+          "requests": "Requests",
+          "reports": "Reports",
+          "bugs": "Bugs"
+        }
       }
     },
     "ui": {
@@ -176,7 +197,8 @@
         "more": "More options",
         "report": "Report content",
         "share": "Copy idea link",
-        "submit": "Submit"
+        "submit": "Submit",
+        "archive": "Archive"
       },
       "code": {
         "button": "Code: {{var}}",
@@ -276,7 +298,8 @@
         "ideas": "Number of ideas",
         "likes": "Number of likes",
         "status": "Status",
-        "confidence": "Match confidence"
+        "confidence": "Match confidence",
+        "type": "Type"
       },
       "toggle": "Toggle {{var}}",
       "count": {

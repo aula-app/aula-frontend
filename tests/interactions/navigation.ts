@@ -152,14 +152,3 @@ export const goToAnnouncementsSettings = async (page: Page, forceRefresh: boolea
   await ensureUrl(page, '/settings/announcements', forceRefresh);
 };
 
-export const goToReportsSettings = async (page: Page, forceRefresh: boolean = false) => {
-  await ensureUrl(page, '/settings/reports', forceRefresh);
-};
-
-export const goToBugsSettings = async (page: Page, forceRefresh: boolean = false) => {
-  await ensureUrl(page, '/settings/bugs', forceRefresh);
-};
-
-export const goToRequestsSettings = async (page: Page, forceRefresh: boolean = false) => {
-  await ensureUrl(page, '/settings/requests', forceRefresh);
-};

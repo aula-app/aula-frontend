@@ -76,6 +76,17 @@ export const TEST_IDS = {
   // Reports (ReportCard)
   ARCHIVE_REPORT_BUTTON: 'archive-report-button',
 
+  // Data requests (RequestActions)
+  REJECT_REQUEST_BUTTON: 'cancel-request',
+  CONFIRM_REQUEST_BUTTON: 'confirm-request',
+  CONFIRM_REQUEST_DIALOG: 'confirm-request-dialog',
+  CONFIRM_REQUEST_CANCEL: 'cancel-request-action',
+  CONFIRM_REQUEST_ACTION: 'confirm-request-action',
+
+  // Messages (Messages view, MessageDetail)
+  MESSAGE_TYPE_FILTER: 'message-type-filter',
+  ARCHIVE_MESSAGE_BUTTON: 'archive-message-button',
+
   // Toast notifications (Toast)
   TOAST_ERROR: 'toast-error',
   TOAST_SUCCESS: 'toast-success',

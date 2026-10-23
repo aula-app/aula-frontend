@@ -140,6 +140,27 @@
       "rooms": {
         "singular": "Raum",
         "plural": "Räume"
+      },
+      "messages": {
+        "singular": "Nachricht",
+        "plural": "Nachrichten",
+        "sentOn": "am",
+        "archived": "Nachricht archiviert",
+        "reject": "Ablehnen",
+        "date": "Datum",
+        "select": "Wähle eine Nachricht aus, um sie zu lesen",
+        "notFound": {
+          "title": "Diese Nachricht ist nicht verfügbar",
+          "description": "Vielleicht wurde sie archiviert."
+        },
+        "types": {
+          "label": "Typ",
+          "selected": "Ausgewählte Typen",
+          "messages": "Nachrichten",
+          "requests": "Anfragen",
+          "reports": "Berichte",
+          "bugs": "Fehler"
+        }
       }
     },
     "ui": {
@@ -176,7 +197,8 @@
         "more": "Mehr Optionen",
         "report": "Inhalt melden",
         "share": "Ideen-Link kopieren",
-        "submit": "Übermitteln"
+        "submit": "Übermitteln",
+        "archive": "Archivieren"
       },
       "code": {
         "button": "Code: {{var}}",
@@ -276,7 +298,8 @@
         "ideas": "Anzahl Ideen",
         "likes": "Anzahl Likes",
         "status": "Status",
-        "confidence": "Wahrscheinlichkeit der Übereinstimmung"
+        "confidence": "Wahrscheinlichkeit der Übereinstimmung",
+        "type": "Typ"
       },
       "toggle": "{{var}} umschalten",
       "count": {

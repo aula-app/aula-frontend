@@ -1,13 +1,14 @@
 import type { ComponentType } from 'react';
 import type { ICON_TYPE } from '@/v2/components/ui/Icon';
 import { checkPermissions } from '@/utils';
+import { MessagesChip, UpdatesChip } from './SidebarChips';
 
 export type NavItem = {
   path: string;
   icon: ICON_TYPE;
   title: string; // i18n key suffix — used as ui.navigation.${title}
   permission: () => boolean;
-  chip?: ComponentType; // display-only badge — must not render interactive elements (no buttons or links)
+  chip?: ComponentType; // display-only, no buttons or links; brings its own screen-reader text
 };
 
 export const SIDEBAR_ITEMS: NavItem[] = [
@@ -16,12 +17,14 @@ export const SIDEBAR_ITEMS: NavItem[] = [
     path: '/updates',
     icon: 'bell',
     permission: () => true,
+    chip: UpdatesChip,
   },
   {
     title: 'messages',
     path: '/messages',
     icon: 'message',
     permission: () => true,
+    chip: MessagesChip,
   },
   {
     title: 'users',
@@ -58,24 +61,6 @@ export const SIDEBAR_ITEMS: NavItem[] = [
     path: '/settings/announcements',
     icon: 'announcement',
     permission: () => checkPermissions('announcements', 'viewAll'),
-  },
-  {
-    title: 'reports',
-    path: '/settings/reports',
-    icon: 'report',
-    permission: () => checkPermissions('reports', 'viewAll'),
-  },
-  {
-    title: 'bugs',
-    path: '/settings/bugs',
-    icon: 'bug',
-    permission: () => checkPermissions('reports', 'viewAll'),
-  },
-  {
-    title: 'requests',
-    path: '/settings/requests',
-    icon: 'request',
-    permission: () => checkPermissions('requests', 'viewAll'),
   },
   {
     title: 'configuration',

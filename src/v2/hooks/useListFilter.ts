@@ -12,6 +12,7 @@ type SortableFields = {
   order_importance?: number;
   ideas_num?: number;
   sum_likes?: number;
+  msg_type?: number;
 };
 
 export type OrderKey = keyof SortableFields;
@@ -43,6 +44,7 @@ const orderConfig: Record<OrderKey, { labelKey: string; compare: (a: SortableFie
   },
   ideas_num: { labelKey: 'v2.ui.sort.ideas', compare: (a, b) => (b.ideas_num ?? 0) - (a.ideas_num ?? 0) },
   sum_likes: { labelKey: 'v2.ui.sort.likes', compare: (a, b) => (b.sum_likes ?? 0) - (a.sum_likes ?? 0) },
+  msg_type: { labelKey: 'v2.ui.sort.type', compare: (a, b) => Number(a.msg_type ?? 0) - Number(b.msg_type ?? 0) },
 };
 
 export interface ListFilterConfig<T> {

@@ -58,6 +58,17 @@ describe('useListFilter', () => {
     expect(result.current.visibleItems.map((i) => i.title)).toEqual(['Apple', 'Banana', 'Carrot']);
   });
 
+  it('groups by message type, which the API may send as a string', () => {
+    const messages = [
+      { msg_type: '6', title: 'request' },
+      { msg_type: 1, title: 'message' },
+      { msg_type: '4', title: 'report' },
+    ] as unknown as { msg_type: number; title: string }[];
+    const { result } = renderHook(() => useListFilter(messages, { searchFields: ['title'], orderKeys: ['msg_type'] }));
+    expect(result.current.visibleItems.map((i) => i.title)).toEqual(['message', 'report', 'request']);
+    expect(result.current.orderOptions).toEqual([{ value: 'msg_type', label: 'v2.ui.sort.type' }]);
+  });
+
   it('builds the sort options from the configured keys', () => {
     const { result } = renderHook(() => useListFilter(items, config));
     expect(result.current.orderOptions).toEqual([

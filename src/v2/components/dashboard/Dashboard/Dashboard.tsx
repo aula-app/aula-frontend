@@ -4,10 +4,10 @@ import PhaseCountLink from '@/v2/components/dashboard/PhaseCountLink';
 import Alert from '@/v2/components/ui/Alert';
 import Collapse from '@/v2/components/ui/Collapse';
 import Icon from '@/v2/components/ui/Icon/Icon';
+import { useMessageCount, useUpdateCount } from '@/v2/hooks/useActivityCounts';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
-import { useActivityCounts } from './useActivityCounts';
 import { useDashboard } from './useDashboard';
 
 const DASHBOARD_PHASES: `${RoomPhases}`[] = ['0', '10', '20', '30'];
@@ -20,12 +20,13 @@ interface DashboardProps {
 const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
   const { t } = useTranslation();
   const { counts, error } = useDashboard();
-  const activity = useActivityCounts();
+  const messageCount = useMessageCount();
+  const updateCount = useUpdateCount();
   const headingId = useId();
   const panelId = useId();
 
   return (
-    <section aria-labelledby={headingId} className="flex flex-col p-2 sm:p-4 sm:pb-0 bg-shadow m-2 mb-0 rounded-2xl">
+    <section aria-labelledby={headingId} className="flex flex-col p-2 sm:p-4 sm:pb-2 bg-shadow m-2 mb-0 rounded-2xl">
       <div className="flex items-center justify-between gap-2">
         <h2 id={headingId} className="min-w-0">
           <button
@@ -49,14 +50,14 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
             to="/messages"
             icon="message"
             label={t('ui.navigation.messages')}
-            count={activity.messages}
+            count={messageCount}
             badgeClass="bg-info text-info-fg"
           />
           <ActivityLink
             to="/updates"
             icon="bell"
             label={t('ui.navigation.updates')}
-            count={activity.updates}
+            count={updateCount}
             badgeClass="bg-discussion text-discussion-fg"
           />
         </nav>

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 
 type BaseButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement | HTMLAnchorElement>, 'children'> & {
-  color?: 'primary' | 'secondary' | 'error';
+  color?: 'primary' | 'secondary' | 'error' | 'success';
   to?: string;
 };
 
@@ -26,9 +26,11 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       ? 'text-current'
       : color === 'error'
         ? 'text-error-fg'
-        : color === 'secondary'
-          ? 'text-muted'
-          : 'text-foreground';
+        : color === 'success'
+          ? 'text-success-fg'
+          : color === 'secondary'
+            ? 'text-muted'
+            : 'text-foreground';
     const filled = color ? `bg-${color} text-${color}-fg font-bold` : 'bg-primary text-primary-fg font-bold';
 
     const classes = twMerge(
