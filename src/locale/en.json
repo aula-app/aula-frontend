@@ -202,6 +202,7 @@
       "actions": {
         "add": "Add {{var}}",
         "agree": "Agree",
+        "close": "Close",
         "print": "Print this page",
         "remove": "Remove {{var}}",
         "report": "Report a bug",

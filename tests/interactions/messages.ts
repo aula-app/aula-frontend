@@ -11,13 +11,12 @@ export const create = async (page: Page, data: types.MessageData) => {
 
     await formsInteractions.clickButton(page, 'add-messages-button');
 
-    await formsInteractions.selectAutocompleteOption(page, 'user-field-autocomplete', data.user.realName);
+    await formsInteractions.selectMultiAutocompleteOption(page, 'user-field-autocomplete-input', data.user.username);
 
     await formsInteractions.fillForm(page, 'message-headline', data.title);
     await formsInteractions.fillMarkdownForm(page, 'body', data.content);
 
     await formsInteractions.clickButton(page, 'submit-message-form');
-    await expect(page.getByTestId('submit-message-form')).not.toBeVisible();
 
     const row = page.locator('table tr').filter({ hasText: data.title });
     await expect(row).toBeVisible();
@@ -27,6 +26,26 @@ export const create = async (page: Page, data: types.MessageData) => {
     console.error('❌ Failed to create message for:', data.user.username, error);
     throw error;
   }
+};
+
+/**
+ * The inbox card for a message, found by its headline
+ * @param page - Recipient's page, on /messages
+ * @param headline - Message headline
+ */
+export const card = (page: Page, headline: string) =>
+  page.getByTestId('message-item').filter({ has: page.getByRole('heading', { name: headline, exact: true }) });
+
+/**
+ * Open a message from the inbox and wait for its detail
+ * @param page - Recipient's page
+ * @param headline - Message headline
+ */
+export const open = async (page: Page, headline: string) => {
+  await navigation.goToMessages(page);
+  await card(page, headline).getByRole('link').click();
+  await page.waitForURL((url) => /^\/messages\/.+/.test(url.pathname));
+  await expect(page.locator('[data-testid^="message-detail-"]')).toContainText(headline);
 };
 
 export const remove = async (page: Page, data: types.MessageData) => {

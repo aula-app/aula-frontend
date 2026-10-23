@@ -133,3 +133,32 @@ export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass:
   await page.getByTestId('submit-set-password').click();
   await login(page, data);
 };
+
+/**
+ * Ask an admin to change one of the user's own identity fields from the profile
+ * @param page - Requesting user's page
+ * @param field - Restricted profile field
+ * @param value - Requested new value
+ */
+export const requestProfileChange = async (
+  page: Page,
+  field: 'displayname' | 'realname' | 'username' | 'email',
+  value: string
+) => {
+  await navigation.goToProfile(page);
+
+  const input = page.locator(`#profile-${field}`);
+  await expect(input).toBeDisabled();
+  // The unlock toggle sits in the input's adornment, next to the field.
+  await input.locator('..').getByRole('button').click();
+  await expect(input).toBeEnabled();
+  await input.fill(value);
+
+  await page.locator('form').filter({ has: input }).locator('button[type="submit"]').click();
+
+  // ProfileEditor's dialog has no test ids; Confirm is its last action.
+  const dialog = page.getByRole('dialog').filter({ has: page.locator('#alert-dialog-title') });
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole('button').last().click();
+  await expect(dialog).toBeHidden();
+};

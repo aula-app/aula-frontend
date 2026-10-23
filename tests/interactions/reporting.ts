@@ -163,6 +163,16 @@ export const searchMessages = async (page: Page, text: string) => {
 };
 
 /**
+ * Expect a messages search to come back empty; an inbox with nothing left in it shows the empty state instead
+ * @param page - Page on /messages
+ */
+export const expectNoMessages = async (page: Page) => {
+  await expect(
+    page.getByTestId('messages-no-results-state').or(page.getByTestId('messages-empty-state'))
+  ).toBeVisible();
+};
+
+/**
  * Open the first message matching a text and check its detail shows it
  * @param page - Admin's page
  * @param text - Text in the message headline or body

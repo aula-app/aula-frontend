@@ -1,4 +1,4 @@
-import { expect, test } from '../../fixtures/aula-tests-fixture';
+import { test } from '../../fixtures/aula-tests-fixture';
 import { TEST_IDS } from '../../../src/test-ids';
 import * as entities from '../../helpers/entities';
 import * as ideas from '../../interactions/ideas';
@@ -70,6 +70,6 @@ test('Bug Reports', async ({ newPageFor }) => {
 
   await test.step('Admin verifies bug report is gone', async () => {
     await reporting.searchMessages(adminPage, bugReport);
-    await expect(adminPage.getByTestId('messages-no-results-state')).toBeVisible();
+    await reporting.expectNoMessages(adminPage);
   });
 });

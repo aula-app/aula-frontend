@@ -118,8 +118,8 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
       await expect(adminPage.getByTestId('box-form')).toBeVisible();
     };
 
-    // The picked ideas are the only plain list in the form; the autocomplete's is a listbox.
-    const pickedIdeas = () => adminPage.getByTestId('box-form').getByRole('list');
+    // While the picker popover is open, React Aria aria-hides the tags, so match them by test id rather than role.
+    const pickedIdeas = () => adminPage.locator('[data-testid^="box-form-ideas-tag-"]');
 
     await test.step('User creates two Ideas in the Room', async () => {
       await navigation.goToRoom(userPage, seededRoom.name);
@@ -137,8 +137,10 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
 
       await formInteractions.pickAutocompleteOption(adminPage, 'box-form-ideas', keptIdea.name);
       await formInteractions.pickAutocompleteOption(adminPage, 'box-form-ideas', droppedIdea.name);
-      await expect(pickedIdeas().getByRole('listitem')).toHaveCount(2);
+      await expect(pickedIdeas()).toHaveCount(2);
 
+      // The multi-select picker stays open over the submit button until focus moves elsewhere.
+      await adminPage.getByTestId('box-form-name').click();
       await formInteractions.clickButton(adminPage, 'box-form-submit');
       await expect(adminPage.getByTestId('box-form')).toBeHidden();
     });
@@ -151,10 +153,10 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
 
     await test.step('Admin removes one Idea in the same dialog', async () => {
       await openEditDialog();
-      await expect(pickedIdeas().getByRole('listitem')).toHaveCount(2);
+      await expect(pickedIdeas()).toHaveCount(2);
 
-      await pickedIdeas().getByRole('listitem').filter({ hasText: droppedIdea.name }).getByRole('button').click();
-      await expect(pickedIdeas().getByRole('listitem')).toHaveCount(1);
+      await pickedIdeas().filter({ hasText: droppedIdea.name }).getByRole('button').click();
+      await expect(pickedIdeas()).toHaveCount(1);
 
       await formInteractions.clickButton(adminPage, 'box-form-submit');
       await expect(adminPage.getByTestId('box-form')).toBeHidden();
@@ -173,6 +175,7 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
       await field.fill(droppedIdea.name);
       await expect(adminPage.getByRole('option', { name: droppedIdea.name })).toBeVisible();
 
+      await adminPage.getByTestId('box-form-name').click();
       await formInteractions.clickButton(adminPage, 'box-form-cancel');
       await expect(adminPage.getByTestId('box-form')).toBeHidden();
     });
