@@ -80,6 +80,14 @@ export const goToHome = async (page: Page) => {
   await expect(page.getByTestId(TEST_IDS.SCOPE_TITLE)).toBeVisible();
 };
 
+/**
+ * One of the dashboard's activity links (the sidebar links to the same paths); its name carries the new-items count
+ * @param page - Page on a view with the dashboard
+ * @param path - The link's target, e.g. '/messages'
+ */
+export const dashboardActivityLink = (page: Page, path: string) =>
+  page.locator('section').filter({ has: page.getByTestId('dashboard-toggle') }).locator(`a[href="${path}"]`);
+
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
   // Refresh the JWT so room memberships added after the stored token was issued
