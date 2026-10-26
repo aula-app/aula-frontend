@@ -13,9 +13,11 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: ReactNode;
+  /** Hides the title and close button; the title still labels the dialog. */
+  headless?: boolean;
 }
 
-const Modal = ({ open, onClose, title, children }: ModalProps) => {
+const Modal = ({ open, onClose, title, children, headless = false }: ModalProps) => {
   const { t } = useTranslation();
   const titleId = useId();
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -57,12 +59,14 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
           ${isVisible ? '' : 'translate-y-full'}`}
       >
         <div className="relative overflow-y-auto max-h-[90vh] p-4">
-          <div className="absolute top-2 right-2">
-            <IconButton aria-label={t('ui.common.dismiss')} onClick={onClose}>
-              <Icon type="close" aria-hidden="true" />
-            </IconButton>
-          </div>
-          <h2 id={titleId} className="mb-4 pr-8 text-lg font-semibold text-foreground">
+          {!headless && (
+            <div className="absolute top-2 right-2">
+              <IconButton aria-label={t('ui.common.dismiss')} onClick={onClose}>
+                <Icon type="close" aria-hidden="true" />
+              </IconButton>
+            </div>
+          )}
+          <h2 id={titleId} className={headless ? 'sr-only' : 'mb-4 pr-8 text-lg font-semibold text-foreground'}>
             {title}
           </h2>
           <UNSAFE_PortalProvider getContainer={() => dialogRef.current}>{children}</UNSAFE_PortalProvider>

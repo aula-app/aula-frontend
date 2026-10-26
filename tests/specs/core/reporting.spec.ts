@@ -1,6 +1,5 @@
 import { expect, test } from '../../fixtures/aula-tests-fixture';
 import { TEST_IDS } from '../../../src/test-ids';
-import * as settingsInteractions from '../../interactions/settings';
 import * as entities from '../../helpers/entities';
 import * as ideas from '../../interactions/ideas';
 import * as reporting from '../../interactions/reporting';
@@ -66,12 +65,11 @@ test('Bug Reports', async ({ newPageFor }) => {
   });
 
   await test.step('Admin archives the bug report', async () => {
-    await adminPage.getByTestId(TEST_IDS.ARCHIVE_REPORT_BUTTON).click();
+    await adminPage.getByTestId(TEST_IDS.ARCHIVE_MESSAGE_BUTTON).click();
   });
 
   await test.step('Admin verifies bug report is gone', async () => {
-    await navigation.goToBugsSettings(adminPage, true);
-    await settingsInteractions.applyFilter(adminPage, { option: 'body', value: bugReport });
-    await expect(adminPage.locator('text=' + bugReport).first()).not.toBeVisible();
+    await reporting.searchMessages(adminPage, bugReport);
+    await expect(adminPage.getByTestId('messages-no-results-state')).toBeVisible();
   });
 });

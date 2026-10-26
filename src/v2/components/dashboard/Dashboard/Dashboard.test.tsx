@@ -26,7 +26,7 @@ const renderDashboard = (open = true, onOpenChange = vi.fn()) =>
 beforeEach(() => {
   getDashboard.mockReset().mockResolvedValue({ data: { phase_counts: { 0: 4, 10: 1, 20: 0, 30: 2, 40: 9 } } });
   getUpdates.mockReset().mockResolvedValue({ count: 15 });
-  getPersonalMessages.mockReset().mockResolvedValue({ data: [{}, {}, {}] });
+  getPersonalMessages.mockReset().mockResolvedValue({ data: [{ status: 1 }, { status: 1 }, { status: 1 }] });
 });
 
 describe('Dashboard', () => {

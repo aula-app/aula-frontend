@@ -140,6 +140,27 @@
       "rooms": {
         "singular": "Raum",
         "plural": "Räume"
+      },
+      "messages": {
+        "singular": "Nachricht",
+        "plural": "Nachrichten",
+        "sentOn": "am",
+        "archived": "Nachricht archiviert",
+        "reject": "Ablehnen",
+        "date": "Datum",
+        "select": "Wähle eine Nachricht aus, um sie zu lesen",
+        "notFound": {
+          "title": "Diese Nachricht ist nicht verfügbar",
+          "description": "Vielleicht wurde sie archiviert."
+        },
+        "types": {
+          "label": "Typ",
+          "selected": "Ausgewählte Typen",
+          "messages": "Nachrichten",
+          "requests": "Anfragen",
+          "reports": "Berichte",
+          "bugs": "Fehler"
+        }
       }
     },
     "ui": {
@@ -176,7 +197,8 @@
         "more": "Mehr Optionen",
         "report": "Inhalt melden",
         "share": "Ideen-Link kopieren",
-        "submit": "Übermitteln"
+        "submit": "Übermitteln",
+        "archive": "Archivieren"
       },
       "code": {
         "button": "Code: {{var}}",
@@ -276,7 +298,8 @@
         "ideas": "Anzahl Ideen",
         "likes": "Anzahl Likes",
         "status": "Status",
-        "confidence": "Wahrscheinlichkeit der Übereinstimmung"
+        "confidence": "Wahrscheinlichkeit der Übereinstimmung",
+        "type": "Typ"
       },
       "toggle": "{{var}} umschalten",
       "count": {
@@ -703,18 +726,19 @@
     "accepted": "Deine Datenänderungsanfrage wurde akzeptiert.",
     "cancel": "Datenänderungsanfrage abgelehnt",
     "changeName": {
-      "body": "Für den Benutzer {{var}} wurde ein Datenänderungsverfahren beantragt. Er möchte seine {{old}} in {{new}} ändern",
-      "request": "Datenänderungsprozedur angefordert. Bitte warten Sie auf die Genehmigung.",
+      "body": "Benutzer*in {{var}} hat eine Datenänderung angefragt: „{{old}}“ zu „{{new}}“",
+      "request": "Datenänderung angefragt. Bitte warte auf die Genehmigung.",
       "title": "Datenänderungsanfrage für {{var}}"
     },
     "confirm": "Datenänderungsanfrage bestätigt",
     "confirmation": "Bist du sicher, dass du diese Anfrage bestätigen möchtest?",
     "confirmationTitle": "Anfrage bestätigen",
     "deleteAccount": {
-      "body": "Eine Datenlöschungsprozedur wurde für den Benutzer {{var}} angefordert",
+      "body": "Benutzer*in {{var}} hat eine Kontolöschung angefordert",
       "button": "Kontolöschen anfordern",
       "confirm": "Bist du sicher, dass du dein Konto löschen möchtest? Alle deine Daten werden verloren gehen. Diese Aktion kann nicht rückgängig gemacht werden",
-      "title": "Kontolöschungsanfrage für {{var}}"
+      "title": "Kontolöschungsanfrage für {{var}}",
+      "request": "Kontolöschung angefragt. Bitte warte auf die Genehmigung."
     },
     "denied": "Deine Datenänderungsanfrage wurde abgelehnt. Bitte kontaktiere den Schuladministrator für weitere Informationen.",
     "exportData": {
@@ -724,10 +748,8 @@
     },
     "label": "Anfragen",
     "updateData": {
-      "body": "Eine Datenaktualisierungsprozedur wurde für den Benutzer {{var}} angefordert",
       "confirm": "Bist du sicher, dass du die Aktualisierung deiner Felder anfordern möchtest?",
       "headline": "Datenaktualisierungsanfrage",
-      "title": "Kontodatenaktualisierungsanfrage für {{var}}",
       "validation": "Diese Aktion muss von einem Administrator validiert werden, um wirksam zu werden."
     }
   },

@@ -30,6 +30,8 @@ interface ComboBoxProps {
   tagsLabel: string;
   loading?: boolean;
   disabled?: boolean;
+  /** Compact height, matching other dense inputs. */
+  dense?: boolean;
   className?: string;
   'data-testid'?: string;
 }
@@ -43,6 +45,7 @@ const ComboBox = ({
   tagsLabel,
   loading = false,
   disabled = false,
+  dense = false,
   className,
   'data-testid': dataTestId,
 }: ComboBoxProps) => {
@@ -57,15 +60,17 @@ const ComboBox = ({
       menuTrigger="focus"
       allowsEmptyCollection
       isDisabled={disabled || loading || options.length === 0}
-      className={twMerge('group/combobox relative flex flex-col gap-2', className)}
+      className={twMerge('group/combobox relative flex flex-col', dense ? 'gap-1' : 'gap-2', className)}
     >
       <div className="relative">
         <Input
           placeholder={placeholder ?? ' '}
           data-testid={dataTestId}
-          className={twMerge(fieldBoxClasses({ hasEnd: true }), 'placeholder:text-muted')}
+          className={twMerge(fieldBoxClasses({ dense, hasEnd: true }), 'placeholder:text-muted')}
         />
-        <FieldLabel floated={placeholder ? true : undefined}>{label}</FieldLabel>
+        <FieldLabel dense={dense} floated={placeholder ? true : undefined}>
+          {label}
+        </FieldLabel>
         <Button className="absolute inset-y-0 right-0 flex items-center pl-2 pr-3 cursor-pointer outline-none data-disabled:cursor-not-allowed">
           <Icon
             type="chevronDown"
