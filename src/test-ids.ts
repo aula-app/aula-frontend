@@ -87,6 +87,9 @@ export const TEST_IDS = {
   MESSAGE_TYPE_FILTER: 'message-type-filter',
   ARCHIVE_MESSAGE_BUTTON: 'archive-message-button',
 
+  // Updates (Updates view)
+  UPDATE_TYPE_FILTER: 'update-type-filter',
+
   // Toast notifications (Toast)
   TOAST_ERROR: 'toast-error',
   TOAST_SUCCESS: 'toast-success',

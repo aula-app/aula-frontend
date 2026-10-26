@@ -161,6 +161,32 @@
           "reports": "Berichte",
           "bugs": "Fehler"
         }
+      },
+      "updates": {
+        "singular": "Aktualisierung",
+        "plural": "Aktualisierungen",
+        "onIdeas_one": "zu {{count}} Idee",
+        "onIdeas_other": "zu {{count}} Ideen",
+        "subtitle": "Neue Aktivitäten zu deinen Ideen seit deinem letzten Besuch",
+        "activity": {
+          "comments_one": "{{count}} neuer Kommentar",
+          "comments_other": "{{count}} neue Kommentare",
+          "votes_one": "{{count}} neue Stimme",
+          "votes_other": "{{count}} neue Stimmen",
+          "for": "{{count}} dafür",
+          "against": "{{count}} dagegen",
+          "neutral": "{{count}} neutral"
+        },
+        "empty": {
+          "title": "Keine neuen Aktualisierungen",
+          "description": "Komm später wieder!"
+        },
+        "types": {
+          "label": "Typ",
+          "selected": "Ausgewählte Typen",
+          "votes": "Stimmen",
+          "comments": "Kommentare"
+        }
       }
     },
     "ui": {
