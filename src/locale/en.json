@@ -724,20 +724,21 @@
   },
   "requests": {
     "accepted": "Your data change request has been accepted.",
-    "cancel": "Data request change denied",
+    "cancel": "Data change request denied",
     "changeName": {
-      "body": "A data change procedure was requested for user {{var}}. They want to change their {{old}} to {{new}}",
-      "request": "Data change procedure requested. Please wait for approval.",
+      "body": "User {{var}} requested a data change: “{{old}}” to “{{new}}”",
+      "request": "Data change requested. Please wait for approval.",
       "title": "Data change request for {{var}}"
     },
     "confirm": "Data request change confirmed",
     "confirmation": "Are you sure you want to confirm this request?",
     "confirmationTitle": "Confirm request",
     "deleteAccount": {
-      "body": "A data deletion procedure was requested for user {{var}}",
+      "body": "User {{var}} has requested an account deletion",
       "button": "Request account deletion",
       "confirm": "Are you sure you want to delete your account? All your data will be lost. This action cannot be undone",
-      "title": "Account deletion request for {{var}}"
+      "title": "Account deletion request for {{var}}",
+      "request": "Account deletion requested. Please wait for confirmation."
     },
     "denied": "Your data change request has been denied. Please contact the school admin for further information.",
     "exportData": {
@@ -747,10 +748,8 @@
     },
     "label": "Requests",
     "updateData": {
-      "body": "A data update procedure was requested for user {{var}}",
       "confirm": "Are you sure you want to request the update of your fields?",
       "headline": "Data update request",
-      "title": "Account data update request for {{var}}",
       "validation": "This action should be validated by an Admin to take place."
     }
   },
