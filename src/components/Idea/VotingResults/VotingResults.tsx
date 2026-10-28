@@ -118,7 +118,7 @@ const VotingResults: React.FC<Props> = ({ idea, quorum, onReload }) => {
       {checkPermissions('ideas', 'setWinner') && (
         <FormControlLabel
           control={<Switch onChange={handleSetWinner} checked={Boolean(idea.is_winner)} sx={{ ml: 3 }} />}
-          label={t('settings.columns.is_winner')}
+          label={t('scopes.ideas.mark_winner')}
           sx={{ mt: 2 }}
         />
       )}

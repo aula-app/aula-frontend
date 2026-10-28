@@ -525,17 +525,15 @@
       "approve": "Approve",
       "approved": "This idea was approved.",
       "inPhase": "{{var}} in {{phase}} phase",
-      "marked_not_winner": "This idea is not selected as a winner.",
-      "marked_winner": "This idea is selected as a winner.",
       "name": "Idea",
       "noQuorum": "No quorum set.",
-      "not_marked_yet": "This idea is still not marked as a winner.",
       "placeholder": "Search ideas...",
       "plural": "Ideas",
       "reject": "Reject",
       "rejected": "This idea was not approved.",
       "waiting": "This idea is waiting for approval.",
-      "winner": "This idea has won."
+      "winner": "This idea has passed.",
+      "mark_winner": "Mark idea as passed"
     },
     "messages": {
       "name": "Message",
@@ -643,7 +641,6 @@
       "infinite_votes": "Infinite Votes",
       "info": "Info",
       "internal_info": "Internal Info",
-      "is_winner": "Mark as Winner",
       "language_id": "Language",
       "last_login": "Last Login",
       "last_update": "Last Update",
