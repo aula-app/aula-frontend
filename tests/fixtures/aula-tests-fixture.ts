@@ -6,6 +6,9 @@ import * as shared from '../support/utils';
 import { FILTER_EXCLUDED_RESOURCES, getStorageStatePath } from './utils';
 import { DbBackchannel } from './db-backchannel';
 import { TestConstants } from '../support/config';
+import { exec as _exec } from 'node:child_process';
+import { promisify } from 'node:util';
+const exec = promisify(_exec);
 
 type WorkerFixtures = {
   // Fixture to determine the DB instance_code based on worker's parallelIndex
@@ -43,6 +46,12 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
   }, { scope: 'worker' }],
 
   baselineLoaded: [async ({ dbInstanceCode }, use) => {
+    // TODO less hacky
+    const index = +(dbInstanceCode.substring(4));
+    const { stdout, stderr } = await exec(`./artisan tenants:create-test --index=${index}`);
+    // TODO nicer, check for errors
+    console.log(stdout);
+
     const dbBackchannel = await DbBackchannel.getByInstanceCode(dbInstanceCode);
     await dbBackchannel.truncateAll();
     await dbBackchannel.seed();
