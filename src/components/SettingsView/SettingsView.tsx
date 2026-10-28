@@ -43,7 +43,6 @@ const SettingsView = <T extends SettingType>({
     limit,
     offset,
     orderby,
-    filters,
     edit,
     setAsc,
     setLimit,

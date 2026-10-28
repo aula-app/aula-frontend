@@ -190,7 +190,7 @@ export const useFocusTrap = (
 export const useModalAnnouncement = (
   isOpen: boolean,
   title: string,
-  translationFunction: (key: string, options?: any) => string
+  translationFunction: (key: string, options?: Record<string, unknown>) => string
 ) => {
   // Track previous open state to detect changes
   const wasOpen = useRef(false);

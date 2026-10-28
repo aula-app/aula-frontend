@@ -2,12 +2,12 @@ import { AppIconButton } from '@/components';
 import { PossibleFields } from '@/types/Scopes';
 import { InputAdornment, TextField } from '@mui/material';
 import { useState } from 'react';
-import { Control, Controller } from 'react-hook-form';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-interface Props {
-  name: keyof PossibleFields;
-  control: Control<any, any>;
+interface Props<T extends FieldValues = FieldValues> {
+  name: Path<T>;
+  control: Control<T>;
   className?: string;
   placeholder?: string;
   tabIndex?: number;
@@ -27,7 +27,13 @@ const autocompleteTokens: Partial<Record<keyof PossibleFields, string>> = {
   email: 'email',
 };
 
-const RestrictedField = ({ name, control, locked = false, required = false, ...restOfProps }: Props) => {
+const RestrictedField = <T extends FieldValues = FieldValues>({
+  name,
+  control,
+  locked = false,
+  required = false,
+  ...restOfProps
+}: Props<T>) => {
   const { t } = useTranslation();
 
   const [disabled, setDisabled] = useState(true);
@@ -50,7 +56,7 @@ const RestrictedField = ({ name, control, locked = false, required = false, ...r
           helperText={typeof fieldState.error?.message === 'string' ? fieldState.error.message : undefined}
           slotProps={{
             htmlInput: {
-              autoComplete: autocompleteTokens[name],
+              autoComplete: autocompleteTokens[name as keyof PossibleFields],
             },
             input: {
               'aria-labelledby': `profile-${name}-label`,
