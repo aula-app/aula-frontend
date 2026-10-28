@@ -1,3 +1,3 @@
 import PhasesView from './PhasesView';
 
-export { PhasesView as default,  };
+export { PhasesView as default };

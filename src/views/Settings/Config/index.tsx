@@ -1,3 +1,3 @@
 import ConfigView from './ConfigView';
 
-export { ConfigView as default,  };
+export { ConfigView as default };

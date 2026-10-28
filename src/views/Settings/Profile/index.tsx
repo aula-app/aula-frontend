@@ -1,3 +1,3 @@
 import UserProfileView from './UserProfileView';
 
-export {  UserProfileView };
+export { UserProfileView };

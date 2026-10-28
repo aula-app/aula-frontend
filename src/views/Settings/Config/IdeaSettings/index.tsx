@@ -1,3 +1,3 @@
 import IdeaSettings from './IdeaSettings';
 
-export { IdeaSettings as default,  };
+export { IdeaSettings as default };

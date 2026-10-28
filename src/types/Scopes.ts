@@ -93,10 +93,10 @@ export interface IdeaType {
   room_id: number;
   room_hash_id: string;
   status: StatusTypes;
-  is_winner: number;
+  is_winner: -1 | 0 | 1;
   winner_comment: string;
   approved: -1 | 0 | 1;
-  approval_comment: null;
+  approval_comment: string | null;
   custom_field1: string | null;
   custom_field2: string | null;
   number_of_votes: number;
@@ -136,6 +136,7 @@ export interface RoomType {
   id: number;
   internal_info: string;
   last_update: string;
+  number_of_users: number;
   order_importance: number;
   restrict_to_roomusers_only: number;
   phase_duration_0: number;
