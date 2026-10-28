@@ -4,16 +4,24 @@ import fs from 'fs';
 
 export class DbBackchannel {
   private static _instances: { [instanceCode: string]: DbBackchannel } = {};
-  public static getByInstanceCode = async (instanceCode: string) => {
-    if (!this._instances[instanceCode]) {
-      const centralConnection = await mariadb.createConnection({
+  private static _central: mariadb.Connection;
+
+  public static getCentral = async () => {
+    if (!this._central) {
+      this._central = await mariadb.createConnection({
         host: process.env.DB_HOST,
         port: Number(process.env.DB_PORT),
         user: process.env.DB_USER,
         password: process.env.DB_PASS,
         database: process.env.DB_NAME,
       });
+    }
+    return this._central;
+  }
 
+  public static getByInstanceCode = async (instanceCode: string) => {
+    if (!this._instances[instanceCode]) {
+      const centralConnection = await this.getCentral();
       let result;
       try {
         result = await centralConnection.query<{ data: { tenancy_db_username: string; tenancy_db_password: string; tenancy_db_name: string } }[]>(
@@ -49,6 +57,13 @@ export class DbBackchannel {
    */
   private constructor() { }
   private tenantConnectionsPool!: mariadb.Pool;
+
+  // TODO very likely remove this, in favor of artisan call
+  public static async setupTenants(): Promise<void> {
+    const sql = fs.readFileSync(path.join(path.resolve(__dirname, 'sql'), '090-tenants.sql'), 'utf8');
+    const conn = await DbBackchannel.getCentral();
+    conn.query(sql);
+  }
 
   public async truncateAll(): Promise<void> {
     await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '100-truncate-all.sql'));
