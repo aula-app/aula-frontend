@@ -32,6 +32,9 @@ services:
     ports:
       - "8000:80"
     env_file: ${BACKEND_DIR}/.env
+    # TODO? add all "fixed" env things, or provide .env.d-c?
+    environment:
+      DB_PORT: 3306
     depends_on:
       mariadb:
         condition: service_healthy
