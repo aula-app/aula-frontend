@@ -404,7 +404,7 @@ const IdpSyncView: React.FC = () => {
             onChange={selectStep}
             label={t('v2.ui.idpSync.steps')}
             // h-12 is what the toolbar's sticky offset is measured against.
-            tabListClassName="sticky top-0 z-20 h-12 bg-background"
+            tabListClassName="sticky top-0 z-20 h-12 bg-background -mx-2 px-2 sm:-mx-4 sm:px-4"
             data-testid="idp-sync-tabs"
             tabs={[
               {

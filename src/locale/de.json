@@ -154,7 +154,7 @@
           "pending": "Vorgeschlagen — bestätige sie, sonst bleibt beides getrennt.",
           "create": "Nur beim Anbieter — ein neues aula-Konto entsteht.",
           "keep": "Nur in aula — bleibt unverändert.",
-          "empty": "Leerer Platz, auf dem du eine Zuordnung vornehmen kannst — zieh eine Karte hierher oder wähle eine aus und bestimme, wohin sie gehört."
+          "empty": "Leerer Platz für eine Zuordnung."
         },
         "legendTitle": "Legende:"
       }

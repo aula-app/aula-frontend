@@ -66,7 +66,7 @@ const ReviewTable: React.FC<Props> = ({
   return (
     <div className="flex flex-col gap-3">
       <div
-        className="sticky top-12 z-10 -mt-4 -mb-3 flex flex-wrap items-center gap-2 bg-background pt-4 pb-3"
+        className="sticky top-12 z-10 -mt-4 -mb-3 flex flex-wrap items-center gap-2 bg-background pt-4 pb-3 -mx-2 px-2 sm:-mx-4 sm:px-4"
         data-keeps-pick
       >
         <div className="w-64">
@@ -97,9 +97,14 @@ const ReviewTable: React.FC<Props> = ({
       <div className="-mx-1 sm:-mx-2">
         <table
           // No own scroller: its bar would sit under the last row.
-          className="w-full min-w-2xl table-fixed border-separate border-spacing-x-1 border-spacing-y-2 text-sm sm:border-spacing-x-2"
+          className="w-full min-w-2xl table-fixed border-separate border-spacing-x-1 border-spacing-y-3 text-sm sm:border-spacing-x-2"
           data-testid={`idp-review-table-${kind}`}
         >
+          <colgroup>
+            <col className="w-[30%]" />
+            <col className="w-[30%]" />
+            <col className="w-[40%]" />
+          </colgroup>
           <thead>
             <tr className="text-left opacity-70">
               <th scope="col" className="px-3 font-normal">
@@ -126,9 +131,7 @@ const ReviewTable: React.FC<Props> = ({
                   ? t('v2.ui.idpSync.pendingContested', { count: rivals })
                   : null;
 
-              const tag = (
-                <OutcomeTag kind={kindOfRow} className="self-start" data-testid={`idp-review-outcome-${row.id}`} />
-              );
+              const tag = <OutcomeTag kind={kindOfRow} data-testid={`idp-review-outcome-${row.id}`} />;
 
               return (
                 <tr
@@ -155,12 +158,12 @@ const ReviewTable: React.FC<Props> = ({
                     members={rowMembers}
                   />
 
-                  <td className={`${CARD} ${tone} ${problem ? 'ring-2 ring-error-fg' : ''}`}>
-                    <span className={`flex flex-col gap-2 min-w-0 ${CONTENT}`}>
+                  <td className={`${CARD} ${tone} relative ${problem ? 'ring-2 ring-error-fg' : ''}`}>
+                    {/* On the border, so the row keeps no line for it. */}
+                    <span className="absolute top-0 right-0 z-1 translate-x-1 -translate-y-1/2">
                       {kindOfRow === 'pending' ? (
                         <Tooltip
                           tapToShow
-                          wrapperClassName="self-start"
                           className="px-3 text-sm text-text-primary"
                           content={t('v2.ui.idpSync.pending')}
                           data-testid={`idp-review-note-${row.id}`}
@@ -173,7 +176,9 @@ const ReviewTable: React.FC<Props> = ({
                       ) : (
                         tag
                       )}
+                    </span>
 
+                    <span className={`flex flex-wrap items-center gap-2 min-w-0 ${CONTENT}`}>
                       <EntityMeta
                         {...resultOf(row, isPerson)}
                         detailEnd={
@@ -187,7 +192,7 @@ const ReviewTable: React.FC<Props> = ({
                         }
                       />
                       {isPair(row) && (
-                        <span className="flex flex-wrap items-center justify-between gap-1">
+                        <span className="ml-auto flex shrink-0 items-center gap-1">
                           {kindOfRow === 'pending' && (
                             <button
                               type="button"
