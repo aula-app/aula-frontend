@@ -65,8 +65,6 @@ const ReviewTable: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col gap-3">
-      {/* The padding carries the surrounding gaps, so nothing shows through once the bar is pinned;
-          the negative margins hand that space back to the flow layout. */}
       <div
         className="sticky top-12 z-10 -mt-4 -mb-3 flex flex-wrap items-center gap-2 bg-background pt-4 pb-3"
         data-keeps-pick

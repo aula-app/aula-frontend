@@ -318,7 +318,6 @@ const IdpSyncView: React.FC = () => {
 
   return (
     <div className="flex flex-col h-full overflow-y-auto px-2 pb-2 sm:px-4 sm:pb-4 gap-4" data-testid="idp-sync-view">
-      {/* The scroller carries no top padding: sticky top-0 would leave rows showing through it. */}
       <h1 className="flex items-center gap-2 pt-2 sm:pt-4">
         <Icon type="cloudSync" />
         {t('v2.ui.idpSync.title')}

@@ -5,7 +5,6 @@ import { ICON, TAG } from './styles';
 
 interface Props {
   kind: RowKind;
-  /** Layout from the parent; the tag owns only its own look. */
   className?: string;
   as?: 'span' | 'dt';
   'data-testid'?: string;
