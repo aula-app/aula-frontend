@@ -147,7 +147,14 @@
           "create": "New in aula",
           "keep": "Unchanged"
         },
-        "checking": "Checking the sync status"
+        "checking": "Checking the sync status",
+        "legend": {
+          "merge": "Matched — the two become one account.",
+          "pending": "Proposed — confirm it, or both stay as they are.",
+          "create": "Only at the provider — a new aula account is made.",
+          "keep": "Only in aula — stays as it is."
+        },
+        "legendTitle": "Legend:"
       }
     },
     "form": {

@@ -147,7 +147,14 @@
           "create": "Neu in aula",
           "keep": "Unverändert"
         },
-        "checking": "Status der Synchronisation wird geprüft"
+        "checking": "Status der Synchronisation wird geprüft",
+        "legend": {
+          "merge": "Zugeordnet — beide werden ein Konto.",
+          "pending": "Vorgeschlagen — bestätige sie, sonst bleibt beides getrennt.",
+          "create": "Nur beim Anbieter — ein neues aula-Konto entsteht.",
+          "keep": "Nur in aula — bleibt unverändert."
+        },
+        "legendTitle": "Legende:"
       }
     },
     "form": {

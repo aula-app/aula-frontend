@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import CandidateFilter from './CandidateFilter';
 import ReviewTable from './ReviewTable';
+import Legend from './ReviewTable/Legend';
 import { useLeaveGuard } from './useLeaveGuard';
 import { arrange, membersByRoom, realName, resultName, rivalsOf, searchRows } from './ReviewTable/candidates';
 
@@ -316,8 +317,9 @@ const IdpSyncView: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto p-2 sm:p-4 gap-4" data-testid="idp-sync-view">
-      <h1 className="flex items-center gap-2">
+    <div className="flex flex-col h-full overflow-y-auto px-2 pb-2 sm:px-4 sm:pb-4 gap-4" data-testid="idp-sync-view">
+      {/* The scroller carries no top padding: sticky top-0 would leave rows showing through it. */}
+      <h1 className="flex items-center gap-2 pt-2 sm:pt-4">
         <Icon type="cloudSync" />
         {t('v2.ui.idpSync.title')}
       </h1>
@@ -393,12 +395,17 @@ const IdpSyncView: React.FC = () => {
 
       {(status === 'reviewing' || (status === 'connected' && loading)) && (
         <div className="flex flex-col gap-6">
-          <p className="text-sm opacity-70">{t('v2.ui.idpSync.guide')}</p>
+          <div className="flex flex-col gap-3">
+            <p className="mb-0! text-sm opacity-70">{t('v2.ui.idpSync.guide')}</p>
+            <Legend />
+          </div>
 
           <Tabs
             value={step}
             onChange={selectStep}
             label={t('v2.ui.idpSync.steps')}
+            // h-12 is what the toolbar's sticky offset is measured against.
+            tabListClassName="sticky top-0 z-20 h-12 bg-background"
             data-testid="idp-sync-tabs"
             tabs={[
               {

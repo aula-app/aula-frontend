@@ -9,7 +9,8 @@ import { isPair, Members, resultOf, rivalsOf, rowKind, SORTS } from './candidate
 import MatchCell from './MatchCell';
 import MemberCount from './MemberCount';
 import EntityMeta from './EntityMeta';
-import { CARD, CHIP, CONTENT, FOCUS, ICON, TAG, toneFor } from './styles';
+import { CARD, CHIP, CONTENT, FOCUS, toneFor } from './styles';
+import OutcomeTag from './OutcomeTag';
 import { useMatching } from './useMatching';
 
 type Props = {
@@ -64,7 +65,12 @@ const ReviewTable: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-2" data-keeps-pick>
+      {/* The padding carries the surrounding gaps, so nothing shows through once the bar is pinned;
+          the negative margins hand that space back to the flow layout. */}
+      <div
+        className="sticky top-12 z-10 -mt-4 -mb-3 flex flex-wrap items-center gap-2 bg-background pt-4 pb-3"
+        data-keeps-pick
+      >
         <div className="w-64">
           <TextInput
             dense
@@ -123,13 +129,7 @@ const ReviewTable: React.FC<Props> = ({
                   : null;
 
               const tag = (
-                <span
-                  className={`${TAG[kindOfRow]} flex items-center gap-1 self-start rounded-full px-2 py-0.5 text-xs font-bold whitespace-nowrap`}
-                  data-testid={`idp-review-outcome-${row.id}`}
-                >
-                  <Icon type={ICON[kindOfRow]} size="1.1em" />
-                  {t(`v2.ui.idpSync.outcome.${kindOfRow}`)}
-                </span>
+                <OutcomeTag kind={kindOfRow} className="self-start" data-testid={`idp-review-outcome-${row.id}`} />
               );
 
               return (
