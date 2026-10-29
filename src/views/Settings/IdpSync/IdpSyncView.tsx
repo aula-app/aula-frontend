@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import CandidateFilter from './CandidateFilter';
 import ReviewTable from './ReviewTable';
+import Legend from './ReviewTable/Legend';
 import { useLeaveGuard } from './useLeaveGuard';
 import { arrange, membersByRoom, realName, resultName, rivalsOf, searchRows } from './ReviewTable/candidates';
 
@@ -37,6 +38,8 @@ const IdpSyncView: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [progress, setProgress] = useState<MigrationProgress | null>(null);
+  /** Null progress is a failed request; a null migration_status is a school without sync. */
+  const [checked, setChecked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Message | null>(null);
@@ -64,7 +67,12 @@ const IdpSyncView: React.FC = () => {
   const [problems, setProblems] = useState<Record<number, string>>({});
 
   const refreshProgress = useCallback(async () => {
-    setProgress(await getMigrationProgress());
+    const current = await getMigrationProgress();
+
+    setProgress(current);
+    setChecked(true);
+
+    return current;
   }, []);
 
   const loadKind = useCallback(async (kind: CandidateKind) => {
@@ -99,10 +107,10 @@ const IdpSyncView: React.FC = () => {
       // One-shot token: drop it so a reload does not retry.
       setSearchParams({}, { replace: true });
 
-      const current = await getMigrationProgress();
-      setProgress(current);
+      const current = await refreshProgress();
+      const identified = !!current?.migration_status && current.migration_status !== 'flagged';
 
-      if (!result.success && current?.migration_status === 'flagged') {
+      if (!result.success && !identified) {
         setError({
           title: t('v2.ui.idpSync.errors.connect.title'),
           body: t(`errors.sso.${result.error}`, t('v2.ui.idpSync.errors.connect.body')),
@@ -113,7 +121,7 @@ const IdpSyncView: React.FC = () => {
 
       setNotice(t('v2.ui.idpSync.connectReturned'));
     });
-  }, [searchParams, setSearchParams, t]);
+  }, [searchParams, setSearchParams, refreshProgress, t]);
 
   const connect = async () => {
     setBusy(true);
@@ -309,8 +317,8 @@ const IdpSyncView: React.FC = () => {
   );
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto p-2 sm:p-4 gap-4" data-testid="idp-sync-view">
-      <h1 className="flex items-center gap-2">
+    <div className="flex flex-col h-full overflow-y-auto px-2 pb-2 sm:px-4 sm:pb-4 gap-4" data-testid="idp-sync-view">
+      <h1 className="flex items-center gap-2 pt-2 sm:pt-4">
         <Icon type="cloudSync" />
         {t('v2.ui.idpSync.title')}
       </h1>
@@ -347,7 +355,19 @@ const IdpSyncView: React.FC = () => {
         </div>
       </Dialog>
 
-      {status === null && (
+      {!checked && <Loading label={t('v2.ui.idpSync.checking')} data-testid="idp-sync-checking" />}
+
+      {checked && !progress && (
+        <FeedbackState
+          image="/img/Paula_schlafend.svg"
+          alt={t('v2.alt.sleeping')}
+          title={t('v2.ui.idpSync.errors.progress.title')}
+          description={t('v2.ui.idpSync.errors.progress.body')}
+          data-testid="idp-sync-unreachable"
+        />
+      )}
+
+      {checked && !!progress && status === null && (
         <FeedbackState
           image="/img/Paula_schlafend.svg"
           alt={t('v2.alt.sleeping')}
@@ -374,12 +394,17 @@ const IdpSyncView: React.FC = () => {
 
       {(status === 'reviewing' || (status === 'connected' && loading)) && (
         <div className="flex flex-col gap-6">
-          <p className="text-sm opacity-70">{t('v2.ui.idpSync.guide')}</p>
+          <div className="flex flex-col gap-3">
+            <p className="mb-0! text-sm opacity-70">{t('v2.ui.idpSync.guide')}</p>
+            <Legend />
+          </div>
 
           <Tabs
             value={step}
             onChange={selectStep}
             label={t('v2.ui.idpSync.steps')}
+            // h-12 is what the toolbar's sticky offset is measured against.
+            tabListClassName="sticky top-0 z-20 h-12 bg-background -mx-2 px-2 sm:-mx-4 sm:px-4"
             data-testid="idp-sync-tabs"
             tabs={[
               {

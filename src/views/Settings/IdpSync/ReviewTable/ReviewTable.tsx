@@ -3,12 +3,14 @@ import { CandidateKind, MergeCandidate } from '@/services/idpMigration';
 import { useTranslation } from 'react-i18next';
 import SortSelect from '@/v2/components/input/SortSelect';
 import TextInput from '@/v2/components/input/TextInput';
+import Tooltip from '@/v2/components/ui/Tooltip';
 import { useListSort } from '@/v2/hooks/useListSort';
 import { isPair, Members, resultOf, rivalsOf, rowKind, SORTS } from './candidates';
 import MatchCell from './MatchCell';
 import MemberCount from './MemberCount';
 import EntityMeta from './EntityMeta';
-import { CARD, CHIP, CONTENT, toneFor } from './styles';
+import { CARD, CHIP, CONTENT, FOCUS, toneFor } from './styles';
+import OutcomeTag from './OutcomeTag';
 import { useMatching } from './useMatching';
 
 type Props = {
@@ -63,7 +65,10 @@ const ReviewTable: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center gap-2" data-keeps-pick>
+      <div
+        className="sticky top-12 z-10 -mt-4 -mb-3 flex flex-wrap items-center gap-2 bg-background pt-4 pb-3 -mx-2 px-2 sm:-mx-4 sm:px-4"
+        data-keeps-pick
+      >
         <div className="w-64">
           <TextInput
             dense
@@ -92,9 +97,14 @@ const ReviewTable: React.FC<Props> = ({
       <div className="-mx-1 sm:-mx-2">
         <table
           // No own scroller: its bar would sit under the last row.
-          className="w-full min-w-2xl table-fixed border-separate border-spacing-x-1 border-spacing-y-2 text-sm sm:border-spacing-x-2"
+          className="w-full min-w-2xl table-fixed border-separate border-spacing-x-1 border-spacing-y-3 text-sm sm:border-spacing-x-2"
           data-testid={`idp-review-table-${kind}`}
         >
+          <colgroup>
+            <col className="w-[30%]" />
+            <col className="w-[30%]" />
+            <col className="w-[40%]" />
+          </colgroup>
           <thead>
             <tr className="text-left opacity-70">
               <th scope="col" className="px-3 font-normal">
@@ -111,10 +121,17 @@ const ReviewTable: React.FC<Props> = ({
           <tbody>
             {shown.map((row) => {
               const kindOfRow = rowKind(row);
-              const tone = toneFor(kindOfRow, isPerson);
+              const tone = toneFor(kindOfRow);
               const rowMembers = members?.get(row.id);
               const rivals = kindOfRow === 'pending' ? rivalsOf(all, row).length : 0;
               const problem = problems[row.id];
+              const warning = problem
+                ? t(`v2.ui.idpSync.problems.${problem}`, t('v2.ui.idpSync.problems.default'))
+                : rivals > 0
+                  ? t('v2.ui.idpSync.pendingContested', { count: rivals })
+                  : null;
+
+              const tag = <OutcomeTag kind={kindOfRow} data-testid={`idp-review-outcome-${row.id}`} />;
 
               return (
                 <tr
@@ -141,8 +158,27 @@ const ReviewTable: React.FC<Props> = ({
                     members={rowMembers}
                   />
 
-                  <td className={`${CARD} ${tone} ${problem ? 'ring-2 ring-error-fg' : ''}`}>
-                    <span className={`flex items-center gap-2 min-w-0 ${CONTENT}`}>
+                  <td className={`${CARD} ${tone} relative ${problem ? 'ring-2 ring-error-fg' : ''}`}>
+                    {/* On the border, so the row keeps no line for it. */}
+                    <span className="absolute top-0 right-0 z-1 translate-x-1 -translate-y-1/2">
+                      {kindOfRow === 'pending' ? (
+                        <Tooltip
+                          tapToShow
+                          className="px-3 text-sm text-text-primary"
+                          content={t('v2.ui.idpSync.pending')}
+                          data-testid={`idp-review-note-${row.id}`}
+                        >
+                          {/* Focusable, or the tooltip is unreachable by keyboard. */}
+                          <span tabIndex={0} className={`cursor-help rounded-full ${FOCUS}`}>
+                            {tag}
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        tag
+                      )}
+                    </span>
+
+                    <span className={`flex flex-wrap items-center gap-2 min-w-0 ${CONTENT}`}>
                       <EntityMeta
                         {...resultOf(row, isPerson)}
                         detailEnd={
@@ -180,13 +216,9 @@ const ReviewTable: React.FC<Props> = ({
                         </span>
                       )}
                     </span>
-                    {(kindOfRow === 'pending' || !!problem) && (
-                      <p className="mb-0! px-3 pb-2 text-xs font-bold" data-testid={`idp-review-note-${row.id}`}>
-                        {problem
-                          ? t(`v2.ui.idpSync.problems.${problem}`, t('v2.ui.idpSync.problems.default'))
-                          : rivals > 0
-                            ? t('v2.ui.idpSync.pendingContested', { count: rivals })
-                            : t('v2.ui.idpSync.pending')}
+                    {!!warning && (
+                      <p className="mb-0! px-3 pb-2 text-xs font-bold" data-testid={`idp-review-warning-${row.id}`}>
+                        {warning}
                       </p>
                     )}
                   </td>
