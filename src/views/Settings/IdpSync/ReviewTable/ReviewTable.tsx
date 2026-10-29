@@ -3,12 +3,13 @@ import { CandidateKind, MergeCandidate } from '@/services/idpMigration';
 import { useTranslation } from 'react-i18next';
 import SortSelect from '@/v2/components/input/SortSelect';
 import TextInput from '@/v2/components/input/TextInput';
+import Tooltip from '@/v2/components/ui/Tooltip';
 import { useListSort } from '@/v2/hooks/useListSort';
 import { isPair, Members, resultOf, rivalsOf, rowKind, SORTS } from './candidates';
 import MatchCell from './MatchCell';
 import MemberCount from './MemberCount';
 import EntityMeta from './EntityMeta';
-import { CARD, CHIP, CONTENT, ICON, toneFor } from './styles';
+import { CARD, CHIP, CONTENT, FOCUS, ICON, TAG, toneFor } from './styles';
 import { useMatching } from './useMatching';
 
 type Props = {
@@ -115,6 +116,21 @@ const ReviewTable: React.FC<Props> = ({
               const rowMembers = members?.get(row.id);
               const rivals = kindOfRow === 'pending' ? rivalsOf(all, row).length : 0;
               const problem = problems[row.id];
+              const warning = problem
+                ? t(`v2.ui.idpSync.problems.${problem}`, t('v2.ui.idpSync.problems.default'))
+                : rivals > 0
+                  ? t('v2.ui.idpSync.pendingContested', { count: rivals })
+                  : null;
+
+              const tag = (
+                <span
+                  className={`${TAG[kindOfRow]} flex items-center gap-1 self-start rounded-full px-2 py-0.5 text-xs font-bold whitespace-nowrap`}
+                  data-testid={`idp-review-outcome-${row.id}`}
+                >
+                  <Icon type={ICON[kindOfRow]} size="1.1em" />
+                  {t(`v2.ui.idpSync.outcome.${kindOfRow}`)}
+                </span>
+              );
 
               return (
                 <tr
@@ -142,7 +158,24 @@ const ReviewTable: React.FC<Props> = ({
                   />
 
                   <td className={`${CARD} ${tone} ${problem ? 'ring-2 ring-error-fg' : ''}`}>
-                    <span className={`flex items-center gap-2 min-w-0 ${CONTENT}`}>
+                    <span className={`flex flex-col gap-2 min-w-0 ${CONTENT}`}>
+                      {kindOfRow === 'pending' ? (
+                        <Tooltip
+                          tapToShow
+                          wrapperClassName="self-start"
+                          className="px-3 text-sm text-text-primary"
+                          content={t('v2.ui.idpSync.pending')}
+                          data-testid={`idp-review-note-${row.id}`}
+                        >
+                          {/* Focusable, or the tooltip is unreachable by keyboard. */}
+                          <span tabIndex={0} className={`cursor-help rounded-full ${FOCUS}`}>
+                            {tag}
+                          </span>
+                        </Tooltip>
+                      ) : (
+                        tag
+                      )}
+
                       <EntityMeta
                         {...resultOf(row, isPerson)}
                         detailEnd={
@@ -155,45 +188,34 @@ const ReviewTable: React.FC<Props> = ({
                           )
                         }
                       />
-                      <span className="ml-auto flex shrink-0 items-center gap-1">
-                        {/* The row kind, in words: the card tints sit under 3:1 against the page. */}
-                        <span className="flex items-center gap-1 text-xs font-bold whitespace-nowrap">
-                          <Icon type={ICON[kindOfRow]} size="1.1em" />
-                          {t(`v2.ui.idpSync.outcome.${kindOfRow}`)}
-                        </span>
-                        {isPair(row) && (
-                          <>
-                            {kindOfRow === 'pending' && (
-                              <button
-                                type="button"
-                                className={`${CHIP} flex items-center gap-1`}
-                                onClick={() => onConfirm(row)}
-                                data-testid={`idp-review-confirm-${row.id}`}
-                              >
-                                <Icon type="check" size="1.1em" />
-                                {t('v2.ui.idpSync.actions.confirm')}
-                              </button>
-                            )}
+                      {isPair(row) && (
+                        <span className="flex flex-wrap items-center justify-between gap-1">
+                          {kindOfRow === 'pending' && (
                             <button
                               type="button"
                               className={`${CHIP} flex items-center gap-1`}
-                              onClick={() => onAssign(row, null)}
-                              data-testid={`idp-review-unlink-${row.id}`}
+                              onClick={() => onConfirm(row)}
+                              data-testid={`idp-review-confirm-${row.id}`}
                             >
-                              <Icon type="unlink" size="1.1em" />
-                              {t('v2.ui.idpSync.actions.unlink')}
+                              <Icon type="check" size="1.1em" />
+                              {t('v2.ui.idpSync.actions.confirm')}
                             </button>
-                          </>
-                        )}
-                      </span>
+                          )}
+                          <button
+                            type="button"
+                            className={`${CHIP} flex items-center gap-1`}
+                            onClick={() => onAssign(row, null)}
+                            data-testid={`idp-review-unlink-${row.id}`}
+                          >
+                            <Icon type="unlink" size="1.1em" />
+                            {t('v2.ui.idpSync.actions.unlink')}
+                          </button>
+                        </span>
+                      )}
                     </span>
-                    {(kindOfRow === 'pending' || !!problem) && (
-                      <p className="mb-0! px-3 pb-2 text-xs font-bold" data-testid={`idp-review-note-${row.id}`}>
-                        {problem
-                          ? t(`v2.ui.idpSync.problems.${problem}`, t('v2.ui.idpSync.problems.default'))
-                          : rivals > 0
-                            ? t('v2.ui.idpSync.pendingContested', { count: rivals })
-                            : t('v2.ui.idpSync.pending')}
+                    {!!warning && (
+                      <p className="mb-0! px-3 pb-2 text-xs font-bold" data-testid={`idp-review-warning-${row.id}`}>
+                        {warning}
                       </p>
                     )}
                   </td>

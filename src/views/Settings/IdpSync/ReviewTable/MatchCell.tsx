@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { avatarUrl, isAulaOnly, isProviderOnly, Members, rowKind } from './candidates';
 import MemberCount from './MemberCount';
 import EntityMeta from './EntityMeta';
-import { CARD, CONTENT, DIM, HOLE, PLAIN } from './styles';
+import { CARD, CONTENT, DIM, FOCUS, HOLE, PLAIN } from './styles';
 import { Matching } from './useMatching';
 
 type Side = 'aula' | 'provider';
@@ -156,7 +156,7 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
       {interactive ? (
         <button
           type="button"
-          className={`flex w-full items-center gap-2 text-left ${CONTENT} ${
+          className={`flex w-full items-center gap-2 rounded-xl text-left ${CONTENT} ${FOCUS} ${
             source && !picked ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'
           }`}
           draggable={source}

@@ -2,7 +2,7 @@ import Icon from '@/components/new/Icon/Icon';
 import Tooltip from '@/v2/components/ui/Tooltip';
 import { useTranslation } from 'react-i18next';
 import { Member } from './candidates';
-import { DIM, DOT, SOURCE_TEXT } from './styles';
+import { DIM, SOURCE_TEXT } from './styles';
 
 interface Props {
   /** Already sorted. */
@@ -37,7 +37,7 @@ const MemberCount = ({ members, id, label, 'data-testid': testId }: Props) => {
               >
                 {members.map(({ name, kind }, index) => (
                   <li key={`${index}-${name}`} className={`flex items-center gap-1.5 ${SOURCE_TEXT[kind]}`}>
-                    <span aria-hidden="true" className={`size-2 shrink-0 rounded-full ${DOT[kind]}`} />
+                    <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-current" />
                     <span className="truncate">{name}</span>
                     <span className="sr-only">, {t(`v2.ui.idpSync.memberKind.${kind}`)}</span>
                   </li>

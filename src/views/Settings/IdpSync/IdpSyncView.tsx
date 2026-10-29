@@ -37,7 +37,7 @@ const IdpSyncView: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [progress, setProgress] = useState<MigrationProgress | null>(null);
-  /** A null progress is a failed request; a null migration_status is a school without sync. */
+  /** Null progress is a failed request; a null migration_status is a school without sync. */
   const [checked, setChecked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -107,7 +107,6 @@ const IdpSyncView: React.FC = () => {
       setSearchParams({}, { replace: true });
 
       const current = await refreshProgress();
-      // Anything past `flagged` means the school is identified, so a late or spent token did no harm.
       const identified = !!current?.migration_status && current.migration_status !== 'flagged';
 
       if (!result.success && !identified) {
