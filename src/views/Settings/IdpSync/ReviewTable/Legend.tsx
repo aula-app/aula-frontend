@@ -1,4 +1,3 @@
-import Icon from '@/components/new/Icon/Icon';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RowKind } from './candidates';
@@ -34,12 +33,8 @@ const Legend: React.FC = () => {
         ))}
 
         <div className={`${ITEM} ${PLAIN} border-dashed`}>
-          <dt
-            className={`${ON_BORDER} flex items-center gap-1 rounded-full border border-dashed border-current/70 bg-paper px-2 py-0.5 text-xs font-bold whitespace-nowrap`}
-          >
-            <Icon type="add" size="1.1em" />
-            {t('v2.ui.idpSync.outcome.empty')}
-          </dt>
+          {/* The dashed card is the whole sample: an empty slot carries no tag. */}
+          <dt className="sr-only">{t('v2.ui.idpSync.outcome.empty')}</dt>
           <dd className="mb-0!">{t('v2.ui.idpSync.legend.empty')}</dd>
         </div>
       </dl>
