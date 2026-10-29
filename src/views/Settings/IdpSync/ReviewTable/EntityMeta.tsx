@@ -1,5 +1,6 @@
 import Icon from '@/components/new/Icon/Icon';
 import Avatar from '@/v2/components/idea/Avatar';
+import { DIM } from './styles';
 import { ReactNode } from 'react';
 
 interface Props {
@@ -21,12 +22,12 @@ const EntityMeta = ({ name, detail, detailEnd, avatar, avatarSrc, classes }: Pro
       <span className="truncate font-bold">{name}</span>
       {(!!detail || !!detailEnd) && (
         <span className="flex min-w-0 items-center gap-1 text-xs">
-          {!!detail && <span className="truncate opacity-70">{detail}</span>}
+          {!!detail && <span className={`truncate ${DIM}`}>{detail}</span>}
           {detailEnd}
         </span>
       )}
       {!!classes && (
-        <span className="flex min-w-0 items-center gap-1 text-xs opacity-70" title={classes}>
+        <span className={`flex min-w-0 items-center gap-1 text-xs ${DIM}`} title={classes}>
           <Icon type="rooms" size="1em" className="shrink-0" />
           <span className="truncate">{classes}</span>
         </span>

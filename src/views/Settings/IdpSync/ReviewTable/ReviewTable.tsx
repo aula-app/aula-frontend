@@ -8,7 +8,7 @@ import { isPair, Members, resultOf, rivalsOf, rowKind, SORTS } from './candidate
 import MatchCell from './MatchCell';
 import MemberCount from './MemberCount';
 import EntityMeta from './EntityMeta';
-import { CARD, CHIP, CONTENT, toneFor } from './styles';
+import { CARD, CHIP, CONTENT, ICON, toneFor } from './styles';
 import { useMatching } from './useMatching';
 
 type Props = {
@@ -111,7 +111,7 @@ const ReviewTable: React.FC<Props> = ({
           <tbody>
             {shown.map((row) => {
               const kindOfRow = rowKind(row);
-              const tone = toneFor(kindOfRow, isPerson);
+              const tone = toneFor(kindOfRow);
               const rowMembers = members?.get(row.id);
               const rivals = kindOfRow === 'pending' ? rivalsOf(all, row).length : 0;
               const problem = problems[row.id];
@@ -155,30 +155,37 @@ const ReviewTable: React.FC<Props> = ({
                           )
                         }
                       />
-                      {isPair(row) && (
-                        <span className="ml-auto flex shrink-0 items-center gap-1">
-                          {kindOfRow === 'pending' && (
+                      <span className="ml-auto flex shrink-0 items-center gap-1">
+                        {/* The row kind, in words: the card tints sit under 3:1 against the page. */}
+                        <span className="flex items-center gap-1 text-xs font-bold whitespace-nowrap">
+                          <Icon type={ICON[kindOfRow]} size="1.1em" />
+                          {t(`v2.ui.idpSync.outcome.${kindOfRow}`)}
+                        </span>
+                        {isPair(row) && (
+                          <>
+                            {kindOfRow === 'pending' && (
+                              <button
+                                type="button"
+                                className={`${CHIP} flex items-center gap-1`}
+                                onClick={() => onConfirm(row)}
+                                data-testid={`idp-review-confirm-${row.id}`}
+                              >
+                                <Icon type="check" size="1.1em" />
+                                {t('v2.ui.idpSync.actions.confirm')}
+                              </button>
+                            )}
                             <button
                               type="button"
                               className={`${CHIP} flex items-center gap-1`}
-                              onClick={() => onConfirm(row)}
-                              data-testid={`idp-review-confirm-${row.id}`}
+                              onClick={() => onAssign(row, null)}
+                              data-testid={`idp-review-unlink-${row.id}`}
                             >
-                              <Icon type="check" size="1.1em" />
-                              {t('v2.ui.idpSync.actions.confirm')}
+                              <Icon type="unlink" size="1.1em" />
+                              {t('v2.ui.idpSync.actions.unlink')}
                             </button>
-                          )}
-                          <button
-                            type="button"
-                            className={`${CHIP} flex items-center gap-1`}
-                            onClick={() => onAssign(row, null)}
-                            data-testid={`idp-review-unlink-${row.id}`}
-                          >
-                            <Icon type="unlink" size="1.1em" />
-                            {t('v2.ui.idpSync.actions.unlink')}
-                          </button>
-                        </span>
-                      )}
+                          </>
+                        )}
+                      </span>
                     </span>
                     {(kindOfRow === 'pending' || !!problem) && (
                       <p className="mb-0! px-3 pb-2 text-xs font-bold" data-testid={`idp-review-note-${row.id}`}>

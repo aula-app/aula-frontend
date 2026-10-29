@@ -2,7 +2,7 @@ import Icon from '@/components/new/Icon/Icon';
 import Tooltip from '@/v2/components/ui/Tooltip';
 import { useTranslation } from 'react-i18next';
 import { Member } from './candidates';
-import { SOURCE_TEXT } from './styles';
+import { DIM, DOT, SOURCE_TEXT } from './styles';
 
 interface Props {
   /** Already sorted. */
@@ -14,7 +14,7 @@ interface Props {
   'data-testid'?: string;
 }
 
-const TRIGGER = 'inline-flex cursor-help opacity-70 hover:opacity-100';
+const TRIGGER = `inline-flex cursor-help ${DIM} hover:text-current`;
 
 const MemberCount = ({ members, id, label, 'data-testid': testId }: Props) => {
   const { t } = useTranslation();
@@ -22,7 +22,7 @@ const MemberCount = ({ members, id, label, 'data-testid': testId }: Props) => {
 
   return (
     <>
-      <span className="truncate opacity-70">{t('v2.ui.idpSync.members', { count: members.length })}</span>
+      <span className={`truncate ${DIM}`}>{t('v2.ui.idpSync.members', { count: members.length })}</span>
       {members.length > 0 && (
         // Keeps clicks from picking the card.
         <span className="inline-flex" onClick={(event) => event.stopPropagation()} data-keeps-pick>
@@ -37,7 +37,7 @@ const MemberCount = ({ members, id, label, 'data-testid': testId }: Props) => {
               >
                 {members.map(({ name, kind }, index) => (
                   <li key={`${index}-${name}`} className={`flex items-center gap-1.5 ${SOURCE_TEXT[kind]}`}>
-                    <span aria-hidden="true" className="size-2 shrink-0 rounded-full bg-current" />
+                    <span aria-hidden="true" className={`size-2 shrink-0 rounded-full ${DOT[kind]}`} />
                     <span className="truncate">{name}</span>
                     <span className="sr-only">, {t(`v2.ui.idpSync.memberKind.${kind}`)}</span>
                   </li>

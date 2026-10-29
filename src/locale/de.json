@@ -84,6 +84,10 @@
           "save": {
             "title": "Die Änderung konnte nicht gespeichert werden.",
             "body": "Es wurde nichts geändert. Versuche es noch einmal."
+          },
+          "progress": {
+            "title": "Der Status der Synchronisation konnte nicht geprüft werden.",
+            "body": "Lade die Seite neu. Wenn es weiterhin nicht klappt, prüfe, ob der Anbieter erreichbar ist."
           }
         },
         "actionNeeded": "Aktion erforderlich:",
@@ -136,7 +140,14 @@
           "no_local_row": "Für diese Zuordnung ist kein aula-Datensatz ausgewählt.",
           "local_row_claimed_twice": "Dieser aula-Datensatz ist mehrfach zugeordnet.",
           "local_row_already_linked": "Dieser aula-Datensatz ist beim Anbieter schon mit jemand anderem verknüpft."
-        }
+        },
+        "outcome": {
+          "merge": "Zusammengeführt",
+          "pending": "Bestätigung nötig",
+          "create": "Neu in aula",
+          "keep": "Unverändert"
+        },
+        "checking": "Status der Synchronisation wird geprüft"
       }
     },
     "form": {

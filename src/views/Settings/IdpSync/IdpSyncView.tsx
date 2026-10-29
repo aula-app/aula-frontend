@@ -37,6 +37,8 @@ const IdpSyncView: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [progress, setProgress] = useState<MigrationProgress | null>(null);
+  /** A null progress is a failed request; a null migration_status is a school without sync. */
+  const [checked, setChecked] = useState(false);
   const [busy, setBusy] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Message | null>(null);
@@ -64,7 +66,12 @@ const IdpSyncView: React.FC = () => {
   const [problems, setProblems] = useState<Record<number, string>>({});
 
   const refreshProgress = useCallback(async () => {
-    setProgress(await getMigrationProgress());
+    const current = await getMigrationProgress();
+
+    setProgress(current);
+    setChecked(true);
+
+    return current;
   }, []);
 
   const loadKind = useCallback(async (kind: CandidateKind) => {
@@ -99,10 +106,11 @@ const IdpSyncView: React.FC = () => {
       // One-shot token: drop it so a reload does not retry.
       setSearchParams({}, { replace: true });
 
-      const current = await getMigrationProgress();
-      setProgress(current);
+      const current = await refreshProgress();
+      // Anything past `flagged` means the school is identified, so a late or spent token did no harm.
+      const identified = !!current?.migration_status && current.migration_status !== 'flagged';
 
-      if (!result.success && current?.migration_status === 'flagged') {
+      if (!result.success && !identified) {
         setError({
           title: t('v2.ui.idpSync.errors.connect.title'),
           body: t(`errors.sso.${result.error}`, t('v2.ui.idpSync.errors.connect.body')),
@@ -113,7 +121,7 @@ const IdpSyncView: React.FC = () => {
 
       setNotice(t('v2.ui.idpSync.connectReturned'));
     });
-  }, [searchParams, setSearchParams, t]);
+  }, [searchParams, setSearchParams, refreshProgress, t]);
 
   const connect = async () => {
     setBusy(true);
@@ -347,7 +355,19 @@ const IdpSyncView: React.FC = () => {
         </div>
       </Dialog>
 
-      {status === null && (
+      {!checked && <Loading label={t('v2.ui.idpSync.checking')} data-testid="idp-sync-checking" />}
+
+      {checked && !progress && (
+        <FeedbackState
+          image="/img/Paula_schlafend.svg"
+          alt={t('v2.alt.sleeping')}
+          title={t('v2.ui.idpSync.errors.progress.title')}
+          description={t('v2.ui.idpSync.errors.progress.body')}
+          data-testid="idp-sync-unreachable"
+        />
+      )}
+
+      {checked && !!progress && status === null && (
         <FeedbackState
           image="/img/Paula_schlafend.svg"
           alt={t('v2.alt.sleeping')}

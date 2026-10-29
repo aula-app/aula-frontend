@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { avatarUrl, isAulaOnly, isProviderOnly, Members, rowKind } from './candidates';
 import MemberCount from './MemberCount';
 import EntityMeta from './EntityMeta';
-import { CARD, CONTENT, HOLE, PLAIN } from './styles';
+import { CARD, CONTENT, DIM, HOLE, PLAIN } from './styles';
 import { Matching } from './useMatching';
 
 type Side = 'aula' | 'provider';
@@ -184,7 +184,7 @@ const MatchCell = ({ row, side, tone, matching, isPerson, connector, members }: 
           data-keeps-pick
           data-testid={`idp-review-${droppable ? 'place' : picked ? 'cancel' : 'pick'}-${row.id}`}
         >
-          {source && !picked && <Icon type="drag" size="1.1em" className="shrink-0 opacity-40" />}
+          {source && !picked && <Icon type="drag" size="1.1em" className={`shrink-0 ${DIM}`} />}
           {content}
         </button>
       ) : (

@@ -84,6 +84,10 @@
           "save": {
             "title": "Could not save the change.",
             "body": "Nothing was changed. Try again."
+          },
+          "progress": {
+            "title": "Could not check the sync status.",
+            "body": "Reload the page. If it keeps failing, check that the provider is reachable."
           }
         },
         "actionNeeded": "Action needed:",
@@ -136,7 +140,14 @@
           "no_local_row": "No aula record is selected for this match.",
           "local_row_claimed_twice": "This aula record is matched more than once.",
           "local_row_already_linked": "This aula record is already linked to someone else at the provider."
-        }
+        },
+        "outcome": {
+          "merge": "Merged",
+          "pending": "Needs confirming",
+          "create": "New in aula",
+          "keep": "Unchanged"
+        },
+        "checking": "Checking the sync status"
       }
     },
     "form": {
