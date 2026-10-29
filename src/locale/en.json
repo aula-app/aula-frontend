@@ -145,14 +145,16 @@
           "merge": "Merged",
           "pending": "Needs confirming",
           "create": "New in aula",
-          "keep": "Unchanged"
+          "keep": "Unchanged",
+          "empty": "Empty"
         },
         "checking": "Checking the sync status",
         "legend": {
           "merge": "Matched — the two become one account.",
           "pending": "Proposed — confirm it, or both stay as they are.",
           "create": "Only at the provider — a new aula account is made.",
-          "keep": "Only in aula — stays as it is."
+          "keep": "Only in aula — stays as it is.",
+          "empty": "Empty space where you can assign a match — drag a card here, or pick one and choose where it goes."
         },
         "legendTitle": "Legend:"
       }
