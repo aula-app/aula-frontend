@@ -1,3 +1,3 @@
 import DataExport from './DataExport';
 
-export { DataExport as default,  };
+export { DataExport as default };

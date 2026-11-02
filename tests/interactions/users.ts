@@ -1,4 +1,5 @@
 import { expect, Page } from '@playwright/test';
+import { TEST_IDS } from '../../src/test-ids';
 import * as shared from '../support/utils';
 import * as types from '../support/types';
 import * as formsInteractions from './forms';
@@ -8,73 +9,78 @@ import { TIMEOUTS } from '../support/constants';
 const host = shared.getHost();
 
 export const ensureSpecificInstanceEntered = async (page: Page, instanceCode: string) => {
-  const instanceCodeAlreadySet = await page.getByTestId('current-instance-code').isVisible();
-  if (instanceCodeAlreadySet && await page.getByTestId('current-instance-code').innerText() === instanceCode) {
+  const instanceCodeInput = page.getByTestId('instance-code');
+
+  // Not visible → single-instance, or a broken page. The login form tells us which.
+  if (!(await instanceCodeInput.isVisible())) {
+    await expect(page.locator('input[name="username"]')).toBeVisible();
     return true;
   }
 
-  const instanceCodeInputDiv = page.getByTestId('input-instance-code');
-  if ((await instanceCodeInputDiv.count()) === 0) {
-    console.log(`No instance selector input found.`);
-    throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
-  } else {
-    await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instanceCode);
-    // select Instance Code option from Autocomplete
-    await page.keyboard.press('Enter');
-    await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
+  // Locked (disabled) → code already stored, nothing to do
+  if (!(await instanceCodeInput.isEnabled())) {
     return true;
   }
+
+  // Editable → fill and confirm
+  console.log(`ℹ️ Testing multi instance FE, attempting to use "${instanceCode}"...`);
+  await instanceCodeInput.fill(instanceCode);
+  await page.getByTestId('instance-code-confirm').click();
+  await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });
+  return true;
 };
 
-
 export const ensureInstanceEntered = async (page: Page, username?: string) => {
-  const instanceCodeAlreadySet = await page.getByTestId('current-instance-code').isVisible();
-  if (instanceCodeAlreadySet) {
-    return true;
-  }
-
   const instance = process.env.INSTANCE_CODE || 'SINGLE';
-  const instanceCodeInputDiv = page.getByTestId('input-instance-code');
-  if ((await instanceCodeInputDiv.count()) === 0) {
+  const instanceCodeInput = page.getByTestId('instance-code');
+
+  // Not visible → single-instance, or a broken page. The login form tells us which.
+  if (!(await instanceCodeInput.isVisible())) {
     console.log(`${instance === 'SINGLE' ? '✅' : '⚠️'} No instance selector input found. User: "${username}"`);
     if (instance !== 'SINGLE') {
       throw new Error('Instance selector input not found on the page, but we are testing a multi-instance FE.');
     }
-
-    // if there's no instance code input, then we must be on single-instance FE, right? 😏
-    return true;
-  } else {
-    console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: "${username}"`);
-    await instanceCodeInputDiv.locator(page.locator('input[name="instance-code"]')).fill(instance);
-    await page.getByTestId('submit-instance-code').click();
-    await page.waitForURL((url) => url.pathname === '/', { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('input[name="username"]')).toBeVisible();
     return true;
   }
+
+  // Locked (disabled) → code already stored
+  if (!(await instanceCodeInput.isEnabled())) {
+    return true;
+  }
+
+  // Editable → fill and confirm
+  console.log(`ℹ️ Testing multi instance FE, attempting to use "${instance}"... User: "${username}"`);
+  await instanceCodeInput.fill(instance);
+  await page.getByTestId('instance-code-confirm').click();
+  await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });
+  return true;
 };
 
-export const loginAttempt = async (page: Page, data: { username: string, password: string }) => {
+export const loginAttempt = async (page: Page, data: { username: string; password: string }) => {
   await page.goto(host, { waitUntil: 'domcontentloaded' });
   await ensureInstanceEntered(page, data.username);
   await expect(page.locator('input[name="username"]')).toBeVisible();
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', data.password);
-  await page.locator('button[type="submit"]').click();
+  await page.getByTestId('submit-login').click();
   await page.waitForLoadState('domcontentloaded');
 };
 
 // Helper function to log in a user
-export const login = async (page: Page, data: { username: string, password: string }) => {
+export const login = async (page: Page, data: { username: string; password: string }) => {
   await loginAttempt(page, data);
   await page.waitForLoadState('networkidle');
-  await expect(page.getByRole('alert')).not.toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
-  await expect(page.locator('#rooms-heading')).toBeVisible({ timeout: TIMEOUTS.FIVE_SECONDS });
+  await expect(page.getByTestId(TEST_IDS.TOAST_ERROR)).not.toBeVisible({ timeout: TIMEOUTS.ONE_SECOND });
+  await expect(page.getByTestId(TEST_IDS.SCOPE_TITLE)).toBeVisible({ timeout: TIMEOUTS.FIVE_SECONDS });
 };
 
 // Helper function to log out a user
 export const logout = async (page: Page) => {
   await navigation.goToHome(page);
-  await formsInteractions.clickButton(page, 'logout-button');
+  const button = page.locator('#logout-button');
+  await button.hover();
+  await button.click();
   await expect(page.locator('input[name="username"]')).toBeVisible();
 };
 
@@ -85,18 +91,16 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
 
     await page.fill('input[name="username"]', data.username);
     await page.fill('input[name="password"]', tempPass);
-    await page.locator('button[type="submit"]').click();
+    await page.getByTestId('submit-login').click();
 
-    const oldPasswordButton = page.locator('input[name="oldPassword"]');
-    await expect(oldPasswordButton).toBeVisible();
-
+    await expect(page.getByTestId('oldPassword-input')).toBeVisible();
     await page.fill('input[name="oldPassword"]', tempPass);
     await page.fill('input[name="newPassword"]', data.password);
     await page.fill('input[name="confirmPassword"]', data.password);
-    await page.locator('button[type="submit"]').click();
+    await page.getByTestId('submit-set-password').click();
 
     // Check if we're on the home page (logged in) or need to login again
-    const isLoggedIn = await page.locator('#rooms-heading').isVisible();
+    const isLoggedIn = await page.getByTestId(TEST_IDS.SCOPE_TITLE).isVisible();
 
     if (!isLoggedIn) {
       console.log('⚠️ User not automatically logged in after password change, attempting manual login');
@@ -104,8 +108,8 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
       await page.goto(host, { waitUntil: 'domcontentloaded' });
       await page.fill('input[name="username"]', data.username);
       await page.fill('input[name="password"]', data.password);
-      await page.locator('button[type="submit"]').click();
-      await expect(page.locator('#rooms-heading')).toBeVisible();
+      await page.getByTestId('submit-login').click();
+      await expect(page.getByTestId(TEST_IDS.SCOPE_TITLE)).toBeVisible();
     }
 
     console.log('✅ Successfully registered user:', data.username);
@@ -120,12 +124,41 @@ export const register = async (page: Page, data: types.UserData, tempPass: strin
 export const firstLoginFlow = async (page: Page, data: types.UserData, tempPass: string) => {
   await page.fill('input[name="username"]', data.username);
   await page.fill('input[name="password"]', tempPass);
-  await page.locator('button[type="submit"]').click();
+  await page.getByTestId('submit-login').click();
 
-  await page.locator('input[name="oldPassword"]').filter({ visible: true }).fill(tempPass);
-
+  await expect(page.getByTestId('oldPassword-input')).toBeVisible();
+  await page.fill('input[name="oldPassword"]', tempPass);
   await page.fill('input[name="newPassword"]', data.password);
   await page.fill('input[name="confirmPassword"]', data.password);
-  await page.locator('button[type="submit"]').click();
+  await page.getByTestId('submit-set-password').click();
   await login(page, data);
+};
+
+/**
+ * Ask an admin to change one of the user's own identity fields from the profile
+ * @param page - Requesting user's page
+ * @param field - Restricted profile field
+ * @param value - Requested new value
+ */
+export const requestProfileChange = async (
+  page: Page,
+  field: 'displayname' | 'realname' | 'username' | 'email',
+  value: string
+) => {
+  await navigation.goToProfile(page);
+
+  const input = page.locator(`#profile-${field}`);
+  await expect(input).toBeDisabled();
+  // The unlock toggle sits in the input's adornment, next to the field.
+  await input.locator('..').getByRole('button').click();
+  await expect(input).toBeEnabled();
+  await input.fill(value);
+
+  await page.locator('form').filter({ has: input }).locator('button[type="submit"]').click();
+
+  // ProfileEditor's dialog has no test ids; Confirm is its last action.
+  const dialog = page.getByRole('dialog').filter({ has: page.locator('#alert-dialog-title') });
+  await expect(dialog).toBeVisible();
+  await dialog.getByRole('button').last().click();
+  await expect(dialog).toBeHidden();
 };

@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import svgr from 'vite-plugin-svgr';
@@ -22,6 +23,25 @@ export default defineConfig({
     }),
   ],
   assetsInclude: ['**/*.md'],
+  optimizeDeps: {
+    include: [
+      '@mui/material',
+      '@mui/system',
+      '@mui/icons-material',
+      '@mui/x-date-pickers',
+      '@emotion/react',
+      '@emotion/styled',
+      'react-hook-form',
+      '@hookform/resolvers',
+      'react-hook-form-mui',
+      'yup',
+      'react-markdown',
+      'rehype-raw',
+      'dayjs',
+      'i18next',
+      'react-i18next',
+    ],
+  },
   server: {
     open: true,
     port: 3000,
@@ -32,5 +52,18 @@ export default defineConfig({
   },
   resolve: {
     alias: [{ find: '@', replacement: path.resolve(__dirname, 'src') }],
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    css: false,
+    server: {
+      // Pre-bundled dependencies bypass vi.mock, so their own imports cannot be
+      // stubbed. Inlining this one lets a test replace `is-emoji-supported`, whose
+      // canvas-based check cannot run under jsdom.
+      deps: { inline: ['@tiptap/extension-emoji'] },
+    },
   },
 });

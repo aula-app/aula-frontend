@@ -1,3 +1,3 @@
 import AppLink from './AppLink';
 
-export { AppLink as default,  };
+export { AppLink as default };

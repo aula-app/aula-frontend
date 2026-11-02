@@ -4,7 +4,6 @@ import { TEST_IDS } from '../../src/test-ids';
 import * as types from '../support/types';
 import * as formInteractions from './forms';
 import * as navigation from './navigation';
-import * as settingsInteractions from './settings';
 
 /**
  * Report Types - maps to backend reporting categories
@@ -45,14 +44,15 @@ export const reportIdea = async (
   // Wait for report dialog
   await expect(page.getByTestId(TEST_IDS.REPORT_DIALOG)).toBeVisible();
 
-  // Select report type from dropdown
-  await formInteractions.selectOptionByValue(page, 'select-field-report', reportType);
+  // Select report type from dropdown (v2 SelectInput)
+  await page.getByTestId('report-form-reason').click();
+  await page.getByTestId(`report-form-reason-option-${reportType}`).click();
 
-  // Fill in report content
-  await formInteractions.fillMarkdownForm(page, 'content', reportContent);
+  // Fill in report content (v2 RichEditor)
+  await page.getByTestId('report-form-content').locator('[contenteditable="true"]').fill(reportContent);
 
   // Submit report
-  await formInteractions.clickButton(page, 'report-form-submit-button');
+  await formInteractions.clickButton(page, 'report-form-submit');
   // The dialog closes only after the API call resolves — waiting for it to hide
   // is equivalent to waiting for the network request to complete.
   await expect(page.getByTestId(TEST_IDS.REPORT_DIALOG)).toBeHidden();
@@ -90,14 +90,15 @@ export const reportComment = async (
   // Wait for report dialog
   await expect(page.getByTestId(TEST_IDS.REPORT_DIALOG)).toBeVisible();
 
-  // Select report type from dropdown
-  await formInteractions.selectOptionByValue(page, 'select-field-report', reportType);
+  // Select report type from dropdown (v2 SelectInput)
+  await page.getByTestId('report-form-reason').click();
+  await page.getByTestId(`report-form-reason-option-${reportType}`).click();
 
-  // Fill in report content
-  await formInteractions.fillMarkdownForm(page, 'content', reportContent);
+  // Fill in report content (v2 RichEditor)
+  await page.getByTestId('report-form-content').locator('[contenteditable="true"]').fill(reportContent);
 
   // Submit report
-  await formInteractions.clickButton(page, 'report-form-submit-button');
+  await formInteractions.clickButton(page, 'report-form-submit');
   await expect(page.getByTestId(TEST_IDS.REPORT_DIALOG)).toBeHidden();
 };
 
@@ -107,13 +108,7 @@ export const reportComment = async (
  * @param ideaName - Name of the reported idea
  */
 export const verifyIdeaReported = async (adminPage: Page, ideaName: string) => {
-  await navigation.goToReportsSettings(adminPage);
-
-  // Apply filter to find the specific report by body (idea name appears in the body/location)
-  await settingsInteractions.applyFilter(adminPage, { option: 'body', value: ideaName });
-
-  // Wait for the page to show filtered results - look for the idea name anywhere on the page
-  await expect(adminPage.locator('text=' + ideaName).first()).toBeVisible();
+  await findMessage(adminPage, ideaName);
 };
 
 /**
@@ -122,13 +117,7 @@ export const verifyIdeaReported = async (adminPage: Page, ideaName: string) => {
  * @param commentText - Text of the reported comment
  */
 export const verifyCommentReported = async (adminPage: Page, commentText: string) => {
-  await navigation.goToReportsSettings(adminPage);
-
-  // Apply filter to find the specific report by body text
-  await settingsInteractions.applyFilter(adminPage, { option: 'body', value: commentText });
-
-  // Wait for the page to show filtered results - look for the comment text anywhere on the page
-  await expect(adminPage.locator('text=' + commentText).first()).toBeVisible();
+  await findMessage(adminPage, commentText);
 };
 
 /**
@@ -159,11 +148,39 @@ export const reportBug = async (page: Page, description: string) => {
  * @param description - Bug description text
  */
 export const verifyBugReported = async (adminPage: Page, description: string) => {
-  await navigation.goToBugsSettings(adminPage);
+  await findMessage(adminPage, description);
+};
 
-  // Apply filter to find the specific bug report by body text
-  await settingsInteractions.applyFilter(adminPage, { option: 'body', value: description });
+/**
+ * Search the messages page (freshly loaded, so no earlier search lingers)
+ * @param page - Admin's page
+ * @param text - Text in the message headline or body
+ */
+export const searchMessages = async (page: Page, text: string) => {
+  await navigation.goToMessages(page);
+  await page.getByTestId(TEST_IDS.SEARCH_BUTTON).click();
+  await page.getByTestId(TEST_IDS.SEARCH_FIELD).fill(text);
+};
 
-  // Wait for the page to show filtered results - look for the description anywhere on the page
-  await expect(adminPage.locator('text=' + description).first()).toBeVisible();
+/**
+ * Expect a messages search to come back empty; an inbox with nothing left in it shows the empty state instead
+ * @param page - Page on /messages
+ */
+export const expectNoMessages = async (page: Page) => {
+  await expect(
+    page.getByTestId('messages-no-results-state').or(page.getByTestId('messages-empty-state'))
+  ).toBeVisible();
+};
+
+/**
+ * Open the first message matching a text and check its detail shows it
+ * @param page - Admin's page
+ * @param text - Text in the message headline or body
+ */
+export const findMessage = async (page: Page, text: string) => {
+  await searchMessages(page, text);
+  const result = page.getByTestId('message-item').first();
+  await expect(result).toBeVisible();
+  await result.getByRole('link').click();
+  await expect(page.locator('[data-testid^="message-detail-"]')).toContainText(text);
 };

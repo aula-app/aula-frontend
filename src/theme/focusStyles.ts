@@ -14,7 +14,7 @@ const focusVisibleStyles = {
 // Different focus styles for light and dark modes
 const lightModeFocusStyles = {
   ...focusVisibleStyles,
-  outlineColor: 'var(--color-text-primary)',
+  outlineColor: 'var(--color-foreground)',
   boxShadow: '0 0 0 4px rgba(0, 0, 0, 0.15)',
 };
 
@@ -26,8 +26,6 @@ const darkModeFocusStyles = {
 };
 
 // Helper function to get the correct focus styles based on theme mode
-const getFocusStyles = (isDarkMode: boolean) => 
-  isDarkMode ? darkModeFocusStyles : lightModeFocusStyles;
-
+const getFocusStyles = (isDarkMode: boolean) => (isDarkMode ? darkModeFocusStyles : lightModeFocusStyles);
 
 export default getFocusStyles;

@@ -1,3 +1,3 @@
 import AddIdeasButton from './AddIdeasButton';
 
-export { AddIdeasButton as default,  };
+export { AddIdeasButton as default };

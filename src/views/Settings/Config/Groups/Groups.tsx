@@ -2,7 +2,7 @@ import { AppIcon } from '@/components';
 import GroupForms from '@/components/DataForms/GroupForms';
 import { deleteGroup, getGroups } from '@/services/groups';
 import { GroupType } from '@/types/Scopes';
-import { WarningAmber } from '@mui/icons-material';
+import WarningAmber from '@mui/icons-material/WarningAmber';
 import {
   Button,
   Chip,

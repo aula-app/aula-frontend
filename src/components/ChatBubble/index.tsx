@@ -1,3 +1,3 @@
 import ChatBubble from './ChatBubble';
 
-export { ChatBubble as default,  };
+export { ChatBubble as default };

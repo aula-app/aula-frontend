@@ -1,3 +1,3 @@
 import BoxCard from './BoxCard';
 
-export { BoxCard as default,  };
+export { BoxCard as default };
