@@ -1,11 +1,21 @@
-- name: Add To aula-GitHub project
-  uses: actions/add-to-project@v2.0.0
-  with:
-    # URL of the project to add issues to
-    project-url: https://github.com/orgs/aula-app/projects/1/views/1
-    # A GitHub personal access token with write access to the project
-    github-token: ${{ secrets.GH_PAT_FOR_WORKFLOW_AUTOMATION }}
-    # A comma-separated list of labels to use as a filter for issue to be added
-    #labeled: # optional
-    # The behavior of the labels filter, AND to match all labels, OR to match any label, NOT to exclude any listed label (default is OR)
-    #label-operator: # optional
+name: Add new issues to "aula board" project
+
+on:
+  issues:
+    types:
+      - opened
+
+jobs:
+  add-to-project:
+    name: Add issue to project
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/add-to-project@v2.0.0
+        with:
+          # You can target a project in a different organization
+          # to the issue
+          project-url: https://github.com/orgs/aula-app/projects/1/views/1
+          # A GitHub personal access token with write access to the project, TODO: regenerate yearly, next: Nov '27
+          github-token: ${{ secrets.GH_PAT_FOR_WORKFLOW_AUTOMATION }}
+          #labeled: bug, needs-triage
+          #label-operator: OR
