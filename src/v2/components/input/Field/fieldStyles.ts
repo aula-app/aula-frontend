@@ -20,7 +20,7 @@ export const fieldBoxClasses = ({ dense, invalid, hasStart, hasEnd }: FieldBoxOp
   );
 
 export const listBoxClasses =
-  'rounded-lg border border-input-border bg-background shadow-md overflow-auto py-1 outline-none';
+  'rounded-lg border border-input-border bg-background shadow-md group-data-[placement=top]/popover:shadow-md-up overflow-auto py-1 outline-none';
 
 export const listBoxItemClasses = twMerge(
   'px-3 py-2 text-sm cursor-pointer outline-none transition-colors duration-100 text-muted',
@@ -28,4 +28,4 @@ export const listBoxItemClasses = twMerge(
   'data-focused:outline-solid data-focused:outline-2 data-focused:-outline-offset-2 data-focused:outline-foreground'
 );
 
-export const popoverClasses = 'text-foreground';
+export const popoverClasses = 'group/popover text-foreground';
