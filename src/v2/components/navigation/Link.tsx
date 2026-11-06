@@ -1,0 +1,44 @@
+import { AnchorHTMLAttributes, ReactNode, forwardRef } from 'react';
+import { Link as RouterLink, LinkProps as RouterLinkProps } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
+
+type BaseRouterLinkProps = { to: string; className?: string } & Omit<RouterLinkProps, 'to' | 'children'>;
+type BaseAnchorProps = { href: string; to?: never; className?: string } & Omit<
+  AnchorHTMLAttributes<HTMLAnchorElement>,
+  'children'
+>;
+
+// Require aria-label when no children are provided (e.g. icon-only links)
+type LinkProps = (BaseRouterLinkProps | BaseAnchorProps) & { disabled?: boolean } & (
+    | { children: ReactNode; 'aria-label'?: string }
+    | { children?: never; 'aria-label': string }
+  );
+
+const linkClass = 'text-foreground rounded-lg underline-offset-2 hover:underline';
+
+const Link = forwardRef<HTMLAnchorElement, LinkProps>(({ className, ...props }, ref) => {
+  const classes = twMerge(linkClass, className);
+
+  if (props.disabled) {
+    const { disabled, to, href, ...rest } = props as LinkProps & { to?: string; href?: string };
+    return (
+      <div
+        ref={ref as React.Ref<HTMLDivElement>}
+        className={classes}
+        {...(rest as React.HTMLAttributes<HTMLDivElement>)}
+      />
+    );
+  }
+
+  if ('href' in props && props.href) {
+    const { href, ...rest } = props;
+    return <a ref={ref} href={href} className={classes} {...rest} />;
+  }
+
+  const { to, ...rest } = props as { to: string } & Omit<RouterLinkProps, 'to'>;
+  return <RouterLink ref={ref} to={to} className={classes} {...rest} />;
+});
+
+Link.displayName = 'Link';
+
+export default Link;

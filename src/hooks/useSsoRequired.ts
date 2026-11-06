@@ -1,24 +1,13 @@
-import { getSsoStatus } from '@/services/sso';
-import { localStorageGet } from '@/utils';
-import { useEffect, useState } from 'react';
+import { useSsoStatus } from './useSsoStatus';
 
-export function useSsoRequired(): boolean {
-  const [required, setRequired] = useState(false);
+/**
+ * Whether the instance mandates SSO. `undefined` while the status is still
+ * being resolved, so callers can gate rendering instead of failing open.
+ */
+export function useSsoRequired(): boolean | undefined {
+  const status = useSsoStatus();
 
-  useEffect(() => {
-    const apiUrl = localStorageGet('api_url');
-    if (!apiUrl) return;
+  if (status === undefined) return undefined;
 
-    let cancelled = false;
-
-    getSsoStatus(apiUrl).then((status) => {
-      if (!cancelled) setRequired(status?.enabled === true && status.provider !== null && status.required === true);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  return required;
+  return status?.enabled === true && status.provider !== null && status.required === true;
 }

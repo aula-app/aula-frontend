@@ -137,7 +137,7 @@ const PhasesView = () => {
   }, [t, data.length, phaseData.title]);
 
   return (
-    <Stack overflow="hidden" flex={1}>
+    <Stack height="100%">
       <DashBoard show={true} />
       <Stack flex={1} p={2} alignItems="center" sx={{ overflowY: 'auto' }}>
         <ScopeHeader title={scopeHeaderTitle} scopeKey="ideas" totalCount={data.length} {...scopeHeaderProps} />
