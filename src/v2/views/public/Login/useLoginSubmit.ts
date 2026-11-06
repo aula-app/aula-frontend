@@ -17,7 +17,8 @@ export type LoginFormValues = {
   password: string;
 };
 
-export const useLoginSubmit = () => {
+/** @param instanceCode The confirmed instance code; SSO status is re-fetched when it changes. */
+export const useLoginSubmit = (instanceCode?: string | null) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -31,7 +32,7 @@ export const useLoginSubmit = () => {
   /** True when nobody knows yet whether this person has an aula account. */
   const [claimable, setClaimable] = useState(false);
 
-  const ssoStatus = useSsoStatus();
+  const ssoStatus = useSsoStatus(instanceCode);
   const ssoBrowserSupported = useMemo(() => isSsoBrowserSupported(), []);
 
   const ssoAvailable = ssoStatus?.enabled === true;

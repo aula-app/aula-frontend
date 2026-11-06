@@ -19,6 +19,16 @@ const MAX_PASSWORD_LENGTH = 64;
 const LoginView: React.FC = () => {
   const { t } = useTranslation();
   const {
+    instanceCode,
+    setInstanceCode,
+    isEditing,
+    startEditing,
+    error: codeError,
+    isLoading: codeLoading,
+    validateCode,
+    showField,
+  } = useInstanceCode();
+  const {
     onSubmit,
     isLoading,
     isSsoLoading,
@@ -34,17 +44,7 @@ const LoginView: React.FC = () => {
     ssoLinkToken,
     claimable,
     declineClaim,
-  } = useLoginSubmit();
-  const {
-    instanceCode,
-    setInstanceCode,
-    isEditing,
-    startEditing,
-    error: codeError,
-    isLoading: codeLoading,
-    validateCode,
-    showField,
-  } = useInstanceCode();
+  } = useLoginSubmit(isEditing ? null : instanceCode);
 
   const schema = useMemo(
     () =>
