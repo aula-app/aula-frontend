@@ -16,7 +16,7 @@ export const fieldBoxClasses = ({ dense, invalid, hasStart, hasEnd }: FieldBoxOp
     hasStart ? (dense ? 'pl-8' : 'pl-10') : '',
     hasEnd ? (dense ? 'pr-8' : 'pr-10') : '',
     invalid ? 'border-error-fg outline-error-fg focus:border-error-fg' : 'outline-current focus:border-current',
-    'disabled:cursor-not-allowed disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:opacity-50'
+    'disabled:cursor-not-allowed disabled:opacity-60 data-disabled:cursor-not-allowed data-disabled:opacity-60'
   );
 
 export const listBoxClasses =

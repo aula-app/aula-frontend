@@ -21,7 +21,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       'relative overflow-hidden aspect-square inline-flex items-center justify-center rounded-full',
       'text-current cursor-pointer select-none transition-[background-color] duration-200 ease-in-out',
       'hover:bg-shadow active:bg-shadow',
-      'disabled:cursor-not-allowed disabled:opacity-40 disabled:text-gray-400',
+      'disabled:cursor-not-allowed disabled:opacity-60',
       dense ? 'p-0' : 'p-2',
       className
     );
@@ -29,7 +29,7 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
     const component = to ? (
       <Link
         to={to}
-        className={twMerge(classes, disabled && 'pointer-events-none opacity-40')}
+        className={twMerge(classes, disabled && 'pointer-events-none opacity-60')}
         aria-disabled={disabled || undefined}
         tabIndex={disabled ? -1 : undefined}
         onMouseDown={createRipple}

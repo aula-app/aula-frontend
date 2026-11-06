@@ -98,7 +98,7 @@ const ComboBox = ({
                     'text-xs text-foreground cursor-default transition-colors',
                     'data-hovered:border-input-border-hover',
                     'data-focus-visible:outline-1 data-focus-visible:outline-current data-focus-visible:border-current',
-                    'data-disabled:opacity-50'
+                    'data-disabled:opacity-60'
                   )}
                 >
                   <span className="truncate">{item.label}</span>

@@ -39,7 +39,7 @@ const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
           aria-describedby={hintId}
           className={twMerge(
             'group flex items-center gap-2 text-sm select-none cursor-pointer',
-            'data-disabled:cursor-not-allowed data-disabled:opacity-50',
+            'data-disabled:cursor-not-allowed data-disabled:opacity-60',
             className
           )}
         >
