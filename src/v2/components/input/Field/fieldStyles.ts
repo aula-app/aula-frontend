@@ -24,7 +24,8 @@ export const listBoxClasses =
 
 export const listBoxItemClasses = twMerge(
   'px-3 py-2 text-sm cursor-pointer outline-none transition-colors duration-100 text-muted',
-  'data-selected:text-current data-selected:font-medium data-focused:bg-neutral data-focused:text-foreground'
+  'data-selected:text-current data-selected:font-medium data-focused:bg-neutral data-focused:text-foreground',
+  'data-focused:outline-solid data-focused:outline-2 data-focused:-outline-offset-2 data-focused:outline-foreground'
 );
 
 export const popoverClasses = 'text-foreground';
