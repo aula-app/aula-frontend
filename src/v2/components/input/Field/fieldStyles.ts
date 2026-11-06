@@ -22,4 +22,9 @@ export const fieldBoxClasses = ({ dense, invalid, hasStart, hasEnd }: FieldBoxOp
 export const listBoxClasses =
   'rounded-lg border border-input-border bg-background shadow-md overflow-auto py-1 outline-none';
 
+export const listBoxItemClasses = twMerge(
+  'px-3 py-2 text-sm cursor-pointer outline-none transition-colors duration-100 text-muted',
+  'data-selected:text-current data-selected:font-medium data-focused:bg-neutral data-focused:text-foreground'
+);
+
 export const popoverClasses = 'text-foreground';

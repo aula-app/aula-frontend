@@ -1,4 +1,10 @@
-import { FieldLabel, fieldBoxClasses, listBoxClasses, popoverClasses } from '@/v2/components/input/Field';
+import {
+  FieldLabel,
+  fieldBoxClasses,
+  listBoxClasses,
+  listBoxItemClasses,
+  popoverClasses,
+} from '@/v2/components/input/Field';
 import { SelectOption } from '@/v2/components/input/SelectInput';
 import Icon from '@/v2/components/ui/Icon';
 import {
@@ -132,10 +138,7 @@ const ComboBox = ({
               id={option.value}
               textValue={option.label}
               data-testid={dataTestId ? `${dataTestId}-option-${option.value}` : undefined}
-              className={twMerge(
-                'group flex items-center gap-2 px-3 py-2 text-sm cursor-pointer outline-none transition-colors duration-100 text-muted',
-                'data-selected:text-current data-selected:font-medium data-focused:bg-primary/10'
-              )}
+              className={twMerge(listBoxItemClasses, 'group flex items-center gap-2')}
             >
               <span className="flex-1 truncate">{option.label}</span>
               <Icon type="check" size="1em" className="invisible shrink-0 group-data-selected:visible" />
