@@ -54,7 +54,6 @@ const ComboBox = ({
       value={value}
       onChange={(keys: Key[]) => onChange(keys.map(String))}
       defaultItems={options}
-      menuTrigger="focus"
       allowsEmptyCollection
       isDisabled={disabled || loading || options.length === 0}
       className={twMerge('group/combobox relative flex flex-col gap-2', className)}
@@ -90,9 +89,9 @@ const ComboBox = ({
                   data-testid={dataTestId ? `${dataTestId}-tag-${item.value}` : undefined}
                   className={twMerge(
                     'flex max-w-full items-center gap-1 rounded-full border border-input-border py-0.5 pl-3 pr-1 bg-shadow',
-                    'text-xs text-foreground cursor-default outline-none transition-colors',
+                    'text-xs text-foreground cursor-default transition-colors',
                     'data-hovered:border-input-border-hover',
-                    'data-focus-visible:outline-2 data-focus-visible:outline-offset-1 data-focus-visible:outline-primary',
+                    'data-focus-visible:outline-1 data-focus-visible:outline-current data-focus-visible:border-current',
                     'data-disabled:opacity-50'
                   )}
                 >
@@ -102,8 +101,8 @@ const ComboBox = ({
                     data-testid={dataTestId ? `${dataTestId}-remove-${item.value}` : undefined}
                     className={twMerge(
                       'flex shrink-0 items-center justify-center rounded-full p-0.5 text-muted cursor-pointer',
-                      'outline-none transition-colors data-hovered:bg-shadow data-pressed:bg-shadow',
-                      'data-focus-visible:outline-2 data-focus-visible:outline-primary'
+                      'transition-colors data-hovered:bg-shadow data-pressed:bg-shadow',
+                      'data-focus-visible:outline-2 data-focus-visible:outline-foreground'
                     )}
                   >
                     <Icon type="close" size="0.875rem" />
