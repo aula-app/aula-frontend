@@ -36,6 +36,7 @@ describe('IdeaField', () => {
     const { onChange, user } = renderField();
 
     await user.click(await readyInput());
+    await user.keyboard('{ArrowDown}');
     await user.click(await screen.findByTestId('idea-field-option-i2'));
 
     expect(onChange).toHaveBeenCalledWith([{ value: 'i2', label: 'Skate ramp' }]);
@@ -54,6 +55,7 @@ describe('IdeaField', () => {
     const { user } = renderField([{ value: 'i1', label: 'Longer lunch break' }]);
 
     await user.click(await readyInput());
+    await user.keyboard('{ArrowDown}');
 
     expect(await screen.findByTestId('idea-field-option-i1')).toHaveAttribute('aria-selected', 'true');
     expect(screen.getByTestId('idea-field-option-i2')).toHaveAttribute('aria-selected', 'false');
@@ -68,6 +70,7 @@ describe('IdeaField', () => {
 
     rerender(<IdeaField roomId="r1" value={[]} onChange={onChange} />);
     await user.click(await readyInput());
+    await user.keyboard('{ArrowDown}');
     await user.click(await screen.findByTestId('idea-field-option-i9'));
     expect(onChange).toHaveBeenLastCalledWith([assigned]);
   });
