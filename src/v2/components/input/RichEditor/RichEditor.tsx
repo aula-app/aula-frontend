@@ -161,7 +161,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
           'hover:border-input-border-hover focus-within:outline-1',
           error || overLimit
             ? 'border-error-fg focus-within:outline-error-fg'
-            : 'focus-within:border-current focus-within:ring-current',
+            : 'focus-within:border-current focus-within:outline-current',
           disabled ? 'cursor-not-allowed opacity-50' : ''
         )}
         onFocus={() => setIsFocused(true)}

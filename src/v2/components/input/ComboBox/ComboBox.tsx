@@ -108,7 +108,7 @@ const ComboBox = ({
                     className={twMerge(
                       'flex shrink-0 items-center justify-center rounded-full p-0.5 text-muted cursor-pointer',
                       'transition-colors data-hovered:bg-shadow data-pressed:bg-shadow',
-                      'data-focus-visible:outline-2 data-focus-visible:outline-foreground'
+                      'data-focus-visible:outline-2 data-focus-visible:outline-current'
                     )}
                   >
                     <Icon type="close" size="0.875rem" />

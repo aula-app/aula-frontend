@@ -46,16 +46,16 @@ const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
           <span
             aria-hidden="true"
             className={twMerge(
-              'flex size-4 shrink-0 items-center justify-center rounded border border-secondary text-primary-fg',
+              'flex size-4 shrink-0 items-center justify-center rounded border border-secondary',
               'transition-colors duration-150',
               'group-data-selected:border-primary group-data-selected:bg-primary',
               'group-data-invalid:border-error-fg',
-              'group-data-focus-visible:outline-2 group-data-focus-visible:outline-offset-2 group-data-focus-visible:outline-primary'
+              'group-data-focus-visible:outline-2 group-data-focus-visible:outline-offset-2 group-data-focus-visible:outline-current'
             )}
           >
             <Icon
               type="check"
-              className="size-3 opacity-0 transition-opacity duration-150 group-data-selected:opacity-100"
+              className="size-3 text-primary-fg opacity-0 transition-opacity duration-150 group-data-selected:opacity-100"
             />
           </span>
           <span className={required ? 'font-bold after:content-["*"] after:ml-0.5' : undefined}>{label}</span>
