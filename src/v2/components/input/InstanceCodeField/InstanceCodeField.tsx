@@ -25,6 +25,11 @@ const InstanceCodeField = ({ value, onChange, error, isEditing, onEditClick, onC
       helperText={isEditing ? t('v2.page.code.hint') : undefined}
       value={value}
       onChange={(e) => onChange(e.target.value)}
+      onKeyDown={(e) => {
+        if (e.key !== 'Enter') return;
+        e.preventDefault();
+        onConfirmClick?.();
+      }}
       disabled={!isEditing || disabled}
       data-testid="instance-code"
       endAdornment={
