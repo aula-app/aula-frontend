@@ -6,6 +6,9 @@ import * as shared from '../support/utils';
 import { FILTER_EXCLUDED_RESOURCES, getStorageStatePath } from './utils';
 import { DbBackchannel } from './db-backchannel';
 import { TestConstants } from '../support/config';
+import { exec as _exec } from 'node:child_process';
+import { promisify } from 'node:util';
+const exec = promisify(_exec);
 
 type WorkerFixtures = {
   // Fixture to determine the DB instance_code based on worker's parallelIndex
@@ -38,11 +41,17 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
    */
   dbInstanceCode: [async ({}, use, { parallelIndex }) => {
     const idx = parallelIndex ?? '0';
-    const name = `db00${idx}`;
+    const name = `TEST${idx}`;
     await use(name);
   }, { scope: 'worker' }],
 
   baselineLoaded: [async ({ dbInstanceCode }, use) => {
+    // TODO less hacky
+    const index = +(dbInstanceCode.substring(4));
+    const { stdout, stderr } = await exec(`./artisan tenants:create-test --index=${index}`);
+    // TODO nicer, check for errors
+    console.log(stdout);
+
     const dbBackchannel = await DbBackchannel.getByInstanceCode(dbInstanceCode);
     await dbBackchannel.truncateAll();
     await dbBackchannel.seed();
@@ -75,11 +84,12 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
           await ctx.close();
           hasLoggedInState[username] = true;
         } catch {
-          // ignored because this might be fine, for example newly created users have to 
+          // ignored because this might be fine, for example newly created users have to
           // go through the process of setting their password the first time using tempPass (see CSV import test)
           console.log(`󱞭 [PW.worker] Login failed. Should retry. instance: "${dbInstanceCode}", username: "${username}"`);
           hasLoggedInState[username] = false;
-          // but, still we should return 'null' so that the 
+          await ctx.close();
+          // but, still we should return 'null' so that the
           // context would be set later after first-time registration is complete
           return null;
         }

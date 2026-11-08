@@ -1,3 +1,3 @@
 import VotingCard from './VotingCard';
 
-export { VotingCard as default,  };
+export { VotingCard as default };

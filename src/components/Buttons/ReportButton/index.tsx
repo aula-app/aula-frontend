@@ -1,3 +1,3 @@
 import ReportButton from './ReportButton';
 
-export { ReportButton as default,  };
+export { ReportButton as default };

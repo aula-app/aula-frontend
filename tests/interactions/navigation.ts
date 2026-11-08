@@ -5,7 +5,9 @@ import * as shared from '../support/utils';
 const host = shared.getHost();
 
 export const clickOnPageItem = async (page: Page, text: string) => {
-  const item = page.getByText(text);
+  // Closed <dialog>s keep their content mounted, so a bare text match can hit
+  // offscreen copies of the same label.
+  const item = page.getByText(text).filter({ visible: true });
   await expect(item).toBeVisible();
   await item.click();
 };
@@ -75,8 +77,16 @@ export const goToHome = async (page: Page) => {
   // a fresh room list. Without this, a stale home page loaded before another
   // worker created a room never shows that room's card.
   await page.goto(host, { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('#rooms-heading')).toBeVisible();
+  await expect(page.getByTestId(TEST_IDS.SCOPE_TITLE)).toBeVisible();
 };
+
+/**
+ * One of the dashboard's activity links (the sidebar links to the same paths); its name carries the new-items count
+ * @param page - Page on a view with the dashboard
+ * @param path - The link's target, e.g. '/messages'
+ */
+export const dashboardActivityLink = (page: Page, path: string) =>
+  page.locator('section').filter({ has: page.getByTestId('dashboard-toggle') }).locator(`a[href="${path}"]`);
 
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
@@ -150,14 +160,3 @@ export const goToAnnouncementsSettings = async (page: Page, forceRefresh: boolea
   await ensureUrl(page, '/settings/announcements', forceRefresh);
 };
 
-export const goToReportsSettings = async (page: Page, forceRefresh: boolean = false) => {
-  await ensureUrl(page, '/settings/reports', forceRefresh);
-};
-
-export const goToBugsSettings = async (page: Page, forceRefresh: boolean = false) => {
-  await ensureUrl(page, '/settings/bugs', forceRefresh);
-};
-
-export const goToRequestsSettings = async (page: Page, forceRefresh: boolean = false) => {
-  await ensureUrl(page, '/settings/requests', forceRefresh);
-};

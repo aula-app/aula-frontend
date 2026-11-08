@@ -1,3 +1,3 @@
 import SetPasswordView from './SetPasswordView';
 
-export { SetPasswordView as default,  };
+export { SetPasswordView as default };

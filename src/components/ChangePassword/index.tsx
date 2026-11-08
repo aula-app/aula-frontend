@@ -1,3 +1,3 @@
 import ChangePassword from './ChangePassword';
 
-export { ChangePassword as default,  };
+export { ChangePassword as default };

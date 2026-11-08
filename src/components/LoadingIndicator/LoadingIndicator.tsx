@@ -8,17 +8,17 @@ interface LoadingIndicatorProps {
    * Whether content is currently loading
    */
   isLoading: boolean;
-  
+
   /**
    * Optional name of the resource being loaded, will be used in screen reader announcements
    */
   resourceName?: string;
-  
+
   /**
    * Optional text to display while loading. If not provided, uses 'actions.loading'
    */
   loadingText?: string;
-  
+
   /**
    * Optional size for the CircularProgress component
    * @default 40
@@ -30,26 +30,21 @@ interface LoadingIndicatorProps {
  * A loading indicator component that properly announces loading states to screen readers
  * via aria-live regions.
  */
-const LoadingIndicator = ({ 
-  isLoading, 
-  resourceName, 
-  loadingText,
-  size = 40
-}: LoadingIndicatorProps) => {
+const LoadingIndicator = ({ isLoading, resourceName, loadingText, size = 40 }: LoadingIndicatorProps) => {
   const { t } = useTranslation();
-  
+
   // Announce loading state changes to screen readers
   useEffect(() => {
     announceLoadingState(isLoading, resourceName);
   }, [isLoading, resourceName]);
-  
+
   if (!isLoading) return null;
-  
+
   return (
-    <Box 
-      display="flex" 
-      flexDirection="column" 
-      alignItems="center" 
+    <Box
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
       justifyContent="center"
       py={3}
       role="status"

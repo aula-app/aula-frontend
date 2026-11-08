@@ -1,0 +1,48 @@
+import { usePageTitle } from '@/hooks/usePageTitle';
+import { versionsRequest, VersionsResponse } from '@/services/requests-v2';
+import { useAppStore } from '@/store/AppStore';
+import { summarizeVersions } from '@/v2/utils/versions';
+import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+const AboutViewEN = () => {
+  const { t } = useTranslation();
+  const [, dispatch] = useAppStore();
+  const [versions, setVersions] = useState<VersionsResponse>();
+  usePageTitle('pageTitles.about');
+
+  const fetchVersions = useCallback(async () => {
+    setVersions(await versionsRequest());
+  }, []);
+
+  useEffect(() => {
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.about'), '']] });
+    fetchVersions();
+  }, []);
+
+  return (
+    <div className="flex flex-col gap-4" data-testid="about-view">
+      <h1>{t('v2.page.about.title')}</h1>
+      <h2>{t('v2.page.about.version')}</h2>
+      <code>
+        {summarizeVersions({ ...versions, 'aula-frontend': import.meta.env?.VITE_APP_VERSION }).map(
+          ([name, version]) => (
+            <span key={name} className="block">
+              {name}: &nbsp;{version}
+            </span>
+          )
+        )}
+      </code>
+      <hr />
+      <h2>{t('v2.page.about.publisher')}</h2>
+      <h4>aula gGmbH</h4>
+      <p>Alte Schönhauser Straße 23/24</p>
+      <p>10119 Berlin</p>
+      <p>{t('v2.page.about.phone')}: 030-28040850</p>
+      <p>{t('v2.page.about.email')}: info@aula.de</p>
+      <p>{t('v2.page.about.legal')}</p>
+    </div>
+  );
+};
+
+export default AboutViewEN;

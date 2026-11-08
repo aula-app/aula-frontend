@@ -14,12 +14,14 @@ export const TEST_IDS = {
   // Content reporting (ReportButton)
   REPORT_DIALOG: 'report-dialog',
 
-  // Search & sort (ScopeHeader)
+  // Search & sort (ScopeHeader, v2 ScopeTitle)
   SEARCH_FIELD: 'search-field',
   SEARCH_BUTTON: 'search-button',
   SORT_SELECT: 'sort-select',
   SORT_BUTTON: 'sort-button',
-  SORT_DIRECTION_BUTTON: 'sort-direction-button',
+  SORT_DIRECTION_BUTTON: 'sort-select-direction',
+  SCOPE_CONTROLS: 'scope-controls',
+  SCOPE_TITLE: 'scope-title',
 
   // Filtering (FilterBar)
   FILTER_TOGGLE_BUTTON: 'filter-toggle-button',
@@ -30,11 +32,76 @@ export const TEST_IDS = {
 
   // Dialogs / confirmations (ConfirmDialog, DataDelete)
   CONFIRM_BUTTON: 'confirm-button',
+  APPROVE_BUTTON: 'approve-button',
+  REJECT_BUTTON: 'reject-button',
+  ADVANCE_PHASE_BUTTON: 'advance-phase-button',
+  ADVANCE_PHASE_CONFIRM: 'advance-phase-confirm',
+  ADVANCE_PHASE_CANCEL: 'advance-phase-cancel',
+  VOTE_RESULTS: 'vote-results',
+  WINNER_BUTTON: 'winner-button',
+  NOT_WINNER_BUTTON: 'not-winner-button',
   CANCEL_BUTTON: 'cancel-button',
   DELETE_BUTTON: 'delete-button',
 
+  // Box actions (v2 Boxes / BoxCard MoreOptions)
+  ADD_BOX_BUTTON: 'add-box-button',
+  BOX_IDEA_LIST: 'box-idea-list',
+  BOX_MORE_MENU: 'box-more-menu',
+  BOX_MORE_OPTIONS_PANEL: 'box-more-options-panel',
+  DELETE_BOX_CONFIRM: 'delete-box-confirm',
+  DELETE_BOX_CANCEL: 'delete-box-cancel',
+
+  // Idea card actions (v2 Idea, Edit/Delete/ReportButton)
+  ADD_IDEA_BUTTON: 'add-idea-button',
+  IDEA_MORE_MENU: 'idea-more-menu',
+  IDEA_MORE_OPTIONS_PANEL: 'idea-more-options-panel',
+  LIKE_BUTTON: 'like-button',
+  EDIT_BUTTON: 'edit-button',
+  REPORT_BUTTON: 'report-button',
+  SHARE_BUTTON: 'share-button',
+  DELETE_IDEA_CONFIRM: 'delete-idea-confirm',
+  DELETE_IDEA_CANCEL: 'delete-idea-cancel',
+
+  // Comment actions (v2 Comment, Comments section)
+  ADD_COMMENT_BUTTON: 'add-comment-button',
+  COMMENT_FORM: 'comment-form',
+  COMMENT_FORM_SUBMIT: 'confirm-comment-button',
+  COMMENT_FORM_CANCEL: 'cancel-comment-button',
+  COMMENT_MORE_MENU: 'comment-more-options',
+  COMMENT_MORE_OPTIONS_PANEL: 'comment-more-options-panel',
+
   // Offline state (PublicOfflineView)
   SCHOOL_OFFLINE_VIEW: 'school-offline-view',
+
+  // Reports (ReportCard)
+  ARCHIVE_REPORT_BUTTON: 'archive-report-button',
+
+  // Data requests (RequestActions)
+  REJECT_REQUEST_BUTTON: 'cancel-request',
+  CONFIRM_REQUEST_BUTTON: 'confirm-request',
+  CONFIRM_REQUEST_DIALOG: 'confirm-request-dialog',
+  CONFIRM_REQUEST_CANCEL: 'cancel-request-action',
+  CONFIRM_REQUEST_ACTION: 'confirm-request-action',
+
+  // Messages (Messages view, MessageDetail)
+  MESSAGE_TYPE_FILTER: 'message-type-filter',
+  ARCHIVE_MESSAGE_BUTTON: 'archive-message-button',
+
+  // Updates (Updates view)
+  UPDATE_TYPE_FILTER: 'update-type-filter',
+
+  // Toast notifications (Toast)
+  TOAST_ERROR: 'toast-error',
+  TOAST_SUCCESS: 'toast-success',
+  TOAST_WARNING: 'toast-warning',
+  TOAST_INFO: 'toast-info',
+
+  // Navigation layout (TopBar, SideBar, Breadcrumb, PrintButton)
+  TOPBAR_MENU_BUTTON: 'topbar-menu-button',
+  BREADCRUMB_NAV: 'breadcrumb-nav',
+  BREADCRUMB_TOGGLE: 'breadcrumb-toggle',
+  BREADCRUMB_MENU: 'breadcrumb-menu',
+  PRINT_BUTTON: 'print-button',
 
   // Settings / timed actions (TimedCommands)
   TIMEDCOMMAND_CONFIRM_BUTTON: 'timedcommand-confirm-button',

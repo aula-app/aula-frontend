@@ -4,8 +4,7 @@
 import { announceToScreenReader } from './accessibility';
 import { useCallback, useEffect, useRef } from 'react';
 
-const FOCUSABLE_ELEMENTS = 
-  'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+const FOCUSABLE_ELEMENTS = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
 /**
  * Traps focus within a modal dialog
@@ -32,26 +31,29 @@ export const useFocusTrap = (
   }, [modalRef]);
 
   // Handle keyboard events to trap focus
-  const handleKeyDown = useCallback((e: KeyboardEvent) => {
-    if (!modalRef.current || e.key !== 'Tab') return;
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!modalRef.current || e.key !== 'Tab') return;
 
-    const focusableElements = getFocusableElements();
-    if (focusableElements.length === 0) return;
+      const focusableElements = getFocusableElements();
+      if (focusableElements.length === 0) return;
 
-    const firstElement = focusableElements[0] as HTMLElement;
-    const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
+      const firstElement = focusableElements[0] as HTMLElement;
+      const lastElement = focusableElements[focusableElements.length - 1] as HTMLElement;
 
-    // If shift+tab on first element, move to last element
-    if (e.shiftKey && document.activeElement === firstElement) {
-      e.preventDefault();
-      lastElement?.focus();
-    } 
-    // If tab on last element, move to first element
-    else if (!e.shiftKey && document.activeElement === lastElement) {
-      e.preventDefault();
-      firstElement?.focus();
-    }
-  }, [modalRef, getFocusableElements]);
+      // If shift+tab on first element, move to last element
+      if (e.shiftKey && document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement?.focus();
+      }
+      // If tab on last element, move to first element
+      else if (!e.shiftKey && document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement?.focus();
+      }
+    },
+    [modalRef, getFocusableElements]
+  );
 
   // Set initial focus
   const setInitialFocus = useCallback(() => {
@@ -86,7 +88,7 @@ export const useFocusTrap = (
       const focusTimer = setTimeout(() => {
         setInitialFocus();
       }, 50);
-      
+
       return () => clearTimeout(focusTimer);
     }
   }, [isOpen, setInitialFocus]);
@@ -103,7 +105,7 @@ export const useFocusTrap = (
         // First try the specified final focus element
         if (finalFocusRef?.current && finalFocusRef.current.isConnected) {
           finalFocusRef.current.focus();
-        } 
+        }
         // Then try the element that had focus before opening
         else if (previousFocusRef.current && previousFocusRef.current.isConnected) {
           previousFocusRef.current.focus();
@@ -133,13 +135,13 @@ export const useFocusTrap = (
           }
         }
       }, 100); // 100ms delay seems to work well with most animations
-      
+
       // Remove event listener
       document.removeEventListener('keydown', handleKeyDown);
-      
+
       return () => clearTimeout(returnFocusTimer);
     }
-    
+
     // Clean up on unmount
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
@@ -153,23 +155,23 @@ export const useFocusTrap = (
     // Get all elements in the document that should be hidden from screen readers when modal is open
     const rootNodes = document.querySelectorAll('body > *');
     const modalNode = modalRef.current.closest('[role="dialog"], [role="alertdialog"]') || modalRef.current;
-    
+
     // Store the original aria-hidden values
     const originalValues = new Map<Element, string | null>();
-    
+
     // Hide all other root nodes from screen readers
-    rootNodes.forEach(node => {
+    rootNodes.forEach((node) => {
       if (node.contains(modalNode) || modalNode.contains(node)) return;
-      
+
       originalValues.set(node, node.getAttribute('aria-hidden'));
       node.setAttribute('aria-hidden', 'true');
     });
-    
+
     return () => {
       // Restore original aria-hidden values
-      rootNodes.forEach(node => {
+      rootNodes.forEach((node) => {
         if (node.contains(modalNode) || modalNode.contains(node)) return;
-        
+
         const originalValue = originalValues.get(node);
         if (originalValue === null) {
           node.removeAttribute('aria-hidden');
@@ -194,22 +196,16 @@ export const useModalAnnouncement = (
 ) => {
   // Track previous open state to detect changes
   const wasOpen = useRef(false);
-  
+
   useEffect(() => {
     // Only announce when state changes
     if (isOpen && !wasOpen.current) {
       // Announce modal opening
-      announceToScreenReader(
-        translationFunction('ui.accessibility.modalOpened', { title }), 
-        'assertive'
-      );
+      announceToScreenReader(translationFunction('ui.accessibility.modalOpened', { title }), 'assertive');
       wasOpen.current = true;
     } else if (!isOpen && wasOpen.current) {
       // Announce modal closing
-      announceToScreenReader(
-        translationFunction('ui.accessibility.modalClosed'), 
-        'polite'
-      );
+      announceToScreenReader(translationFunction('ui.accessibility.modalClosed'), 'polite');
       wasOpen.current = false;
     }
   }, [isOpen, title, translationFunction]);
@@ -227,11 +223,11 @@ export const useEscapeKey = (isOpen: boolean, onClose: () => void) => {
         onClose();
       }
     };
-    
+
     if (isOpen) {
       document.addEventListener('keydown', handleEscapeKey);
     }
-    
+
     return () => {
       document.removeEventListener('keydown', handleEscapeKey);
     };

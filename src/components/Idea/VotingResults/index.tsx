@@ -1,3 +1,3 @@
 import VotingResults from './VotingResults';
 
-export { VotingResults as default,  };
+export { VotingResults as default };
