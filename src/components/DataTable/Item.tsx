@@ -5,7 +5,7 @@ import { getIdpProvider } from '@/services/idpMigration';
 import { getRoom } from '@/services/rooms';
 import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
-import { PossibleFields, SettingType, UserType } from '@/types/Scopes';
+import { PossibleFields, RoomType, SettingType, UserType } from '@/types/Scopes';
 import { isSsoUser, phases, STATUS } from '@/utils';
 import { Chip, Stack, Typography } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
@@ -41,10 +41,10 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
 
   const value = row[column as keyof SettingType];
 
-  // The provider is a property of the school, not of a person, and the legacy
-  // user payload has no way to reach it.
+  // The provider is a property of the school, and the legacy user and room
+  // payloads have no way to reach it.
   useEffect(() => {
-    if (column !== 'idp_user_id') return;
+    if (column !== 'idp_user_id' && column !== 'idp_group_id') return;
 
     getIdpProvider().then(setIdpProvider);
   }, [column]);
@@ -187,6 +187,13 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
       if (!user.idp_user_id && !user.sso_sub) return <Typography>aula</Typography>;
 
       return <Typography>{`sso: ${user.sso_provider ?? idpProvider ?? 'unknown'}`}</Typography>;
+    }
+
+    case 'idp_group_id': {
+      const room = row as RoomType;
+      if (!room.idp_group_id) return <Typography>aula</Typography>;
+
+      return <Typography>{`sso: ${idpProvider ?? 'unknown'}`}</Typography>;
     }
 
     // Default case for all other fields
