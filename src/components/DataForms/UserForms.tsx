@@ -150,8 +150,13 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       status: data.status,
       userlevel: data.userlevel || defaultValues.userlevel,
       user_id: defaultValues.hash_id,
+      // editUser requires all three and overwrites them, so SSO users send back the stored values.
       ...(isSsoManaged
-        ? {}
+        ? {
+            email: defaultValues.email ?? '',
+            realname: defaultValues.realname,
+            username: defaultValues.username,
+          }
         : {
             email: data.email,
             realname: data.realname,

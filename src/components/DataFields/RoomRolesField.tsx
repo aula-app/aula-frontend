@@ -2,7 +2,7 @@ import AppIcon from '@/components/AppIcon';
 import { getAllRooms } from '@/services/rooms';
 import { RoomType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
-import { roles } from '@/utils';
+import { isSsoUser, roles } from '@/utils';
 import {
   Button,
   ButtonProps,
@@ -44,10 +44,16 @@ const RoomRolesField: React.FC<Props> = ({ user, disabled = false, onUpdate, ...
   const [userRoles, setUserRoles] = useState<{ room: string; role: RoleTypes }[]>(JSON.parse(user?.roles || '[]'));
   const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes | 0 }[]>([]);
 
+  // The IdP owns an SSO user's room membership; only their role in those rooms is editable here.
+  const isSsoManaged = isSsoUser(user);
+  const visibleRooms = isSsoManaged
+    ? schoolRooms.filter((room) => userRoles.some((role) => role.room === room.hash_id))
+    : schoolRooms;
+
   // Create role options based on user level
   const getRoleOptions = () => {
     const options = [
-      { value: 0, label: t('roles.empty') },
+      ...(isSsoManaged ? [] : [{ value: 0, label: t('roles.empty') }]),
       ...roles
         // only users that aren't admins or supermoderators can have room-specific roles
         .filter((role) => role < 40)
@@ -145,7 +151,7 @@ const RoomRolesField: React.FC<Props> = ({ user, disabled = false, onUpdate, ...
           aria-label={t('ui.accessibility.roomRolesList')}
           id="room-roles-dialog-description"
         >
-          {schoolRooms.map((room, index) => {
+          {visibleRooms.map((room, index) => {
             const currentRole =
               updateRoles.find((role) => role.room === room.hash_id)?.role ??
               userRoles.find((role) => role.room === room.hash_id)?.role ??
