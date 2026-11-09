@@ -13,18 +13,12 @@ import { useTranslation } from 'react-i18next';
 import MarkdownReader from '../MarkdownReader';
 import ResetPasswordButton from '../Buttons/ResetPasswordButton';
 
-/**
- * Props for the DataItem component
- */
 type Props = {
   row: SettingType;
   column: keyof PossibleFields;
   onReload?: () => void;
 };
 
-/**
- * Valid message consent types
- */
 type MessageConsentValues = 'message' | 'announcement' | 'alert';
 const messageConsentValues = ['message', 'announcement', 'alert'] as MessageConsentValues[];
 
@@ -175,15 +169,10 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
       ) : null;
     }
 
-    // Where the account comes from: "aula" for one made here, "sso: <provider>"
-    // for one the directory owns.
     case 'idp_user_id': {
       const user = row as UserType;
 
-      // idp_user_id, not sso_sub: the import gives an account its provider
-      // identity, while sso_sub only appears once that person has signed in.
-      // Keying off sso_sub alone labelled every imported account "aula" until
-      // its owner first logged in, which is exactly backwards.
+      // idp_user_id: set at import, before the first sign-in.
       if (!user.idp_user_id && !user.sso_sub) return <Typography>aula</Typography>;
 
       return <Typography>{`sso: ${user.sso_provider ?? idpProvider ?? 'unknown'}`}</Typography>;

@@ -30,6 +30,7 @@ interface RoomFormsProps {
 
 const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false, onClose }) => {
   const { t } = useTranslation();
+  const isIdpRoom = !!defaultValues?.idp_group_id;
   const [users, setUsers] = useState<string[]>([]);
   const [updateUsers, setUpdateUsers] = useState<UpdateType>({ add: [], remove: [] });
   const [isLoading, setIsLoading] = useState(false);
@@ -38,7 +39,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   const saveUserSelections = useCallback(
     (updates?: UpdateType) => {
       if (!defaultValues) {
-        // Only for new rooms
         try {
           const userIdsToSave = updates ? updates.add : updateUsers.add;
           sessionStorage.setItem('roomform-users-draft', JSON.stringify(userIdsToSave));
@@ -53,7 +53,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   // Load user selections from sessionStorage (only for new rooms)
   const loadUserSelections = useCallback(() => {
     if (!defaultValues) {
-      // Only for new rooms
       try {
         const saved = sessionStorage.getItem('roomform-users-draft');
         if (saved) {
@@ -66,7 +65,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     }
   }, [defaultValues]);
 
-  // Clear user selections from sessionStorage
   const clearUserSelections = useCallback(() => {
     try {
       sessionStorage.removeItem('roomform-users-draft');
@@ -76,7 +74,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   }, []);
 
   const schema = yup.object({
-    room_name: yup.string().required(t('forms.validation.required')),
+    room_name: isIdpRoom ? yup.string().nullable() : yup.string().required(t('forms.validation.required')),
     description_public: yup.string().required(t('forms.validation.required')),
     description_internal: yup.string().nullable(),
     // the default room has no phase fields in the form and may hold NULL durations
@@ -106,7 +104,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     setError,
   } = form;
 
-  // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
   const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
@@ -167,7 +164,8 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   const updateRoom = async (data: SchemaType) => {
     if (!defaultValues?.hash_id) return;
     const response = await editRoom({
-      room_name: data.room_name,
+      // editRoom requires and overwrites the name.
+      room_name: isIdpRoom ? defaultValues.room_name : data.room_name,
       description_internal: data.description_internal,
       description_public: data.description_public,
       internal_info: data.internal_info,
@@ -194,7 +192,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     await Promise.all([...addPromises, ...removePromises]);
   };
 
-  // Helper function to handle user selection accumulation for new rooms
   const handleUserSelectionChange = useCallback(
     (updates: UpdateType) => {
       if (!defaultValues) {
@@ -209,7 +206,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
         setUpdateUsers(accumulatedUpdates);
         saveUserSelections(accumulatedUpdates);
       } else {
-        // For existing rooms: use updates directly
         setUpdateUsers(updates);
         saveUserSelections(updates);
       }
@@ -217,7 +213,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     [defaultValues, updateUsers.add, saveUserSelections]
   );
 
-  // Memoize the key properties of defaultValues to avoid unnecessary re-renders
   const defaultValuesKey = useMemo(() => {
     if (!defaultValues) return null;
     return {
@@ -235,7 +230,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     reset({ ...defaultValues });
     fetchRoomUsers();
 
-    // Load user selections for new rooms, clear for edit rooms
     if (!defaultValues) {
       loadUserSelections();
     } else {
@@ -274,8 +268,8 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
             <Stack gap={2} flex={1}>
               <TextField
                 fullWidth
-                required
-                disabled={isLoading}
+                required={!isIdpRoom}
+                disabled={isLoading || isIdpRoom}
                 label={t(`settings.columns.room_name`)}
                 size="small"
                 error={!!errors.room_name}
@@ -304,7 +298,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
                 <UsersField
                   defaultValues={defaultValues ? users : updateUsers.add}
                   onChange={handleUserSelectionChange}
-                  disabled={isLoading}
+                  disabled={isLoading || isIdpRoom}
                 />
               )}
             </Stack>
