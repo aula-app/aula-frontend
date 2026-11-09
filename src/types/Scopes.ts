@@ -147,6 +147,8 @@ export interface RoomType {
   status: StatusTypes;
   updater_id: string;
   type: 0 | 1;
+  /** The IdP group this room is synced from; null for rooms created in aula. */
+  idp_group_id?: string | null;
 }
 
 export interface UserType {

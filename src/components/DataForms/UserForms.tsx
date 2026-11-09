@@ -26,8 +26,6 @@ interface UserFormsProps {
 const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
 
-  // Provider-managed accounts own their identity: the admin cannot edit the
-  // username, email or realname the directory supplies.
   const isSsoManaged = isSsoUser(defaultValues);
 
   const [rooms, setRooms] = useState<string[]>([]);
@@ -67,7 +65,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     watch,
   } = form;
 
-  // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
   const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
@@ -108,7 +105,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   };
 
   const newUser = async (data: SchemaType) => {
-    // Clear any previous errors
     setError('username', {});
     setError('email', {});
     setError('root', {});
@@ -123,7 +119,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       username: data.username,
     });
     if (response.error || !response.data) {
-      // Check if it's a duplicate username/email error (error_code 2)
       setError('root', {
         type: 'manual',
         message: response.error || t('errors.default'),
@@ -139,7 +134,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const updateUser = async (data: SchemaType) => {
     if (!defaultValues?.hash_id) return;
 
-    // Clear any previous errors
     setError('username', {});
     setError('email', {});
     setError('root', {});
@@ -150,7 +144,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       status: data.status,
       userlevel: data.userlevel || defaultValues.userlevel,
       user_id: defaultValues.hash_id,
-      // editUser requires all three and overwrites them, so SSO users send back the stored values.
+      // editUser requires and overwrites all three.
       ...(isSsoManaged
         ? {
             email: defaultValues.email ?? '',
