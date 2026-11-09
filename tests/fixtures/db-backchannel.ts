@@ -58,6 +58,11 @@ export class DbBackchannel {
     await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '120-seed.sql'));
   }
 
+  /** Marks part of the baseline as IdP-managed; undone by the next `seed()`. */
+  public async seedIdpManaged(): Promise<void> {
+    await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '130-idp-managed.sql'));
+  }
+
   private async runSqlFile(filePath: string) {
     const sql = fs.readFileSync(filePath, 'utf8');
     await this.query(sql);
