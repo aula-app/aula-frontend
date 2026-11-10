@@ -282,7 +282,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
               <TextField
                 fullWidth
                 required
-                // native disabled only: register({ disabled }) would drop the value from the submit payload
                 disabled={isLoading || isIdpRoom}
                 label={t(`settings.columns.room_name`)}
                 size="small"
