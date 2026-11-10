@@ -75,7 +75,10 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
 
   const schema = yup.object({
     room_name: yup.string().required(t('forms.validation.required')),
-    description_public: yup.string().required(t('forms.validation.required')),
+    description_public: yup
+      .string()
+      .transform((value) => value ?? '')
+      .default(''),
     description_internal: yup.string().nullable(),
     // the default room has no phase fields in the form and may hold NULL durations
     phase_duration_1: isDefault ? yup.number().nullable() : yup.number().required(t('forms.validation.required')),
@@ -105,6 +108,17 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   } = form;
 
   type SchemaType = yup.InferType<typeof schema>;
+
+  const resetForm = () =>
+    reset(
+      defaultValues && !isDefault
+        ? {
+            ...defaultValues,
+            phase_duration_1: defaultValues.phase_duration_1 || DEFAULT_PHASE_DURATION,
+            phase_duration_3: defaultValues.phase_duration_3 || DEFAULT_PHASE_DURATION,
+          }
+        : { ...defaultValues }
+    );
 
   const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
     storageKey: 'roomform-draft-new',
@@ -226,7 +240,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   }, [defaultValues]);
 
   useEffect(() => {
-    reset({ ...defaultValues });
+    resetForm();
     fetchRoomUsers();
 
     if (!defaultValues) {
@@ -258,7 +272,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
                 <>
                   <RoomImageSelector
                     image={field.value || control._defaultValues['description_internal'] || 'DI:0:0'}
-                    onClose={() => reset({ ...defaultValues })}
+                    onClose={resetForm}
                     onSubmit={(value) => setValue('description_internal', value)}
                   />
                 </>
@@ -278,7 +292,6 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
                 {...register('room_name')}
               />
               <MarkdownEditor
-                required
                 disabled={isLoading}
                 name="description_public"
                 control={control}
