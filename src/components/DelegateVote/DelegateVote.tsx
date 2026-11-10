@@ -3,13 +3,14 @@ import { AccessibleDialog } from '@/components/AccessibleDialog';
 import { GenericListRequest } from '@/services/requests';
 import { DelegateType, delegateVote, getPossibleDelegations, revokeDelegation } from '@/services/users';
 import { useAppStore } from '@/store';
-import { localStorageGet, parseJwt } from '@/utils';
+import { parseJwt } from '@/utils';
 import { Button, FilledInput, Slide, Stack, Typography } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import { ChangeEvent, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import UserAvatar from '../UserAvatar';
+import { getAccessToken } from '@/services/session';
 
 interface Props {
   open: boolean;
@@ -26,8 +27,7 @@ interface Props {
 const DelegateVote = ({ open, delegate, onClose, triggerRef }: Props) => {
   const { t } = useTranslation();
   const { room_id, box_id } = useParams();
-  const jwt_token = localStorageGet('token');
-  const jwt_payload = parseJwt(jwt_token);
+  const jwt_payload = parseJwt(getAccessToken() ?? '');
   const [, dispatch] = useAppStore();
 
   const [users, setUsers] = useState<DelegateType[]>([]);

@@ -8,6 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import * as yup from 'yup';
+import { getAccessToken } from '@/services/session';
 
 interface FormData {
   email: string;
@@ -44,7 +45,7 @@ const RecoveryPasswordView = () => {
       const response = await recoverPassword(
         localStorageGet('api_url'),
         formData.email,
-        localStorageGet('token'),
+        getAccessToken(),
         controller.signal
       );
 

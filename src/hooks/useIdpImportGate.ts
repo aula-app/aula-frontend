@@ -1,6 +1,7 @@
 import { getIdpImportStatus, IdpImportStatus } from '@/services/sso';
 import { localStorageGet } from '@/utils';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { getAccessToken } from '@/services/session';
 
 /** How often to ask the backend whether the school import has finished. */
 const POLL_INTERVAL_MS = 2000;
@@ -49,7 +50,7 @@ export const useIdpImportGate = () => {
 
     const read = async (): Promise<IdpImportStatus | null> => {
       const apiUrl = localStorageGet('api_url');
-      const token = localStorageGet('token');
+      const token = getAccessToken();
 
       if (!apiUrl || !token) return null;
 

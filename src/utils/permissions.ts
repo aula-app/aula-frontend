@@ -1,6 +1,6 @@
 import { RoleTypes } from '@/types/SettingsTypes';
 import { parseJwt } from './jwt';
-import { localStorageGet } from './localStorage';
+import { getAccessToken } from '@/services/session';
 
 /** User roles:
  * 10 => "guest",
@@ -126,7 +126,7 @@ const permissions = {
 export function checkPermissions(model: keyof typeof permissions, action: string, user_id?: string): boolean {
   try {
     // Check user permissions
-    const jwt = localStorageGet('token');
+    const jwt = getAccessToken();
     if (!jwt) return false;
 
     const user = parseJwt(jwt);
