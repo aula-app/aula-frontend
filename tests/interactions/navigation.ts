@@ -40,7 +40,7 @@ export const openAccordion = async (page: Page, testId: string) => {
 // Page navigation
 
 /**
- * Refreshes the JWT in the page's localStorage by calling the backend refresh endpoint.
+ * Refreshes the JWT in the page's localStorage through the OAuth2 refresh grant.
  * Necessary when the stored JWT pre-dates room membership changes made in a test's beforeAll,
  * because the server uses JWT room roles to authorise getIdeasByRoom but doesn't trigger
  * an automatic refresh for that endpoint when the JWT is valid-but-stale.
@@ -49,20 +49,23 @@ const refreshJWT = async (page: Page): Promise<void> => {
   await page.evaluate(async () => {
     const apiUrl = localStorage.getItem('api_url');
     const code = localStorage.getItem('code');
-    const token = localStorage.getItem('token');
-    console.log(`refreshJWT: ${apiUrl} ${code} ${token}`);
-    if (!apiUrl || !code || !token) return;
+    const refreshToken = localStorage.getItem('refresh_token');
+    const clientId = JSON.parse(localStorage.getItem('config') ?? '{}').OAUTH_CLIENT_ID;
+    console.log(`refreshJWT: ${apiUrl} ${code} ${refreshToken}`);
+    if (!apiUrl || !code || !refreshToken || !clientId) return;
     try {
-      const response = await fetch(`${apiUrl}/api/controllers/refresh_token.php`, {
-        method: 'GET',
+      const response = await fetch(`${apiUrl}/api/v2/oauth/token`, {
+        method: 'POST',
         headers: {
           'aula-instance-code': code,
-          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
+        body: new URLSearchParams({ grant_type: 'refresh_token', client_id: clientId, refresh_token: refreshToken }),
       });
       const data = await response.json();
-      if (data && data.JWT) {
-        localStorage.setItem('token', data.JWT);
+      if (data && data.access_token) {
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('refresh_token', data.refresh_token);
       }
     } catch {
       // Ignore errors — stale JWT is better than a crash
