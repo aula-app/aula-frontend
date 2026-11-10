@@ -2,11 +2,12 @@ import { AppIconButton, AppLink } from "@/components";
 import Eduplaces from "@/components/Buttons/Eduplaces/Eduplaces";
 import { handleOAuthLogin } from "@/services/auth";
 import { declineAccountClaim } from "@/services/idpMigration";
-import { loginUser } from "@/services/login";
+import { OAuthError, passwordGrant } from "@/services/oauth";
+import { storeSession } from "@/services/session";
 import { completeSsoLink, getSsoStatus, initiateSso } from "@/services/sso";
 import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";
-import { isSsoBrowserSupported, localStorageGet, localStorageSet, MIN_SSO_SAFARI_VERSION, parseJwt } from "@/utils";
+import { isSsoBrowserSupported, localStorageGet, MIN_SSO_SAFARI_VERSION, parseJwt } from "@/utils";
 import { Browser } from "@capacitor/browser";
 import { Capacitor } from "@capacitor/core";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -27,6 +28,8 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import * as yup from "yup";
+
+const LOGIN_TIMEOUT_MS = 10000;
 
 /**
  * Renders "Login" view for Login flow
@@ -97,42 +100,15 @@ const LoginView = () => {
     try {
       setLoading(true);
 
-      const jwt_token = localStorageGet("token");
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
+      const timeoutId = setTimeout(() => controller.abort(), LOGIN_TIMEOUT_MS);
 
-      const response = await loginUser(instanceApiUrl, formData, jwt_token, controller.signal);
+      const session = await passwordGrant(instanceApiUrl, formData, controller.signal);
       clearTimeout(timeoutId);
       setLoading(false);
 
-      if (response.online_mode !== undefined && response.online_mode !== 1) {
-        navigate("/offline", { replace: true });
-        return;
-      }
-
-      if (response.data || !('JWT' in response)) {
-        // error_code 3 means "this account / tenant requires SSO" — show a
-        // dedicated message so the user understands to click the SSO button
-        // instead of retrying the password.
-        if ('error_code' in response && response.error_code === 3) {
-          const reason = 'error' in response && response.error ? String(response.error) : 'use_sso';
-          setError(t(`errors.sso.${reason}`, { defaultValue: t('errors.sso.use_sso') }));
-          return;
-        }
-        setError(
-          'user_status' in response && response.user_status !== null
-            ? response.user_status === 0
-              ? t('errors.accountInactive')
-              : t('errors.accountSuspended', { var: response.data ? t('errors.accountSuspendDate', { var: response.data }) : '' })
-            : t('errors.invalidCredentials')
-        );
-        return;
-      }
-
-      const responseJWT = parseJwt(response.JWT || '');
-
-      if (responseJWT?.temp_pw) {
-        navigate(`/password`, { replace: true, state: { tmp_jwt: response.JWT } });
+      if (parseJwt(session.accessToken)?.temp_pw) {
+        navigate(`/password`, { replace: true, state: { tmp_jwt: session.accessToken } });
         return;
       }
 
@@ -141,7 +117,7 @@ const LoginView = () => {
       // /sso/link endpoint stamps sso_sub onto the row so future SSO logins
       // bypass this prompt.
       if (ssoLinkToken) {
-        const linkResult = await completeSsoLink(instanceApiUrl, ssoLinkToken, response.JWT || '');
+        const linkResult = await completeSsoLink(instanceApiUrl, ssoLinkToken, session.accessToken);
         if (!linkResult.success) {
           setError(t(`errors.sso.${linkResult.error}`, { defaultValue: t('errors.sso.link_failed') }));
           return;
@@ -149,19 +125,33 @@ const LoginView = () => {
         setSsoLinkToken(null);
       }
 
-      localStorageSet("token", response.JWT);
+      storeSession(session);
       dispatch({ type: "LOG_IN" });
       navigate("/", { replace: true });
     } catch (e) {
       setLoading(false);
-      if (e instanceof Error) {
-        if (e.name === 'AbortError') {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.timeout'), type: 'error' } });
-        } else if (e.name === 'NetworkError') {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.network'), type: 'error' } });
-        } else {
-          dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
-        }
+
+      if (e instanceof OAuthError) {
+        // The token endpoint answers every refused login with invalid_grant:
+        // wrong password, inactive or suspended account, or an SSO-managed
+        // user, so unlike BE.v1 there is no finer message to show.
+        setError(
+          e.code === 'access_denied'
+            ? t('errors.sso.tenant_requires_sso')
+            : e.code === 'invalid_grant'
+              ? t('errors.invalidCredentials')
+              : t('errors.default')
+        );
+        return;
+      }
+
+      if (e instanceof Error && e.name === 'AbortError') {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.timeout'), type: 'error' } });
+      } else if (e instanceof TypeError) {
+        // fetch rejects with a TypeError when the server cannot be reached.
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.network'), type: 'error' } });
+      } else {
+        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
       }
     }
   };

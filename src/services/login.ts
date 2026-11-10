@@ -1,39 +1,4 @@
-import { LoginFormValues, LoginResponseType } from '@/types/LoginTypes';
 import { localStorageGet } from '../utils/localStorage';
-
-export const loginUser = async (
-  apiUrl: string,
-  formData: LoginFormValues,
-  token: string | null,
-  signal: AbortSignal
-): Promise<LoginResponseType> => {
-  const api_code = localStorageGet('code');
-
-  try {
-    const response = await fetch(`${apiUrl}/api/controllers/login.php`, {
-      method: 'POST',
-      headers: {
-        'aula-instance-code': api_code,
-        'aula-frontend-version': process.env.VITE_APP_VERSION ?? 'unknown',
-        'Content-Type': 'application/json',
-        Authorization: token ? `Bearer ${token}` : '',
-      },
-      body: JSON.stringify(formData),
-      signal,
-    });
-
-    if (!response.ok) {
-      throw new Error('NetworkError');
-    }
-
-    return await response.json();
-  } catch (error) {
-    if (error instanceof Error) {
-      throw error;
-    }
-    throw new Error('Unknown error occurred', { cause: error });
-  }
-};
 
 export const checkPasswordKey = async (secret: string) => {
   const instanceApiUrl = localStorageGet('api_url');
