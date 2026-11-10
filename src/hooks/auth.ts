@@ -1,10 +1,12 @@
 import { Browser } from '@capacitor/browser';
 import { Capacitor } from '@capacitor/core';
 
+import { SESSION_EXPIRED_EVENT } from '@/services/oauth';
 import { databaseRequest } from '@/services/requests';
+import { clearSession, getAccessToken } from '@/services/session';
 import { useAppStore } from '@/store';
 import { InstanceResponse } from '@/types/Generics';
-import { checkPermissions, localStorageDelete, localStorageGet } from '@/utils';
+import { checkPermissions, localStorageGet } from '@/utils';
 import { isTokenValid } from '@/utils/jwt';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect } from 'react';
@@ -20,7 +22,22 @@ export function useIsAuthenticated() {
   // Subscribe to the store so auth changes (login/logout) re-run this check.
   useAppStore();
 
-  return isTokenValid(localStorageGet('token'));
+  return isTokenValid(getAccessToken());
+}
+
+/**
+ * Logs out when the refresh token is rejected, i.e. the backend ended the
+ * session (revoked, expired after 60 days, user deleted).
+ */
+export function useSessionExpiry() {
+  const [, dispatch] = useAppStore();
+
+  useEffect(() => {
+    const onExpired = () => dispatch({ type: 'LOG_OUT' });
+    window.addEventListener(SESSION_EXPIRED_EVENT, onExpired);
+
+    return () => window.removeEventListener(SESSION_EXPIRED_EVENT, onExpired);
+  }, [dispatch]);
 }
 
 export async function fetchIsOnline(): Promise<boolean> {
@@ -46,7 +63,7 @@ export function useEventLogout() {
   return useCallback(async () => {
     const apiUrl = localStorageGet('api_url');
     const instanceCode = localStorageGet('code');
-    const token = localStorageGet('token');
+    const token = getAccessToken();
 
     let ssoLogoutUrl: string | null = null;
 
@@ -77,7 +94,8 @@ export function useEventLogout() {
       localStorage.setItem('sso_force_login', 'true');
     }
 
-    localStorageDelete('token');
+    // Passport exposes no revocation endpoint; the refresh token simply stops being used.
+    clearSession();
     dispatch({ type: 'LOG_OUT' });
 
     if (!ssoLogoutUrl) {
@@ -106,7 +124,7 @@ export function useEventLogout() {
 export const useConsentSync = (isAuthenticated: boolean, locationKey: string) => {
   const [, dispatch] = useAppStore();
   const apiUrl = localStorageGet('api_url');
-  const jwtToken = localStorageGet('token');
+  const jwtToken = getAccessToken();
 
   const fetchConsent = useCallback(async () => {
     if (!jwtToken || !apiUrl) return;

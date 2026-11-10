@@ -1,6 +1,8 @@
 import { ObjectPropByName, StatusTypes } from '../types/Generics';
 import { parseJwt } from '../utils/jwt';
 import { localStorageGet } from '../utils/localStorage';
+import { getFreshAccessToken, refreshSession } from './oauth';
+import { getAccessToken } from './session';
 import { t } from 'i18next';
 
 /**
@@ -74,11 +76,14 @@ export const baseRequest = async <T = unknown>(
   path: string,
   data: ObjectPropByName,
   isJson: boolean = true,
-  tmpJwtToken?: string
+  tmpJwtToken?: string,
+  isRetry = false
 ): Promise<GenericResponse<T>> => {
   const instanceApiUrl = localStorageGet('api_url');
   const instanceCode = localStorageGet('code');
-  const jwtToken = tmpJwtToken || localStorageGet('token');
+  // A refresh that fails on the network falls back to the stored token; the
+  // request below then reports the failure the way it always has.
+  const jwtToken = tmpJwtToken || (await getFreshAccessToken().catch(() => getAccessToken()));
   const headers = {} as {
     'Content-Type': string;
     Authorization?: string;
@@ -117,25 +122,15 @@ export const baseRequest = async <T = unknown>(
 
     const response = await request.json();
 
-    if ('success' in response && response.error === 'refresh_token') {
-      const requestData = {
-        method: 'GET',
-        headers: headers,
-      };
+    // BE.v1 asks for a re-issued token when the user's level or roles changed.
+    // Once only: the v2 refresh grant does not clear that flag yet, and a
+    // second refusal must not turn into an endless refresh loop.
+    if ('success' in response && response.error === 'refresh_token' && !isRetry) {
+      const newToken = await refreshSession();
 
-      const request = await fetch(`${instanceApiUrl}/api/controllers/refresh_token.php`, requestData);
-      const new_jwt = await request.json();
-
-      localStorage.setItem('token', new_jwt['JWT']);
-
-      // Dispatch a custom event that React components can listen to
-      const tokenRefreshEvent = new CustomEvent('token-refreshed', {
-        detail: { token: new_jwt['JWT'] },
-      });
-      window.dispatchEvent(tokenRefreshEvent);
-
-      // Retry the original request with the new token
-      return baseRequest<T>(path, data, isJson, new_jwt['JWT']);
+      if (newToken) {
+        return baseRequest<T>(path, data, isJson, newToken, true);
+      }
     }
 
     // Handle offline mode
@@ -206,8 +201,7 @@ export const databaseRequest = async <T = unknown>(
   argumentsWithUserIdValue = [] as string[]
 ): Promise<GenericResponse<T>> => {
   if (argumentsWithUserIdValue.length > 0) {
-    const jwt_token = localStorageGet('token');
-    const jwt_payload = parseJwt(jwt_token);
+    const jwt_payload = parseJwt(getAccessToken() ?? '');
     argumentsWithUserIdValue.forEach((argumentName) => {
       data.arguments[argumentName] = jwt_payload?.user_id;
     });

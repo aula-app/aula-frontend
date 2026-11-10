@@ -1,4 +1,4 @@
-import { useConsentSync, useIsAuthenticated } from '@/hooks/auth';
+import { useConsentSync, useIsAuthenticated, useSessionExpiry } from '@/hooks/auth';
 import PrivateRoutes from './PrivateRoutes';
 import PublicRoutes from './PublicRoutes';
 import { useLocation } from 'react-router';
@@ -11,6 +11,7 @@ const Routes = () => {
   const isAuthenticated = useIsAuthenticated(); // Variant 2
 
   useConsentSync(isAuthenticated, location.pathname);
+  useSessionExpiry();
 
   return isAuthenticated ? <PrivateRoutes /> : <PublicRoutes />;
 };
