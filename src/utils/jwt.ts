@@ -46,6 +46,18 @@ export function parseJwt(token: string): {
   }
 }
 
+/**
+ * Seconds until the token's `exp`, negative once expired. Null when the token
+ * cannot be parsed or never expires (`exp === 0`).
+ */
+export function secondsUntilExpiry(token: string): number | null {
+  const payload = parseJwt(token);
+
+  if (!payload || typeof payload.exp !== 'number' || payload.exp === 0) return null;
+
+  return payload.exp - Math.floor(Date.now() / 1000);
+}
+
 export function isTokenValid(token: string | null): boolean {
   if (!token) return false;
 
