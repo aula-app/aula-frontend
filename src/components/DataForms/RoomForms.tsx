@@ -74,7 +74,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   }, []);
 
   const schema = yup.object({
-    room_name: isIdpRoom ? yup.string().nullable() : yup.string().required(t('forms.validation.required')),
+    room_name: yup.string().required(t('forms.validation.required')),
     description_public: yup.string().required(t('forms.validation.required')),
     description_internal: yup.string().nullable(),
     // the default room has no phase fields in the form and may hold NULL durations
@@ -164,8 +164,7 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
   const updateRoom = async (data: SchemaType) => {
     if (!defaultValues?.hash_id) return;
     const response = await editRoom({
-      // editRoom requires and overwrites the name.
-      room_name: isIdpRoom ? defaultValues.room_name : data.room_name,
+      room_name: data.room_name,
       description_internal: data.description_internal,
       description_public: data.description_public,
       internal_info: data.internal_info,
@@ -268,7 +267,8 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
             <Stack gap={2} flex={1}>
               <TextField
                 fullWidth
-                required={!isIdpRoom}
+                required
+                // native disabled only: register({ disabled }) would drop the value from the submit payload
                 disabled={isLoading || isIdpRoom}
                 label={t(`settings.columns.room_name`)}
                 size="small"
