@@ -21,10 +21,10 @@
         "notEnabled": "No sync is enabled for this school. An operator can turn it on in aula-manager.",
         "connectReturned": "Signed in at the provider. Your aula account is now linked and the school is identified.",
         "reviewWarning": "Please check these matches. A wrong merge gives one person another's account, including everything they have written.",
-        "rooms": "Classes and rooms",
+        "rooms": "Rooms",
         "steps": "Review steps",
-        "filterRoom": "Class",
-        "allRooms": "All classes",
+        "filterRoom": "Room",
+        "allRooms": "All rooms",
         "noClasses": "No class",
         "filterPerson": "Person",
         "allPeople": "Everybody",
@@ -84,6 +84,10 @@
           "save": {
             "title": "Could not save the change.",
             "body": "Nothing was changed. Try again."
+          },
+          "progress": {
+            "title": "Could not check the sync status.",
+            "body": "Reload the page. If it keeps failing, check that the provider is reachable."
           }
         },
         "actionNeeded": "Action needed:",
@@ -136,7 +140,23 @@
           "no_local_row": "No aula record is selected for this match.",
           "local_row_claimed_twice": "This aula record is matched more than once.",
           "local_row_already_linked": "This aula record is already linked to someone else at the provider."
-        }
+        },
+        "outcome": {
+          "merge": "Merged",
+          "pending": "Needs confirming",
+          "create": "New in aula",
+          "keep": "Unchanged",
+          "empty": "Empty"
+        },
+        "checking": "Checking the sync status",
+        "legend": {
+          "merge": "Matched — the two become one account.",
+          "pending": "Proposed — confirm it, or both stay as they are.",
+          "create": "Only at the provider — a new aula account is made.",
+          "keep": "Only in aula — stays as it is.",
+          "empty": "Empty space where you can assign a match."
+        },
+        "legendTitle": "Legend:"
       }
     },
     "form": {
