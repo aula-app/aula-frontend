@@ -50,7 +50,7 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
 
   await test.step('Admin can see the Box inside the Room', async () => {
     await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.DISCUSSION);
-    const boxTitle = adminPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
+    const boxTitle = adminPage.getByTestId(`box-${box.name}`);
     await expect(boxTitle).toBeVisible();
   });
 
@@ -104,7 +104,7 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
 
   await test.step('Verify box is in approval phase', async () => {
     await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.APPROVAL);
-    const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
+    const boxTitle = userPage.getByTestId(`box-${box.name}`);
     await expect(boxTitle).toBeVisible();
   });
 
@@ -163,7 +163,7 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
 
   await test.step('Verify box is in voting phase', async () => {
     await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.VOTING);
-    const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
+    const boxTitle = userPage.getByTestId(`box-${box.name}`);
     await expect(boxTitle).toBeVisible();
   });
 
@@ -206,7 +206,7 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
 
   await test.step('Verify box is in results phase', async () => {
     await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.RESULTS);
-    const boxTitle = userPage.getByTestId(TEST_IDS.BOX_CARD).getByText(box.name);
+    const boxTitle = userPage.getByTestId(`box-${box.name}`);
     await expect(boxTitle).toBeVisible();
   });
 

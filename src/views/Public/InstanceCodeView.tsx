@@ -75,11 +75,11 @@ const InstanceCodeView = () => {
         navigate('/');
       } else {
         setSubmitError(t('errors.default'));
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+        dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
       }
     } catch {
       setSubmitError(t('instance.error'));
-      dispatch({ type: 'ADD_POPUP', message: { message: t('instance.error'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('instance.error'), type: 'error' } });
     } finally {
       setIsSubmitting(false);
     }

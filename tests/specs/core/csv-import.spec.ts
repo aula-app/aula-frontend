@@ -31,7 +31,6 @@ test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) =>
   let csvFilePath: string;
 
   await test.step('Admin imports 1st CSV', async () => {
-
     await test.step('Prepare CSV file', async () => {
       // prepare data locally (skip emails)
       const csvUsersFormatted = csvUsers.map((u) => `${u.realName};${u.displayName};${u.username};;${u.about}`);
@@ -122,7 +121,6 @@ test('CSV Import', async ({ dbInstanceCode, ensureStatePathFor, newPageFor }) =>
 
   // Import 2nd CSV - extended (+1 user, diff. dest. room, 1 diff. role)
   await test.step('Admin imports 2nd CSV', async () => {
-
     await test.step('Admin - Create new room2 via UI', async () => {
       await roomsSettings.create(adminPage, room2);
     });

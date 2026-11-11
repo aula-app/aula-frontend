@@ -1,5 +1,5 @@
 import { announceToScreenReader, useEscapeKey, useFocusTrap, useModalAnnouncement } from '@/utils';
-import { Close } from '@mui/icons-material';
+import Close from '@mui/icons-material/Close';
 import { Backdrop, Box, Fade, IconButton, Modal, ModalProps, Typography } from '@mui/material';
 import React, { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import { useTranslation } from 'react-i18next';

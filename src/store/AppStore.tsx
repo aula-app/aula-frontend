@@ -1,5 +1,4 @@
 import { localStorageGet } from '@/utils';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import {
   ComponentType,
   createContext,
@@ -15,9 +14,10 @@ import AppReducer from './AppReducer';
  * AppState structure and initial values
  */
 
-export interface PopupType {
+export interface ToastMessage {
+  id: string;
   message: string;
-  type: 'error' | 'success' | 'info';
+  type: 'error' | 'success' | 'warning' | 'info';
 }
 
 export interface AppStoreState {
@@ -25,7 +25,7 @@ export interface AppStoreState {
   isAuthenticated: boolean;
   hasConsent: boolean;
   currentUser?: object | undefined;
-  messages: PopupType[];
+  toasts: ToastMessage[];
   breadcrumb: [string, string][];
   lastScroll: number;
   lastIdeaList: string;
@@ -38,15 +38,15 @@ export type AppAction =
   | { type: 'HAS_CONSENT'; payload: boolean }
   | { type: 'SET_BREADCRUMB'; breadcrumb: [string, string][] }
   | { type: 'DARK_MODE'; payload: boolean }
-  | { type: 'ADD_POPUP'; message: PopupType }
-  | { type: 'REMOVE_POPUP'; index: number }
-  | { type: 'REMOVE_ALL_POPUP' };
+  | { type: 'ADD_TOAST'; message: Omit<ToastMessage, 'id'> }
+  | { type: 'REMOVE_TOAST'; id: string }
+  | { type: 'REMOVE_ALL_TOASTS' };
 
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
   hasConsent: false,
-  messages: [],
+  toasts: [],
   breadcrumb: [],
   lastScroll: 0,
   lastIdeaList: '',
@@ -68,9 +68,8 @@ const AppContext = createContext<AppContextReturningType>([INITIAL_APP_STATE, ()
  * </AppStoreProvider>
  */
 const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) => {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const previousDarkMode = Boolean(localStorageGet('darkMode'));
-  const darkMode = previousDarkMode !== undefined ? previousDarkMode : prefersDarkMode;
+  const savedDarkMode = localStorage.getItem('darkMode');
+  const darkMode = savedDarkMode !== null ? savedDarkMode === 'true' : window.matchMedia('(prefers-color-scheme: dark)').matches;
   const token = localStorageGet('token');
   const tokenExists = Boolean(token !== undefined);
 
