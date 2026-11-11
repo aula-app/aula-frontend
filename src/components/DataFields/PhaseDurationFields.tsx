@@ -113,6 +113,7 @@ const PhaseDurationFields = <T extends FieldValues = FieldValues>({
                     required={required}
                     disabled={disabled}
                     {...fieldProps}
+                    value={fieldProps.value ?? ''}
                     error={!!fieldState.error}
                     {...restOfProps}
                     slotProps={{

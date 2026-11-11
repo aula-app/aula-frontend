@@ -124,4 +124,21 @@ test.describe('IdP Management - synced rooms and SSO users', () => {
       await expect(adminPage.getByTestId('users-field').locator('input')).toBeEnabled();
     });
   });
+
+  test('Room form saves a room without phase durations or description', async ({ newPageFor }) => {
+    const adminPage = await newPageFor('admin');
+
+    await navigation.goToRoomsSettings(adminPage, true);
+    await settingsInteractions.openEdit({
+      page: adminPage,
+      filters: { option: 'room_name', value: 'e2e.local_room' },
+    });
+    await expect(adminPage.getByTestId('phase_duration_1-input')).toHaveValue('14');
+    await expect(adminPage.getByTestId('phase_duration_3-input')).toHaveValue('14');
+
+    const editRequest = adminPage.waitForRequest((request) => request.url().includes('model.php?editRoom'));
+    await formInteractions.clickButton(adminPage, 'room-form-submit-button');
+    expect((await editRequest).postDataJSON().arguments.description_public).toBe('');
+    await expect(adminPage.getByTestId('room-name-input')).toBeHidden();
+  });
 });
