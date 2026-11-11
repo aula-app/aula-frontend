@@ -713,7 +713,8 @@
       "userlevel": "User level",
       "username": "User name",
       "vote_bias": "Vote Bias",
-      "idp_user_id": "Type"
+      "idp_user_id": "Type",
+      "idp_group_id": "Type"
     },
     "customFields": {
       "form": "Custom field {{var}}",

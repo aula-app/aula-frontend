@@ -713,7 +713,8 @@
       "userlevel": "Benutzer-Rolle",
       "username": "Benutzername",
       "vote_bias": "Stimmverzerrung",
-      "idp_user_id": "Typ"
+      "idp_user_id": "Typ",
+      "idp_group_id": "Typ"
     },
     "customFields": {
       "form": "Benutzerdefiniertes Feld {{var}}",
