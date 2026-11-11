@@ -79,8 +79,9 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
     room_name: yup.string().required(t('forms.validation.required')),
     description_public: yup.string().required(t('forms.validation.required')),
     description_internal: yup.string().nullable(),
-    phase_duration_1: yup.number().required(t('forms.validation.required')),
-    phase_duration_3: yup.number().required(t('forms.validation.required')),
+    // the default room has no phase fields in the form and may hold NULL durations
+    phase_duration_1: isDefault ? yup.number().nullable() : yup.number().required(t('forms.validation.required')),
+    phase_duration_3: isDefault ? yup.number().nullable() : yup.number().required(t('forms.validation.required')),
   } as Record<keyof RoomArguments, any>);
 
   const form = useForm({
