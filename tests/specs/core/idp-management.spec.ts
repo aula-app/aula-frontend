@@ -13,7 +13,6 @@ import * as settingsInteractions from '../../interactions/settings';
  */
 test.describe('IdP Management - synced rooms and SSO users', () => {
   test.beforeEach(async ({ dbInstanceCode, baselineLoaded }) => {
-    void baselineLoaded;
     const dbBackchannel = await DbBackchannel.getByInstanceCode(dbInstanceCode);
     await dbBackchannel.seedIdpManaged();
   });
