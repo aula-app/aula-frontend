@@ -41,11 +41,11 @@
     "trivy-image": "docker build -t aula-frontend:latest-trivy . && trivy image aula-frontend:latest-trivy && docker image rm aula-frontend:latest-trivy"
   },
   "dependencies": {
-    "@capacitor/android": "^8.2.0",
+    "@capacitor/android": "^8.6.0",
     "@capacitor/app": "^8.0.1",
     "@capacitor/browser": "^8.0.0",
     "@capacitor/core": "^8.2.0",
-    "@capacitor/ios": "^8.0.2",
+    "@capacitor/ios": "^8.6.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@hookform/resolvers": "^3.3.4",
