@@ -27,6 +27,7 @@ import ReviewTable from './ReviewTable';
 import Legend from './ReviewTable/Legend';
 import { useLeaveGuard } from './useLeaveGuard';
 import { arrange, membersByRoom, realName, resultName, rivalsOf, searchRows } from './ReviewTable/candidates';
+import { getAccessToken } from '@/services/session';
 
 const PER_PAGE = 50;
 
@@ -101,7 +102,7 @@ const IdpSyncView: React.FC = () => {
     if (!linkToken) return;
 
     const apiUrl = localStorageGet('api_url') ?? '';
-    const jwt = localStorageGet('token') ?? '';
+    const jwt = getAccessToken() ?? '';
 
     completeSsoLink(apiUrl, linkToken, jwt).then(async (result) => {
       // One-shot token: drop it so a reload does not retry.

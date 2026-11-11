@@ -3,6 +3,7 @@ import { StatusTypes } from '@/types/Generics';
 import { DelegationType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
 import { localStorageGet } from '@/utils';
+import { getAccessToken } from '@/services/session';
 
 interface GetUserResponse extends GenericResponse {
   data: UserType | null;
@@ -181,7 +182,7 @@ export async function editSelfAbout(about_me: string): Promise<GenericResponse> 
 export function getUserGDPRData(userPublicId: string): Promise<Response> {
   // TODO abstracize this somewhere, probably at the latest for FE/v2
   const apiUrl =`${localStorageGet('api_url')}/api/v2/users/${userPublicId}/export`;
-  const token = localStorageGet('token');
+  const token = getAccessToken();
   return fetch(apiUrl, {
     headers: {
       'Authorization': `Bearer ${token}`,

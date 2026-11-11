@@ -10,6 +10,7 @@ import {
   useReducer,
 } from 'react';
 import AppReducer from './AppReducer';
+import { getAccessToken } from '@/services/session';
 
 /**
  * AppState structure and initial values
@@ -71,8 +72,7 @@ const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) =>
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const previousDarkMode = Boolean(localStorageGet('darkMode'));
   const darkMode = previousDarkMode !== undefined ? previousDarkMode : prefersDarkMode;
-  const token = localStorageGet('token');
-  const tokenExists = Boolean(token !== undefined);
+  const tokenExists = Boolean(getAccessToken());
 
   const initialState: AppStoreState = {
     ...INITIAL_APP_STATE,

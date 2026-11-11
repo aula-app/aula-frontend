@@ -1,4 +1,5 @@
 import { localStorageGet } from '@/utils';
+import { getAccessToken } from '@/services/session';
 
 export type MigrationStatus = 'flagged' | 'connected' | 'reviewing' | 'importing' | 'linking' | 'completed' | null;
 
@@ -52,7 +53,7 @@ export interface CandidatePage {
 const headers = (): Record<string, string> => ({
   Accept: 'application/json',
   'Content-Type': 'application/json',
-  Authorization: `Bearer ${localStorageGet('token')}`,
+  Authorization: `Bearer ${getAccessToken()}`,
   'aula-instance-code': localStorageGet('code') ?? '',
   'aula-frontend-version': import.meta.env.VITE_APP_VERSION ?? 'unknown',
 });

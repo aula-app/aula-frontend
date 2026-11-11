@@ -1,5 +1,7 @@
 ## Unreleased
 
+- **Technical improvements**
+  - authenticate against the BE.v2 OAuth2 token endpoint (password and refresh grants via openid-client) instead of BE.v1 login.php; deployments must set `OAUTH_CLIENT_ID` (`DOCKER_AULA_OAUTH_CLIENT_ID` / `VITE_APP_OAUTH_CLIENT_ID`)
 - **New features**
   - users can now log in by (autocompleted) school name as well as instance code
 - **New features**
