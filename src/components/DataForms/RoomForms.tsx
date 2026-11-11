@@ -109,16 +109,23 @@ const RoomForms: React.FC<RoomFormsProps> = ({ defaultValues, isDefault = false,
 
   type SchemaType = yup.InferType<typeof schema>;
 
-  const resetForm = () =>
-    reset(
-      defaultValues && !isDefault
-        ? {
-            ...defaultValues,
-            phase_duration_1: defaultValues.phase_duration_1 || DEFAULT_PHASE_DURATION,
-            phase_duration_3: defaultValues.phase_duration_3 || DEFAULT_PHASE_DURATION,
-          }
-        : { ...defaultValues }
-    );
+  const resetForm = () => {
+    if (!defaultValues) {
+      reset({});
+      return;
+    }
+
+    if (isDefault) {
+      reset({ ...defaultValues });
+      return;
+    }
+
+    reset({
+      ...defaultValues,
+      phase_duration_1: defaultValues.phase_duration_1 || DEFAULT_PHASE_DURATION,
+      phase_duration_3: defaultValues.phase_duration_3 || DEFAULT_PHASE_DURATION,
+    });
+  };
 
   const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
     storageKey: 'roomform-draft-new',
