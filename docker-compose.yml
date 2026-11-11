@@ -34,7 +34,10 @@ services:
     env_file: ${BACKEND_DIR}/.env
     # TODO? add all "fixed" env things, or provide .env.d-c?
     environment:
-      DB_PORT: 3306
+      DB_HOST: "mariadb"
+      DB_PORT: "3306"
+      CENTRAL_DB_HOST: "mariadb"
+      CENTRAL_DB_PORT: "3306"
     depends_on:
       mariadb:
         condition: service_healthy
@@ -43,6 +46,9 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - ${BACKEND_DIR}/app:/opt/laravel/app
+      - ${BACKEND_DIR}/tests:/opt/laravel/tests
+      # needed e.g. for AddAllCSVPestTest 
+      - ${BACKEND_DIR}/legacy:/opt/laravel/legacy
       - ${BACKEND_DIR}/config:/opt/laravel/config
       - ${BACKEND_DIR}/public:/opt/laravel/public
       - ${BACKEND_DIR}/resources:/opt/laravel/resources
@@ -54,6 +60,7 @@ services:
         target: /opt/laravel/bootstrap/cache
         tmpfs:
           mode: 0o01777
+      # FIXME these don't work as expected. only folders auto-update
       - type: bind
         source: ${BACKEND_DIR}/.env
         target: /opt/laravel/.env
@@ -91,7 +98,9 @@ services:
     environment:
       APP_ENV: local
       APACHE_SERVER_NAME: localhost
-      CENTRAL_DB_HOST: ${CENTRAL_DB_HOST:-mariadb}
+      DB_PORT: "3306"
+      DB_HOST: "mariadb"
+      CENTRAL_DB_HOST: "mariadb"
       CENTRAL_DB_PORT: ${CENTRAL_DB_PORT:-3306}
       CENTRAL_DB_NAME: ${CENTRAL_DB_NAME:-aula_database}
       CENTRAL_DB_USER: ${CENTRAL_DB_USER:-aula_user}
