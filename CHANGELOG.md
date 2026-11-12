@@ -2,8 +2,6 @@
 
 - **New features**
   - users can now log in by (autocompleted) school name as well as instance code
-- **New features**
-  - users' data exports do not require admin approval any more
 - **Technical improvements**
   - remove Tech Admin role, clean up related permissions, notably regarding the listing+viewing+selection of rooms
 - **Bug fixes**
