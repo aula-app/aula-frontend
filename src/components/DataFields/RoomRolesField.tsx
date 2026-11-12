@@ -29,7 +29,7 @@ interface Props extends ButtonProps {
   onUpdate: (updates: { room: string; role: RoleTypes | 0 }[]) => void;
 }
 
-const RoomRolesField: React.FC<Props> = ({ user, disabled = false, onUpdate, ...restOfProps }) => {
+const RoomRolesField: React.FC<Props> = ({ user, defaultLevel, disabled = false, onUpdate, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
@@ -144,18 +144,19 @@ const RoomRolesField: React.FC<Props> = ({ user, disabled = false, onUpdate, ...
           id="room-roles-dialog-description"
         >
           {visibleRooms.map((room, index) => {
+            const isStandardRoom = room.type === 1;
             const currentRole =
               updateRoles.find((role) => role.room === room.hash_id)?.role ??
               userRoles.find((role) => role.room === room.hash_id)?.role ??
-              0;
+              (isStandardRoom ? defaultLevel : 0);
 
-            const roleOptions = getRoleOptions(!isIdpManaged(room));
-            const isAdminLocked = (user?.userlevel ?? 0) >= 50 && room.type === 1;
+            const roleOptions = getRoleOptions(!isIdpManaged(room) && !isStandardRoom);
+            const isAdminLocked = (user?.userlevel ?? 0) >= 50 && isStandardRoom;
 
             return (
               <ListItemButton
                 key={room.hash_id}
-                sx={{ py: 0, order: room.type === 1 ? 0 : 1 }}
+                sx={{ py: 0, order: isStandardRoom ? 0 : 1 }}
                 tabIndex={index === 0 ? 0 : -1}
                 role="listitem"
                 aria-label={room.room_name || 'Aula'}
