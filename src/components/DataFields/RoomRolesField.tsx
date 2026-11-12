@@ -29,7 +29,7 @@ interface Props extends ButtonProps {
   onUpdate: (updates: { room: string; role: RoleTypes | 0 }[]) => void;
 }
 
-const RoomRolesField: React.FC<Props> = ({ user, defaultLevel, disabled = false, onUpdate, ...restOfProps }) => {
+const RoomRolesField: React.FC<Props> = ({ user, disabled = false, onUpdate, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
@@ -145,12 +145,10 @@ const RoomRolesField: React.FC<Props> = ({ user, defaultLevel, disabled = false,
         >
           {visibleRooms.map((room, index) => {
             const isStandardRoom = room.type === 1;
-            const currentRole =
-              updateRoles.find((role) => role.room === room.hash_id)?.role ??
-              userRoles.find((role) => role.room === room.hash_id)?.role ??
-              (isStandardRoom ? defaultLevel : 0);
+            const savedRole = userRoles.find((role) => role.room === room.hash_id)?.role;
+            const currentRole = updateRoles.find((role) => role.room === room.hash_id)?.role ?? savedRole ?? 0;
 
-            const roleOptions = getRoleOptions(!isIdpManaged(room) && !isStandardRoom);
+            const roleOptions = getRoleOptions(!isIdpManaged(room) && (!isStandardRoom || savedRole === undefined));
             const isAdminLocked = (user?.userlevel ?? 0) >= 50 && isStandardRoom;
 
             return (
