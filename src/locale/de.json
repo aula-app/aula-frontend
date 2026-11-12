@@ -470,9 +470,10 @@
     },
     "denied": "Deine Datenänderungsanfrage wurde abgelehnt. Bitte kontaktiere den Schuladministrator für weitere Informationen.",
     "exportData": {
-      "button": "Datenexport herunterladen",
+      "body": "Eine Datenexportprozedur wurde für den Benutzer {{var}} angefordert",
+      "button": "Datenexport anfordern",
       "info": "Nach Datenschutzanforderungen (DSGVO) müssen Online-Dienste ihren Nutzer auf Anfrage alle gespeicherten Daten zur Verfügung stellen.",
-      "legacyHint": "Bitte öffne dein Profil (Klick auf Name / Bild), und klicke dann unter Datenschutz / Kontodaten exportieren auf Datenexport herunterladen."
+      "title": "Kontodatenexportanfrage für {{var}}"
     },
     "label": "Anfragen",
     "updateData": {

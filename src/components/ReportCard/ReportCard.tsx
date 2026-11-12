@@ -1,5 +1,5 @@
 import { addMessage, setMessageStatus } from '@/services/messages';
-import { deleteUser, editSelfRestricted } from '@/services/users';
+import { deleteUser, editSelfRestricted, exportSelfData } from '@/services/users';
 import { useAppStore } from '@/store';
 import { MessageType } from '@/types/Scopes';
 import { errorAlert, successAlert } from '@/utils';
@@ -42,8 +42,8 @@ interface Report {
 }
 
 interface DataRequest {
-  type?: 'deleteAccount'
-  responseTo?: 'deleteAccount'
+  type?: 'deleteAccount' | 'requestData';
+  responseTo?: 'deleteAccount' | 'requestData';
   id: string;
   realname: string;
   username: string;
@@ -118,6 +118,26 @@ const ReportCard = ({ report, onReload, ...restOfProps }: Props) => {
     successAlert(t(`requests.confirm`), dispatch);
   };
 
+  const downloadData = async () => {
+    const request = await exportSelfData();
+
+    if (request.error) {
+      errorAlert(t(request.error), dispatch);
+      return;
+    }
+
+    const file = document.createElement('a');
+    file.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(request.data)));
+    file.setAttribute('download', `data_export_${dayjs().format('YYYY-MM-DD_HH:mm')}.txt`);
+
+    file.style.display = 'none';
+    document.body.appendChild(file);
+
+    file.click();
+
+    document.body.removeChild(file);
+  };
+
   const confirmRequest = async () => {
     switch (metadata.type) {
       case 'changeName':
@@ -167,7 +187,11 @@ ${message}`,
       data-testid={
         metadata?.type === 'deleteAccount'
           ? `user-deletion-request-${metadata.username}`
-          : `request-${report.hash_id}`
+          : metadata?.type === 'requestData'
+            ? `data-export-request-${metadata.username}`
+            : metadata?.responseTo === 'requestData'
+              ? `data-export-request-details-${metadata.username}`
+              : `request-${report.hash_id}`
       }
       {...restOfProps}
     >
@@ -234,10 +258,13 @@ ${message}`,
           </>
         )}
         {metadata && metadata.responseTo === 'requestData' && (
-          <p>
-            {/* this will show up for users who requested an export when it still required admin approval */}
-            {t('requests.exportData.legacyHint')}
-          </p>
+          <CardActions>
+            <Stack direction="row" mt={0.5} flex={1} gap={1} justifyContent="end">
+              <Button variant="contained" color="info" onClick={downloadData} data-testid="download-data-button">
+                {t('actions.download')}
+              </Button>
+            </Stack>
+          </CardActions>
         )}
       </CardContent>
     </Card>
