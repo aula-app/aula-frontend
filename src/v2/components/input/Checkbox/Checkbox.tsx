@@ -39,7 +39,7 @@ const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
           aria-describedby={hintId}
           className={twMerge(
             'group flex items-center gap-2 text-sm select-none cursor-pointer',
-            'data-disabled:cursor-not-allowed data-disabled:opacity-60',
+            'data-disabled:cursor-not-allowed data-disabled:text-muted',
             className
           )}
         >
@@ -50,12 +50,14 @@ const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
               'transition-colors duration-150',
               'group-data-selected:border-primary group-data-selected:bg-primary',
               'group-data-invalid:border-error-fg',
+              'group-data-disabled:border-transparent group-data-disabled:bg-neutral',
+              'group-data-disabled:group-data-selected:border-transparent group-data-disabled:group-data-selected:bg-neutral',
               'group-data-focus-visible:outline-2 group-data-focus-visible:outline-offset-2 group-data-focus-visible:outline-current'
             )}
           >
             <Icon
               type="check"
-              className="size-3 text-primary-fg opacity-0 transition-opacity duration-150 group-data-selected:opacity-100"
+              className="size-3 text-primary-fg opacity-0 transition-opacity duration-150 group-data-selected:opacity-100 group-data-disabled:text-foreground"
             />
           </span>
           <span className={required ? 'font-bold after:content-["*"] after:ml-0.5' : undefined}>{label}</span>

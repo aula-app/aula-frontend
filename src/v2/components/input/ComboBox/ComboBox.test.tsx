@@ -17,7 +17,15 @@ const options: SelectOption[] = [
   { value: 'c', label: 'Bike racks' },
 ];
 
-const Harness = ({ initial = [], onChange }: { initial?: string[]; onChange?: (value: string[]) => void }) => {
+const Harness = ({
+  initial = [],
+  onChange,
+  disabled,
+}: {
+  initial?: string[];
+  onChange?: (value: string[]) => void;
+  disabled?: boolean;
+}) => {
   const [value, setValue] = useState<string[]>(initial);
   return (
     <ComboBox
@@ -26,6 +34,7 @@ const Harness = ({ initial = [], onChange }: { initial?: string[]; onChange?: (v
       tagsLabel="Selected ideas"
       options={options}
       value={value}
+      disabled={disabled}
       onChange={(next) => {
         setValue(next);
         onChange?.(next);
@@ -113,6 +122,15 @@ describe('ComboBox', () => {
     await user.keyboard('{ArrowRight}');
     expect(screen.getByTestId('cb-tag-b')).toHaveFocus();
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it('shows the tags without remove buttons when disabled', () => {
+    render(<Harness initial={['a', 'b']} disabled />);
+
+    expect(screen.getByTestId('cb-tag-a')).toHaveAttribute('data-disabled');
+    expect(screen.getByTestId('cb-tag-b')).toHaveAttribute('data-disabled');
+    expect(screen.queryByTestId('cb-remove-a')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('cb-remove-b')).not.toBeInTheDocument();
   });
 
   it('closes on a click outside', async () => {
