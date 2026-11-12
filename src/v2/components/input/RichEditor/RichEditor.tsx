@@ -161,8 +161,8 @@ const RichEditor: React.FC<RichEditorProps> = ({
           'hover:border-input-border-hover focus-within:outline-1',
           error || overLimit
             ? 'border-error-fg focus-within:outline-error-fg'
-            : 'focus-within:border-current focus-within:ring-current',
-          disabled ? 'cursor-not-allowed opacity-50' : ''
+            : 'focus-within:border-current focus-within:outline-current',
+          disabled ? 'cursor-not-allowed opacity-60 [&_button:disabled]:opacity-100' : ''
         )}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
@@ -301,7 +301,7 @@ const RichEditor: React.FC<RichEditorProps> = ({
         <EditorContent
           editor={editor}
           data-testid={dataTestId}
-          className={`max-w-none max-h-28 overflow-y-auto p-3 pb-0 [&_li>p]:mb-0 [&_li>p]:inline [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'opacity-50 cursor-not-allowed' : 'cursor-text'}`}
+          className={`max-w-none max-h-28 overflow-y-auto p-3 pb-0 [&_li>p]:mb-0 [&_li>p]:inline [&_div[contenteditable]:focus]:outline-none shadow-inner ${disabled ? 'cursor-not-allowed' : 'cursor-text'}`}
         />
       </div>
 
