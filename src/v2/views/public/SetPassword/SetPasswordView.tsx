@@ -8,7 +8,7 @@ import InstanceCodeField from '@/v2/components/input/InstanceCodeField/InstanceC
 import { useInstanceCode } from '@/v2/components/input/InstanceCodeField/useInstanceCode';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { useSetPasswordSubmit, SetPasswordFormValues } from './useSetPasswordSubmit';
@@ -47,12 +47,11 @@ const SetPasswordView = () => {
   );
 
   const {
-    register,
     handleSubmit,
     reset,
     control,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({ resolver: yupResolver(schema), defaultValues: { newPassword: '', confirmPassword: '' } });
 
   const wrappedSubmit = async (data: SetPasswordFormValues) => {
     const codeOk = await validateCode();
@@ -98,29 +97,41 @@ const SetPasswordView = () => {
       )}
 
       <div className="flex flex-col gap-2">
-        <TextInput
-          type="password"
-          label={t('v2.form.passwordNew.label')}
-          required
-          autoComplete="new-password"
-          error={errors.newPassword?.message}
-          helperText={
-            <span className="flex gap-1">
-              <Hint content={t('v2.form.passwordNew.hint')} />
-              {t('v2.form.passwordNew.helper', { var: MIN_PASSWORD_LENGTH })}
-            </span>
-          }
-          data-testid="newPassword-input"
-          {...register('newPassword')}
+        <Controller
+          name="newPassword"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              type="password"
+              label={t('v2.form.passwordNew.label')}
+              required
+              autoComplete="new-password"
+              error={errors.newPassword?.message}
+              helperText={
+                <span className="flex gap-1">
+                  <Hint content={t('v2.form.passwordNew.hint')} />
+                  {t('v2.form.passwordNew.helper', { var: MIN_PASSWORD_LENGTH })}
+                </span>
+              }
+              data-testid="newPassword-input"
+            />
+          )}
         />
 
-        <TextInput
-          type="password"
-          label={t('v2.form.passwordConfirm.label')}
-          required
-          autoComplete="new-password"
-          error={errors.confirmPassword?.message}
-          {...register('confirmPassword')}
+        <Controller
+          name="confirmPassword"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              type="password"
+              label={t('v2.form.passwordConfirm.label')}
+              required
+              autoComplete="new-password"
+              error={errors.confirmPassword?.message}
+            />
+          )}
         />
       </div>
 

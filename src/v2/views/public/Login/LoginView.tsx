@@ -5,7 +5,7 @@ import InstanceCodeField from '@/v2/components/input/InstanceCodeField';
 import { useInstanceCode } from '@/v2/components/input/InstanceCodeField/useInstanceCode';
 import { yupResolver } from '@hookform/resolvers/yup';
 import React, { useMemo } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { useLoginSubmit } from './useLoginSubmit';
@@ -41,11 +41,12 @@ const LoginView: React.FC = () => {
   );
 
   const {
-    register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<{ username: string; password: string }>({
     resolver: yupResolver(schema),
+    defaultValues: { username: '', password: '' },
   });
 
   const wrappedSubmit = async (data: { username: string; password: string }) => {
@@ -72,22 +73,34 @@ const LoginView: React.FC = () => {
             disabled={isLoading || codeLoading}
           />
         )}
-        <TextInput
-          label={t('v2.form.login.label')}
-          required
-          autoComplete="username"
-          autoCapitalize="none"
-          error={errors.username?.message}
-          {...register('username')}
+        <Controller
+          name="username"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              label={t('v2.form.login.label')}
+              required
+              autoComplete="username"
+              autoCapitalize="none"
+              error={errors.username?.message}
+            />
+          )}
         />
-        <TextInput
-          label={t('v2.form.password.label')}
-          type="password"
-          required
-          autoComplete="current-password"
-          autoCapitalize="none"
-          error={errors.password?.message}
-          {...register('password')}
+        <Controller
+          name="password"
+          control={control}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              label={t('v2.form.password.label')}
+              type="password"
+              required
+              autoComplete="current-password"
+              autoCapitalize="none"
+              error={errors.password?.message}
+            />
+          )}
         />
         <Button type="submit" disabled={isLoading || codeLoading} data-testid="submit-login">
           {t('v2.page.login.button')}

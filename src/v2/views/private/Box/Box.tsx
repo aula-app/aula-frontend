@@ -7,9 +7,8 @@ import { checkPermissions } from '@/utils';
 import BoxCard from '@/v2/components/box/BoxCard';
 import { countSettled, inTheRunning } from '@/v2/components/box/countSettled';
 import Fab from '@/v2/components/button/Fab/Fab';
-import IconButton from '@/v2/components/button/IconButton';
 import Idea from '@/v2/components/idea/Idea';
-import SelectInput from '@/v2/components/input/SelectInput';
+import SortSelect from '@/v2/components/input/SortSelect';
 import TextInput from '@/v2/components/input/TextInput';
 import ListPageLayout from '@/v2/components/layout/ListPageLayout';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
@@ -148,29 +147,18 @@ const Box: React.FC = () => {
                   label={t('v2.ui.actions.search')}
                   startAdornment={<Icon type="search" />}
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={setSearchQuery}
                   className="flex-1 min-w-20"
                   data-testid={TEST_IDS.SEARCH_FIELD}
                 />
-                <SelectInput
-                  dense
-                  label={t('v2.ui.sort.label')}
+                <SortSelect
                   options={orderOptions}
                   value={orderBy}
                   onChange={setOrderBy}
+                  reversed={reversed}
+                  onReversedChange={setReversed}
                   data-testid={TEST_IDS.SORT_SELECT}
                 />
-                <IconButton
-                  dense
-                  hint={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
-                  aria-label={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
-                  aria-pressed={reversed}
-                  data-testid={TEST_IDS.SORT_DIRECTION_BUTTON}
-                  onClick={() => setReversed(!reversed)}
-                  className="min-w-6"
-                >
-                  <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="1.5em" />
-                </IconButton>
               </ScopeTitle>
             )}
           </>

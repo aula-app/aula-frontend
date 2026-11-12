@@ -1,6 +1,9 @@
 import Icon from '@/v2/components/ui/Icon';
 import IconButton from '@/v2/components/button/IconButton';
+import { useBackdropDismiss } from '@/v2/hooks/useBackdropDismiss';
+import { useEscapeDismiss } from '@/v2/hooks/useEscapeDismiss';
 import { ReactNode, useEffect, useId, useRef, useState } from 'react';
+import { UNSAFE_PortalProvider } from 'react-aria';
 import { useTranslation } from 'react-i18next';
 
 const TRANSITION_MS = 300;
@@ -36,27 +39,15 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
     }
   }, [open]);
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-    if (!dialog) return;
-    const handleCancel = (e: Event) => {
-      e.preventDefault();
-      onClose();
-    };
-    dialog.addEventListener('cancel', handleCancel);
-    return () => dialog.removeEventListener('cancel', handleCancel);
-  }, [onClose]);
-
-  const handleBackdropClick = (e: React.MouseEvent<HTMLDialogElement>) => {
-    if (e.target === e.currentTarget) onClose();
-  };
+  useEscapeDismiss(dialogRef, onClose);
+  const backdropDismiss = useBackdropDismiss(onClose);
 
   return (
     <dialog
       ref={dialogRef}
       data-testid="modal"
       aria-labelledby={titleId}
-      onClick={handleBackdropClick}
+      {...backdropDismiss}
       className="fixed inset-x-0 bottom-0 top-auto m-0 w-full max-w-full bg-transparent p-0 max-h-none overflow-visible"
     >
       <div
@@ -74,7 +65,7 @@ const Modal = ({ open, onClose, title, children }: ModalProps) => {
           <h2 id={titleId} className="mb-4 pr-8 text-lg font-semibold text-foreground">
             {title}
           </h2>
-          {children}
+          <UNSAFE_PortalProvider getContainer={() => dialogRef.current}>{children}</UNSAFE_PortalProvider>
         </div>
       </div>
     </dialog>
