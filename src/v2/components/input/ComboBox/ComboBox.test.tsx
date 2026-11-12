@@ -138,4 +138,22 @@ describe('ComboBox', () => {
 
     expect(onChange).toHaveBeenLastCalledWith(['b']);
   });
+
+  // Disabled: React Aria bug. In multi-select, Tab unselects the option just picked with Enter.
+  // Re-enable once React Aria fixes it.
+  // it('keeps a keyboard pick when Tab closes the list', async () => {
+  //   const user = userEvent.setup();
+  //   const onChange = vi.fn();
+  //   render(<Harness onChange={onChange} />);
+  //
+  //   await user.click(screen.getByTestId('cb'));
+  //   await user.keyboard('s{ArrowDown}{Enter}');
+  //   expect(screen.getByTestId('cb-tag-b')).toBeInTheDocument();
+  //
+  //   await user.tab();
+  //
+  //   expect(screen.getByTestId('cb')).toHaveAttribute('aria-expanded', 'false');
+  //   expect(onChange).toHaveBeenLastCalledWith(['b']);
+  //   expect(screen.getByTestId('cb-tag-b')).toBeInTheDocument();
+  // });
 });
