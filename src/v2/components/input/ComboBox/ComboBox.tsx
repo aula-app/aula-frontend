@@ -53,6 +53,7 @@ const ComboBox = ({
   'data-testid': dataTestId,
 }: ComboBoxProps) => {
   const { t } = useTranslation();
+  const isDisabled = disabled || loading || options.length === 0;
 
   return (
     <AriaComboBox
@@ -61,7 +62,7 @@ const ComboBox = ({
       onChange={(keys: Key[]) => onChange(keys.map(String))}
       defaultItems={options}
       allowsEmptyCollection
-      isDisabled={disabled || loading || options.length === 0}
+      isDisabled={isDisabled}
       className={twMerge('group/combobox relative flex flex-col gap-2', className)}
     >
       <div className="relative">
@@ -82,7 +83,11 @@ const ComboBox = ({
 
       <ComboBoxValue<SelectOption>>
         {({ selectedItems }) => (
-          <TagGroup aria-label={tagsLabel} onRemove={(keys) => onChange(value.filter((key) => !keys.has(key)))}>
+          <TagGroup
+            aria-label={tagsLabel}
+            disabledKeys={isDisabled ? value : undefined}
+            onRemove={(keys) => onChange(value.filter((key) => !keys.has(key)))}
+          >
             <TagList
               items={selectedItems.filter((item): item is SelectOption => item != null)}
               data-testid={dataTestId ? `${dataTestId}-tags` : undefined}
@@ -98,21 +103,23 @@ const ComboBox = ({
                     'text-xs text-foreground cursor-default transition-colors',
                     'data-hovered:border-input-border-hover',
                     'data-focus-visible:outline-1 data-focus-visible:outline-current data-focus-visible:border-current',
-                    'data-disabled:opacity-60'
+                    'data-disabled:border-transparent data-disabled:pr-3'
                   )}
                 >
                   <span className="truncate">{item.label}</span>
-                  <Button
-                    slot="remove"
-                    data-testid={dataTestId ? `${dataTestId}-remove-${item.value}` : undefined}
-                    className={twMerge(
-                      'flex shrink-0 items-center justify-center rounded-full p-0.5 text-muted cursor-pointer',
-                      'transition-colors data-hovered:bg-shadow data-pressed:bg-shadow',
-                      'data-focus-visible:outline-2 data-focus-visible:outline-current'
-                    )}
-                  >
-                    <Icon type="close" size="0.875rem" />
-                  </Button>
+                  {!isDisabled && (
+                    <Button
+                      slot="remove"
+                      data-testid={dataTestId ? `${dataTestId}-remove-${item.value}` : undefined}
+                      className={twMerge(
+                        'flex shrink-0 items-center justify-center rounded-full p-0.5 text-muted cursor-pointer',
+                        'transition-colors data-hovered:bg-shadow data-pressed:bg-shadow',
+                        'data-focus-visible:outline-2 data-focus-visible:outline-current'
+                      )}
+                    >
+                      <Icon type="close" size="0.875rem" />
+                    </Button>
+                  )}
                 </Tag>
               )}
             </TagList>

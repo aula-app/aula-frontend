@@ -22,6 +22,7 @@ const FieldLabel = ({ children, required, invalid, dense, hasStart, floated, cla
     <Label
       className={twMerge(
         'pointer-events-none absolute left-3 origin-left text-sm transition-all duration-200 bg-background px-0.5',
+        'peer-disabled:bg-transparent',
         'text-nowrap text-ellipsis max-w-full overflow-hidden',
         followsPeer
           ? twMerge(
