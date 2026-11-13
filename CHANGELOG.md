@@ -1,4 +1,4 @@
-## Unreleased
+## 1.10.3
 
 - **New features**
   - users can now log in by (autocompleted) school name as well as instance code
