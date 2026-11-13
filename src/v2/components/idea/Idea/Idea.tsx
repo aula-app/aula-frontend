@@ -15,7 +15,7 @@ import { IdeaForm } from '@/v2/forms';
 import Stat from '@/v2/components/idea/Stat';
 import UserBar from '@/v2/components/idea/UserBar';
 import Markdown from '@/v2/components/ui/Markdown';
-import MoreOptions from '@/v2/components/ui/MoreOptions';
+import MoreOptions, { moreOptionsClearance, moreOptionsHost } from '@/v2/components/ui/MoreOptions';
 import { TEST_IDS } from '@/test-ids';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -74,20 +74,21 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onCha
         )}
         <div
           className={twMerge(
-            'relative flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
+            moreOptionsHost,
+            'flex flex-col-reverse ml-4 gap-1 py-2 px-4 rounded-2xl rounded-bl-none',
             bubbleColor,
             hasQuorumBar ? 'rounded-br-none' : '',
             hasTopTab ? 'rounded-tr-none' : ''
           )}
         >
-          <Link to={ideaPath}>
-            <h2 id={titleId} className="font-semibold text-inherit">
+          <Link to={ideaPath} className={moreOptionsClearance}>
+            <h2 id={titleId} className="font-semibold text-inherit wrap-anywhere">
               {idea.title}
             </h2>
             {idea.content && <Markdown className="prose text-inherit line-clamp-3">{idea.content}</Markdown>}
           </Link>
           <MoreOptions
-            className="absolute top-1 right-1 z-10"
+            corner
             panelClassName="ml-auto mr-1"
             menuTestId={TEST_IDS.IDEA_MORE_MENU}
             panelTestId={TEST_IDS.IDEA_MORE_OPTIONS_PANEL}

@@ -1,4 +1,3 @@
-import Chip from '@/v2/components/button/Chip';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
@@ -15,15 +14,22 @@ interface PhaseStatusProps {
 /** Phase status badge sitting on top of an idea bubble. */
 const PhaseStatus = ({ status, iconOnly = false, className }: PhaseStatusProps) => {
   const { t } = useTranslation();
+  const label = t(status.label);
 
   return (
-    <Chip
-      aria-label={t(status.label)}
-      className={twMerge('text-xs gap-1 font-medium rounded-b-none', status.colors, className)}
-      startIcon={<Icon type={status.icon} className={iconOnly ? undefined : '-mx-1'} aria-hidden="true" />}
+    <span
+      role={iconOnly ? 'img' : undefined}
+      aria-label={iconOnly ? label : undefined}
+      className={twMerge(
+        'inline-flex items-center justify-center gap-1 whitespace-nowrap rounded-2xl rounded-b-none p-1 px-3',
+        'text-xs font-medium',
+        status.colors,
+        className
+      )}
     >
-      {!iconOnly && t(status.label)}
-    </Chip>
+      <Icon type={status.icon} className={iconOnly ? undefined : '-mx-1'} aria-hidden="true" />
+      {!iconOnly && <span className="ml-1">{label}</span>}
+    </span>
   );
 };
 

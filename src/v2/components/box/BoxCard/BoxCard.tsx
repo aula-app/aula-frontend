@@ -10,7 +10,7 @@ import ShareButton from '@/v2/components/button/ShareButton';
 import Icon from '@/v2/components/ui/Icon/Icon';
 import Markdown from '@/v2/components/ui/Markdown';
 import ProgressBar from '@/v2/components/ui/ProgressBar';
-import MoreOptions from '@/v2/components/ui/MoreOptions';
+import MoreOptions, { moreOptionsClearance, moreOptionsHost } from '@/v2/components/ui/MoreOptions';
 import Link from '@/v2/components/navigation/Link';
 import { Category } from '@/v2/components/idea/CategoryList';
 import BoxIdeaList from '../BoxIdeaList';
@@ -75,12 +75,23 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
     <div data-testid={TEST_IDS.BOX_CARD} className="flex flex-col gap-0.5">
       <div
         className={twMerge(
-          `relative flex flex-col gap-2 rounded-t-2xl px-4 pt-2 pb-3 text-foreground bg-${phaseColor}`,
+          moreOptionsHost,
+          `flex flex-col rounded-t-2xl px-4 pt-2 pb-3 text-foreground bg-${phaseColor}`,
           !hasRows && !showCountdown && !showProgress && 'rounded-b-2xl'
         )}
       >
+        <Link
+          to={to}
+          data-testid={`box-${box.name}`}
+          className={twMerge('flex flex-col no-underline text-foreground', moreOptionsClearance)}
+        >
+          {box.name && <h2 className="font-bold wrap-anywhere">{box.name}</h2>}
+          {box.description_public && (
+            <Markdown className="prose-sm text-muted line-clamp-3">{box.description_public}</Markdown>
+          )}
+        </Link>
         <MoreOptions
-          className="absolute top-0.5 right-1.5"
+          corner
           panelClassName="mr-1"
           menuTestId={TEST_IDS.BOX_MORE_MENU}
           panelTestId={TEST_IDS.BOX_MORE_OPTIONS_PANEL}
@@ -133,12 +144,6 @@ const BoxCard = ({ box, ideas, progress, categories, votes, onChanged }: BoxCard
             </>
           )}
         </MoreOptions>
-        <Link to={to} data-testid={`box-${box.name}`} className="flex flex-col no-underline text-foreground">
-          {box.name && <h2 className="font-bold">{box.name}</h2>}
-          {box.description_public && (
-            <Markdown className="prose-sm text-muted line-clamp-3">{box.description_public}</Markdown>
-          )}
-        </Link>
       </div>
 
       {hasRows && (
