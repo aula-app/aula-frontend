@@ -38,24 +38,38 @@ describe('ScopeTitle', () => {
 
   it('toggles the controls and focuses the first control when opened', () => {
     const onToggle = vi.fn();
-    const { getByRole, getByLabelText } = render(
+    const { getByRole, getByLabelText, getByTestId, queryByTestId } = render(
       <ScopeTitle scope="ideas" onToggle={onToggle}>
         <input aria-label="query" />
       </ScopeTitle>
     );
 
-    const toggle = getByRole('button', { name: 'v2.ui.actions.search' });
+    const toggle = getByRole('button', { name: 'v2.ui.actions.searchAndSort' });
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
     expect(toggle.getAttribute('aria-controls')).toBe(getByRole('search').id);
+    expect(getByTestId('icon-search')).toBeTruthy();
+    expect(getByTestId('icon-sortAsc')).toBeTruthy();
 
     fireEvent.click(toggle);
     expect(toggle.getAttribute('aria-expanded')).toBe('true');
-    expect(getByRole('button', { name: 'v2.ui.actions.close' })).toBe(toggle);
+    expect(getByRole('button', { name: 'v2.ui.button.close' })).toBe(toggle);
+    expect(getByTestId('icon-close')).toBeTruthy();
+    expect(queryByTestId('icon-sortAsc')).toBeNull();
     expect(getByLabelText('query')).toHaveFocus();
     expect(onToggle).toHaveBeenCalledWith(true);
 
     fireEvent.click(toggle);
     expect(toggle.getAttribute('aria-expanded')).toBe('false');
     expect(onToggle).toHaveBeenCalledWith(false);
+  });
+
+  it('shows the descending sort icon on the closed toggle when the sort is reversed', () => {
+    const { getByTestId, queryByTestId } = render(
+      <ScopeTitle scope="ideas" sortReversed>
+        <input aria-label="query" />
+      </ScopeTitle>
+    );
+    expect(getByTestId('icon-sortDesc')).toBeTruthy();
+    expect(queryByTestId('icon-sortAsc')).toBeNull();
   });
 });

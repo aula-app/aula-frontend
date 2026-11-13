@@ -48,6 +48,7 @@ const Rooms: React.FC<RoomsProps> = ({ onScroll }) => {
           total={rooms.length}
           defaultOpen={!!searchQuery}
           onToggle={(open) => !open && setSearchQuery('')}
+          sortReversed={reversed}
         >
           <TextInput
             dense

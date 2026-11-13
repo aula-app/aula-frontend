@@ -82,6 +82,7 @@ const Ideas: React.FC = () => {
           total={ideas.length}
           defaultOpen={!!searchQuery}
           onToggle={(open) => !open && setSearchQuery('')}
+          sortReversed={reversed}
         >
           <TextInput
             dense
