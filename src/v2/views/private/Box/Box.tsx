@@ -140,6 +140,7 @@ const Box: React.FC = () => {
                 phase={String(box.phase_id)}
                 defaultOpen={!!searchQuery}
                 onToggle={(open) => !open && setSearchQuery('')}
+                sortReversed={reversed}
               >
                 <TextInput
                   dense

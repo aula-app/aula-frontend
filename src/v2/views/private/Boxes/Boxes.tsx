@@ -99,6 +99,7 @@ const Boxes: React.FC = () => {
           total={boxes.length}
           defaultOpen={!!searchQuery}
           onToggle={(open) => !open && setSearchQuery('')}
+          sortReversed={reversed}
         >
           <TextInput
             dense
