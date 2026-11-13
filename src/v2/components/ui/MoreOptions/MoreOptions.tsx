@@ -6,9 +6,18 @@ import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
+/** Parent classes for a `corner` MoreOptions and the content beside it. */
+export const moreOptionsHost = 'relative group/more-options';
+
+/** Content classes beside a `corner` MoreOptions: clears the toggle, and drops below the action row while open. */
+export const moreOptionsClearance =
+  'pr-7 transition-[padding] duration-150 ease-in-out group-has-aria-expanded/more-options:pt-8';
+
 interface MoreOptionsProps {
   /** Renders the action buttons; receives `close` to dismiss the menu after an action fires. */
   children: (close: () => void) => React.ReactNode;
+  /** Pin to the top-right corner of a `moreOptionsHost` parent, over content using `moreOptionsClearance`. */
+  corner?: boolean;
   /** Classes for the wrapper. Defaults to `contents` so the toggle/panel join the parent layout. */
   buttonClassName?: string;
   /** Classes for the toggle button (e.g. positioning). */
@@ -23,6 +32,7 @@ interface MoreOptionsProps {
 
 const MoreOptions = ({
   children,
+  corner = false,
   buttonClassName,
   className,
   collapseClassName,
@@ -42,7 +52,11 @@ const MoreOptions = ({
   };
 
   return (
-    <div ref={wrapperRef} className={twMerge('flex flex-row-reverse', className)} onBlur={handleBlur}>
+    <div
+      ref={wrapperRef}
+      className={twMerge('flex flex-row-reverse', corner && 'absolute top-0.5 right-1.5 z-10', className)}
+      onBlur={handleBlur}
+    >
       <IconButton
         aria-label={t('v2.ui.button.more')}
         aria-expanded={isOpen}

@@ -12,7 +12,10 @@ vi.mock('@/utils', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/utils')>()),
   checkPermissions: () => true,
 }));
-vi.mock('@/v2/components/ui/MoreOptions', () => ({ default: () => null }));
+vi.mock('@/v2/components/ui/MoreOptions', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/v2/components/ui/MoreOptions')>()),
+  default: () => null,
+}));
 vi.mock('@/v2/components/ui/Markdown', () => ({ default: () => null }));
 vi.mock('@/v2/components/idea/LikeStat/useIdeaLike', () => ({
   useIdeaLike: () => ({ liked: false, count: 7, toggle: () => {}, pending: false }),
@@ -146,5 +149,14 @@ describe('Idea metrics by phase', () => {
     const unset = { ...idea, approved: null as unknown as IdeaType['approved'] };
     const { container } = renderAt('20', { idea: unset, quorum: 40 });
     expect(barOf(container)?.getAttribute('aria-valuenow')).toBe('70');
+  });
+});
+
+describe('Idea phase status', () => {
+  it('shows the status as a label, not a button', () => {
+    const { container, getByText } = renderAt('20');
+
+    expect(getByText('v2.scopes.ideas.status.approved').closest('button')).toBeNull();
+    expect(container.querySelector('button[aria-label="v2.scopes.ideas.status.approved"]')).toBeNull();
   });
 });
