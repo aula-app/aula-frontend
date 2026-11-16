@@ -12,6 +12,7 @@ const FILTER = ['room_name', 'description_public'] as Array<keyof RoomType>;
 const COLUMNS = [
   { name: 'room_name', orderId: 5 },
   { name: 'description_public', orderId: 6 },
+  { name: 'idp_group_id', orderId: 0 },
   { name: 'status', orderId: 2 },
   { name: 'created', orderId: 4 },
   { name: 'last_update', orderId: 0 },
@@ -35,7 +36,7 @@ const RoomsView: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.rooms'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.rooms'), '']] });
   }, [dispatch, t]);
 
   return (

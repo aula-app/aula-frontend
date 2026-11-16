@@ -8,7 +8,7 @@ interface Props {
   disabled?: boolean;
 }
 
-const UserBar: React.FC<Props> = ({ info, disabled = false }) => {
+const UserBar: React.FC<Props> = ({ info }) => {
   const { formatDateTime } = useDateFormatters();
   return (
     <Stack direction="row" alignItems="center">

@@ -15,6 +15,9 @@ export const validateAndSaveInstanceCode = async (code: string): Promise<boolean
     },
   };
 
+  // TODO: it *feels* like CENTRAL_API_URL should be enough here,
+  //   also, I believe this runs after the root loadRuntimeConfig, guaranteed?
+  //   also the final Set, with ??, seems error-prone
   let api_url = getRuntimeConfig().CENTRAL_API_URL;
   if (api_url === null || api_url === '') {
     api_url = (await loadRuntimeConfig()).CENTRAL_API_URL;

@@ -31,16 +31,12 @@ const Dashboard = ({ show = true }: DashboardProps) => {
       } else {
         setError(response.error || 'Failed to load dashboard');
       }
-    } catch (err) {
+    } catch {
       setError('Failed to load dashboard');
     } finally {
       setIsLoading(false);
     }
   }, []);
-
-  useEffect(() => {
-    setShowing(show);
-  }, [show]);
 
   useEffect(() => {
     fetchDashboard();

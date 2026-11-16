@@ -15,7 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 const UserMessagesView = () => {
   const { t } = useTranslation();
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
   usePageTitle('pageTitles.messages');
 
   const [isLoading, setLoading] = useState(true);
@@ -32,7 +32,7 @@ const UserMessagesView = () => {
 
   useEffect(() => {
     fetchMessages();
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.messages'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.messages'), '']] });
   }, []);
 
   return (

@@ -36,7 +36,7 @@ export const getDashboard = async (): Promise<GetDashboardResponse> => {
 /**
  * Fetches updates data for the current user
  * Makes a database request to get user-specific update information
- */ 0;
+ */
 
 export interface UpdateResponse {
   votes: DefaultUpdate[];

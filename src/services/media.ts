@@ -28,7 +28,7 @@ interface GetAvatarResponse extends GenericResponse {
   data: { filename: string }[] | null;
 }
 
-export const uploadImage = async (file: File): Promise<any> => {
+export const uploadImage = async (file: File): Promise<GenericResponse> => {
   const formData = new FormData();
   formData.append('file', file, 'avatar.png');
   formData.append('fileType', 'avatar');

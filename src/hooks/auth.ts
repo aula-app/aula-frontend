@@ -5,7 +5,7 @@ import { databaseRequest } from '@/services/requests';
 import { useAppStore } from '@/store';
 import { InstanceResponse } from '@/types/Generics';
 import { checkPermissions, localStorageDelete, localStorageGet } from '@/utils';
-import { parseJwt } from '@/utils/jwt';
+import { isTokenValid } from '@/utils/jwt';
 import { useNavigate } from 'react-router-dom';
 import { useCallback, useEffect } from 'react';
 import { getUserConsent } from '@/services/consent';
@@ -17,29 +17,13 @@ const CONSENT_REQUEST_TIMEOUT_MS = 10000;
  * @returns {boolean} true if user is authenticated, false otherwise
  */
 export function useIsAuthenticated() {
-  const [state] = useAppStore();
-  let result = state.isAuthenticated;
+  // Subscribe to the store so auth changes (login/logout) re-run this check.
+  useAppStore();
 
-  // Verify token exists and is valid
-  const token = localStorageGet('token');
-  if (token) {
-    const payload = parseJwt(token);
-
-    // Check if token is valid and not expired
-    if (payload && typeof payload.exp === 'number') {
-      const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
-      result = payload.exp === 0 || payload.exp > currentTime;
-    } else {
-      result = false;
-    }
-  } else {
-    result = false;
-  }
-
-  return result;
+  return isTokenValid(localStorageGet('token'));
 }
 
-export async function useIsOnline(): Promise<boolean> {
+export async function fetchIsOnline(): Promise<boolean> {
   const response = await databaseRequest<InstanceResponse>({
     model: 'Settings',
     method: 'getInstanceSettings',
@@ -135,12 +119,12 @@ export const useConsentSync = (isAuthenticated: boolean, locationKey: string) =>
       window.clearTimeout(timeoutId);
 
       dispatch({
-        action: 'HAS_CONSENT',
+        type: 'HAS_CONSENT',
         payload: result.data !== 0,
       });
-    } catch (error) {
+    } catch {
       dispatch({
-        action: 'HAS_CONSENT',
+        type: 'HAS_CONSENT',
         payload: false,
       });
     }

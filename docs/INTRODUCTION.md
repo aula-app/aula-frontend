@@ -75,7 +75,6 @@ The system defines six permission levels:
 | Moderator       | Can moderate assigned Rooms and mark winners |
 | Super Moderator | Can moderate all school Rooms                |
 | School Admin    | Full access to administrative settings       |
-| Tech Admin      | Access to technical configuration only       |
 
 ## Additional features
 

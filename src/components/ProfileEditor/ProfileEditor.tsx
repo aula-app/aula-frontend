@@ -3,10 +3,10 @@ import { MarkdownEditor } from '@/components/DataFields';
 import UserAvatar from '@/components/UserAvatar';
 import { addMessage } from '@/services/messages';
 import { editSelfAbout, editSelfRestricted } from '@/services/users';
-import { useSsoManaged } from '@/hooks';
+import { useSsoRequired } from '@/hooks';
 import { useAppStore } from '@/store';
 import { UserType } from '@/types/Scopes';
-import { checkPermissions, errorAlert, successAlert } from '@/utils';
+import { checkPermissions, errorAlert, isSsoUser, successAlert } from '@/utils';
 import { yupResolver } from '@hookform/resolvers/yup';
 import {
   Button,
@@ -36,20 +36,21 @@ interface Props {
 const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
-  const isSsoManaged = useSsoManaged();
+  const isSsoRequired = useSsoRequired();
+  const isSsoLocked = isSsoRequired || isSsoUser(user);
 
   const [updateRequests, setUpdateRequests] = useState<Array<fieldOptions>>([]);
   const [editImage, setEditImage] = useState(false);
 
   const schema = yup.object({
-    realname: isSsoManaged
+    realname: isSsoLocked
       ? yup.string().nullable()
       : yup
           .string()
           .max(30, t('forms.validation.maxLength', { var: 30 }))
           .min(3, t('forms.validation.minLength', { var: 3 }))
           .required(t('forms.validation.required')),
-    username: isSsoManaged
+    username: isSsoLocked
       ? yup.string().nullable()
       : yup
           .string()
@@ -75,7 +76,7 @@ const ProfileEditor: React.FC<Props> = ({ user, onReload }) => {
 
   const userFields = ['displayname', 'username', 'realname', 'email', 'about_me'] as Array<keyof SchemaType>;
 
-  const isLockedField = (field: keyof SchemaType) => isSsoManaged && field !== 'displayname' && field !== 'about_me';
+  const isLockedField = (field: keyof SchemaType) => isSsoLocked && field !== 'displayname' && field !== 'about_me';
 
   const isAdmin = checkPermissions('users', 'edit');
 

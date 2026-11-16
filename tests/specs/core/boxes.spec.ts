@@ -12,10 +12,9 @@ import { BoxData } from '../../support/types';
  */
 test.describe('Box Management - Creation, phase changes and Permissions', () => {
 
-  test.skip('Unprivileged User cannot create a Box', async ({ seededRoom, newPageFor }) => {
-    const box = entities.createBox('unprivileged-box', seededRoom)
-    const userPage = await newPageFor('user');
-
+  test.skip('Unprivileged User cannot create a Box', async () => {
+    // TODO: const box = entities.createBox('unprivileged-box', seededRoom)
+    // TODO: const userPage = await newPageFor('user');
     // TODO: expect can't create Box from Room page
     // TODO: expect can't access Box Settings page
     //

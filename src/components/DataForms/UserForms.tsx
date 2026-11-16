@@ -26,8 +26,6 @@ interface UserFormsProps {
 const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const { t } = useTranslation();
 
-  // Provider-managed accounts own their identity: the admin cannot edit the
-  // username, email or realname the directory supplies.
   const isSsoManaged = isSsoUser(defaultValues);
 
   const [rooms, setRooms] = useState<string[]>([]);
@@ -67,7 +65,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     watch,
   } = form;
 
-  // Infer TypeScript type from the Yup schema
   type SchemaType = yup.InferType<typeof schema>;
 
   const { handleSubmit: handleDraftSubmit, handleCancel } = useDraftStorage(form, {
@@ -108,7 +105,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   };
 
   const newUser = async (data: SchemaType) => {
-    // Clear any previous errors
     setError('username', {});
     setError('email', {});
     setError('root', {});
@@ -123,7 +119,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       username: data.username,
     });
     if (response.error || !response.data) {
-      // Check if it's a duplicate username/email error (error_code 2)
       setError('root', {
         type: 'manual',
         message: response.error || t('errors.default'),
@@ -139,7 +134,6 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const updateUser = async (data: SchemaType) => {
     if (!defaultValues?.hash_id) return;
 
-    // Clear any previous errors
     setError('username', {});
     setError('email', {});
     setError('root', {});
@@ -150,8 +144,13 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
       status: data.status,
       userlevel: data.userlevel || defaultValues.userlevel,
       user_id: defaultValues.hash_id,
+      // editUser requires and overwrites all three.
       ...(isSsoManaged
-        ? {}
+        ? {
+            email: defaultValues.email ?? '',
+            realname: defaultValues.realname,
+            username: defaultValues.username,
+          }
         : {
             email: data.email,
             realname: data.realname,
@@ -183,9 +182,10 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
     await Promise.all(updateRoles?.map((update) => addSpecialRoles(user_id, update.role, update.room)) || []);
   };
 
-  const RoleOptionTypes = [
+  const roleOptions = [
     ...roles
-      .filter((role) => role < 30 || (role >= 40 && role < 60))
+      // (Non-Special) Moderators (30, 31) can only be room-roles, not user-roles
+      .filter((role) => ! ([30, 31].includes(role)))
       .map((r) => ({ value: r, label: t(`roles.${r}`) })),
   ];
 
@@ -339,27 +339,24 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
                   },
                 }}
               />
-              {defaultValues?.userlevel !== 60 && (
-                <>
-                  {checkPermissions('users', 'addRole') && (
-                    <SelectField
-                      size="small"
-                      control={control}
-                      options={RoleOptionTypes}
-                      name="userlevel"
-                      sx={{ minWidth: 200 }}
-                    />
-                  )}
-                  {checkPermissions('rooms', 'addUser') && watch('userlevel') < 40 && (
-                    <RoomRolesField
-                      rooms={rooms}
-                      user={defaultValues}
-                      defaultLevel={watch('userlevel')}
-                      onUpdate={(data) => onUpdate(data)}
-                      disabled={isLoading}
-                    />
-                  )}
-                </>
+              {/* TODO do we need to guard Admins against de-Admining themselves? */}
+              {checkPermissions('users', 'addRole') && (
+                <SelectField
+                  size="small"
+                  control={control}
+                  options={roleOptions}
+                  name="userlevel"
+                  sx={{ minWidth: 200 }}
+                />
+              )}
+              {checkPermissions('rooms', 'addUser') && watch('userlevel') < 40 && (
+                <RoomRolesField
+                  rooms={rooms}
+                  user={defaultValues}
+                  defaultLevel={watch('userlevel')}
+                  onUpdate={(data) => onUpdate(data)}
+                  disabled={isLoading}
+                />
               )}
             </Stack>
             <MarkdownEditor

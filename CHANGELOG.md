@@ -1,3 +1,24 @@
+## Unreleased
+
+- **New features**
+  - users can now log in by (autocompleted) school name as well as instance code
+- **Technical improvements**
+  - remove Tech Admin role, clean up related permissions, notably regarding the listing+viewing+selection of rooms
+- **Bug fixes**
+  - SSO-managed schools (EDUPLACES): add, delete and CSV import are now blocked only when SSO is mandatory, and remain available when SSO is merely offered
+
+## 1.10.2
+
+- **Bug fixes**
+  - Reenable 'forgot password' route when SSO is not mandatory
+
+## 1.10.1
+
+- **Bug fixes**
+  - fix "?" tooltips (aka. KnowMore) for interations on mobile
+  - SSO-managed schools (EDUPLACES): review guards for SSO login available and/or mandatory
+  - Manage SSO requirements for login, and display a versioning alert message when required
+
 ## 1.10.0
 
 - **New features**

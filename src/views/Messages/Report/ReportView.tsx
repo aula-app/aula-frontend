@@ -16,7 +16,7 @@ const ReportView = () => {
   const { report_id } = useParams();
 
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [report, setReport] = useState<MessageType>();
 
   const fetchReport = useCallback(async () => {

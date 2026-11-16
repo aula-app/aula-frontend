@@ -2,7 +2,7 @@ import AppIcon from '@/components/AppIcon';
 import { getAllRooms } from '@/services/rooms';
 import { RoomType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
-import { roles } from '@/utils';
+import { isSsoUser, roles } from '@/utils';
 import {
   Button,
   ButtonProps,
@@ -22,10 +22,6 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-/**
- * Interface that will be exposed to the parent component.
- */
-
 interface Props extends ButtonProps {
   user?: UserType;
   rooms: string[];
@@ -33,32 +29,29 @@ interface Props extends ButtonProps {
   onUpdate: (updates: { room: string; role: RoleTypes | 0 }[]) => void;
 }
 
-const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled = false, onUpdate, ...restOfProps }) => {
+const RoomRolesField: React.FC<Props> = ({ user, disabled = false, onUpdate, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [schoolRooms, setRooms] = useState<RoomType[]>([]);
 
   const [userRoles, setUserRoles] = useState<{ room: string; role: RoleTypes }[]>(JSON.parse(user?.roles || '[]'));
   const [updateRoles, setUpdateRoles] = useState<{ room: string; role: RoleTypes | 0 }[]>([]);
 
-  // Create role options based on room type and user level
-  const getRoleOptions = (room: RoomType) => {
-    const isStandardRoom = room.type === 1;
-    const isAdmin = (user?.userlevel ?? 0) >= 50;
+  const isSsoManaged = isSsoUser(user);
+  const isIdpManaged = (room: RoomType) => isSsoManaged && !!room.idp_group_id;
+  const visibleRooms = schoolRooms.filter(
+    (room) => !isIdpManaged(room) || userRoles.some((role) => role.room === room.hash_id)
+  );
 
+  const getRoleOptions = (canLeave: boolean) => {
     const options = [
-      { value: 0, label: t('roles.empty') },
+      ...(canLeave ? [{ value: 0, label: t('roles.empty') }] : []),
       ...roles
-        .filter((role) => {
-          // Filter based on room type and admin status
-          if (isAdmin && isStandardRoom) {
-            return role < 60; // Admins can see all roles except super admin for standard rooms
-          }
-          return role < 40; // Non-admins see only basic roles
-        })
+        // only users that aren't admins or supermoderators can have room-specific roles
+        .filter((role) => role < 40)
         .map((r) => ({ value: r, label: t(`roles.${r}`) })),
     ];
 
@@ -80,14 +73,12 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
   };
 
   const handleUpdate = async (room: string, role: RoleTypes | 0) => {
-    // delete existing role if it is the same as the new role
     const existingRole = userRoles.find((r) => r.room === room)?.role;
     if (existingRole === role) {
       setUpdateRoles(updateRoles.filter((r) => r.room !== room));
       return;
     }
 
-    // update existing role if it exists
     const existingIndex = updateRoles.findIndex((r) => r.room === room);
     if (existingIndex > -1) {
       const updatedRoles = [...updateRoles];
@@ -96,7 +87,6 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
       return;
     }
 
-    // add new role
     setUpdateRoles([{ room, role }, ...updateRoles]);
   };
 
@@ -153,13 +143,13 @@ const RoomRolesField: React.FC<Props> = ({ user, rooms, defaultLevel, disabled =
           aria-label={t('ui.accessibility.roomRolesList')}
           id="room-roles-dialog-description"
         >
-          {schoolRooms.map((room, index) => {
+          {visibleRooms.map((room, index) => {
             const currentRole =
               updateRoles.find((role) => role.room === room.hash_id)?.role ??
               userRoles.find((role) => role.room === room.hash_id)?.role ??
               0;
 
-            const roleOptions = getRoleOptions(room);
+            const roleOptions = getRoleOptions(!isIdpManaged(room));
             const isAdminLocked = (user?.userlevel ?? 0) >= 50 && room.type === 1;
 
             return (

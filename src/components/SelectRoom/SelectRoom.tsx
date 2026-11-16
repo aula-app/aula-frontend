@@ -1,4 +1,4 @@
-import { getRooms } from '@/services/rooms';
+import { getAllRooms } from '@/services/rooms';
 import { RoomType } from '@/types/Scopes';
 import { MenuItem, TextField } from '@mui/material';
 import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ const SelectRoom = ({ room, setRoom }: Params) => {
   const [rooms, setRooms] = useState<Array<RoomType>>([]);
 
   const fetchRooms = useCallback(async () => {
-    const response = await getRooms();
+    const response = await getAllRooms();
     if (!response.error && response.data) setRooms(response.data);
   }, []);
 

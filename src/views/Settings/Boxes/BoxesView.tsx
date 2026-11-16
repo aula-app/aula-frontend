@@ -43,7 +43,7 @@ const BoxesView: React.FC = () => {
   });
 
   useEffect(() => {
-    dispatch({ action: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.boxes'), '']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.boxes'), '']] });
   }, [dispatch, t]);
 
   const extraFilters = <SelectRoom room={room_id} setRoom={setRoom} />;

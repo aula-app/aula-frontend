@@ -37,7 +37,7 @@ const BoxPhaseView = () => {
   const boxFilterFunction = useMemo(() => createTextFilter<BoxType>(['name', 'description_public']), []);
 
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [boxes, setBoxes] = useState<BoxType[]>([]);
 
   // Apply filtering to boxes
@@ -63,7 +63,7 @@ const BoxPhaseView = () => {
   }, [filteredBoxes, sortKey, sortDirection]);
 
   const [edit, setEdit] = useState<BoxType | boolean>(); // undefined = update dialog closed; true = new idea; EditArguments = edit idea;
-  const [appState, dispatch] = useAppStore();
+  const [, dispatch] = useAppStore();
 
   const getRoomName = (id: string) => {
     return getRoom(id).then((response) => {
@@ -82,12 +82,12 @@ const BoxPhaseView = () => {
     setBoxes(response.data || []);
     setLoading(false);
 
-    let roomName = await getRoomName(room_id);
+    const roomName = await getRoomName(room_id);
 
     dispatch({
-      action: 'SET_BREADCRUMB',
+      type: 'SET_BREADCRUMB',
       breadcrumb: [
-        [roomName, `/room/${room_id}/phase/0`],
+        [roomName ?? 'Room', `/room/${room_id}/phase/0`],
         [t(`phases.name-${phase}`), `/room/${room_id}/phase/${phase}`],
       ],
     });

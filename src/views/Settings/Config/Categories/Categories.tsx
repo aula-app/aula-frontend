@@ -60,7 +60,7 @@ const CatView: React.FC = () => {
           data-testid="add-new-category-chip"
           aria-label={t('actions.add', { var: t('scopes.categories.name') })}
         />
-        {categories.map((category, key) => {
+        {categories.map((category) => {
           const currentIcon = category.description_internal as keyof typeof CAT_ICONS;
           return (
             <Chip

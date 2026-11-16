@@ -1,7 +1,7 @@
 import { InstanceResponse, OnlineOptions } from '@/types/Generics';
 import { InstanceStatusOptions } from '@/utils';
-import { Button, MenuItem, Stack, TextField, Typography } from '@mui/material';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { Button, Stack } from '@mui/material';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
 
@@ -19,7 +19,7 @@ interface Props {
 const SystemSettings = ({ settings, onReload }: Props) => {
   const { t } = useTranslation();
   const [status, setStatus] = useState<OnlineOptions | null>(settings?.online_mode ?? null);
-  const [hasError, setHasError] = useState(false);
+  const [, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [, dispatch] = useAppStore();
 
@@ -44,7 +44,7 @@ const SystemSettings = ({ settings, onReload }: Props) => {
         setStatus(pendingStatus);
         onReload();
       }
-    } catch (error) {
+    } catch {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
       cancelStatusChange();
     } finally {

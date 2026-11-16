@@ -42,8 +42,6 @@ export const getRooms = async (
   // Check if user has Super Moderator (40) access to view all rooms
   const hasSuperModAccess = checkPermissions('rooms', 'viewAll');
 
-  if (!hasSuperModAccess) delete args.type;
-
   const response = await databaseRequest(
     {
       model: 'Room',
@@ -72,20 +70,6 @@ export const getAllRooms = async (
     },
     []
   );
-
-  return response as GetRoomsResponse;
-};
-
-/**
- * Get a list of the rooms of a user from the database.
- */
-
-const getRoomsByUser = async (user_id: string): Promise<GetRoomsResponse> => {
-  const response = await databaseRequest({
-    model: 'Room',
-    method: 'getRoomsByUser',
-    arguments: { user_id },
-  });
 
   return response as GetRoomsResponse;
 };

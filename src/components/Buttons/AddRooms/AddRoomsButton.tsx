@@ -1,5 +1,5 @@
 import AppIcon from '@/components/AppIcon';
-import { getRooms } from '@/services/rooms';
+import { getAllRooms } from '@/services/rooms';
 import { addUserRoom, getUserRooms, removeUserRoom } from '@/services/users';
 import { RoomType } from '@/types/Scopes';
 import { UpdtesObject } from '@/types/SettingsTypes';
@@ -16,7 +16,6 @@ import {
   ListItemButton,
   ListItemText,
   Skeleton,
-  Typography,
 } from '@mui/material';
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -36,14 +35,14 @@ const AddRoomButton = forwardRef<AddRoomRefProps, Props>(({ users = [], disabled
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [isLoading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [rooms, setRooms] = useState<RoomType[]>([]);
   const [selectedRooms, setSelectedRooms] = useState<string[]>([]);
   const [indeterminateRooms, setIndeterminateRooms] = useState<string[]>([]);
   const [updates, setUpdates] = useState<UpdtesObject>({ add: [], remove: [] });
 
   const fetchRooms = useCallback(async () => {
-    const response = await getRooms();
+    const response = await getAllRooms();
     setLoading(false);
     if (response.error) setError(response.error);
     if (!response.error && response.data) setRooms(response.data);

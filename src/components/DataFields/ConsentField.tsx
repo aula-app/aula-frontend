@@ -1,17 +1,17 @@
 import { FormControl, Stack, StandardTextFieldProps, TextField } from '@mui/material';
-import { Control, Controller } from 'react-hook-form-mui';
+import { Control, Controller, FieldValues, Path } from 'react-hook-form-mui';
 import { useTranslation } from 'react-i18next';
 import SelectField from './SelectField';
 
-interface Props extends StandardTextFieldProps {
-  control: Control<any, any>;
+interface Props<T extends FieldValues = FieldValues> extends StandardTextFieldProps {
+  control: Control<T>;
 }
 
 /**
  * Renders "ConsentField" component
  */
 
-const ConsentField: React.FC<Props> = ({ control, sx }) => {
+const ConsentField = <T extends FieldValues = FieldValues>({ control, sx }: Props<T>) => {
   const { t } = useTranslation();
 
   const CONSENT_OPTIONS = [
@@ -22,7 +22,7 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
 
   return (
     <Controller
-      name="user_needs_to_consent"
+      name={'user_needs_to_consent' as Path<T>}
       control={control}
       render={({ field }) => (
         <FormControl sx={{ flex: 1, minWidth: 'min(150px, 100%)', ...sx }}>
@@ -36,7 +36,7 @@ const ConsentField: React.FC<Props> = ({ control, sx }) => {
               {...field}
             />
             <Controller
-              name="consent_text"
+              name={'consent_text' as Path<T>}
               control={control}
               render={({ field, fieldState }) => (
                 <TextField

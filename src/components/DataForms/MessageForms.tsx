@@ -123,7 +123,7 @@ const MessageForms: React.FC<MessageFormsProps> = ({ defaultValues, onClose }) =
       headline: data.headline,
       body: data.body,
       status: data.status as StatusTypes,
-      msg_type: 2 as 2,
+      msg_type: 2 as const,
       target_id,
       target_group,
     };

@@ -16,8 +16,11 @@ export class DbBackchannel {
 
       let result;
       try {
-        result = await centralConnection.query<any>(`SELECT data FROM tenants WHERE instance_code = ?`, [instanceCode]);
-        let { data } = result[0];
+        result = await centralConnection.query<{ data: { tenancy_db_username: string; tenancy_db_password: string; tenancy_db_name: string } }[]>(
+          `SELECT data FROM tenants WHERE instance_code = ?`,
+          [instanceCode]
+        );
+        const { data } = result[0];
 
         const self = new DbBackchannel();
         // Create pool so that we can reuse connections
@@ -55,12 +58,17 @@ export class DbBackchannel {
     await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '120-seed.sql'));
   }
 
+  /** Marks part of the baseline as IdP-managed; undone by the next `seed()`. */
+  public async seedIdpManaged(): Promise<void> {
+    await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '130-idp-managed.sql'));
+  }
+
   private async runSqlFile(filePath: string) {
     const sql = fs.readFileSync(filePath, 'utf8');
     await this.query(sql);
   }
 
-  private async query(sql: string | mariadb.QueryOptions, values?: any) {
+  private async query(sql: string | mariadb.QueryOptions, values?: unknown[]) {
     const conn = await this.tenantConnectionsPool.getConnection();
     try {
       await conn.query(sql, values);

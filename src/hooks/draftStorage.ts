@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useState } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 
 export interface UseDraftStorageOptions {
   storageKey: string;
   isNewRecord: boolean;
-  selections?: Record<string, any>;
+  selections?: Record<string, unknown>;
   onSubmit?: () => void;
   onCancel?: () => void;
 }
 
-export const useDraftStorage = <T extends Record<string, any>>(
+export const useDraftStorage = <T extends FieldValues>(
   form: UseFormReturn<T>,
   options: UseDraftStorageOptions
 ) => {
@@ -22,7 +22,7 @@ export const useDraftStorage = <T extends Record<string, any>>(
   const clearDraft = useCallback(() => {
     try {
       sessionStorage.removeItem(storageKey);
-    } catch (error) {
+    } catch {
       // Silently handle sessionStorage errors
     }
   }, [storageKey]);
@@ -43,7 +43,7 @@ export const useDraftStorage = <T extends Record<string, any>>(
         }
         return draftData.selections || null;
       }
-    } catch (error) {
+    } catch {
       // Silently handle sessionStorage errors
     }
     return null;
@@ -61,7 +61,7 @@ export const useDraftStorage = <T extends Record<string, any>>(
         selections: selections || {},
       };
       sessionStorage.setItem(storageKey, JSON.stringify(draftData));
-    } catch (error) {
+    } catch {
       // Silently handle sessionStorage errors
     }
   }, [storageKey, initialIsNewRecord, getValues, selections]);

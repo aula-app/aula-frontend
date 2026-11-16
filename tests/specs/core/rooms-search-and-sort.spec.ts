@@ -19,7 +19,7 @@ test('Rooms Search (Dashboard/Home page)', async ({ seededUser, newPageFor }) =>
   const adminPage = await newPageFor('admin');
   const userPage = await newPageFor('user');
 
-  let room: RoomData = entities.createRoom('search-sort');
+  const room: RoomData = entities.createRoom('search-sort');
   room.users = [seededUser];
   await roomsSettings.create(adminPage, room);
 

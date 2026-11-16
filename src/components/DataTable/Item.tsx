@@ -5,7 +5,7 @@ import { getIdpProvider } from '@/services/idpMigration';
 import { getRoom } from '@/services/rooms';
 import { getUser } from '@/services/users';
 import { useAppStore } from '@/store';
-import { PossibleFields, SettingType, UserType } from '@/types/Scopes';
+import { PossibleFields, RoomType, SettingType, UserType } from '@/types/Scopes';
 import { isSsoUser, phases, STATUS } from '@/utils';
 import { Chip, Stack, Typography } from '@mui/material';
 import { SyntheticEvent, useEffect, useState } from 'react';
@@ -13,18 +13,12 @@ import { useTranslation } from 'react-i18next';
 import MarkdownReader from '../MarkdownReader';
 import ResetPasswordButton from '../Buttons/ResetPasswordButton';
 
-/**
- * Props for the DataItem component
- */
 type Props = {
   row: SettingType;
   column: keyof PossibleFields;
   onReload?: () => void;
 };
 
-/**
- * Valid message consent types
- */
 type MessageConsentValues = 'message' | 'announcement' | 'alert';
 const messageConsentValues = ['message', 'announcement', 'alert'] as MessageConsentValues[];
 
@@ -41,10 +35,10 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
 
   const value = row[column as keyof SettingType];
 
-  // The provider is a property of the school, not of a person, and the legacy
-  // user payload has no way to reach it.
+  // The provider is a property of the school, and the legacy user and room
+  // payloads have no way to reach it.
   useEffect(() => {
-    if (column !== 'idp_user_id') return;
+    if (column !== 'idp_user_id' && column !== 'idp_group_id') return;
 
     getIdpProvider().then(setIdpProvider);
   }, [column]);
@@ -119,15 +113,16 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
       return <>{formatDateTime(String(value))}</>;
 
     // Enum/Status fields
-    case 'phase_id':
+    case 'phase_id': {
       const currentPhase = value as `${keyof typeof phases}`;
       return <>{phases[currentPhase] ? t(`phases.${phases[currentPhase]}`) : ''}</>;
+    }
     case 'status':
       return <>{t(STATUS[Number(value)].label)}</>;
     case 'userlevel':
-      return <>{t(`roles.${value}` || '')}</>;
+      return <>{t(`roles.${value}`)}</>;
     case 'user_needs_to_consent':
-      return <>{t(`consent.${messageConsentValues[Number(value)]}` || '')}</>;
+      return <>{t(`consent.${messageConsentValues[Number(value)]}`)}</>;
 
     // Markdown fields that need to be rendered as HTML (without line breaks for table display)
     case 'description_public':
@@ -137,7 +132,7 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
       return <MarkdownReader>{String(value).replace(/\n/g, ' ')}</MarkdownReader>;
 
     // Special fields
-    case 'temp_pw':
+    case 'temp_pw': {
       const toggleHidden = (event: SyntheticEvent) => {
         event.stopPropagation();
         setHidden(!hidden);
@@ -172,19 +167,22 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
           <Stack className="printOnly">{t('auth.messages.email')}</Stack>
         </Stack>
       ) : null;
+    }
 
-    // Where the account comes from: "aula" for one made here, "sso: <provider>"
-    // for one the directory owns.
     case 'idp_user_id': {
       const user = row as UserType;
 
-      // idp_user_id, not sso_sub: the import gives an account its provider
-      // identity, while sso_sub only appears once that person has signed in.
-      // Keying off sso_sub alone labelled every imported account "aula" until
-      // its owner first logged in, which is exactly backwards.
+      // idp_user_id: set at import, before the first sign-in.
       if (!user.idp_user_id && !user.sso_sub) return <Typography>aula</Typography>;
 
       return <Typography>{`sso: ${user.sso_provider ?? idpProvider ?? 'unknown'}`}</Typography>;
+    }
+
+    case 'idp_group_id': {
+      const room = row as RoomType;
+      if (!room.idp_group_id) return <Typography>aula</Typography>;
+
+      return <Typography>{`sso: ${idpProvider ?? 'unknown'}`}</Typography>;
     }
 
     // Default case for all other fields

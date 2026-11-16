@@ -2,7 +2,7 @@ import { useAppStore } from '@/store';
 import { PopupType } from '@/store/AppStore';
 import { Alert, Box } from '@mui/material';
 import { SnackbarProvider, closeSnackbar, enqueueSnackbar, SnackbarKey } from 'notistack';
-import { ForwardedRef, forwardRef, useEffect, ReactNode } from 'react';
+import { ForwardedRef, forwardRef, useEffect, useRef, ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import Icon from '../new/Icon';
 import IconButton from '../new/IconButton';
@@ -38,11 +38,11 @@ const alertBaseStyles = {
 const PopupMessages = () => {
   const { t } = useTranslation();
   const [state, dispatch] = useAppStore();
-  let currentStack = [] as PopupType[];
+  const currentStack = useRef<PopupType[]>([]);
 
   const handleClose = (index: number) => {
     if (index < 0) return;
-    currentStack = currentStack.filter((_, i) => i !== index);
+    currentStack.current = currentStack.current.filter((_, i) => i !== index);
     dispatch({ type: 'REMOVE_POPUP', index });
   };
 
@@ -58,7 +58,7 @@ const PopupMessages = () => {
   );
 
   useEffect(() => {
-    const newMessages = [...new Set(state.messages.filter((x) => !currentStack.includes(x)))];
+    const newMessages = [...new Set(state.messages.filter((x) => !currentStack.current.includes(x)))];
     newMessages.map((message) => {
       const messageIndex = state.messages.indexOf(message);
       // Also announce messages to screen readers via the live region
@@ -75,7 +75,7 @@ const PopupMessages = () => {
         persist: isPersistentAlert,
       });
     });
-    currentStack = [...currentStack, ...newMessages];
+    currentStack.current = [...currentStack.current, ...newMessages];
   }, [JSON.stringify(state.messages)]);
 
   // Create components for different alert types
@@ -121,7 +121,7 @@ const PopupMessages = () => {
     </Alert>
   ));
 
-  const addError = (e: CustomEvent<any>) => {
+  const addError = (e: CustomEvent<string>) => {
     dispatch({ type: 'ADD_POPUP', message: { message: t(e.detail), type: 'error' } });
   };
 
