@@ -39,6 +39,12 @@ describe('getInboxMessages', () => {
     expect(response.data?.map((message) => message.hash_id)).toEqual(['a', 'c']);
   });
 
+  it('asks for the admin-only list only with the admin-only permission', async () => {
+    await getInboxMessages();
+
+    expect(checkPermissions).toHaveBeenCalledWith('messages', 'viewAll');
+  });
+
   it('gives admins only the archived messages when asked for them', async () => {
     checkPermissions.mockReturnValue(true);
     const response = await getInboxMessages('archived');
