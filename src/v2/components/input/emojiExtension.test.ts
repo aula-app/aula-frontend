@@ -1,8 +1,12 @@
 import { Editor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import { Markdown } from '@tiptap/markdown';
+import { setCacheHandler } from 'is-emoji-supported';
 import { afterEach, describe, expect, it } from 'vitest';
 import EmojiExtension, { shortcodesToUnicode } from './emojiExtension';
+
+// jsdom has no canvas, so the support probe reports every emoji as unsupported and the node renders the fallback <img>.
+setCacheHandler({ has: () => true, get: () => true, set: () => undefined });
 
 const makeEditor = (content = '') =>
   new Editor({
