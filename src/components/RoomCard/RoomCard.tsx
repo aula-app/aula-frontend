@@ -42,7 +42,7 @@ const RoomCard: FC<RoomCardProps> = ({ room }) => {
         // Focus ring on the card when the inner link is keyboard-focused,
         // preventing overflow:hidden from clipping the link's own outline
         '&:focus-within': {
-          outline: '2px solid var(--color-text-primary)',
+          outline: '2px solid var(--color-foreground)',
           outlineOffset: '2px',
         },
         '& a:focus-visible': { outline: 'none' },

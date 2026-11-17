@@ -11,6 +11,8 @@ interface Props<T extends FieldValues = FieldValues> extends React.ComponentProp
   required?: boolean;
   defaultValue?: string | number;
   onChange?: (...event: unknown[]) => void;
+  /** Render the menu in place — portaled menus are unclickable inside a native `<dialog>` (v2 Modal). */
+  disableMenuPortal?: boolean;
 }
 
 /**
@@ -24,6 +26,7 @@ const SelectField = <T extends FieldValues = FieldValues>({
   defaultValue,
   disabled = false,
   required = false,
+  disableMenuPortal = false,
   sx,
   ...restOfProps
 }: Props<T>) => {
@@ -50,6 +53,7 @@ const SelectField = <T extends FieldValues = FieldValues>({
             slotProps={{
               select: {
                 MenuProps: {
+                  disablePortal: disableMenuPortal,
                   PaperProps: {
                     'data-testid': `select-field-${name}-list`,
                   } as any,

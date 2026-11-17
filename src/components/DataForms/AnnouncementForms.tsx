@@ -30,7 +30,11 @@ const AnnouncementForms: React.FC<AnnouncementFormsProps> = ({ defaultValues, on
     headline: yup.string().required(t('forms.validation.required')),
     body: yup.string().required(t('forms.validation.required')),
     user_needs_to_consent: yup.number(),
-    consent_text: yup.string().required(t('forms.validation.required')),
+    consent_text: yup.string().when('user_needs_to_consent', {
+      is: (v: number) => v !== 0,
+      then: (s) => s.required(t('forms.validation.required')),
+      otherwise: (s) => s.optional(),
+    }),
     status: yup.number(),
     target_group: yup.number(),
     target_id: yup.number(),

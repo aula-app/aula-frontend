@@ -1,4 +1,5 @@
 import { expect, test } from '../../fixtures/aula-tests-fixture';
+import { TEST_IDS } from '../../../src/test-ids';
 import * as settingsInteractions from '../../interactions/settings';
 import * as entities from '../../helpers/entities';
 import * as ideas from '../../interactions/ideas';
@@ -65,7 +66,7 @@ test('Bug Reports', async ({ newPageFor }) => {
   });
 
   await test.step('Admin archives the bug report', async () => {
-    await adminPage.getByRole('button', { name: 'archiv', exact: false }).click();
+    await adminPage.getByTestId(TEST_IDS.ARCHIVE_REPORT_BUTTON).click();
   });
 
   await test.step('Admin verifies bug report is gone', async () => {

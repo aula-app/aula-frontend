@@ -33,8 +33,8 @@ test('Room Creation and accessing Ideas', async ({ seededUser, newPageFor }) => 
   });
 
   // @TODO: Un-Skip when https://github.com/aula-app/aula-frontend/issues/1169 is fixed
-  await test.step.skip('Student is not part of the Room, can\'t see the Idea', async () => {
+  await test.step.skip("Student is not part of the Room, can't see the Idea", async () => {
     await navigation.goToRoom(studentPage, room.name);
-    await expect(userPage.getByTestId('page-not-found-view')).toBeVisible();
+    await expect(userPage.getByTestId('not-found-view')).toBeVisible();
   });
 });

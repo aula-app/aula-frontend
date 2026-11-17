@@ -30,7 +30,7 @@ const SchoolInfo: React.FC = () => {
 
   const onClose = () => {
     dispatch({
-      type: 'ADD_POPUP',
+      type: 'ADD_TOAST',
       message: { message: t('settings.messages.updated', { var: t(`ui.navigation.settings`) }), type: 'success' },
     });
     fetchRoom();

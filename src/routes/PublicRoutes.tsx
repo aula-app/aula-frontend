@@ -1,33 +1,38 @@
-import { useInstanceGuard } from '@/hooks/useInstanceGuard';
-import { InstanceCodeView, Login, OAuthLogin, PublicNotFoundView, Recovery, SetPassword } from '@/views/Public';
-import PublicOfflineView from '@/views/Public/PublicOfflineView';
-import UpdatePasswordView from '@/views/Public/UpdatePassword';
-import { Navigate, Route, Routes } from 'react-router-dom';
 import { useSsoRequired } from '@/hooks';
+import { useInstanceGuard } from '@/hooks/useInstanceGuard';
+import AboutView from '@/v2/views/public/About';
+import Login from '@/v2/views/public/Login';
+import NotFound from '@/v2/views/public/NotFound';
+import OfflineView from '@/v2/views/public/Offline';
+import Recovery from '@/v2/views/public/Recovery/RecoveryView';
+import ResetPasswordView from '@/v2/views/public/ResetPassword';
+import SetPasswordView from '@/v2/views/public/SetPassword';
+import { OAuthLogin } from '@/views/Public';
 
-/** Recovery is unavailable only where SSO is enforced; send those users back to login. */
-const RecoveryGuard = () => {
-  const isSsoRequired = useSsoRequired();
-  return isSsoRequired ? <Navigate to="/login" replace /> : <Recovery />;
-};
+import { Route, Routes } from 'react-router-dom';
 
 /**
  * List of routes available only for anonymous users
  */
 const PublicRoutes = () => {
   useInstanceGuard();
+  const isSsoRequired = useSsoRequired();
 
   return (
     <Routes>
       <Route path="/" element={<Login />} />
-      <Route path="/code" element={<InstanceCodeView />} />
+      <Route path="about" element={<AboutView />} />
       <Route path="login/*" element={<Login />} />
-      <Route path="offline" element={<PublicOfflineView />} />
+      <Route path="offline" element={<OfflineView />} />
       <Route path="oauth-login/:jwt_token" element={<OAuthLogin />} />
-      <Route path="password/" element={<UpdatePasswordView />} />
-      <Route path="password/:key" element={<SetPassword />} />
-      <Route path="recovery/*" element={<RecoveryGuard />} />
-      <Route path="*" element={<PublicNotFoundView />} />
+      {isSsoRequired === false && (
+        <>
+          <Route path="password/" element={<ResetPasswordView />} />
+          <Route path="password/:key" element={<SetPasswordView />} />
+          <Route path="recovery/*" element={<Recovery />} />
+        </>
+      )}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
