@@ -58,6 +58,16 @@ export class DbBackchannel {
     await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '120-seed.sql'));
   }
 
+  public async backdatePhaseStart(boxName: string, days: number): Promise<void> {
+    const result = await this.query(
+      'UPDATE au_topics SET phase_start = NOW() - INTERVAL ? DAY WHERE name = ?',
+      [days, boxName]
+    );
+    if (result.affectedRows !== 1) {
+      throw new Error(`Expected to back-date one box named "${boxName}", updated ${result.affectedRows}`);
+    }
+  }
+
   private async runSqlFile(filePath: string) {
     const sql = fs.readFileSync(filePath, 'utf8');
     await this.query(sql);
@@ -66,7 +76,7 @@ export class DbBackchannel {
   private async query(sql: string | mariadb.QueryOptions, values?: unknown[]) {
     const conn = await this.tenantConnectionsPool.getConnection();
     try {
-      await conn.query(sql, values);
+      return await conn.query(sql, values);
     } finally {
       await conn.release();
     }
