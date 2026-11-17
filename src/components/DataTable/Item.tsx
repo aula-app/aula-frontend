@@ -173,7 +173,7 @@ const Item: React.FC<Props> = ({ row, column, onReload }) => {
       const user = row as UserType;
 
       // idp_user_id: set at import, before the first sign-in.
-      if (!user.idp_user_id && !user.sso_sub) return <Typography>aula</Typography>;
+      if (!isSsoUser(user)) return <Typography>aula</Typography>;
 
       return <Typography>{`sso: ${user.sso_provider ?? idpProvider ?? 'unknown'}`}</Typography>;
     }
