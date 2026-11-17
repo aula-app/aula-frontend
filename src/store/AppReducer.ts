@@ -57,7 +57,7 @@ const AppReducer: React.Reducer<AppStoreState, AppAction> = (state, action) => {
       };
     }
     case 'ADD_TOAST': {
-      const incoming: ToastMessage = { ...action?.message, id: nextToastId() };
+      const incoming: ToastMessage = { ...action?.message, id: nextToastId(), createdAt: Date.now() };
       // Prevent duplicate messages (same text + type)
       if (state.toasts.find((m) => m.message === incoming.message && m.type === incoming.type)) {
         return state;
@@ -82,6 +82,11 @@ const AppReducer: React.Reducer<AppStoreState, AppAction> = (state, action) => {
     }
     case 'REMOVE_ALL_TOASTS': {
       return { ...state, toasts: [] };
+    }
+    case 'CLEAR_PAGE_TOASTS': {
+      const isPageScoped = (m: ToastMessage) => (m.type === 'success' || m.type === 'info') && !m.persistent;
+      const toasts = state.toasts.filter((m) => !(isPageScoped(m) && m.createdAt <= action.before));
+      return toasts.length === state.toasts.length ? state : { ...state, toasts };
     }
     default:
       return state;

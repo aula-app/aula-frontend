@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { useAppStore } from '@/store';
 import { ToastMessage } from '@/store/AppStore';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
 import Icon, { ICON_TYPE } from '../Icon';
 import IconButton from '../../button/IconButton';
 
@@ -20,6 +21,8 @@ const TOAST_ICONS: Record<ToastMessage['type'], ICON_TYPE> = {
 };
 
 const EXIT_DURATION_MS = 200;
+/** Keeps toasts raised just before a navigation. */
+const NAVIGATION_GRACE_MS = 1000;
 
 interface ToastItemProps {
   toast: ToastMessage;
@@ -48,9 +51,6 @@ const ToastItem = ({ toast, isExiting, onDismiss }: ToastItemProps) => {
     <div
       data-toast
       data-testid={`toast-${toast.type}`}
-      // role + aria-live kept for visual context; announcements go through the hidden live regions
-      role={toast.type === 'error' || toast.type === 'warning' ? 'alert' : 'status'}
-      aria-atomic="true"
       className={`flex items-center gap-3 rounded-2xl rounded-tr-none pl-6 pr-4 py-2 shadow-lg min-w-72 max-w-sm ${TOAST_STYLES[toast.type]} ${isExiting ? 'animate-toast-out' : 'animate-toast-in'}`}
     >
       <Icon type={TOAST_ICONS[toast.type]} aria-hidden="true" />
@@ -84,11 +84,20 @@ const ToastAnnouncer = ({ assertive, polite }: { assertive: string; polite: stri
 );
 
 const Toast = () => {
+  const { t } = useTranslation();
+  const { pathname } = useLocation();
   const [state, dispatch] = useAppStore();
   const [exitingIds, setExitingIds] = useState<Set<string>>(new Set());
   const [assertiveMsg, setAssertiveMsg] = useState('');
   const [politeMsg, setPoliteMsg] = useState('');
   const prevToastIds = useRef<Set<string>>(new Set());
+  const prevPathname = useRef(pathname);
+
+  useEffect(() => {
+    if (pathname === prevPathname.current) return;
+    prevPathname.current = pathname;
+    dispatch({ type: 'CLEAR_PAGE_TOASTS', before: Date.now() - NAVIGATION_GRACE_MS });
+  }, [pathname, dispatch]);
 
   // Announce only newly added toasts
   useEffect(() => {
@@ -124,7 +133,7 @@ const Toast = () => {
       <ToastAnnouncer assertive={assertiveMsg} polite={politeMsg} />
       <div
         role="region"
-        aria-label="Notifications"
+        aria-label={t('v2.ui.a11y.notifications')}
         className="fixed top-[calc(1rem+env(safe-area-inset-top))] right-[calc(1rem+env(safe-area-inset-right))] z-50 flex flex-col pointer-events-none"
       >
         {state.toasts.map((toast) => {

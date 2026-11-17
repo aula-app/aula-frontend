@@ -18,6 +18,9 @@ export interface ToastMessage {
   id: string;
   message: string;
   type: 'error' | 'success' | 'warning' | 'info';
+  createdAt: number;
+  /** Survives navigation. */
+  persistent?: boolean;
 }
 
 export interface AppStoreState {
@@ -38,9 +41,10 @@ export type AppAction =
   | { type: 'HAS_CONSENT'; payload: boolean }
   | { type: 'SET_BREADCRUMB'; breadcrumb: [string, string][] }
   | { type: 'DARK_MODE'; payload: boolean }
-  | { type: 'ADD_TOAST'; message: Omit<ToastMessage, 'id'> }
+  | { type: 'ADD_TOAST'; message: Omit<ToastMessage, 'id' | 'createdAt'> }
   | { type: 'REMOVE_TOAST'; id: string }
-  | { type: 'REMOVE_ALL_TOASTS' };
+  | { type: 'REMOVE_ALL_TOASTS' }
+  | { type: 'CLEAR_PAGE_TOASTS'; before: number };
 
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
