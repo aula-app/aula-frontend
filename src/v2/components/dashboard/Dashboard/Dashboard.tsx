@@ -34,7 +34,7 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
             aria-controls={panelId}
             onClick={() => onOpenChange(!open)}
             data-testid="dashboard-toggle"
-            className="flex cursor-pointer items-center gap-2 rounded-lg pl-2"
+            className="flex max-w-full cursor-pointer items-center gap-2 rounded-lg pl-2"
           >
             <span className="truncate">{t('v2.ui.dashboard.title')}</span>
             <Icon
