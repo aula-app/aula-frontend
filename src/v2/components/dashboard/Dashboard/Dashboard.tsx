@@ -4,7 +4,7 @@ import PhaseCountLink from '@/v2/components/dashboard/PhaseCountLink';
 import Alert from '@/v2/components/ui/Alert';
 import Collapse from '@/v2/components/ui/Collapse';
 import Icon from '@/v2/components/ui/Icon/Icon';
-import { useId } from 'react';
+import { forwardRef, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 import { useActivityCounts } from './useActivityCounts';
@@ -17,7 +17,7 @@ interface DashboardProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
+const Dashboard = forwardRef<HTMLElement, DashboardProps>(({ open, onOpenChange }, ref) => {
   const { t } = useTranslation();
   const { counts, error } = useDashboard();
   const activity = useActivityCounts();
@@ -25,7 +25,7 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
   const panelId = useId();
 
   return (
-    <section aria-labelledby={headingId} className="flex flex-col p-2 bg-shadow m-2 mx-4 mb-0 rounded-2xl">
+    <section ref={ref} aria-labelledby={headingId} className="flex flex-col p-2 bg-shadow m-2 mx-4 mb-0 rounded-2xl">
       <div className="flex items-center justify-between gap-2">
         <h2 id={headingId} className="min-w-0">
           <button
@@ -76,6 +76,8 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
       </Collapse>
     </section>
   );
-};
+});
+
+Dashboard.displayName = 'Dashboard';
 
 export default Dashboard;
