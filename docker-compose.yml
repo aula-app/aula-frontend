@@ -67,13 +67,8 @@ services:
         bind:
           create_host_path: false
       - type: bind
-        source: ${BACKEND_DIR}/storage/oauth-private.key
-        target: /opt/laravel/storage/oauth-private.key
-        bind:
-          create_host_path: false
-      - type: bind
-        source: ${BACKEND_DIR}/storage/oauth-public.key
-        target: /opt/laravel/storage/oauth-public.key
+        source: ${BACKEND_DIR}/storage/
+        target: /opt/laravel/storage/
         bind:
           create_host_path: false
       - type: bind
@@ -122,9 +117,10 @@ services:
         target: /var/www/html/config
         bind:
           create_host_path: false
+      # provide oauth key
       - type: bind
-        source: ${BACKEND_DIR}/storage/oauth-public.key
-        target: /var/www/html/config/oauth-public.key
+        source: ${BACKEND_DIR}/storage/
+        target: /var/www/html/storage/
         read_only: true
         bind:
           create_host_path: false
@@ -162,6 +158,7 @@ services:
       APP_FRONTEND_URL: http://127.0.0.1:3000
       APP_FRONTEND_HOST: http://127.0.0.1
     volumes:
+      # TODO just mount the whole folder, make sure node_modules cached? or just reuse?
       - ./package.json:/app/package.json
       - ./yarn.lock:/app/yarn.lock
       - ./tailwind.config.js:/app/tailwind.config.js

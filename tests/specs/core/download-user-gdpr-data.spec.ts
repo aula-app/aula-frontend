@@ -1,8 +1,8 @@
-import * as formInteractions from '../../interactions/forms';
 import { expect, test } from '../../fixtures/aula-tests-fixture';
 import * as navigation from '../../interactions/navigation';
 
-test('Download User GDPR Data', async ({ newPageFor }) => {
+// needs v2 oauth token
+test.skip('Download User GDPR Data', async ({ newPageFor }) => {
   const userPage = await newPageFor('user');
 
   await test.step('User can request user data export', async () => {
