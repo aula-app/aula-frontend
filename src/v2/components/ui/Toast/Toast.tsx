@@ -1,5 +1,5 @@
 import { ToastMessage } from '@/store/AppStore';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import {
   Button,
   I18nProvider,
@@ -28,13 +28,23 @@ const TOAST_ICONS: Record<ToastMessage['type'], ICON_TYPE> = {
   info: 'info',
 };
 
-/** Keeps toasts raised just before a navigation. */
 const NAVIGATION_GRACE_MS = 1000;
 
 const Toast = () => {
   const { i18n } = useTranslation();
   const { pathname } = useLocation();
   const prevPathname = useRef(pathname);
+  const resizeObserver = useRef<ResizeObserver>();
+
+  const trackInset = useCallback((region: HTMLDivElement | null) => {
+    resizeObserver.current?.disconnect();
+    const root = document.documentElement.style;
+    if (!region) return root.removeProperty('--toast-inset');
+    resizeObserver.current = new ResizeObserver(() =>
+      root.setProperty('--toast-inset', `${region.getBoundingClientRect().bottom}px`)
+    );
+    resizeObserver.current.observe(region);
+  }, []);
 
   useEffect(() => {
     if (pathname === prevPathname.current) return;
@@ -45,6 +55,7 @@ const Toast = () => {
   return (
     <I18nProvider locale={i18n.language}>
       <ToastRegion
+        ref={trackInset}
         queue={toastQueue}
         className={twMerge(
           'fixed z-50 flex flex-col gap-2 w-[calc(100vw-2rem)] max-w-sm outline-none',

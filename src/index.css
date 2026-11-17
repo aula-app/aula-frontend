@@ -32,6 +32,11 @@
   animation: toast-in 250ms ease-out;
 }
 
+/* Keeps keyboard focus from scrolling under visible toasts (WCAG 2.4.11). */
+* {
+  scroll-padding-top: var(--toast-inset, 0px);
+}
+
 /* MUI-like ripple animation */
 @keyframes ripple {
   0% {
