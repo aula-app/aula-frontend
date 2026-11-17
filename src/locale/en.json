@@ -98,7 +98,8 @@
         "plural": "boxes",
         "reviewed": "{{count}} of {{total}} reviewed",
         "singular": "box",
-        "phaseReady": "Ready for {{var}}",
+        "allReviewed": "All ideas reviewed",
+        "moveTo": "Move to {{var}}",
         "advance": "Move on"
       },
       "comments": {
@@ -135,6 +136,10 @@
           "decision": "Approval",
           "reason": "Reason for rejection"
         }
+      },
+      "rooms": {
+        "singular": "Room",
+        "plural": "Rooms"
       }
     },
     "ui": {
@@ -255,9 +260,11 @@
       },
       "navigation": "Navigation menu",
       "moveToPhase": "Move to {{phase}}",
+      "roomPhase": "{{room}}: {{var}}",
       "phases": "Phase navigation",
       "sort": {
         "label": "Sort by",
+        "default": "Default order",
         "asc": "Sort ascending",
         "desc": "Sort descending",
         "created": "Creation date",

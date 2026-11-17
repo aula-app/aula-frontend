@@ -4,6 +4,7 @@ export * from './useIsDrawerMode';
 export * from './useLogout';
 export * from './useModal';
 export * from './useQuorum';
+export * from './useRoomPhaseCounts';
 export * from './useRoomUsers';
 export * from './useScrollRestoration';
 export * from './useToast';
