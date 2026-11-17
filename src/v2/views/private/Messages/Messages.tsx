@@ -3,7 +3,7 @@ import { useAppStore } from '@/store/AppStore';
 import { TEST_IDS } from '@/test-ids';
 import { MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
-import ComboBox from '@/v2/components/input/ComboBox';
+import CheckboxGroup from '@/v2/components/input/CheckboxGroup';
 import SelectInput from '@/v2/components/input/SelectInput';
 import SortSelect from '@/v2/components/input/SortSelect';
 import TextInput from '@/v2/components/input/TextInput';
@@ -111,17 +111,22 @@ const Messages = () => {
               }}
             >
               <div className="flex min-w-0 flex-1 flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <TextInput
-                    dense
-                    type="search"
-                    label={t('v2.ui.actions.search')}
-                    startAdornment={<Icon type="search" />}
-                    value={searchQuery}
-                    onChange={setSearchQuery}
-                    className="flex-1 min-w-20"
-                    data-testid={TEST_IDS.SEARCH_FIELD}
-                  />
+                <TextInput
+                  dense
+                  type="search"
+                  label={t('v2.ui.actions.search')}
+                  startAdornment={<Icon type="search" />}
+                  value={searchQuery}
+                  onChange={setSearchQuery}
+                  data-testid={TEST_IDS.SEARCH_FIELD}
+                />
+                <CheckboxGroup
+                  options={typeOptions}
+                  value={types}
+                  onChange={setTypes}
+                  data-testid={TEST_IDS.MESSAGE_TYPE_FILTER}
+                />
+                <div className="flex flex-wrap items-center gap-2">
                   <SortSelect
                     options={orderOptions}
                     value={orderBy}
@@ -129,18 +134,6 @@ const Messages = () => {
                     reversed={reversed}
                     onReversedChange={setReversed}
                     data-testid={TEST_IDS.SORT_SELECT}
-                  />
-                </div>
-                <div className="flex items-start gap-2">
-                  <ComboBox
-                    dense
-                    label={t('v2.scopes.messages.types.label')}
-                    tagsLabel={t('v2.scopes.messages.types.selected')}
-                    options={typeOptions}
-                    value={types}
-                    onChange={setTypes}
-                    className="min-w-0 flex-1"
-                    data-testid={TEST_IDS.MESSAGE_TYPE_FILTER}
                   />
                   {canFilterStatus && (
                     <SelectInput
