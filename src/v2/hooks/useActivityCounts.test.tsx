@@ -2,6 +2,7 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { ReactNode } from 'react';
 import { MemoryRouter, useNavigate } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { MESSAGES_CHANGED } from '@/v2/components/message/archiveMessage';
 import { useMessageCount, useUpdateCount } from './useActivityCounts';
 
 const getInboxMessages = vi.fn();
@@ -43,6 +44,18 @@ describe('useMessageCount', () => {
     act(() => result.current.navigate('/messages'));
 
     await waitFor(() => expect(result.current.count).toBe(3));
+  });
+
+  it('refetches when a message is archived without navigating', async () => {
+    const { result } = renderHook(() => useMessageCount(), { wrapper });
+    await waitFor(() => expect(result.current).toBe(4));
+
+    getInboxMessages.mockResolvedValue({ data: [{}, {}, {}], error: null });
+    act(() => {
+      window.dispatchEvent(new Event(MESSAGES_CHANGED));
+    });
+
+    await waitFor(() => expect(result.current).toBe(3));
   });
 });
 

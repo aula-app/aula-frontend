@@ -146,6 +146,8 @@
         "plural": "messages",
         "sentOn": "on",
         "archived": "Message archived",
+        "archiveConfirm": "'{{var}}' will be moved to the archive.\nArchived items can be shown again with the status filter '{{status}}'.",
+        "restored": "Message restored",
         "reject": "Reject",
         "date": "date",
         "select": "Select a message to read it",
@@ -198,7 +200,8 @@
         "report": "Report content",
         "share": "Copy idea link",
         "submit": "Submit",
-        "archive": "Archive"
+        "archive": "Archive",
+        "restore": "Restore"
       },
       "code": {
         "button": "Code: {{var}}",
@@ -210,6 +213,9 @@
         "label": "Dark mode"
       },
       "dialog": {
+        "archive": {
+          "title": "Archive?"
+        },
         "delete": {
           "title": "Caution!",
           "description": "Are you sure you want to continue?\nThis action cannot be undone.",
@@ -1246,6 +1252,7 @@
       "closeMenu": "Close main menu",
       "mainMenu": "Main navigation",
       "openMenu": "Open main menu",
+      "inbox": "Inbox",
       "messages": "Messages",
       "privacy": "Privacy",
       "profile": "Profile",
@@ -1297,6 +1304,7 @@
   "pageTitles": {
     "welcome": "Welcome",
     "about": "About aula",
+    "inbox": "Inbox",
     "messages": "Messages",
     "announcements": "Announcements",
     "announcement": "Announcement",

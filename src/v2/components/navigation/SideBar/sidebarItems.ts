@@ -20,7 +20,7 @@ export const SIDEBAR_ITEMS: NavItem[] = [
     chip: UpdatesChip,
   },
   {
-    title: 'messages',
+    title: 'inbox',
     path: '/messages',
     icon: 'message',
     permission: () => true,

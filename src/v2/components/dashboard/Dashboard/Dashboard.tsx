@@ -49,7 +49,7 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
           <ActivityLink
             to="/messages"
             icon="message"
-            label={t('ui.navigation.messages')}
+            label={t('ui.navigation.inbox')}
             count={messageCount}
             badgeClass="bg-info text-info-fg"
           />

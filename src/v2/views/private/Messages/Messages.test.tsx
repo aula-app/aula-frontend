@@ -1,5 +1,5 @@
 import { MessageType } from '@/types/Scopes';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -145,15 +145,17 @@ describe('Messages', () => {
     await waitFor(() => expect(screen.getAllByTestId('message-item')).toHaveLength(2));
 
     await user.click(screen.getByTestId('search-button'));
-    const tags = screen.getAllByTestId(/^message-type-filter-tag-/).map((tag) => tag.dataset.testid);
-    expect(tags).toEqual([
-      'message-type-filter-tag-messages',
-      'message-type-filter-tag-requests',
-      'message-type-filter-tag-reports',
-      'message-type-filter-tag-bugs',
+    const types = within(screen.getByRole('group', { name: 'v2.scopes.messages.types.label' }));
+    const checkboxes = types.getAllByRole('checkbox');
+    expect(checkboxes.map((checkbox) => checkbox.closest('label')?.textContent)).toEqual([
+      'v2.scopes.messages.types.messages',
+      'v2.scopes.messages.types.requests',
+      'v2.scopes.messages.types.reports',
+      'v2.scopes.messages.types.bugs',
     ]);
+    checkboxes.forEach((checkbox) => expect((checkbox as HTMLInputElement).checked).toBe(true));
 
-    await user.click(screen.getByTestId('message-type-filter-remove-messages'));
+    await user.click(types.getByText('v2.scopes.messages.types.messages'));
     await waitFor(() => expect(screen.getAllByTestId('message-item')).toHaveLength(1));
     expect(screen.getByText('Data export request')).toBeTruthy();
   });

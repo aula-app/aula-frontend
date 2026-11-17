@@ -14,7 +14,6 @@ import {
   HiNumberedList,
   HiOutlineAcademicCap,
   HiOutlineArchiveBox,
-  HiOutlineArchiveBoxArrowDown,
   HiOutlineArrowRightEndOnRectangle,
   HiOutlineBars3,
   HiOutlineBell,
@@ -61,7 +60,7 @@ import {
   HiTrash,
 } from 'react-icons/hi2';
 import voting from './voting.svg?react';
-import { LuFilter, LuFilterX } from 'react-icons/lu';
+import { LuArchive, LuArchiveRestore, LuFilter, LuFilterX } from 'react-icons/lu';
 
 const VotingIcon: IconType = ({ size = '1em', color = 'currentColor', style, ...props }) =>
   React.createElement(voting, {
@@ -79,7 +78,7 @@ export const ICONS = {
   announcement: HiOutlineMegaphone,
   announcements: HiOutlineMegaphone,
   approval: HiOutlineQuestionMarkCircle,
-  archive: HiOutlineArchiveBoxArrowDown,
+  archive: LuArchive,
   back: HiOutlineChevronLeft,
   bell: HiOutlineBell,
   bold: HiBold,
@@ -142,6 +141,7 @@ export const ICONS = {
   sortDesc: AiOutlineSortDescending,
   strikethrough: HiStrikethrough,
   undo: HiArrowUturnLeft,
+  unarchive: LuArchiveRestore,
   user: HiOutlineUser,
   users: HiOutlineUserGroup,
   voting: VotingIcon,
