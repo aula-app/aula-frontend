@@ -105,7 +105,6 @@
     },
     "ui": {
       "a11y": {
-        "notifications": "Notifications",
         "navigation": "Navigation menu",
         "skipToContent": "Skip to main content",
         "breadcrumb": {

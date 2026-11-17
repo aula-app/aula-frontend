@@ -1,14 +1,10 @@
-import { useAppStore } from '@/store';
+import { addToast } from '@/v2/components/ui/Toast/toastQueue';
 
-export const useToast = () => {
-  const [, dispatch] = useAppStore();
-
-  const toast = {
-    error: (message: string) => dispatch({ type: 'ADD_TOAST', message: { message, type: 'error' } }),
-    success: (message: string) => dispatch({ type: 'ADD_TOAST', message: { message, type: 'success' } }),
-    warning: (message: string) => dispatch({ type: 'ADD_TOAST', message: { message, type: 'warning' } }),
-    info: (message: string) => dispatch({ type: 'ADD_TOAST', message: { message, type: 'info' } }),
-  };
-
-  return { toast };
+const toast = {
+  error: (message: string) => addToast({ message, type: 'error' }),
+  success: (message: string) => addToast({ message, type: 'success' }),
+  warning: (message: string) => addToast({ message, type: 'warning' }),
+  info: (message: string) => addToast({ message, type: 'info' }),
 };
+
+export const useToast = () => ({ toast });

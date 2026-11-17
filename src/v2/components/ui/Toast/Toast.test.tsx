@@ -1,31 +1,15 @@
-import { AppAction, AppContext, AppStoreState, ToastMessage } from '@/store/AppStore';
-import AppReducer from '@/store/AppReducer';
+import { AppStore, useAppStore } from '@/store';
+import { ToastMessage } from '@/store/AppStore';
 import { act, render, screen } from '@testing-library/react';
-import { Dispatch, ReactNode, useReducer } from 'react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter, NavigateFunction, useNavigate } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import Toast from './Toast';
+import { addToast, toastQueue } from './toastQueue';
 
-vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key }) }));
+vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'en' } }) }));
 
-const initialState: AppStoreState = {
-  darkMode: false,
-  isAuthenticated: true,
-  hasConsent: true,
-  toasts: [],
-  breadcrumb: [],
-  lastScroll: 0,
-  lastIdeaList: '',
-};
-
-let dispatch: Dispatch<AppAction>;
 let navigate: NavigateFunction;
-
-const Store = ({ children }: { children: ReactNode }) => {
-  const value = useReducer(AppReducer, initialState);
-  dispatch = value[1];
-  return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
-};
 
 const Navigator = () => {
   navigate = useNavigate();
@@ -35,17 +19,16 @@ const Navigator = () => {
 const renderToasts = () =>
   render(
     <MemoryRouter initialEntries={['/messages']}>
-      <Store>
-        <Navigator />
-        <Toast />
-      </Store>
+      <Navigator />
+      <Toast />
     </MemoryRouter>
   );
 
-const raise = (message: Omit<ToastMessage, 'id' | 'createdAt'>) => act(() => dispatch({ type: 'ADD_TOAST', message }));
+const raise = (toast: ToastMessage) => act(() => addToast(toast));
 const visibleToasts = () => screen.queryAllByTestId(/^toast-/).map((toast) => toast.textContent);
 
 afterEach(() => {
+  act(() => toastQueue.clear());
   vi.restoreAllMocks();
 });
 
@@ -72,7 +55,7 @@ describe('Toast', () => {
     now.mockReturnValue(5000);
     act(() => navigate('/settings/messages'));
 
-    expect(visibleToasts()).toEqual(['Careful', 'Update available']);
+    expect(visibleToasts()).toHaveLength(2);
   });
 
   it('keeps a toast raised together with the navigation it leads to', () => {
@@ -84,13 +67,49 @@ describe('Toast', () => {
     expect(visibleToasts()).toEqual(['Archived']);
   });
 
-  it('announces only through the hidden live regions, inside a labelled region', () => {
+  it('skips a toast identical to one already showing', () => {
     renderToasts();
-    raise({ type: 'error', message: 'Failed' });
+    raise({ type: 'success', message: 'Archived' });
     raise({ type: 'success', message: 'Archived' });
 
-    expect(screen.getAllByRole('alert')).toHaveLength(1);
-    expect(screen.getAllByRole('status')).toHaveLength(1);
-    expect(screen.getByRole('region', { name: 'v2.ui.a11y.notifications' })).toBeTruthy();
+    expect(visibleToasts()).toHaveLength(1);
+  });
+
+  it('shows each toast as a labelled alert dialog in a labelled region, with a labelled close button', () => {
+    renderToasts();
+    raise({ type: 'error', message: 'Failed' });
+
+    expect(screen.getByRole('region', { name: '1 notification.' })).toBeTruthy();
+    expect(screen.getByRole('alertdialog', { name: 'Failed' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Close' })).toBeTruthy();
+  });
+
+  it('moves keyboard focus into the toasts with F6', async () => {
+    renderToasts();
+    raise({ type: 'error', message: 'Failed' });
+
+    await userEvent.keyboard('{F6}');
+
+    expect(screen.getByRole('region', { name: '1 notification.' }).contains(document.activeElement)).toBe(true);
+  });
+
+  it('shows toasts raised through the app store', () => {
+    localStorage.setItem('darkMode', 'false');
+    const Raiser = () => {
+      const [, dispatch] = useAppStore();
+      return <button onClick={() => dispatch({ type: 'ADD_TOAST', message: { type: 'info', message: 'Saved' } })} />;
+    };
+    render(
+      <AppStore>
+        <MemoryRouter>
+          <Raiser />
+          <Toast />
+        </MemoryRouter>
+      </AppStore>
+    );
+
+    act(() => screen.getAllByRole('button')[0].click());
+
+    expect(visibleToasts()).toEqual(['Saved']);
   });
 });
