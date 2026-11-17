@@ -1,9 +1,18 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { useAppStore } from '@/store';
 import { ToastMessage } from '@/store/AppStore';
+import { useCallback, useEffect, useRef } from 'react';
+import {
+  Button,
+  I18nProvider,
+  Text,
+  UNSTABLE_Toast as AriaToast,
+  UNSTABLE_ToastContent as ToastContent,
+  UNSTABLE_ToastRegion as ToastRegion,
+} from 'react-aria-components';
 import { useTranslation } from 'react-i18next';
+import { useLocation } from 'react-router-dom';
+import { twMerge } from 'tailwind-merge';
 import Icon, { ICON_TYPE } from '../Icon';
-import IconButton from '../../button/IconButton';
+import { clearPageToasts, toastQueue } from './toastQueue';
 
 const TOAST_STYLES: Record<ToastMessage['type'], string> = {
   error: 'bg-error text-error-fg',
@@ -19,124 +28,71 @@ const TOAST_ICONS: Record<ToastMessage['type'], ICON_TYPE> = {
   info: 'info',
 };
 
-const EXIT_DURATION_MS = 200;
-
-interface ToastItemProps {
-  toast: ToastMessage;
-  isExiting: boolean;
-  onDismiss: (id: string) => void;
-}
-
-const ToastItem = ({ toast, isExiting, onDismiss }: ToastItemProps) => {
-  const { t } = useTranslation();
-  const dismissButtonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const el = dismissButtonRef.current?.closest('[data-toast]') as HTMLElement | null;
-    if (!el) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.stopPropagation();
-        onDismiss(toast.id);
-      }
-    };
-    el.addEventListener('keydown', handleKeyDown);
-    return () => el.removeEventListener('keydown', handleKeyDown);
-  }, [toast.id, onDismiss]);
-
-  return (
-    <div
-      data-toast
-      data-testid={`toast-${toast.type}`}
-      // role + aria-live kept for visual context; announcements go through the hidden live regions
-      role={toast.type === 'error' || toast.type === 'warning' ? 'alert' : 'status'}
-      aria-atomic="true"
-      className={`flex items-center gap-3 rounded-2xl rounded-tr-none pl-6 pr-4 py-2 shadow-lg min-w-72 max-w-sm ${TOAST_STYLES[toast.type]} ${isExiting ? 'animate-toast-out' : 'animate-toast-in'}`}
-    >
-      <Icon type={TOAST_ICONS[toast.type]} aria-hidden="true" />
-      <span className="flex-1 text-sm font-medium">{toast.message}</span>
-      <IconButton
-        ref={dismissButtonRef}
-        type="button"
-        aria-label={t('ui.common.dismiss')}
-        onClick={() => onDismiss(toast.id)}
-      >
-        <Icon type="close" aria-hidden="true" />
-      </IconButton>
-    </div>
-  );
-};
-
-/**
- * Persistent, visually-hidden live regions.
- * Must exist in the DOM before any announcements — screen readers (especially JAWS)
- * ignore content injected into a live region that was itself just inserted.
- */
-const ToastAnnouncer = ({ assertive, polite }: { assertive: string; polite: string }) => (
-  <>
-    <div role="alert" aria-live="assertive" aria-atomic="true" className="sr-only">
-      {assertive}
-    </div>
-    <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
-      {polite}
-    </div>
-  </>
-);
+const NAVIGATION_GRACE_MS = 1000;
 
 const Toast = () => {
-  const [state, dispatch] = useAppStore();
-  const [exitingIds, setExitingIds] = useState<Set<string>>(new Set());
-  const [assertiveMsg, setAssertiveMsg] = useState('');
-  const [politeMsg, setPoliteMsg] = useState('');
-  const prevToastIds = useRef<Set<string>>(new Set());
+  const { i18n } = useTranslation();
+  const { pathname } = useLocation();
+  const prevPathname = useRef(pathname);
+  const resizeObserver = useRef<ResizeObserver>();
 
-  // Announce only newly added toasts
+  const trackInset = useCallback((region: HTMLDivElement | null) => {
+    resizeObserver.current?.disconnect();
+    const root = document.documentElement.style;
+    if (!region) return root.removeProperty('--toast-inset');
+    resizeObserver.current = new ResizeObserver(() =>
+      root.setProperty('--toast-inset', `${region.getBoundingClientRect().bottom}px`)
+    );
+    resizeObserver.current.observe(region);
+  }, []);
+
   useEffect(() => {
-    const currentIds = new Set(state.toasts.map((t) => t.id));
-    for (const toast of state.toasts) {
-      if (!prevToastIds.current.has(toast.id)) {
-        if (toast.type === 'error' || toast.type === 'warning') {
-          setAssertiveMsg('');
-          setTimeout(() => setAssertiveMsg(toast.message), 50);
-        } else {
-          setPoliteMsg('');
-          setTimeout(() => setPoliteMsg(toast.message), 50);
-        }
-      }
-    }
-    prevToastIds.current = currentIds;
-  }, [state.toasts]);
-
-  const handleDismiss = useCallback((id: string) => {
-    setExitingIds((prev) => new Set(prev).add(id));
-    setTimeout(() => {
-      dispatch({ type: 'REMOVE_TOAST', id });
-      setExitingIds((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-    }, EXIT_DURATION_MS);
-  }, [dispatch]);
+    if (pathname === prevPathname.current) return;
+    prevPathname.current = pathname;
+    clearPageToasts(Date.now() - NAVIGATION_GRACE_MS);
+  }, [pathname]);
 
   return (
-    <>
-      <ToastAnnouncer assertive={assertiveMsg} polite={politeMsg} />
-      <div
-        role="region"
-        aria-label="Notifications"
-        className="fixed top-[calc(1rem+env(safe-area-inset-top))] right-[calc(1rem+env(safe-area-inset-right))] z-50 flex flex-col pointer-events-none"
+    <I18nProvider locale={i18n.language}>
+      <ToastRegion
+        ref={trackInset}
+        queue={toastQueue}
+        className={twMerge(
+          'fixed z-50 flex flex-col gap-2 w-[calc(100vw-2rem)] max-w-sm outline-none',
+          'top-[calc(4rem+var(--safe-area-inset-top,0px))] right-[calc(1rem+env(safe-area-inset-right))]'
+        )}
       >
-        {state.toasts.map((toast) => {
-          const isExiting = exitingIds.has(toast.id);
-          return (
-            <div key={toast.id} className={`pointer-events-auto ${isExiting ? 'animate-toast-collapse' : 'pb-2'}`}>
-              <ToastItem toast={toast} isExiting={isExiting} onDismiss={handleDismiss} />
-            </div>
-          );
-        })}
-      </div>
-    </>
+        {({ toast }) => (
+          <AriaToast
+            toast={toast}
+            data-testid={`toast-${toast.content.type}`}
+            className={twMerge(
+              'flex items-center gap-3 rounded-2xl rounded-tr-none pl-6 pr-2 py-2 shadow-lg',
+              'animate-toast-in motion-reduce:animate-none outline-none',
+              'data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-current',
+              TOAST_STYLES[toast.content.type]
+            )}
+          >
+            <Icon type={TOAST_ICONS[toast.content.type]} aria-hidden="true" />
+            <ToastContent className="flex-1">
+              <Text slot="title" className="text-sm font-medium">
+                {toast.content.message}
+              </Text>
+            </ToastContent>
+            <Button
+              slot="close"
+              className={twMerge(
+                'flex shrink-0 items-center justify-center rounded-full p-2 cursor-pointer outline-none',
+                'data-hovered:bg-black/10 data-pressed:bg-black/20',
+                'data-focus-visible:outline-2 data-focus-visible:outline-current'
+              )}
+            >
+              <Icon type="close" aria-hidden="true" />
+            </Button>
+          </AriaToast>
+        )}
+      </ToastRegion>
+    </I18nProvider>
   );
 };
 

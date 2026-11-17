@@ -38,7 +38,7 @@ test('Toast - success appears and can be dismissed', async ({ page, dbInstanceCo
   await gotoPublicNotFound(page, dbInstanceCode);
   await triggerToast(page, 'success');
 
-  const toast = page.locator('[role="region"][aria-label="Notifications"] [role="status"]');
+  const toast = page.getByTestId('toast-success');
   await expect(toast).toBeVisible();
   await expect(toast).toContainText('Success toast');
 
@@ -46,16 +46,18 @@ test('Toast - success appears and can be dismissed', async ({ page, dbInstanceCo
   await expect(toast).not.toBeVisible();
 });
 
-test('Toast - error appears and can be dismissed with Escape', async ({ page, dbInstanceCode }) => {
+test('Toast - error can be reached with F6 and dismissed from the keyboard', async ({ page, dbInstanceCode }) => {
   await gotoPublicNotFound(page, dbInstanceCode);
   await triggerToast(page, 'error');
 
-  const toast = page.locator('[role="region"][aria-label="Notifications"] [role="alert"]').first();
+  const toast = page.getByRole('alertdialog').filter({ hasText: 'Error toast' });
   await expect(toast).toBeVisible();
-  await expect(toast).toContainText('Error toast');
 
-  await toast.getByRole('button').focus();
-  await page.keyboard.press('Escape');
+  await page.keyboard.press('F6');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await expect(toast.getByRole('button')).toBeFocused();
+  await page.keyboard.press('Enter');
   await expect(toast).not.toBeVisible();
 });
 
@@ -64,11 +66,11 @@ test('Toast - multiple toasts stack and dismiss individually', async ({ page, db
   await triggerToast(page, 'success');
   await triggerToast(page, 'info');
 
-  const region = page.locator('[role="region"][aria-label="Notifications"]');
-  await expect(region.locator('[role="status"]')).toHaveCount(2);
+  const toasts = page.getByRole('alertdialog');
+  await expect(toasts).toHaveCount(2);
 
-  await region.locator('[role="status"]').first().getByRole('button').click();
-  await expect(region.locator('[role="status"]')).toHaveCount(1);
+  await toasts.first().getByRole('button').click();
+  await expect(toasts).toHaveCount(1);
 });
 
 // ── Tooltip ───────────────────────────────────────────────────────────────────

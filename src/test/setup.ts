@@ -7,6 +7,14 @@ if (typeof globalThis.PointerEvent === 'undefined') {
   globalThis.PointerEvent = class PointerEvent extends Event {} as typeof globalThis.PointerEvent;
 }
 
+if (typeof globalThis.ResizeObserver === 'undefined') {
+  globalThis.ResizeObserver = class ResizeObserver {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof globalThis.ResizeObserver;
+}
+
 afterEach(() => {
   cleanup();
 });

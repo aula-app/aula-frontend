@@ -87,6 +87,7 @@ export const useOutdatedGuard = (refreshKey?: string): OutdatedState => {
               type: 'ADD_TOAST',
               message: {
                 type: 'info',
+                persistent: true,
                 message: t('errors.appBelowRecommended', {
                   currentVersion,
                   recommendedVersion,
