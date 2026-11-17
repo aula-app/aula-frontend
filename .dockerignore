@@ -5,8 +5,6 @@
 .github
 githooks/
 
-../aula-backend/db
-
 .DS_Store
 .prettier*
 .eslint*

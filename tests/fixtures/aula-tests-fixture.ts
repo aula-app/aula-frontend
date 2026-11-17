@@ -49,7 +49,7 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
     // TODO less hacky
     const index = +(dbInstanceCode.substring(4));
     const { stdout, stderr } = await exec(`./artisan tenants:create-test --index=${index}`);
-    // TODO nicer, check for errors
+    // TODO nicer stdout, check stderr for errors
     console.log(stdout);
 
     const dbBackchannel = await DbBackchannel.getByInstanceCode(dbInstanceCode);
