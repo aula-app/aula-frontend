@@ -25,7 +25,7 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
   const panelId = useId();
 
   return (
-    <section aria-labelledby={headingId} className="flex flex-col p-2 sm:p-4 sm:pb-0 bg-shadow m-2 mb-0 rounded-2xl">
+    <section aria-labelledby={headingId} className="flex flex-col p-2 bg-shadow m-2 mx-4 mb-0 rounded-2xl">
       <div className="flex items-center justify-between gap-2">
         <h2 id={headingId} className="min-w-0">
           <button
@@ -65,7 +65,7 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
         {error ? (
           <Alert severity="error" title={t('v2.ui.error.fetch.title')} className="my-2" />
         ) : (
-          <ul className="grid grid-cols-2 gap-2 py-2 sm:grid-cols-4">
+          <ul className="grid grid-cols-2 gap-2 p-1 pt-2 sm:grid-cols-4">
             {DASHBOARD_PHASES.map((phase) => (
               <li key={phase}>
                 <PhaseCountLink phase={phase} count={counts?.[phase]} />
