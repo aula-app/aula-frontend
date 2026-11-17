@@ -71,6 +71,9 @@ test('Bug Reports', async ({ newPageFor }) => {
 
   await test.step('Admin verifies bug report is gone', async () => {
     await reporting.searchMessages(adminPage, bugReport);
-    await expect(adminPage.getByTestId('messages-no-results-state')).toBeVisible();
+    // An emptied inbox shows the empty state instead of "no results".
+    await expect(
+      adminPage.getByTestId('messages-no-results-state').or(adminPage.getByTestId('messages-empty-state'))
+    ).toBeVisible();
   });
 });
