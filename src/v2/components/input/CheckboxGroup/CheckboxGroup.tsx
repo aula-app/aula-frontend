@@ -4,7 +4,7 @@ import { CheckboxGroup as AriaCheckboxGroup, Label } from 'react-aria-components
 import { twMerge } from 'tailwind-merge';
 
 interface CheckboxGroupProps {
-  label: string;
+  label?: string;
   options: SelectOption[];
   /** Values of the checked options. */
   value: string[];
