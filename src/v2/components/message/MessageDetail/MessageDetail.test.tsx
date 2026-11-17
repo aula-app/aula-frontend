@@ -8,6 +8,7 @@ import MessageDetail from './MessageDetail';
 
 const checkPermissions = vi.fn();
 const archiveMessage = vi.fn();
+const restoreMessage = vi.fn();
 
 vi.mock('@/utils', async (importOriginal) => ({
   ...(await importOriginal<object>()),
@@ -15,6 +16,7 @@ vi.mock('@/utils', async (importOriginal) => ({
 }));
 vi.mock('@/v2/components/message/archiveMessage', () => ({
   archiveMessage: (id: string) => archiveMessage(id),
+  restoreMessage: (id: string) => restoreMessage(id),
   archiveConfirmDescription: () => 'archiveConfirm',
 }));
 vi.mock('@/store', () => ({ useAppStore: () => [{}, () => {}] }));
@@ -43,6 +45,7 @@ const renderDetail = (msg: MessageType, onClose?: () => void, onDone?: () => voi
 beforeEach(() => {
   checkPermissions.mockReset().mockReturnValue(true);
   archiveMessage.mockReset().mockResolvedValue({ error: null });
+  restoreMessage.mockReset().mockResolvedValue({ error: null });
 });
 
 describe('MessageDetail', () => {
@@ -121,6 +124,17 @@ describe('MessageDetail', () => {
 
     await userEvent.click(screen.getByTestId(TEST_IDS.ARCHIVE_CONFIRM));
     expect(archiveMessage).toHaveBeenCalledWith('m1');
+    expect(onDone).toHaveBeenCalled();
+  });
+
+  it('restores an archived message instead of archiving it', async () => {
+    const onDone = vi.fn();
+    renderDetail({ ...message(1, 'Hello class'), status: 3 } as MessageType, undefined, onDone);
+
+    expect(screen.queryByRole('button', { name: 'v2.ui.button.archive' })).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: 'v2.ui.button.restore' }));
+
+    expect(restoreMessage).toHaveBeenCalledWith('m1');
     expect(onDone).toHaveBeenCalled();
   });
 });

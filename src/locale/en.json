@@ -147,6 +147,7 @@
         "sentOn": "on",
         "archived": "Message archived",
         "archiveConfirm": "'{{var}}' will be moved to the archive.\nArchived items can be shown again with the status filter '{{status}}'.",
+        "restored": "Message restored",
         "reject": "Reject",
         "date": "date",
         "select": "Select a message to read it",
@@ -199,7 +200,8 @@
         "report": "Report content",
         "share": "Copy idea link",
         "submit": "Submit",
-        "archive": "Archive"
+        "archive": "Archive",
+        "restore": "Restore"
       },
       "code": {
         "button": "Code: {{var}}",

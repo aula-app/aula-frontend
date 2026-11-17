@@ -198,7 +198,7 @@ const Messages = () => {
             <ScrollList storageKey="messages" className="gap-1">
               {visibleMessages.map((message) => (
                 <li key={message.hash_id} data-testid="message-item">
-                  <MessageCard message={message} selected={message.hash_id === message_id} onArchived={refetch} />
+                  <MessageCard message={message} selected={message.hash_id === message_id} onChanged={refetch} />
                 </li>
               ))}
             </ScrollList>

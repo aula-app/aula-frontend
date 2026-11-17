@@ -1,7 +1,8 @@
 import { MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import ArchiveButton from '@/v2/components/button/ArchiveButton';
-import { archiveConfirmDescription, archiveMessage } from '@/v2/components/message/archiveMessage';
+import RestoreButton from '@/v2/components/button/RestoreButton';
+import { archiveConfirmDescription, archiveMessage, restoreMessage } from '@/v2/components/message/archiveMessage';
 import { MESSAGE_STATUS } from '@/v2/components/message/getInboxMessages';
 import { parseMessageBody } from '@/v2/components/message/parseMessageBody';
 import { isActionableRequest } from '@/v2/components/message/RequestActions';
@@ -17,19 +18,21 @@ interface MessageCardProps {
   message: MessageType;
   /** Marks the card whose message is open beside the list. */
   selected?: boolean;
-  /** Called once the message is archived. */
-  onArchived?: () => void;
+  /** Called once the message is archived or restored. */
+  onChanged?: () => void;
 }
 
-const MessageCard = ({ message, selected = false, onArchived }: MessageCardProps) => {
+const MessageCard = ({ message, selected = false, onChanged }: MessageCardProps) => {
   const { t } = useTranslation();
   const titleId = useId();
   const variant = getMessageVariant(message.msg_type);
   const { icon, iconClass, color, hover } = VARIANT_STYLES[variant];
+  const canChangeStatus = checkPermissions('messages', 'status');
   const canArchive =
-    checkPermissions('messages', 'status') &&
+    canChangeStatus &&
     Number(message.status) === MESSAGE_STATUS.active &&
     !isActionableRequest(parseMessageBody(message.body).metadata);
+  const canRestore = canChangeStatus && Number(message.status) === MESSAGE_STATUS.archived;
 
   return (
     <article
@@ -51,7 +54,7 @@ const MessageCard = ({ message, selected = false, onArchived }: MessageCardProps
           'hover:no-underline transition-colors duration-150',
           color,
           hover,
-          !canArchive && 'rounded-r-2xl pr-6'
+          !canArchive && !canRestore && 'rounded-r-2xl pr-6'
         )}
       >
         <h2 id={titleId} className="truncate text-lg font-semibold">
@@ -64,15 +67,24 @@ const MessageCard = ({ message, selected = false, onArchived }: MessageCardProps
           </p>
         )}
       </Link>
-      {canArchive && (
+      {(canArchive || canRestore) && (
         <div className={twMerge('flex shrink-0 items-center justify-center rounded-r-2xl px-3', color)}>
-          <ArchiveButton
-            subject={message.headline}
-            confirmDescription={archiveConfirmDescription(t, message.headline)}
-            successMessage={t('v2.scopes.messages.archived')}
-            onArchive={() => archiveMessage(message.hash_id)}
-            onArchived={onArchived}
-          />
+          {canArchive ? (
+            <ArchiveButton
+              subject={message.headline}
+              confirmDescription={archiveConfirmDescription(t, message.headline)}
+              successMessage={t('v2.scopes.messages.archived')}
+              onArchive={() => archiveMessage(message.hash_id)}
+              onArchived={onChanged}
+            />
+          ) : (
+            <RestoreButton
+              subject={message.headline}
+              successMessage={t('v2.scopes.messages.restored')}
+              onRestore={() => restoreMessage(message.hash_id)}
+              onRestored={onChanged}
+            />
+          )}
         </div>
       )}
     </article>

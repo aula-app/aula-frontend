@@ -147,6 +147,7 @@
         "sentOn": "am",
         "archived": "Nachricht archiviert",
         "archiveConfirm": "„{{var}}“ wird ins Archiv verschoben.\nMit dem Statusfilter „{{status}}“ lassen sich archivierte Einträge wieder anzeigen.",
+        "restored": "Nachricht wiederhergestellt",
         "reject": "Ablehnen",
         "date": "Datum",
         "select": "Wähle eine Nachricht aus, um sie zu lesen",
@@ -199,7 +200,8 @@
         "report": "Inhalt melden",
         "share": "Ideen-Link kopieren",
         "submit": "Übermitteln",
-        "archive": "Archivieren"
+        "archive": "Archivieren",
+        "restore": "Wiederherstellen"
       },
       "code": {
         "button": "Code: {{var}}",

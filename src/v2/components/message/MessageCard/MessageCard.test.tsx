@@ -21,10 +21,10 @@ vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => k
 const message = (msg_type: number) =>
   ({ hash_id: 'm1', headline: 'Hate speech report', msg_type, created: '2026-06-12 15:30:00', status: 1 }) as MessageType;
 
-const renderCard = (msg_type = 1, onArchived = vi.fn()) =>
+const renderCard = (msg_type = 1, onChanged = vi.fn()) =>
   render(
     <MemoryRouter>
-      <MessageCard message={message(msg_type)} onArchived={onArchived} />
+      <MessageCard message={message(msg_type)} onChanged={onChanged} />
     </MemoryRouter>
   );
 
@@ -57,14 +57,14 @@ describe('MessageCard', () => {
   });
 
   it('archives the message and notifies the list', async () => {
-    const onArchived = vi.fn();
-    renderCard(4, onArchived);
+    const onChanged = vi.fn();
+    renderCard(4, onChanged);
 
     await userEvent.click(screen.getByRole('button', { name: 'v2.ui.button.archive: Hate speech report' }));
     await userEvent.click(screen.getByTestId(TEST_IDS.ARCHIVE_CONFIRM));
 
     expect(setMessageStatus).toHaveBeenCalledWith({ message_id: 'm1', status: 3 });
-    expect(onArchived).toHaveBeenCalled();
+    expect(onChanged).toHaveBeenCalled();
     expect(dispatch).toHaveBeenCalledWith(
       expect.objectContaining({ message: expect.objectContaining({ type: 'success' }) })
     );
@@ -72,28 +72,44 @@ describe('MessageCard', () => {
 
   it('keeps the message and shows the error when archiving fails', async () => {
     setMessageStatus.mockResolvedValue({ error: 'nope' });
-    const onArchived = vi.fn();
-    renderCard(1, onArchived);
+    const onChanged = vi.fn();
+    renderCard(1, onChanged);
 
     await userEvent.click(screen.getByRole('button', { name: /v2.ui.button.archive/ }));
     await userEvent.click(screen.getByTestId(TEST_IDS.ARCHIVE_CONFIRM));
 
-    expect(onArchived).not.toHaveBeenCalled();
+    expect(onChanged).not.toHaveBeenCalled();
     expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ message: { message: 'nope', type: 'error' } }));
   });
 
   it('leaves the message alone when the confirmation is cancelled', async () => {
-    const onArchived = vi.fn();
-    renderCard(4, onArchived);
+    const onChanged = vi.fn();
+    renderCard(4, onChanged);
 
     await userEvent.click(screen.getByRole('button', { name: 'v2.ui.button.archive: Hate speech report' }));
     await userEvent.click(screen.getByTestId(TEST_IDS.ARCHIVE_CANCEL));
 
     expect(setMessageStatus).not.toHaveBeenCalled();
-    expect(onArchived).not.toHaveBeenCalled();
+    expect(onChanged).not.toHaveBeenCalled();
   });
 
-  it('hides the archive action on a message that is already archived', () => {
+  it('offers to restore an archived message instead of archiving it, and notifies the list', async () => {
+    const onChanged = vi.fn();
+    render(
+      <MemoryRouter>
+        <MessageCard message={{ ...message(4), status: 3 }} onChanged={onChanged} />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByRole('button', { name: /v2.ui.button.archive/ })).toBeNull();
+    await userEvent.click(screen.getByRole('button', { name: 'v2.ui.button.restore: Hate speech report' }));
+
+    expect(setMessageStatus).toHaveBeenCalledWith({ message_id: 'm1', status: 1 });
+    expect(onChanged).toHaveBeenCalled();
+  });
+
+  it('hides the restore action from users who cannot change message status', () => {
+    checkPermissions.mockReturnValue(false);
     render(
       <MemoryRouter>
         <MessageCard message={{ ...message(1), status: 3 }} />
