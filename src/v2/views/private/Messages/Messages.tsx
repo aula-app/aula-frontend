@@ -67,7 +67,7 @@ const Messages = () => {
     reversed,
     setReversed,
   } = useListFilter(typedMessages, messagesFilterConfig, 'messages');
-  usePageTitle('pageTitles.messages');
+  usePageTitle('pageTitles.inbox');
 
   const selected = messages.find((message) => message.hash_id === message_id);
   const isMissing = !!message_id && !isLoading && !error && !selected;
@@ -80,7 +80,7 @@ const Messages = () => {
   };
 
   useEffect(() => {
-    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.messages'), '/messages']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.inbox'), '/messages']] });
   }, [dispatch, t]);
 
   const notFound = (

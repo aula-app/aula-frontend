@@ -74,7 +74,7 @@ describe('Dashboard', () => {
     renderDashboard();
 
     await screen.findByTestId('dashboard-phase-0');
-    expect(screen.getByRole('link', { name: 'ui.navigation.messages' })).toBeTruthy();
+    expect(screen.getByRole('link', { name: 'ui.navigation.inbox' })).toBeTruthy();
     expect(screen.getByRole('link', { name: 'ui.navigation.updates' })).toBeTruthy();
     expect(screen.queryAllByTestId('badge')).toHaveLength(0);
   });

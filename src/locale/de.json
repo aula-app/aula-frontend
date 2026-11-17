@@ -1252,6 +1252,7 @@
       "closeMenu": "Hauptmenü schließen",
       "mainMenu": "Hauptnavigation",
       "openMenu": "Hauptmenü öffnen",
+      "inbox": "Inbox",
       "messages": "Nachrichten",
       "privacy": "Datenschutz",
       "profile": "Profil",
@@ -1303,6 +1304,7 @@
   "pageTitles": {
     "welcome": "Willkommen",
     "about": "Über aula",
+    "inbox": "Inbox",
     "messages": "Nachrichten",
     "announcements": "Ankündigungen",
     "announcement": "Ankündigung",
