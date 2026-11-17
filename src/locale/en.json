@@ -146,6 +146,7 @@
         "plural": "messages",
         "sentOn": "on",
         "archived": "Message archived",
+        "archiveConfirm": "'{{var}}' will be moved to the archive.\nArchived items can be shown again with the status filter '{{status}}'.",
         "reject": "Reject",
         "date": "date",
         "select": "Select a message to read it",
@@ -210,6 +211,9 @@
         "label": "Dark mode"
       },
       "dialog": {
+        "archive": {
+          "title": "Archive?"
+        },
         "delete": {
           "title": "Caution!",
           "description": "Are you sure you want to continue?\nThis action cannot be undone.",

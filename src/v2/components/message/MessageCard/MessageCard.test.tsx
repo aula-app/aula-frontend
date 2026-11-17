@@ -1,3 +1,4 @@
+import { TEST_IDS } from '@/test-ids';
 import { MessageType } from '@/types/Scopes';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -18,7 +19,7 @@ vi.mock('@/store', () => ({ useAppStore: () => [{}, dispatch] }));
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'en' } }) }));
 
 const message = (msg_type: number) =>
-  ({ hash_id: 'm1', headline: 'Hate speech report', msg_type, created: '2026-06-12 15:30:00' }) as MessageType;
+  ({ hash_id: 'm1', headline: 'Hate speech report', msg_type, created: '2026-06-12 15:30:00', status: 1 }) as MessageType;
 
 const renderCard = (msg_type = 1, onArchived = vi.fn()) =>
   render(
@@ -60,6 +61,7 @@ describe('MessageCard', () => {
     renderCard(4, onArchived);
 
     await userEvent.click(screen.getByRole('button', { name: 'v2.ui.button.archive: Hate speech report' }));
+    await userEvent.click(screen.getByTestId(TEST_IDS.ARCHIVE_CONFIRM));
 
     expect(setMessageStatus).toHaveBeenCalledWith({ message_id: 'm1', status: 3 });
     expect(onArchived).toHaveBeenCalled();
@@ -73,10 +75,32 @@ describe('MessageCard', () => {
     const onArchived = vi.fn();
     renderCard(1, onArchived);
 
-    await userEvent.click(screen.getByRole('button'));
+    await userEvent.click(screen.getByRole('button', { name: /v2.ui.button.archive/ }));
+    await userEvent.click(screen.getByTestId(TEST_IDS.ARCHIVE_CONFIRM));
 
     expect(onArchived).not.toHaveBeenCalled();
     expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ message: { message: 'nope', type: 'error' } }));
+  });
+
+  it('leaves the message alone when the confirmation is cancelled', async () => {
+    const onArchived = vi.fn();
+    renderCard(4, onArchived);
+
+    await userEvent.click(screen.getByRole('button', { name: 'v2.ui.button.archive: Hate speech report' }));
+    await userEvent.click(screen.getByTestId(TEST_IDS.ARCHIVE_CANCEL));
+
+    expect(setMessageStatus).not.toHaveBeenCalled();
+    expect(onArchived).not.toHaveBeenCalled();
+  });
+
+  it('hides the archive action on a message that is already archived', () => {
+    render(
+      <MemoryRouter>
+        <MessageCard message={{ ...message(1), status: 3 }} />
+      </MemoryRouter>
+    );
+
+    expect(screen.queryByRole('button')).toBeNull();
   });
 
   it('hides the archive action on a request still waiting for a decision', () => {

@@ -1,3 +1,4 @@
+import { TEST_IDS } from '@/test-ids';
 import { MessageType } from '@/types/Scopes';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -12,7 +13,10 @@ vi.mock('@/utils', async (importOriginal) => ({
   ...(await importOriginal<object>()),
   checkPermissions: (...args: unknown[]) => checkPermissions(...args),
 }));
-vi.mock('@/v2/components/message/archiveMessage', () => ({ archiveMessage: (id: string) => archiveMessage(id) }));
+vi.mock('@/v2/components/message/archiveMessage', () => ({
+  archiveMessage: (id: string) => archiveMessage(id),
+  archiveConfirmDescription: () => 'archiveConfirm',
+}));
 vi.mock('@/store', () => ({ useAppStore: () => [{}, () => {}] }));
 vi.mock('@/v2/components/ui/Markdown', () => ({ default: ({ children }: { children: string }) => <p>{children}</p> }));
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'en' } }) }));
@@ -113,7 +117,9 @@ describe('MessageDetail', () => {
     const archive = screen.getByRole('button', { name: 'v2.ui.button.archive' });
     expect(archive.closest('header')).toBeNull();
     await userEvent.click(archive);
+    expect(archiveMessage).not.toHaveBeenCalled();
 
+    await userEvent.click(screen.getByTestId(TEST_IDS.ARCHIVE_CONFIRM));
     expect(archiveMessage).toHaveBeenCalledWith('m1');
     expect(onDone).toHaveBeenCalled();
   });

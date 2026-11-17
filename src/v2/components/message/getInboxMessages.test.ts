@@ -39,6 +39,13 @@ describe('getInboxMessages', () => {
     expect(response.data?.map((message) => message.hash_id)).toEqual(['a', 'c']);
   });
 
+  it('gives admins only the archived messages when asked for them', async () => {
+    checkPermissions.mockReturnValue(true);
+    const response = await getInboxMessages('archived');
+
+    expect(response.data?.map((message) => message.hash_id)).toEqual(['b']);
+  });
+
   it('passes an empty or failed response through unchanged', async () => {
     const empty = { data: null, error: 'errors.existingUser', error_code: 2 };
     getPersonalMessages.mockResolvedValue(empty);

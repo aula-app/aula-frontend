@@ -146,6 +146,7 @@
         "plural": "Nachrichten",
         "sentOn": "am",
         "archived": "Nachricht archiviert",
+        "archiveConfirm": "„{{var}}“ wird ins Archiv verschoben.\nMit dem Statusfilter „{{status}}“ lassen sich archivierte Einträge wieder anzeigen.",
         "reject": "Ablehnen",
         "date": "Datum",
         "select": "Wähle eine Nachricht aus, um sie zu lesen",
@@ -210,6 +211,9 @@
         "label": "Dunkelmodus"
       },
       "dialog": {
+        "archive": {
+          "title": "Archivieren?"
+        },
         "delete": {
           "title": "Vorsicht!",
           "description": "Möchtest du wirklich fortfahren?\nDiese Aktion kann nicht rückgängig gemacht werden.",

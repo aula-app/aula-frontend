@@ -1,7 +1,8 @@
 import { MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import ArchiveButton from '@/v2/components/button/ArchiveButton';
-import { archiveMessage } from '@/v2/components/message/archiveMessage';
+import { archiveConfirmDescription, archiveMessage } from '@/v2/components/message/archiveMessage';
+import { MESSAGE_STATUS } from '@/v2/components/message/getInboxMessages';
 import { parseMessageBody } from '@/v2/components/message/parseMessageBody';
 import { isActionableRequest } from '@/v2/components/message/RequestActions';
 import Link from '@/v2/components/navigation/Link';
@@ -26,7 +27,9 @@ const MessageCard = ({ message, selected = false, onArchived }: MessageCardProps
   const variant = getMessageVariant(message.msg_type);
   const { icon, iconClass, color, hover } = VARIANT_STYLES[variant];
   const canArchive =
-    checkPermissions('messages', 'status') && !isActionableRequest(parseMessageBody(message.body).metadata);
+    checkPermissions('messages', 'status') &&
+    Number(message.status) === MESSAGE_STATUS.active &&
+    !isActionableRequest(parseMessageBody(message.body).metadata);
 
   return (
     <article
@@ -65,6 +68,7 @@ const MessageCard = ({ message, selected = false, onArchived }: MessageCardProps
         <div className={twMerge('flex shrink-0 items-center justify-center rounded-r-2xl px-3', color)}>
           <ArchiveButton
             subject={message.headline}
+            confirmDescription={archiveConfirmDescription(t, message.headline)}
             successMessage={t('v2.scopes.messages.archived')}
             onArchive={() => archiveMessage(message.hash_id)}
             onArchived={onArchived}
