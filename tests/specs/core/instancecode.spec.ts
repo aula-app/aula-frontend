@@ -9,7 +9,7 @@ const host = shared.getHost();
 // Un-skip when https://github.com/aula-app/aula-frontend/pull/1319 lands
 //   = when e2e can access /api/v2
 test.describe('Name search / instance code', () => {
-  test.skip('Search by name, use keyboard to select', async ({ page }) => {
+  test('Search by name, use keyboard to select', async ({ page }) => {
     await page.goto(host, { waitUntil: 'domcontentloaded' });
     const combobox = await page.getByRole('combobox', { name: 'Name der Schule (oder Instanzcode)' });
     combobox.focus();
@@ -31,7 +31,7 @@ test.describe('Name search / instance code', () => {
     await expect(currentInstanceCode).toContainText('db000');
   });
 
-  test.skip('Enter instance code', async ({ page }) => {
+  test('Enter instance code', async ({ page }) => {
     await page.goto(host, { waitUntil: 'domcontentloaded' });
     const combobox = await page.getByRole('combobox', { name: 'Name der Schule (oder Instanzcode)' });
     combobox.focus();
@@ -46,7 +46,7 @@ test.describe('Name search / instance code', () => {
     await expect(currentInstanceCode).toContainText('db000');
   });
 
-  test.skip('Enter non-existing instance code', async ({ page }) => {
+  test('Enter non-existing instance code', async ({ page }) => {
     await page.goto(host, { waitUntil: 'domcontentloaded' });
     const combobox = await page.getByRole('combobox', { name: 'Name der Schule (oder Instanzcode)' });
     combobox.focus();
