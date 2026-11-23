@@ -70,6 +70,12 @@ export interface GenericListRequest {
  *   - The response indicates failure (success: false)
  */
 
+const CODE_2_ERRORS: Record<string, string> = {
+  addUser: 'errors.existingUser',
+  editUser: 'errors.existingUser',
+  addIdea: 'errors.boxClosed',
+};
+
 export const baseRequest = async <T = unknown>(
   path: string,
   data: ObjectPropByName,
@@ -154,10 +160,7 @@ export const baseRequest = async <T = unknown>(
     }
 
     if (response.error_code) {
-      let errorKey = 'errors.default';
-      if (response.error_code === 2) {
-        errorKey = 'errors.existingUser';
-      }
+      const errorKey = (response.error_code === 2 && CODE_2_ERRORS[data.method]) || 'errors.default';
 
       return {
         data: null,
