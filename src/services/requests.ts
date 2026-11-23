@@ -37,6 +37,12 @@ export interface GenericListRequest {
   user_needs_to_consent?: StatusTypes;
 }
 
+const CODE_2_ERRORS: Record<string, string> = {
+  addUser: 'errors.existingUser',
+  editUser: 'errors.existingUser',
+  addIdea: 'errors.boxClosed',
+};
+
 /**
  * Makes an authenticated request to the database API.
  *
@@ -69,12 +75,6 @@ export interface GenericListRequest {
  *   - The API request fails
  *   - The response indicates failure (success: false)
  */
-
-const CODE_2_ERRORS: Record<string, string> = {
-  addUser: 'errors.existingUser',
-  editUser: 'errors.existingUser',
-  addIdea: 'errors.boxClosed',
-};
 
 export const baseRequest = async <T = unknown>(
   path: string,
