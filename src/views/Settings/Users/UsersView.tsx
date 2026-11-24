@@ -40,7 +40,13 @@ const UsersView: React.FC = () => {
   const [room_id, setRoom] = useState<string>('');
   const [userlevel, setRole] = useState<RoleTypes | 0>(0);
 
-  const columns = isSsoRequired ? COLUMNS.filter((column) => column.name !== 'temp_pw') : COLUMNS;
+  const columns = COLUMNS.filter((column) => {
+    switch (true) {
+      case isSsoRequired: return !['email', 'temp_pw'].includes(column.name);
+      case !isSsoManaged: return !['idp_user_id'].includes(column.name);
+      default: return true;
+    }
+  });
 
   // Create role options including "All" option
   const roleOptions = [
