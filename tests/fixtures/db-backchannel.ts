@@ -63,6 +63,11 @@ export class DbBackchannel {
     await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '130-idp-managed.sql'));
   }
 
+  /** Adds school-wide role users and a memberless room to the baseline; undone by the next `seed()`. */
+  public async seedGlobalRoles(): Promise<void> {
+    await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '140-global-roles.sql'));
+  }
+
   private async runSqlFile(filePath: string) {
     const sql = fs.readFileSync(filePath, 'utf8');
     await this.query(sql);
