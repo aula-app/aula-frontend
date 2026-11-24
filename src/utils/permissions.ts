@@ -21,6 +21,10 @@ const VOTING_ROLES = [20, 31, 41, 45];
 const ADMIN = [50];
 const USERS_ADMIN = USER_ROLES.concat(ADMIN);
 
+/* N.B.: when .role is an Array, it is checked by .includes() below;
+ * when it is a Number it is compared >=, e.g.:
+ * { role: 40 } allows 41, { role: [40, 50] } doesn't.
+ */
 const permissions = {
   announcements: {
     create: { role: 50 },
