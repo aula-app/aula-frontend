@@ -357,6 +357,7 @@
       "idp_user_missing": "Deine Schule hat uns nicht mitgeteilt, wer du bist. Bitte wende dich an deinen Administrator.",
       "idp_identity_taken": "Dieses Schulkonto ist bereits mit einem anderen aula-Konto verknüpft. Bitte wende dich an deinen Administrator.",
       "link_user_not_found": "Wir konnten dein aula-Konto nicht finden. Bitte versuche erneut, dich anzumelden.",
+      "school_mismatch": "Diese aula-Instanz gehört zu einer anderen Schule als der, mit der du angemeldet bist. Bitte überprüfe den Instanzcode.",
       "school_not_provisioned": "Diese Schule ist noch nicht eingerichtet. Bitte wende dich an deinen Administrator.",
       "sso_disabled": "Single Sign-On ist für diese Schule nicht aktiviert.",
       "login_cancelled": "Die Anmeldung wurde abgebrochen. Du kannst es erneut versuchen.",
