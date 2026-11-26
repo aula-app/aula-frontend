@@ -85,7 +85,10 @@ export const goToHome = async (page: Page) => {
  * @param path - The link's target, e.g. '/messages'
  */
 export const dashboardActivityLink = (page: Page, path: string) =>
-  page.locator('section').filter({ has: page.getByTestId('dashboard-toggle') }).locator(`a[href="${path}"]`);
+  page
+    .locator('section')
+    .filter({ has: page.getByTestId('dashboard-toggle') })
+    .locator(`a[href="${path}"]`);
 
 export const goToRoom = async (page: Page, roomName: string) => {
   await goToHome(page);
