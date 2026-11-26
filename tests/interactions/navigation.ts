@@ -150,4 +150,3 @@ export const goToMessagesSettings = async (page: Page, forceRefresh: boolean = f
 export const goToAnnouncementsSettings = async (page: Page, forceRefresh: boolean = false) => {
   await ensureUrl(page, '/settings/announcements', forceRefresh);
 };
-
