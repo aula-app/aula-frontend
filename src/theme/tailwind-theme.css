@@ -241,4 +241,8 @@
   --color-shadow: var(--color-shadow);
   --color-input-border: var(--color-input-border);
   --color-input-border-hover: var(--color-input-border-hover);
+
+  /* --- Shadows --- */
+  /* shadow-md mirrored, for popovers that open above their trigger */
+  --shadow-md-up: 0 -4px 6px -1px rgb(0 0 0 / 0.1), 0 -2px 4px -2px rgb(0 0 0 / 0.1);
 }

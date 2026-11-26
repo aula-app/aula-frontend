@@ -1,4 +1,10 @@
-import { FieldLabel, fieldBoxClasses, listBoxClasses, popoverClasses } from '@/v2/components/input/Field';
+import {
+  FieldLabel,
+  fieldBoxClasses,
+  listBoxClasses,
+  listBoxItemClasses,
+  popoverClasses,
+} from '@/v2/components/input/Field';
 import { SelectOption } from '@/v2/components/input/SelectInput';
 import Icon from '@/v2/components/ui/Icon';
 import {
@@ -47,6 +53,7 @@ const ComboBox = ({
   'data-testid': dataTestId,
 }: ComboBoxProps) => {
   const { t } = useTranslation();
+  const isDisabled = disabled || loading || options.length === 0;
 
   return (
     <AriaComboBox
@@ -54,9 +61,8 @@ const ComboBox = ({
       value={value}
       onChange={(keys: Key[]) => onChange(keys.map(String))}
       defaultItems={options}
-      menuTrigger="focus"
       allowsEmptyCollection
-      isDisabled={disabled || loading || options.length === 0}
+      isDisabled={isDisabled}
       className={twMerge('group/combobox relative flex flex-col gap-2', className)}
     >
       <div className="relative">
@@ -77,7 +83,11 @@ const ComboBox = ({
 
       <ComboBoxValue<SelectOption>>
         {({ selectedItems }) => (
-          <TagGroup aria-label={tagsLabel} onRemove={(keys) => onChange(value.filter((key) => !keys.has(key)))}>
+          <TagGroup
+            aria-label={tagsLabel}
+            disabledKeys={isDisabled ? value : undefined}
+            onRemove={(keys) => onChange(value.filter((key) => !keys.has(key)))}
+          >
             <TagList
               items={selectedItems.filter((item): item is SelectOption => item != null)}
               data-testid={dataTestId ? `${dataTestId}-tags` : undefined}
@@ -90,24 +100,26 @@ const ComboBox = ({
                   data-testid={dataTestId ? `${dataTestId}-tag-${item.value}` : undefined}
                   className={twMerge(
                     'flex max-w-full items-center gap-1 rounded-full border border-input-border py-0.5 pl-3 pr-1 bg-shadow',
-                    'text-xs text-foreground cursor-default outline-none transition-colors',
+                    'text-xs text-foreground cursor-default transition-colors',
                     'data-hovered:border-input-border-hover',
-                    'data-focus-visible:outline-2 data-focus-visible:outline-offset-1 data-focus-visible:outline-primary',
-                    'data-disabled:opacity-50'
+                    'data-focus-visible:outline-1 data-focus-visible:outline-current data-focus-visible:border-current',
+                    'data-disabled:border-transparent data-disabled:pr-3'
                   )}
                 >
                   <span className="truncate">{item.label}</span>
-                  <Button
-                    slot="remove"
-                    data-testid={dataTestId ? `${dataTestId}-remove-${item.value}` : undefined}
-                    className={twMerge(
-                      'flex shrink-0 items-center justify-center rounded-full p-0.5 text-muted cursor-pointer',
-                      'outline-none transition-colors data-hovered:bg-shadow data-pressed:bg-shadow',
-                      'data-focus-visible:outline-2 data-focus-visible:outline-primary'
-                    )}
-                  >
-                    <Icon type="close" size="0.875rem" />
-                  </Button>
+                  {!isDisabled && (
+                    <Button
+                      slot="remove"
+                      data-testid={dataTestId ? `${dataTestId}-remove-${item.value}` : undefined}
+                      className={twMerge(
+                        'flex shrink-0 items-center justify-center rounded-full p-0.5 text-muted cursor-pointer',
+                        'transition-colors data-hovered:bg-shadow data-pressed:bg-shadow',
+                        'data-focus-visible:outline-2 data-focus-visible:outline-current'
+                      )}
+                    >
+                      <Icon type="close" size="0.875rem" />
+                    </Button>
+                  )}
                 </Tag>
               )}
             </TagList>
@@ -133,10 +145,7 @@ const ComboBox = ({
               id={option.value}
               textValue={option.label}
               data-testid={dataTestId ? `${dataTestId}-option-${option.value}` : undefined}
-              className={twMerge(
-                'group flex items-center gap-2 px-3 py-2 text-sm cursor-pointer outline-none transition-colors duration-100 text-muted',
-                'data-selected:text-current data-selected:font-medium data-focused:bg-primary/10'
-              )}
+              className={twMerge(listBoxItemClasses, 'group flex items-center gap-2')}
             >
               <span className="flex-1 truncate">{option.label}</span>
               <Icon type="check" size="1em" className="invisible shrink-0 group-data-selected:visible" />
