@@ -1,3 +1,3 @@
 import FilterBar from './FilterBar';
 
-export { FilterBar as default,  };
+export { FilterBar as default };

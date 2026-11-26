@@ -34,7 +34,7 @@ export const useSetPasswordSubmit = () => {
     let runtimeConfig: RuntimeConfig;
     try {
       runtimeConfig = getRuntimeConfig();
-    } catch (err) {
+    } catch {
       runtimeConfig = await loadRuntimeConfig();
     }
 

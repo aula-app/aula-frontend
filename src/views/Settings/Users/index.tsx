@@ -1,3 +1,3 @@
 import UsersView from './UsersView';
 
-export { UsersView as default,  };
+export { UsersView as default };

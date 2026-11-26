@@ -26,8 +26,6 @@ const darkModeFocusStyles = {
 };
 
 // Helper function to get the correct focus styles based on theme mode
-const getFocusStyles = (isDarkMode: boolean) => 
-  isDarkMode ? darkModeFocusStyles : lightModeFocusStyles;
-
+const getFocusStyles = (isDarkMode: boolean) => (isDarkMode ? darkModeFocusStyles : lightModeFocusStyles);
 
 export default getFocusStyles;

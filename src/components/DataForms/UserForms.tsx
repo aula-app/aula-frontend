@@ -185,7 +185,7 @@ const UserForms: React.FC<UserFormsProps> = ({ defaultValues, onClose }) => {
   const roleOptions = [
     ...roles
       // (Non-Special) Moderators (30, 31) can only be room-roles, not user-roles
-      .filter((role) => ! ([30, 31].includes(role)))
+      .filter((role) => ![30, 31].includes(role))
       .map((r) => ({ value: r, label: t(`roles.${r}`) })),
   ];
 

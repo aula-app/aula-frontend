@@ -16,7 +16,11 @@ export function useSideBar({ onClose }: UseSideBarOptions) {
   const isActive = (path: string) => pathname === path || pathname.startsWith(`${path}/`);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-    if (e.key === 'Escape') { onClose?.(); document.getElementById('main-content')?.focus(); return; }
+    if (e.key === 'Escape') {
+      onClose?.();
+      document.getElementById('main-content')?.focus();
+      return;
+    }
     if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(e.key)) return;
 
     const nav = e.currentTarget;
@@ -41,19 +45,48 @@ export function useSideBar({ onClose }: UseSideBarOptions) {
     if (inLinks) {
       const items = focusable(linksSec);
       const idx = items.indexOf(active);
-      if (e.key === 'ArrowDown') { e.preventDefault(); if (idx < items.length - 1) items[idx + 1]?.focus(); else focusable(toolsSec)[0]?.focus(); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); if (idx > 0) items[idx - 1]?.focus(); else { const t = focusable(topSec); t[t.length - 1]?.focus(); } }
-      else if (e.key === 'Home') { e.preventDefault(); items[0]?.focus(); }
-      else if (e.key === 'End') { e.preventDefault(); items[items.length - 1]?.focus(); }
-      else if (e.key === 'ArrowRight') { e.preventDefault(); focusable(toolsSec)[0]?.focus(); }
-      else if (e.key === 'ArrowLeft') { e.preventDefault(); const t = focusable(topSec); t[t.length - 1]?.focus(); }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        if (idx < items.length - 1) items[idx + 1]?.focus();
+        else focusable(toolsSec)[0]?.focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        if (idx > 0) items[idx - 1]?.focus();
+        else {
+          const t = focusable(topSec);
+          t[t.length - 1]?.focus();
+        }
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        items[0]?.focus();
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        items[items.length - 1]?.focus();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        focusable(toolsSec)[0]?.focus();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const t = focusable(topSec);
+        t[t.length - 1]?.focus();
+      }
     } else if (inTools) {
       const items = focusable(toolsSec);
       const idx = items.indexOf(active);
-      if (e.key === 'ArrowRight') { e.preventDefault(); items[(idx + 1) % items.length]?.focus(); }
-      else if (e.key === 'ArrowLeft') { e.preventDefault(); items[(idx - 1 + items.length) % items.length]?.focus(); }
-      else if (e.key === 'ArrowUp') { e.preventDefault(); const l = focusable(linksSec); l[l.length - 1]?.focus(); }
-      else if (e.key === 'ArrowDown') { e.preventDefault(); focusable(logoutSec)[0]?.focus(); }
+      if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        items[(idx + 1) % items.length]?.focus();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        items[(idx - 1 + items.length) % items.length]?.focus();
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const l = focusable(linksSec);
+        l[l.length - 1]?.focus();
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        focusable(logoutSec)[0]?.focus();
+      }
     } else if (inTop) {
       const items = focusable(topSec);
       const idx = items.indexOf(active);
@@ -67,9 +100,17 @@ export function useSideBar({ onClose }: UseSideBarOptions) {
         else focusable(logoutSec)[0]?.focus();
       }
     } else if (inLogout) {
-      if (e.key === 'ArrowUp') { e.preventDefault(); focusable(toolsSec)[0]?.focus(); }
-      else if (e.key === 'ArrowLeft') { e.preventDefault(); const t = focusable(toolsSec); t[t.length - 1]?.focus(); }
-      else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); focusable(topSec)[0]?.focus(); }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        focusable(toolsSec)[0]?.focus();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        const t = focusable(toolsSec);
+        t[t.length - 1]?.focus();
+      } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+        e.preventDefault();
+        focusable(topSec)[0]?.focus();
+      }
     }
   };
 

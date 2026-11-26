@@ -22,6 +22,7 @@ export default tseslint.config(
       ...reactHooks.configs.recommended.rules,
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
       '@typescript-eslint/no-unused-expressions': ['error', { allowTernary: true }],
+      '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
       // Advisory for our effect-based data layer; real fix is a shared async hook / react-query.
       'react-hooks/set-state-in-effect': 'warn',
       // Remaining anys are library-boundary casts (MUI slotProps, yup shapes); tracked, not blocking.

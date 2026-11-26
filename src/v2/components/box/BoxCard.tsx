@@ -76,7 +76,12 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
                   })
                 }
                 renderForm={({ onSubmit, onCancel }) => (
-                  <BoxForm defaultValues={box} contextRoomId={box.room_hash_id} onSubmit={onSubmit} onCancel={onCancel} />
+                  <BoxForm
+                    defaultValues={box}
+                    contextRoomId={box.room_hash_id}
+                    onSubmit={onSubmit}
+                    onCancel={onCancel}
+                  />
                 )}
                 onChanged={onChanged}
                 onOpen={close}
@@ -107,19 +112,19 @@ const BoxCard = ({ box, onChanged }: BoxCardProps) => {
             <Markdown className="prose-sm text-muted line-clamp-3">{box.description_public}</Markdown>
           )}
         </div>
-                    {showCountdown && (
-        <footer className={`relative flex items-center gap-1 overflow-hidden rounded-b-2xl bg-${phaseColor} px-2 py-1 text-sm font-medium`}>
-              <div
-                className={`absolute inset-y-0 left-0 bg-${phaseColor}-active`}
-                style={{ width: `${fillPercent}%` }}
-                aria-hidden="true"
-              />
-              <Icon type="clock" size="1rem" aria-hidden="true" className="relative" />
-              <span className="relative">
-                {remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}
-              </span>
-            </footer>
-          )}
+        {showCountdown && (
+          <footer
+            className={`relative flex items-center gap-1 overflow-hidden rounded-b-2xl bg-${phaseColor} px-2 py-1 text-sm font-medium`}
+          >
+            <div
+              className={`absolute inset-y-0 left-0 bg-${phaseColor}-active`}
+              style={{ width: `${fillPercent}%` }}
+              aria-hidden="true"
+            />
+            <Icon type="clock" size="1rem" aria-hidden="true" className="relative" />
+            <span className="relative">{remaining > 0 ? t('phases.end', { var: remaining }) : t('phases.ended')}</span>
+          </footer>
+        )}
       </Link>
     </div>
   );

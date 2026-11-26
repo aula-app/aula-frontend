@@ -107,17 +107,20 @@ const Toast = () => {
     prevToastIds.current = currentIds;
   }, [state.toasts]);
 
-  const handleDismiss = useCallback((id: string) => {
-    setExitingIds((prev) => new Set(prev).add(id));
-    setTimeout(() => {
-      dispatch({ type: 'REMOVE_TOAST', id });
-      setExitingIds((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-    }, EXIT_DURATION_MS);
-  }, [dispatch]);
+  const handleDismiss = useCallback(
+    (id: string) => {
+      setExitingIds((prev) => new Set(prev).add(id));
+      setTimeout(() => {
+        dispatch({ type: 'REMOVE_TOAST', id });
+        setExitingIds((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+      }, EXIT_DURATION_MS);
+    },
+    [dispatch]
+  );
 
   return (
     <>

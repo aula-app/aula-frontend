@@ -4,7 +4,7 @@ import { MessageType } from '@/types/Scopes';
 import { Card, CardActions, CardContent, CardHeader, Divider, Skeleton, Stack, Typography } from '@mui/material';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import {t} from "i18next";
+import { t } from 'i18next';
 
 /**
  * Renders "Message" view
@@ -75,7 +75,13 @@ const MessageView = () => {
         <Card variant="outlined">
           <CardHeader
             title={message.headline}
-            action={<AppIconButton icon={message.status === 1 ? 'archive' : 'unarchive'} title={t(`tooltips.${message.status === 1 ? 'archive' : 'unarchive'}`)} onClick={toggleArchive} />}
+            action={
+              <AppIconButton
+                icon={message.status === 1 ? 'archive' : 'unarchive'}
+                title={t(`tooltips.${message.status === 1 ? 'archive' : 'unarchive'}`)}
+                onClick={toggleArchive}
+              />
+            }
           />
           <CardContent>
             <Typography py={2}>{message.body}</Typography>

@@ -9,7 +9,7 @@ const host = shared.getHost();
  */
 async function ensureInstanceCode(page: import('@playwright/test').Page, dbInstanceCode: string) {
   const instanceCodeInput = page.getByTestId('instance-code');
-  if (await instanceCodeInput.isVisible() && await instanceCodeInput.isEnabled()) {
+  if ((await instanceCodeInput.isVisible()) && (await instanceCodeInput.isEnabled())) {
     await instanceCodeInput.fill(dbInstanceCode);
     await page.getByTestId('instance-code-confirm').click();
     await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });

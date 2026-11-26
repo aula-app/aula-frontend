@@ -10,8 +10,7 @@ type BaseAnchorProps = { href: string; to?: never; className?: string } & Omit<
 
 // Require aria-label when no children are provided (e.g. icon-only links)
 type LinkProps = (BaseRouterLinkProps | BaseAnchorProps) & { disabled?: boolean } & (
-    | { children: ReactNode; 'aria-label'?: string }
-    | { children?: never; 'aria-label': string }
+    { children: ReactNode; 'aria-label'?: string } | { children?: never; 'aria-label': string }
   );
 
 const linkClass = 'text-foreground rounded-lg underline-offset-2 hover:underline';

@@ -1,3 +1,3 @@
 import LocaleSwitch from './LocaleSwitch';
 
-export { LocaleSwitch as default,  };
+export { LocaleSwitch as default };

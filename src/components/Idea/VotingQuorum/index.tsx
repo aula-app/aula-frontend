@@ -1,3 +1,3 @@
 import VotingQuorum from './VotingQuorum';
 
-export { VotingQuorum as default,  };
+export { VotingQuorum as default };

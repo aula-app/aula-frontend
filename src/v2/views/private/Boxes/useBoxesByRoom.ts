@@ -10,10 +10,7 @@ interface UseBoxesByRoomState {
   refetch: () => Promise<void>;
 }
 
-export const useBoxesByRoom = (
-  room_id: string | undefined,
-  phase: `${RoomPhases}`
-): UseBoxesByRoomState => {
+export const useBoxesByRoom = (room_id: string | undefined, phase: `${RoomPhases}`): UseBoxesByRoomState => {
   const [boxes, setBoxes] = useState<BoxType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<'fetch' | 'generic' | null>(null);
@@ -33,7 +30,7 @@ export const useBoxesByRoom = (
       } else {
         setBoxes(response.data || []);
       }
-    } catch (err) {
+    } catch {
       setError('fetch');
     } finally {
       setIsLoading(false);

@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 import Icon from '../../ui/Icon';
 import Button from '../Button';
-import Tooltip from '../../ui/Tooltip';
 
 const CodeCopy: FC<Omit<React.ComponentProps<typeof Button>, 'outlined' | 'text'>> = ({
   className,

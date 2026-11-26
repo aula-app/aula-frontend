@@ -43,7 +43,9 @@ export interface DataTableState<T extends SettingType> {
 
 interface UseDataTableStateOptions<T extends SettingType> {
   initialOrderBy: number;
-  fetchFn: (params: Record<string, unknown>) => Promise<{ data?: T[] | null; count?: number | null; error?: string | null }>;
+  fetchFn: (
+    params: Record<string, unknown>
+  ) => Promise<{ data?: T[] | null; count?: number | null; error?: string | null }>;
   deleteFn: (id: string) => Promise<{ error?: string | null }>;
   filterDependencies?: unknown[];
 }
