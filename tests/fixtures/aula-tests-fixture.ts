@@ -29,6 +29,9 @@ type BrowserFixtures = {
 
   // Fixture to ensure singleton DbBackchannel is loaded and DB is re-seeded
   baselineReload: () => Promise<void>;
+
+  // Moves a box's phase_start `days` into the past, so its countdown can run out
+  backdatePhaseStart: (boxName: string, days: number) => Promise<void>;
 };
 
 export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
@@ -139,6 +142,12 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
       console.log(`󰳿 baselineReloaded for ${dbInstanceCode}`);
     }
     await use(reload);
+  }, { scope: 'test' }],
+
+  // Data is reset by baselineReload in newContextFor teardown
+  backdatePhaseStart: [async ({ dbInstanceCode }, use) => {
+    const dbBackchannel = await DbBackchannel.getByInstanceCode(dbInstanceCode);
+    await use((boxName, days) => dbBackchannel.backdatePhaseStart(boxName, days));
   }, { scope: 'test' }],
 
   // factory to create a new authenticated context (test-scoped)
