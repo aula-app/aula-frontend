@@ -29,7 +29,7 @@ export const useIdeasByBox = (box_id: string | undefined): UseIdeasByBoxState =>
       } else {
         setIdeas(response.data || []);
       }
-    } catch (err) {
+    } catch {
       setError('fetch');
     } finally {
       setIsLoading(false);

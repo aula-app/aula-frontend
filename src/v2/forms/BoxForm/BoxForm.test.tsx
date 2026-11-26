@@ -44,7 +44,7 @@ describe('BoxForm', () => {
   });
 
   it('submits added ideas for a new box', async () => {
-    const onSubmit = vi.fn(async (_data: any) => true);
+    const onSubmit = vi.fn<(data: unknown) => Promise<boolean>>(async () => true);
     render(<BoxForm contextRoomId="room-1" onSubmit={onSubmit} onCancel={() => {}} />);
 
     fireEvent.change(screen.getByTestId('box-form-name'), { target: { value: 'New box' } });
@@ -57,7 +57,7 @@ describe('BoxForm', () => {
   });
 
   it('submits ideas dropped from an existing box as removals', async () => {
-    const onSubmit = vi.fn(async (_data: any) => true);
+    const onSubmit = vi.fn<(data: unknown) => Promise<boolean>>(async () => true);
     render(<BoxForm defaultValues={box} contextRoomId="room-1" onSubmit={onSubmit} onCancel={() => {}} />);
 
     fireEvent.click(await screen.findByTestId('box-form-ideas-remove-i1'));

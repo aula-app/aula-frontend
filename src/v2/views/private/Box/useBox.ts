@@ -31,7 +31,7 @@ export const useBox = (box_id: string | undefined): UseBoxState => {
       }
       setBox(response.data);
       return response.data;
-    } catch (err) {
+    } catch {
       setError('fetch');
       return null;
     } finally {

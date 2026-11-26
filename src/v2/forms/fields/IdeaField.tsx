@@ -1,5 +1,4 @@
 import { getIdeasByRoom } from '@/services/ideas';
-import { PhaseType } from '@/types/SettingsTypes';
 import IconButton from '@/v2/components/button/IconButton';
 import AutocompleteInput from '@/v2/components/input/AutocompleteInput';
 import { SelectOption } from '@/v2/components/input/SelectInput';
@@ -12,7 +11,6 @@ interface IdeaFieldProps {
   roomId: string;
   value: SelectOption[];
   onChange: (ideas: SelectOption[]) => void;
-  color?: PhaseType;
   loadingValue?: boolean;
   disabled?: boolean;
   'data-testid'?: string;
@@ -22,7 +20,6 @@ const IdeaField = ({
   roomId,
   value,
   onChange,
-  color = 'wild',
   loadingValue = false,
   disabled = false,
   'data-testid': dataTestId = 'idea-field',
