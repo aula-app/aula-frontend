@@ -15,6 +15,7 @@ export const useInstanceCode = () => {
   const hasStored = typeof stored === 'string' && stored.length > 0;
 
   const [instanceCode, setInstanceCode] = useState(hasStored ? stored : '');
+  const [confirmedCode, setConfirmedCode] = useState(hasStored ? stored : '');
   const [isEditing, setIsEditing] = useState(!hasStored);
   const [error, setError] = useState<string | undefined>();
   const [isLoading, setIsLoading] = useState(false);
@@ -53,6 +54,7 @@ export const useInstanceCode = () => {
       const isValid = await validateAndSaveInstanceCode(trimmed);
       if (isValid) {
         setIsEditing(false);
+        setConfirmedCode(trimmed);
         setError(undefined);
         return true;
       }
@@ -69,6 +71,8 @@ export const useInstanceCode = () => {
   return {
     instanceCode,
     setInstanceCode,
+    /** Last validated code; changes only on confirm. */
+    confirmedCode,
     isEditing,
     startEditing,
     error,

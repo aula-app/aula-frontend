@@ -44,18 +44,7 @@ export interface SsoStatus {
   provider: string | null;
 }
 
-/**
- * Whether the school behind the current instance code offers SSO.
- *
- * Deployment config only says whether this aula has an identity provider at
- * all; the toggle an operator sets per school lives on the backend. Both have
- * to be true before a login page offers the button, or schools that do not use
- * SSO get one that can only ever refuse them.
- *
- * Returns null when the question cannot be answered, which callers treat as
- * "leave it as the deployment config says" rather than hiding a button a school
- * may well be entitled to.
- */
+/** Whether the school behind the current instance code offers SSO; null when the backend can't answer. */
 export const getSsoStatus = async (apiUrl: string): Promise<SsoStatus | null> => {
   const instanceCode = localStorageGet('code');
 
