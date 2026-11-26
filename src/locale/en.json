@@ -201,7 +201,7 @@
         "share": "Copy idea link",
         "submit": "Submit",
         "archive": "Archive",
-        "restore": "Restore"
+        "unarchive": "Unarchive"
       },
       "code": {
         "button": "Code: {{var}}",

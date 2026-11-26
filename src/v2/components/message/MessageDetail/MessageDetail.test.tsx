@@ -132,7 +132,7 @@ describe('MessageDetail', () => {
     renderDetail({ ...message(1, 'Hello class'), status: 3 } as MessageType, undefined, onDone);
 
     expect(screen.queryByRole('button', { name: 'v2.ui.button.archive' })).toBeNull();
-    await userEvent.click(screen.getByRole('button', { name: 'v2.ui.button.restore' }));
+    await userEvent.click(screen.getByRole('button', { name: 'v2.ui.button.unarchive' }));
 
     expect(restoreMessage).toHaveBeenCalledWith('m1');
     expect(onDone).toHaveBeenCalled();

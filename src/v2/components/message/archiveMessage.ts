@@ -1,11 +1,11 @@
 import { setMessageStatus } from '@/services/messages';
 import { TFunction } from 'i18next';
-import { InboxStatus, MESSAGE_STATUS } from './getInboxMessages';
+import { MESSAGE_STATUS } from './getInboxMessages';
 
 /** Window event fired once a message enters or leaves the inbox, so counts can catch up without a navigation. */
 export const MESSAGES_CHANGED = 'messages-changed';
 
-const setStatus = async (hash_id: string, status: InboxStatus) => {
+const setStatus = async (hash_id: string, status: keyof typeof MESSAGE_STATUS) => {
   const response = await setMessageStatus({ message_id: hash_id, status: MESSAGE_STATUS[status] });
   if (!response.error) window.dispatchEvent(new Event(MESSAGES_CHANGED));
   return response;

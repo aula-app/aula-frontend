@@ -35,7 +35,7 @@ const RestoreButton = ({
   const { t } = useTranslation();
   const { toast } = useToast();
   const [pending, setPending] = useState(false);
-  const label = t('v2.ui.button.restore');
+  const label = t('v2.ui.button.unarchive');
 
   const handleClick = async () => {
     setPending(true);

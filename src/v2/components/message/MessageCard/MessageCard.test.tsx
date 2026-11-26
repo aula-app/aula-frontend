@@ -19,7 +19,13 @@ vi.mock('@/store', () => ({ useAppStore: () => [{}, dispatch] }));
 vi.mock('react-i18next', () => ({ useTranslation: () => ({ t: (key: string) => key, i18n: { language: 'en' } }) }));
 
 const message = (msg_type: number) =>
-  ({ hash_id: 'm1', headline: 'Hate speech report', msg_type, created: '2026-06-12 15:30:00', status: 1 }) as MessageType;
+  ({
+    hash_id: 'm1',
+    headline: 'Hate speech report',
+    msg_type,
+    created: '2026-06-12 15:30:00',
+    status: 1,
+  }) as MessageType;
 
 const renderCard = (msg_type = 1, onChanged = vi.fn()) =>
   render(
@@ -54,6 +60,18 @@ describe('MessageCard', () => {
     const time = container.querySelector('time');
     expect(time?.getAttribute('dateTime')).toBe('2026-06-12 15:30:00');
     expect(time?.textContent).toMatch(/2026/);
+  });
+
+  it('marks an archived message as archived, and an active one not', () => {
+    const { rerender } = renderCard();
+    expect(screen.queryByText('status.archived')).toBeNull();
+
+    rerender(
+      <MemoryRouter>
+        <MessageCard message={{ ...message(1), status: 3 }} />
+      </MemoryRouter>
+    );
+    expect(screen.getByRole('link').textContent).toContain('status.archived');
   });
 
   it('archives the message and notifies the list', async () => {
@@ -102,7 +120,7 @@ describe('MessageCard', () => {
     );
 
     expect(screen.queryByRole('button', { name: /v2.ui.button.archive/ })).toBeNull();
-    await userEvent.click(screen.getByRole('button', { name: 'v2.ui.button.restore: Hate speech report' }));
+    await userEvent.click(screen.getByRole('button', { name: 'v2.ui.button.unarchive: Hate speech report' }));
 
     expect(setMessageStatus).toHaveBeenCalledWith({ message_id: 'm1', status: 1 });
     expect(onChanged).toHaveBeenCalled();

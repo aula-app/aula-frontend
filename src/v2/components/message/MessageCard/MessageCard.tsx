@@ -12,7 +12,7 @@ import Icon from '@/v2/components/ui/Icon/Icon';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
-import { getMessageVariant, VARIANT_STYLES } from './messageVariant';
+import { ARCHIVED_STYLES, getMessageVariant, VARIANT_STYLES } from './messageVariant';
 
 interface MessageCardProps {
   message: MessageType;
@@ -26,13 +26,15 @@ const MessageCard = ({ message, selected = false, onChanged }: MessageCardProps)
   const { t } = useTranslation();
   const titleId = useId();
   const variant = getMessageVariant(message.msg_type);
-  const { icon, iconClass, color, hover } = VARIANT_STYLES[variant];
+  const isArchived = Number(message.status) === MESSAGE_STATUS.archived;
+  const { icon, iconClass, color: typeColor } = VARIANT_STYLES[variant];
+  const { color, hover } = isArchived ? ARCHIVED_STYLES : VARIANT_STYLES[variant];
   const canChangeStatus = checkPermissions('messages', 'status');
   const canArchive =
     canChangeStatus &&
     Number(message.status) === MESSAGE_STATUS.active &&
     !isActionableRequest(parseMessageBody(message.body).metadata);
-  const canRestore = canChangeStatus && Number(message.status) === MESSAGE_STATUS.archived;
+  const canRestore = canChangeStatus && isArchived;
 
   return (
     <article
@@ -43,7 +45,7 @@ const MessageCard = ({ message, selected = false, onChanged }: MessageCardProps)
         selected && 'outline-2 outline-offset-2 outline-foreground'
       )}
     >
-      <div className={twMerge('flex shrink-0 items-center justify-center rounded-l-2xl px-4', color)}>
+      <div className={twMerge('flex shrink-0 items-center justify-center rounded-l-2xl px-4', typeColor)}>
         <Icon type={icon} size="2rem" className={iconClass} />
       </div>
       <Link
@@ -60,10 +62,20 @@ const MessageCard = ({ message, selected = false, onChanged }: MessageCardProps)
         <h2 id={titleId} className="truncate text-lg font-semibold">
           {message.headline}
         </h2>
-        {message.created && (
-          <p className="text-xs">
-            {t('v2.scopes.messages.sentOn')}{' '}
-            <DateText withTime date={message.created} className="font-bold text-current" />
+        {(message.created || isArchived) && (
+          <p className="flex flex-wrap items-center gap-x-2 text-xs">
+            {message.created && (
+              <span>
+                {t('v2.scopes.messages.sentOn')}{' '}
+                <DateText withTime date={message.created} className="font-bold text-current" />
+              </span>
+            )}
+            {isArchived && (
+              <span className="inline-flex items-center gap-1 font-semibold">
+                <Icon type="archive" size="1em" aria-hidden="true" />
+                {t('status.archived')}
+              </span>
+            )}
           </p>
         )}
       </Link>

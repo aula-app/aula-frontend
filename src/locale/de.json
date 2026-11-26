@@ -201,7 +201,7 @@
         "share": "Ideen-Link kopieren",
         "submit": "Übermitteln",
         "archive": "Archivieren",
-        "restore": "Wiederherstellen"
+        "unarchive": "Wiederherstellen"
       },
       "code": {
         "button": "Code: {{var}}",

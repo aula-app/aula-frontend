@@ -18,7 +18,9 @@ export const VARIANT_STYLES: Record<
     color: 'bg-info',
     hover: 'hover:bg-info-active',
   },
-  requests: { icon: 'request', color: 'bg-neutral', hover: 'hover:bg-neutral-active' },
+  requests: { icon: 'request', color: 'bg-discussion', hover: 'hover:bg-discussion-active' },
   reports: { icon: 'report', color: 'bg-warning', hover: 'hover:bg-warning-active' },
   bugs: { icon: 'bug', color: 'bg-error', hover: 'hover:bg-error-active' },
 };
+
+export const ARCHIVED_STYLES = { color: 'bg-neutral', hover: 'hover:bg-neutral-active' };

@@ -9,7 +9,7 @@ import SortSelect from '@/v2/components/input/SortSelect';
 import TextInput from '@/v2/components/input/TextInput';
 import ListPageLayout from '@/v2/components/layout/ListPageLayout';
 import MessageCard from '@/v2/components/message/MessageCard';
-import { InboxStatus } from '@/v2/components/message/getInboxMessages';
+import { INBOX_STATUSES, InboxStatus } from '@/v2/components/message/getInboxMessages';
 import { getMessageVariant, MESSAGE_VARIANTS } from '@/v2/components/message/MessageCard/messageVariant';
 import MessageDetail from '@/v2/components/message/MessageDetail';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
@@ -56,7 +56,7 @@ const Messages = () => {
     value: variant,
     label: t(`v2.scopes.messages.types.${variant}`),
   }));
-  const statusOptions = (['active', 'archived'] as const).map((value) => ({ value, label: t(`status.${value}`) }));
+  const statusOptions = INBOX_STATUSES.map((value) => ({ value, label: t(`status.${value}`) }));
   const {
     visibleItems: visibleMessages,
     searchQuery,
