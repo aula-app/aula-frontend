@@ -142,6 +142,7 @@ export const ICONS = {
   sortDesc: AiOutlineSortDescending,
   strikethrough: HiStrikethrough,
   undo: HiArrowUturnLeft,
+  updates: HiOutlineBell,
   user: HiOutlineUser,
   users: HiOutlineUserGroup,
   voting: VotingIcon,

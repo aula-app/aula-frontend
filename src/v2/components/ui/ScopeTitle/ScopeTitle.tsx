@@ -26,6 +26,8 @@ type ScopeTitleProps = {
   phase?: string;
   /** Shows the descending sort icon on the closed toggle. */
   sortReversed?: boolean;
+  /** Words after the noun, e.g. "on 4 ideas". Ignored inside a phase sentence. */
+  suffix?: string;
 };
 
 const ScopeTitle = ({
@@ -39,6 +41,7 @@ const ScopeTitle = ({
   defaultOpen = false,
   phase,
   sortReversed = false,
+  suffix,
 }: ScopeTitleProps) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -86,6 +89,7 @@ const ScopeTitle = ({
             <>
               {countLabel !== undefined && <span className="shrink-0">{countLabel}</span>}
               <span className="truncate capitalize">{nounLabel}</span>
+              {suffix && <span className="truncate">{suffix}</span>}
             </>
           )}
         </Heading>

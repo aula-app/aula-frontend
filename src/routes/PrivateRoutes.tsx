@@ -20,7 +20,7 @@ import MessagesView from '@/views/Settings/Messages';
 import { UserProfileView } from '@/views/Settings/Profile';
 import RoomsView from '@/views/Settings/Rooms';
 import UsersView from '@/views/Settings/Users';
-import UpdatesView from '@/views/Updates';
+import Updates from '@/v2/views/private/Updates';
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import RestrictedRoutes from './RestrictedRoutes';
@@ -78,7 +78,7 @@ const PrivateRoutes = () => {
       {checkPermissions('messages', 'viewAll') && <Route path="settings/messages" element={<MessagesView />} />}
       {checkPermissions('rooms', 'viewAll') && <Route path="settings/rooms" element={<RoomsView />} />}
       {checkPermissions('users', 'viewAll') && <Route path="settings/users" element={<UsersView />} />}
-      <Route path="updates" element={<UpdatesView />} />
+      <Route path="updates" element={<Updates />} />
       <Route path="offline" element={<OfflineView />} />
       <Route path="*" element={<NotFoundView />} />
     </Routes>
