@@ -1,11 +1,12 @@
 import { getAdminMessages, getPersonalMessages } from '@/services/messages';
+import { MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 
 export const MESSAGE_STATUS = { active: 1, archived: 3 } as const;
 export const INBOX_STATUSES = ['active', 'archived', 'all'] as const;
 export type InboxStatus = (typeof INBOX_STATUSES)[number];
 
-const STATUS_CODES: Record<InboxStatus, number[]> = {
+const STATUS_CODES: Record<InboxStatus, (typeof MESSAGE_STATUS)[keyof typeof MESSAGE_STATUS][]> = {
   active: [MESSAGE_STATUS.active],
   archived: [MESSAGE_STATUS.archived],
   all: Object.values(MESSAGE_STATUS),
@@ -13,10 +14,20 @@ const STATUS_CODES: Record<InboxStatus, number[]> = {
 
 /** The user's messages in a status; admins also get the ones sent to no one in particular (reports, bugs, requests). */
 export const getInboxMessages = async (status: InboxStatus = 'active') => {
+  const codes = STATUS_CODES[status];
   // Must match the backend, where getAdminMessages is admin-only.
-  const response = checkPermissions('messages', 'viewAll') ? await getAdminMessages() : await getPersonalMessages();
-  // The admin query does not filter by status, so other statuses would otherwise mix in.
-  return Array.isArray(response.data)
-    ? { ...response, data: response.data.filter((message) => STATUS_CODES[status].includes(Number(message.status))) }
-    : response;
+  const getMessages = checkPermissions('messages', 'viewAll') ? getAdminMessages : getPersonalMessages;
+  const responses = await Promise.all(codes.map((code) => getMessages(code)));
+
+  const failed = responses.find((response) => !Array.isArray(response.data));
+  if (failed) return failed;
+
+  // The admin query returns messages sent to no one in particular regardless of status.
+  const messages = new Map<string, MessageType>();
+  responses
+    .flatMap((response) => response.data ?? [])
+    .filter((message) => codes.some((code) => code === Number(message.status)))
+    .forEach((message) => messages.set(message.hash_id, message));
+
+  return { ...responses[0], data: [...messages.values()] };
 };
