@@ -10,7 +10,6 @@ import {
 } from 'react-aria-components';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
-import { twMerge } from 'tailwind-merge';
 import Icon, { ICON_TYPE } from '../Icon';
 import { clearPageToasts, toastQueue } from './toastQueue';
 
@@ -27,6 +26,8 @@ const TOAST_ICONS: Record<ToastMessage['type'], ICON_TYPE> = {
   warning: 'alert',
   info: 'info',
 };
+
+const FOCUS_RING = 'outline-none outline-foreground data-focus-visible:outline-solid data-focus-visible:outline-2';
 
 const NAVIGATION_GRACE_MS = 1000;
 
@@ -57,21 +58,17 @@ const Toast = () => {
       <ToastRegion
         ref={trackInset}
         queue={toastQueue}
-        className={twMerge(
-          'fixed z-50 flex flex-col gap-2 w-[calc(100vw-2rem)] max-w-sm outline-none',
-          'top-[calc(4rem+var(--safe-area-inset-top,0px))] right-[calc(1rem+env(safe-area-inset-right))]'
-        )}
+        className={`fixed z-50 flex flex-col gap-2 w-[calc(100vw-2rem)] max-w-sm outline-none group
+          top-[calc(4rem+var(--safe-area-inset-top,0px))] right-[calc(1rem+env(safe-area-inset-right))]`}
       >
         {({ toast }) => (
           <AriaToast
             toast={toast}
             data-testid={`toast-${toast.content.type}`}
-            className={twMerge(
-              'flex items-center gap-3 rounded-2xl rounded-tr-none pl-6 pr-2 py-2 shadow-lg',
-              'animate-toast-in motion-reduce:animate-none outline-none',
-              'data-focus-visible:outline-2 data-focus-visible:outline-offset-2 data-focus-visible:outline-current',
-              TOAST_STYLES[toast.content.type]
-            )}
+            className={`flex items-center gap-3 rounded-2xl rounded-tr-none pl-6 pr-2 py-2 shadow-lg
+              animate-toast-in motion-reduce:animate-none -outline-offset-4  ${FOCUS_RING}
+              group-data-focus-visible:outline-solid group-data-focus-visible:outline-2
+              ${TOAST_STYLES[toast.content.type]}`}
           >
             <Icon type={TOAST_ICONS[toast.content.type]} aria-hidden="true" />
             <ToastContent className="flex-1">
@@ -81,11 +78,8 @@ const Toast = () => {
             </ToastContent>
             <Button
               slot="close"
-              className={twMerge(
-                'flex shrink-0 items-center justify-center rounded-full p-2 cursor-pointer outline-none',
-                'data-hovered:bg-black/10 data-pressed:bg-black/20',
-                'data-focus-visible:outline-2 data-focus-visible:outline-current'
-              )}
+              className={`flex shrink-0 items-center justify-center rounded-full p-2 cursor-pointer
+                data-hovered:bg-black/10 data-pressed:bg-black/20 ${FOCUS_RING}`}
             >
               <Icon type="close" aria-hidden="true" />
             </Button>
