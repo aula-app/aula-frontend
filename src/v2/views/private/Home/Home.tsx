@@ -7,7 +7,12 @@ import { useEffect } from 'react';
 
 const Home = () => {
   const [, dispatch] = useAppStore();
-  const dashboard = useCollapseOnScroll();
+  const {
+    ref: dashboardRef,
+    open: dashboardOpen,
+    setOpen: setDashboardOpen,
+    onScroll: onListScroll,
+  } = useCollapseOnScroll();
   usePageTitle('pageTitles.welcome');
 
   useEffect(() => {
@@ -16,8 +21,8 @@ const Home = () => {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-      <Dashboard ref={dashboard.ref} open={dashboard.open} onOpenChange={dashboard.setOpen} />
-      <Rooms onScroll={dashboard.onScroll} />
+      <Dashboard ref={dashboardRef} open={dashboardOpen} onOpenChange={setDashboardOpen} />
+      <Rooms onScroll={onListScroll} />
     </div>
   );
 };
