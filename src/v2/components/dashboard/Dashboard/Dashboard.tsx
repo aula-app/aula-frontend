@@ -4,10 +4,10 @@ import PhaseCountLink from '@/v2/components/dashboard/PhaseCountLink';
 import Alert from '@/v2/components/ui/Alert';
 import Collapse from '@/v2/components/ui/Collapse';
 import Icon from '@/v2/components/ui/Icon/Icon';
+import { useMessageCount, useUpdateCount } from '@/v2/hooks/useActivityCounts';
 import { forwardRef, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
-import { useActivityCounts } from './useActivityCounts';
 import { useDashboard } from './useDashboard';
 
 const DASHBOARD_PHASES: `${RoomPhases}`[] = ['0', '10', '20', '30'];
@@ -20,7 +20,8 @@ interface DashboardProps {
 const Dashboard = forwardRef<HTMLElement, DashboardProps>(({ open, onOpenChange }, ref) => {
   const { t } = useTranslation();
   const { counts, error } = useDashboard();
-  const activity = useActivityCounts();
+  const messageCount = useMessageCount();
+  const updateCount = useUpdateCount();
   const headingId = useId();
   const panelId = useId();
 
@@ -49,14 +50,14 @@ const Dashboard = forwardRef<HTMLElement, DashboardProps>(({ open, onOpenChange 
             to="/messages"
             icon="message"
             label={t('ui.navigation.messages')}
-            count={activity.messages}
+            count={messageCount}
             badgeClass="bg-info text-info-fg"
           />
           <ActivityLink
             to="/updates"
             icon="bell"
             label={t('ui.navigation.updates')}
-            count={activity.updates}
+            count={updateCount}
             badgeClass="bg-discussion text-discussion-fg"
           />
         </nav>

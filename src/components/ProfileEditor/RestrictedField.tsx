@@ -17,9 +17,6 @@ interface Props<T extends FieldValues = FieldValues> {
   required?: boolean;
 }
 
-/** * Renders "requests" view
- * url: /settings/requests
- */
 const autocompleteTokens: Partial<Record<keyof PossibleFields, string>> = {
   displayname: 'nickname',
   username: 'username',

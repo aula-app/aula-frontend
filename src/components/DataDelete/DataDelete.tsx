@@ -50,7 +50,7 @@ ${t('requests.deleteAccount.body', { var: user.displayname })}`,
         errorAlert(t(response.error), dispatch);
         return;
       }
-      successAlert(t('requests.changeName.request'), dispatch);
+      successAlert(t('requests.deleteAccount.request'), dispatch);
       onReload();
     });
   };

@@ -1,6 +1,7 @@
 import { usePageTitle } from '@/hooks/usePageTitle';
 import { versionsRequest, VersionsResponse } from '@/services/requests-v2';
 import { useAppStore } from '@/store/AppStore';
+import { summarizeVersions } from '@/v2/utils/versions';
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -24,11 +25,13 @@ const AboutViewEN = () => {
       <h1>{t('v2.page.about.title')}</h1>
       <h2>{t('v2.page.about.version')}</h2>
       <code>
-        aula-frontend: &nbsp;{import.meta.env?.VITE_APP_VERSION ?? 'unknown'}
-        <br />
-        aula-backend.v1: &nbsp;{versions?.['aula-backend.v1']?.['aula-backend']?.running ?? 'unknown'}
-        <br />
-        aula-backend.v2: &nbsp;{versions?.['aula-backend.v2']?.['aula-backend']?.running ?? 'unknown'}
+        {summarizeVersions({ ...versions, 'aula-frontend': import.meta.env?.VITE_APP_VERSION }).map(
+          ([name, version]) => (
+            <span key={name} className="block">
+              {name}: &nbsp;{version}
+            </span>
+          )
+        )}
       </code>
       <hr />
       <h2>{t('v2.page.about.publisher')}</h2>

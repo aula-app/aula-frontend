@@ -7,27 +7,22 @@ import Boxes from '@/v2/views/private/Boxes';
 import Ideas from '@/v2/views/private/Ideas';
 import NotFoundView from '@/v2/views/private/NotFound';
 import RoomLayout from '@/v2/views/private/Room';
-import UserMessagesView from '@/views/Messages';
+import Messages from '@/v2/views/private/Messages';
 import AnnouncementView from '@/views/Messages/Announcement';
-import MessageView from '@/views/Messages/Message';
-import ReportView from '@/views/Messages/Report';
 import OfflineView from '@/views/OfflineView';
 import SchoolSetupView from '@/views/Public/SchoolSetupView';
 import AnnouncementsView from '@/views/Settings/Announcements';
 import BoxesView from '@/views/Settings/Boxes';
-import BugsView from '@/views/Settings/Bugs';
 import ConfigView from '@/views/Settings/Config';
 import IdeasSettingsView from '@/views/Settings/Ideas';
 import IdpSyncView from '@/views/Settings/IdpSync';
 import MessagesView from '@/views/Settings/Messages';
 import { UserProfileView } from '@/views/Settings/Profile';
-import ReportsView from '@/views/Settings/Reports';
-import RequestsView from '@/views/Settings/Requests';
 import RoomsView from '@/views/Settings/Rooms';
 import UsersView from '@/views/Settings/Users';
 import UpdatesView from '@/views/Updates';
 import { useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useParams } from 'react-router-dom';
 import RestrictedRoutes from './RestrictedRoutes';
 import Box from '@/v2/views/private/Box';
 import Idea from '@/v2/views/private/Idea';
@@ -58,13 +53,12 @@ const PrivateRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="oauth-login/*" element={<SsoCallbackLanded />} />
       <Route path="about" element={<AboutView />} />
-      <Route path="announcements" element={<UserMessagesView />} />
+      <Route path="announcements" element={<Messages />} />
       <Route path="announcements/:announcement_id" element={<AnnouncementView />} />
-      <Route path="messages" element={<UserMessagesView />} />
-      <Route path="messages/:message_id" element={<MessageView />} />
-      <Route path="reports/:report_id" element={<ReportView />} />
-      <Route path="bugs/:report_id" element={<ReportView />} />
-      <Route path="requests/:report_id" element={<ReportView />} />
+      <Route path="messages/:message_id?" element={<Messages />} />
+      <Route path="reports/:message_id" element={<MessageRedirect />} />
+      <Route path="bugs/:message_id" element={<MessageRedirect />} />
+      <Route path="requests/:message_id" element={<MessageRedirect />} />
       <Route path="phase/:phase" element={<Phase />} />
       <Route path="room/:room_id/" element={<RoomLayout />}>
         <Route path="phase/0" element={<Ideas />} />
@@ -82,9 +76,6 @@ const PrivateRoutes = () => {
       {checkPermissions('ideas', 'viewAll') && <Route path="settings/ideas" element={<IdeasSettingsView />} />}
       {checkPermissions('configs', 'viewAll') && <Route path="settings/idp-sync" element={<IdpSyncView />} />}
       {checkPermissions('messages', 'viewAll') && <Route path="settings/messages" element={<MessagesView />} />}
-      {checkPermissions('reports', 'viewAll') && <Route path="settings/reports" element={<ReportsView />} />}
-      {checkPermissions('reports', 'viewAll') && <Route path="settings/bugs" element={<BugsView />} />}
-      {checkPermissions('requests', 'viewAll') && <Route path="settings/requests" element={<RequestsView />} />}
       {checkPermissions('rooms', 'viewAll') && <Route path="settings/rooms" element={<RoomsView />} />}
       {checkPermissions('users', 'viewAll') && <Route path="settings/users" element={<UsersView />} />}
       <Route path="updates" element={<UpdatesView />} />
@@ -95,5 +86,7 @@ const PrivateRoutes = () => {
 };
 
 const SsoCallbackLanded = () => <Navigate to="/" replace />;
+
+const MessageRedirect = () => <Navigate to={`/messages/${useParams().message_id}`} replace />;
 
 export default PrivateRoutes;
