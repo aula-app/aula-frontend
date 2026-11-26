@@ -158,7 +158,9 @@
         "print": "Diese Seite drucken",
         "remove": "{{var}} entfernen",
         "report": "Einen Fehler melden",
-        "search": "Suchen"
+        "search": "Suchen",
+        "searchAndSort": "Suchen und sortieren",
+        "select": "{{var}} auswählen"
       },
       "announcement": {
         "title": "Ankündigung",

@@ -38,7 +38,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ? 'hover:bg-shadow active:bg-shadow'
         : 'hover:brightness-95 active:brightness-90 dark:hover:brightness-110 dark:active:brightness-125',
       `outline-${color ? `${color}-fg` : 'current'}`,
-      'disabled:cursor-not-allowed disabled:opacity-50',
+      'disabled:cursor-not-allowed disabled:opacity-60',
       outlined ? `border border-current ${onPage}` : text ? `${onPage} shadow-none` : filled,
       className
     );

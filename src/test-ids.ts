@@ -19,7 +19,7 @@ export const TEST_IDS = {
   SEARCH_BUTTON: 'search-button',
   SORT_SELECT: 'sort-select',
   SORT_BUTTON: 'sort-button',
-  SORT_DIRECTION_BUTTON: 'sort-direction-button',
+  SORT_DIRECTION_BUTTON: 'sort-select-direction',
   SCOPE_CONTROLS: 'scope-controls',
   SCOPE_TITLE: 'scope-title',
 
