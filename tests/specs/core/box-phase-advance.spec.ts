@@ -81,7 +81,11 @@ test('Box offers the next phase once every Idea is ruled on', async ({ seededRoo
   });
 });
 
-test('Box offers the next phase once its countdown runs out', async ({ seededRoom, newPageFor, backdatePhaseStart }) => {
+test('Box offers the next phase once its countdown runs out', async ({
+  seededRoom,
+  newPageFor,
+  backdatePhaseStart,
+}) => {
   const PHASES = { DISCUSSION: 10, APPROVAL: 20 } as const;
 
   const adminPage = await newPageFor('admin');

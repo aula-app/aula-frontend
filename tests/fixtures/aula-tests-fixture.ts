@@ -168,10 +168,13 @@ export const test = baseTest.extend<BrowserFixtures, WorkerFixtures>({
   ],
 
   // Data is reset by baselineReload in newContextFor teardown
-  backdatePhaseStart: [async ({ dbInstanceCode }, use) => {
-    const dbBackchannel = await DbBackchannel.getByInstanceCode(dbInstanceCode);
-    await use((boxName, days) => dbBackchannel.backdatePhaseStart(boxName, days));
-  }, { scope: 'test' }],
+  backdatePhaseStart: [
+    async ({ dbInstanceCode }, use) => {
+      const dbBackchannel = await DbBackchannel.getByInstanceCode(dbInstanceCode);
+      await use((boxName, days) => dbBackchannel.backdatePhaseStart(boxName, days));
+    },
+    { scope: 'test' },
+  ],
 
   // factory to create a new authenticated context (test-scoped)
   newContextFor: [
