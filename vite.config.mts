@@ -59,5 +59,9 @@ export default defineConfig({
     setupFiles: './src/test/setup.ts',
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
     css: false,
+    server: {
+      // Lets tests mock `is-emoji-supported`.
+      deps: { inline: ['@tiptap/extension-emoji'] },
+    },
   },
 });

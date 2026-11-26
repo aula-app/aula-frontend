@@ -8,7 +8,14 @@ import { IdeaType } from '@/types/Scopes';
  * Encapsulates the like state for an idea: fetches the user's initial status,
  * exposes an optimistic count and a toggle that reverts on failure.
  */
-export const useIdeaLike = (idea: IdeaType) => {
+export interface IdeaLike {
+  liked: boolean;
+  count: number;
+  toggle: () => Promise<void>;
+  pending: boolean;
+}
+
+export const useIdeaLike = (idea: IdeaType): IdeaLike => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   // `initial` is the status returned by the server (already reflected in

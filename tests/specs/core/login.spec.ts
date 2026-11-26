@@ -14,6 +14,18 @@ const ADMIN_PASSWORD = TestConstants.DEFAULT_PASSWORD;
  * Each test gets a fresh, unauthenticated page — no pre-logged-in fixture contexts needed.
  */
 
+test('Cold start lands on a usable login page', async ({ browser, baselineLoaded: _ }) => {
+  const page = await browser.newPage();
+  await page.goto(host, { waitUntil: 'domcontentloaded' });
+
+  await expect(page.getByTestId('not-found-view')).toHaveCount(0);
+  await expect(page.locator('input[name="username"]')).toBeVisible();
+  await expect(page.locator('input[name="password"]')).toBeVisible();
+  await expect(page.getByTestId('submit-login')).toBeVisible();
+
+  await page.close();
+});
+
 test('Instance code entry', async ({ browser, dbInstanceCode, baselineLoaded: _ }) => {
   const page = await browser.newPage();
   await page.goto(host, { waitUntil: 'domcontentloaded' });
@@ -21,6 +33,7 @@ test('Instance code entry', async ({ browser, dbInstanceCode, baselineLoaded: _ 
   // Skip if the app doesn't show an editable instance code input — single-instance or already stored
   const instanceCodeInput = page.getByTestId('instance-code');
   if (!(await instanceCodeInput.isVisible()) || !(await instanceCodeInput.isEnabled())) {
+    await expect(page.locator('input[name="username"]')).toBeVisible();
     test.skip(true, 'Single-instance setup or code already stored — skipping instance code tests');
     return;
   }

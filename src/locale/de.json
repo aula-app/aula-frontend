@@ -8,6 +8,11 @@
       "winking": "Eine Illustration einer zwinkernden Eule, die die Fehlerseite repräsentiert"
     },
     "form": {
+      "autocomplete": {
+        "noOptions": "Keine Treffer",
+        "results_one": "{{count}} Ergebnis",
+        "results_other": "{{count}} Ergebnisse"
+      },
       "code": {
         "label": "Instanzcode"
       },
@@ -87,8 +92,12 @@
     },
     "scopes": {
       "boxes": {
-        "singular": "Box",
-        "plural": "Boxen"
+        "decided": "{{count}} von {{total}} entschieden",
+        "ideasInBox": "Ideen in dieser Box",
+        "noIdeas": "Noch keine Ideen in dieser Box",
+        "plural": "Boxen",
+        "reviewed": "{{count}} von {{total}} geprüft",
+        "singular": "Box"
       },
       "ideas": {
         "singular": "Idee",
@@ -99,7 +108,21 @@
           "vote": "{{count}} Stimme",
           "votes": "{{count}} Stimmen",
           "comment": "{{count}} Kommentar",
-          "comments": "{{count}} Kommentare"
+          "comments": "{{count}} Kommentare",
+          "voteTurnout": "{{num}} von {{total}} Personen haben abgestimmt",
+          "likeTurnout": "{{num}} von {{total}} Personen gefällt diese Idee"
+        },
+        "status": {
+          "approved": "Genehmigt",
+          "waiting": "Warten",
+          "rejected": "Nicht genehmigt",
+          "votedFor": "Sie haben dafür abgestimmt",
+          "votedNeutral": "Sie haben neutral abgestimmt",
+          "votedAgainst": "Sie haben dagegen abgestimmt",
+          "winner": "Gewinner",
+          "quorumReached": "Quorum erreicht",
+          "quorumMissed": "Quorum nicht erreicht",
+          "notSelected": "Nicht ausgewählt"
         }
       }
     },
@@ -117,6 +140,7 @@
         "add": "{{var}} hinzufügen",
         "agree": "Zustimmen",
         "print": "Diese Seite drucken",
+        "remove": "{{var}} entfernen",
         "report": "Einen Fehler melden",
         "search": "Suchen"
       },

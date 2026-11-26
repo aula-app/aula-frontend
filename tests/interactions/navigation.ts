@@ -5,7 +5,8 @@ import * as shared from '../support/utils';
 const host = shared.getHost();
 
 export const clickOnPageItem = async (page: Page, text: string) => {
-  const item = page.getByText(text);
+  // Closed <dialog>s keep their content mounted.
+  const item = page.getByText(text).filter({ visible: true });
   await expect(item).toBeVisible();
   await item.click();
 };
