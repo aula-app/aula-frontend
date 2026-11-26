@@ -6,7 +6,7 @@ interface UseBoxState {
   box: BoxType | null;
   isLoading: boolean;
   error: 'fetch' | 'generic' | null;
-  /** Resolves to the freshly fetched box, or null when it no longer exists. */
+  /** Null when the box no longer exists. */
   refetch: () => Promise<BoxType | null>;
 }
 
@@ -31,7 +31,7 @@ export const useBox = (box_id: string | undefined): UseBoxState => {
       }
       setBox(response.data);
       return response.data;
-    } catch (err) {
+    } catch {
       setError('fetch');
       return null;
     } finally {

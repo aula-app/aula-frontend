@@ -180,6 +180,7 @@
         "remove": "{{var}} entfernen",
         "report": "Einen Fehler melden",
         "search": "Suchen",
+        "searchAndSort": "Suchen und sortieren",
         "select": "{{var}} auswählen"
       },
       "announcement": {
@@ -310,10 +311,10 @@
         "notEnabled": "Für diese Schule ist keine Synchronisation mit einem Identitätsanbieter (z. B. IServ/Eduplaces) aktiviert. Wende dich an das aula-Team, um diese zu aktivieren.",
         "connectReturned": "Beim Anbieter angemeldet. Dein aula-Konto ist jetzt verknüpft und die Schule erkannt.",
         "reviewWarning": "Bitte prüfe die Zuordnungen. Eine falsche Zusammenführung gibt einer Person das Konto einer anderen — inklusive aller Beiträge(z.B. Ideen, Verbesserungsvorschläge usw.).",
-        "rooms": "Klassen und Räume",
+        "rooms": "Räume",
         "steps": "Schritte der Prüfung",
-        "filterRoom": "Klasse",
-        "allRooms": "Alle Klassen",
+        "filterRoom": "Raum",
+        "allRooms": "Alle Räume",
         "noClasses": "Keine Klasse",
         "filterPerson": "Person",
         "allPeople": "Alle Personen",
@@ -373,6 +374,10 @@
           "save": {
             "title": "Die Änderung konnte nicht gespeichert werden.",
             "body": "Es wurde nichts geändert. Versuche es noch einmal."
+          },
+          "progress": {
+            "title": "Der Status der Synchronisation konnte nicht geprüft werden.",
+            "body": "Lade die Seite neu. Wenn es weiterhin nicht klappt, prüfe, ob der Anbieter erreichbar ist."
           }
         },
         "actionNeeded": "Aktion erforderlich:",
@@ -408,7 +413,7 @@
           "review": "Prüfen",
           "merged": "Zusammengeführt"
         },
-        "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel –, um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
+        "guide": "Jede Zeile zeigt einen aula-Datensatz, seine Entsprechung beim Anbieter und das Konto, das übrig bleibt. Ziehen Sie eine Karte auf einen freien Platz – oder wählen Sie sie aus und bestimmen Sie das Ziel – um von Hand zuzuordnen. Eine Zeile mit beiden Seiten wird zusammengeführt; lösen Sie die Verbindung, um die Konten getrennt zu lassen.",
         "loading": {
           "title": "Prüfung wird aufgebaut",
           "body": "Klassen und Personen beim Identitätsanbieter werden gelesen und mit denen dieser Schule abgeglichen."
@@ -425,7 +430,23 @@
           "no_local_row": "Für diese Zuordnung ist kein aula-Datensatz ausgewählt.",
           "local_row_claimed_twice": "Dieser aula-Datensatz ist mehrfach zugeordnet.",
           "local_row_already_linked": "Dieser aula-Datensatz ist beim Anbieter schon mit jemand anderem verknüpft."
-        }
+        },
+        "outcome": {
+          "merge": "Zusammengeführt",
+          "pending": "Bestätigung nötig",
+          "create": "Neu in aula",
+          "keep": "Unverändert",
+          "empty": "Leer"
+        },
+        "checking": "Status der Synchronisation wird geprüft",
+        "legend": {
+          "merge": "Zugeordnet — beide werden ein Konto.",
+          "pending": "Vorgeschlagen — bestätige sie, sonst bleibt beides getrennt.",
+          "create": "Nur beim Anbieter — ein neues aula-Konto entsteht.",
+          "keep": "Nur in aula — bleibt unverändert.",
+          "empty": "Leerer Platz für eine Zuordnung."
+        },
+        "legendTitle": "Legende:"
       },
       "dashboard": {
         "title": "Meine Aktivitäten",
@@ -590,6 +611,7 @@
     "appOutdated": "Deine App ist veraltet. Bitte aktualisiere Aula, um sie weiter zu nutzen.",
     "appBelowRecommended": "Du nutzt Aula {{currentVersion}}, aber wir empfehlen ein Update auf {{recommendedVersion}}, um Probleme zu vermeiden.",
     "appOutdatedImage": "Zwinkernde Charakterillustration als Erinnerung, die App zu aktualisieren",
+    "boxClosed": "Diese Box nimmt keine neuen Ideen mehr an",
     "databaseError": "Daten konnten nicht abgerufen werden",
     "default": "Etwas ist schief gelaufen",
     "existingUser": "Benutzername und/oder E-Mail sind bereits vergeben",
@@ -742,9 +764,10 @@
     },
     "denied": "Deine Datenänderungsanfrage wurde abgelehnt. Bitte kontaktiere den Schuladministrator für weitere Informationen.",
     "exportData": {
-      "button": "Datenexport herunterladen",
+      "body": "Eine Datenexportprozedur wurde für den Benutzer {{var}} angefordert",
+      "button": "Datenexport anfordern",
       "info": "Nach Datenschutzanforderungen (DSGVO) müssen Online-Dienste ihren Nutzer auf Anfrage alle gespeicherten Daten zur Verfügung stellen.",
-      "legacyHint": "Bitte öffne dein Profil (Klick auf Name / Bild), und klicke dann unter Datenschutz / Kontodaten exportieren auf Datenexport herunterladen."
+      "title": "Kontodatenexportanfrage für {{var}}"
     },
     "label": "Anfragen",
     "updateData": {
@@ -983,7 +1006,8 @@
       "userlevel": "Benutzer-Rolle",
       "username": "Benutzername",
       "vote_bias": "Stimmverzerrung",
-      "idp_user_id": "Typ"
+      "idp_user_id": "Typ",
+      "idp_group_id": "Typ"
     },
     "customFields": {
       "form": "Benutzerdefiniertes Feld {{var}}",

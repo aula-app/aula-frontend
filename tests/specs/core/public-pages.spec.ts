@@ -7,7 +7,7 @@ test('Public pages', async ({ page, dbInstanceCode }) => {
   await page.goto(host, { waitUntil: 'domcontentloaded' });
 
   const instanceCodeInput = page.getByTestId('instance-code');
-  if (await instanceCodeInput.isVisible() && await instanceCodeInput.isEnabled()) {
+  if ((await instanceCodeInput.isVisible()) && (await instanceCodeInput.isEnabled())) {
     await instanceCodeInput.fill(dbInstanceCode);
     await page.getByTestId('instance-code-confirm').click();
     await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });

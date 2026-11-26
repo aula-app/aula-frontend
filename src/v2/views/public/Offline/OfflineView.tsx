@@ -1,5 +1,4 @@
 import Icon from '@/components/new/Icon';
-import Button from '@/v2/components/button/Button/Button';
 import { useHidePublicHero } from '@/v2/views/public/PublicLayoutContext';
 import { useTranslation } from 'react-i18next';
 

@@ -3,3 +3,5 @@ build
 /public
 out
 styles
+android
+ios

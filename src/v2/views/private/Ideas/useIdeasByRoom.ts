@@ -29,7 +29,7 @@ export const useIdeasByRoom = (room_id: string | undefined): UseIdeasByRoomState
       } else {
         setIdeas(response.data || []);
       }
-    } catch (err) {
+    } catch {
       setError('fetch');
     } finally {
       setIsLoading(false);

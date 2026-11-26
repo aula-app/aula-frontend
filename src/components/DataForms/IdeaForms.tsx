@@ -307,6 +307,7 @@ const IdeaForms: React.FC<IdeaFormsProps> = ({ defaultValues, onClose }) => {
                 <SelectBoxField
                   defaultValue={box}
                   room_id={defaultValues?.room_hash_id || room_id}
+                  discussionOnly={!defaultValues}
                   onChange={(newBox) => {
                     setBox(newBox);
                   }}

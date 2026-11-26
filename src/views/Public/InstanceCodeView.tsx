@@ -14,14 +14,14 @@ interface TenantInstanceOption extends TenantInstance {
 
 const filter = createFilterOptions<TenantInstanceOption>({
   ignoreAccents: true,
-  ignoreCase: true
+  ignoreCase: true,
 });
 
 const InstanceCodeView = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitError, setSubmitError] = useState("");
+  const [submitError, setSubmitError] = useState('');
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -47,7 +47,7 @@ const InstanceCodeView = () => {
   useEffect(() => {
     // TODO fix/appease react linter
     fetchTenants();
-  }, [fetchTenants])
+  }, [fetchTenants]);
 
   const handleSubmit = async () => {
     const code = value?.instance_code?.trim();
@@ -87,9 +87,7 @@ const InstanceCodeView = () => {
 
   return (
     <Stack spacing={2} sx={{ maxWidth: '100%', margin: '0 auto', p: 2 }}>
-      <label htmlFor="instanceCode">
-        {t('instance.headline')}
-      </label>
+      <label htmlFor="instanceCode">{t('instance.headline')}</label>
       {/* following the MUI Autocomplete/FreeSolo/Creatable pattern:
           https://mui.com/material-ui/react-autocomplete/#creatable
           which presents a "virtual option" for free/unmatched, typed-in options.
@@ -101,8 +99,8 @@ const InstanceCodeView = () => {
         value={value}
         options={[
           ...tenants
-            .sort((a, b) => a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 1)
-            .map((tenant) => tenant as TenantInstanceOption)
+            .sort((a, b) => (a.name.toLocaleLowerCase() < b.name.toLocaleLowerCase() ? -1 : 1))
+            .map((tenant) => tenant as TenantInstanceOption),
         ]}
         id="instanceCode"
         freeSolo
@@ -112,18 +110,19 @@ const InstanceCodeView = () => {
         autoHighlight
         autoSelect
         loading={isFetchingTenants}
-        renderInput={(params) =>
+        renderInput={(params) => (
           <TextField
             data-testid="input-instance-code"
             name="instance-code"
             error={!!submitError}
             helperText={submitError}
-            placeholder={t('instance.placeholder')} {...params}
+            placeholder={t('instance.placeholder')}
+            {...params}
             onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
               if (event.key === 'Enter') handleSubmit();
             }}
           />
-        }
+        )}
         onChange={(evt, newValue) => {
           setSubmitError('');
           if (typeof newValue === 'string') {
@@ -151,9 +150,7 @@ const InstanceCodeView = () => {
           const { inputValue } = params;
           // ensure that select drops down only when at least one character entered
           // has the side-effect to tame autoSelect+autoHighlight which would be over-eager otherwise
-          const filtered = inputValue.length < 1
-            ? []
-            : filter(options, params);
+          const filtered = inputValue.length < 1 ? [] : filter(options, params);
           const isExisting = options.some((option) => inputValue === option.name);
           if (inputValue !== '' && !isExisting) {
             filtered.push({
@@ -169,21 +166,20 @@ const InstanceCodeView = () => {
           const { key, ...optionProps } = props;
           return (
             <li key={key} {...optionProps}>
-              {option.isInstanceCodeHint
-                ? <>
+              {option.isInstanceCodeHint ? (
+                <>
                   {t('instance.autocompleteHint')}
                   {/* TODO probably fix bg-secondary for v2 / dark mode */}
                   <kbd className="bg-secondary/30 rounded px-1 ml-1">{option.name}</kbd>
-                  </>
-                : option.name
-              }
+                </>
+              ) : (
+                option.name
+              )}
             </li>
           );
         }}
       />
-      {fetchTenantsError &&
-        <Alert severity='warning'>{fetchTenantsError}</Alert>
-      }
+      {fetchTenantsError && <Alert severity="warning">{fetchTenantsError}</Alert>}
       <Button
         sx={{ width: '100%' }}
         data-testid="submit-instance-code"
