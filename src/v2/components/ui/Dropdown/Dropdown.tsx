@@ -20,8 +20,6 @@ const Dropdown = ({ children, content, role = 'listbox', 'aria-label': ariaLabel
   const { verticalClass, horizontalClass, cornerClass } = usePlacement(wrapperRef);
   const panelId = useId();
 
-  const panel = wrapperRef.current?.querySelector('[data-dropdown-panel]');
-
   const trigger = React.cloneElement(children, {
     onClick: (e: React.MouseEvent) => {
       children.props.onClick?.(e);
@@ -30,6 +28,7 @@ const Dropdown = ({ children, content, role = 'listbox', 'aria-label': ariaLabel
     onBlur: (e: React.FocusEvent) => {
       children.props.onBlur?.(e);
       // Trigger lost focus to somewhere outside the panel → close, focus stays where it went
+      const panel = wrapperRef.current?.querySelector('[data-dropdown-panel]');
       if (!panel?.contains(e.relatedTarget as Node)) close();
     },
     'aria-expanded': isOpen,
