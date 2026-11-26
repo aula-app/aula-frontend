@@ -11,7 +11,7 @@ interface ProgressBarProps {
   label: string;
   /** Threshold to mark on the track, 0–100, e.g. a quorum. */
   marker?: number;
-  /** Rendered inside the marker. Keep it to a few characters — the triangle narrows fast. */
+  /** Rendered inside the marker. A few characters at most. */
   markerLabel?: ReactNode;
   /** Sits at the leading edge of the fill, like the percentage in a loading bar. Hidden at zero. */
   valueLabel?: ReactNode;
@@ -19,7 +19,7 @@ interface ProgressBarProps {
   endLabel?: ReactNode;
   /** Pinned inside the left of the bar, e.g. an icon and a count. */
   children?: ReactNode;
-  /** Corner radius is the caller's, since bars sit both standalone and as card footers. */
+  /** Corner radius is set by the caller. */
   className?: string;
 }
 

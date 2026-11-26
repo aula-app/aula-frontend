@@ -49,7 +49,6 @@ const ScopeTitle = ({
   const hasControls = Children.toArray(children).length > 0;
   const toggleLabel = t(isOpen ? 'v2.ui.actions.close' : 'v2.ui.actions.search');
 
-  // Inside a phase sentence the heading is about the phase, so the phase icon reads truer than the scope's.
   const iconType: ICON_TYPE = (phase && phases[phase as `${RoomPhases}`]) || scope;
 
   const nounLabel = t(`v2.scopes.${scope}.${nounCount === 1 ? 'singular' : 'plural'}`);

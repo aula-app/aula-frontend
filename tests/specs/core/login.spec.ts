@@ -14,9 +14,7 @@ const ADMIN_PASSWORD = TestConstants.DEFAULT_PASSWORD;
  * Each test gets a fresh, unauthenticated page — no pre-logged-in fixture contexts needed.
  */
 
-// Guards the whole suite: every other test enters an instance code first, and each of
-// those helpers treats a missing code field as "single-instance, carry on". A public
-// route that renders NotFound therefore reads as green everywhere else.
+// Other helpers treat a missing code field as single-instance, so a NotFound page would pass them.
 test('Cold start lands on a usable login page', async ({ browser, baselineLoaded: _ }) => {
   const page = await browser.newPage();
   await page.goto(host, { waitUntil: 'domcontentloaded' });

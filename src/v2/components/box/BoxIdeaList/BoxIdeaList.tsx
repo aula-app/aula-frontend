@@ -25,8 +25,7 @@ interface BoxIdeaListProps {
 
 const DISCUSSION_PHASE = '10';
 
-// Three 32px rows and their 2px gaps, plus half a row, so a fourth idea is cut
-// in half and gives the list a visible edge to scroll.
+// 3.5 rows (32px + 2px gap): the half row hints that the list scrolls.
 const PREVIEW_HEIGHT = 'max-h-[118px]';
 
 /** What a box holds, as full-width rows: category, title and status. */

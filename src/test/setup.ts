@@ -35,11 +35,7 @@ if (typeof HTMLDialogElement !== 'undefined' && typeof HTMLDialogElement.prototy
   };
 }
 
-// Node 22+ ships its own `localStorage`/`sessionStorage` globals that only work when the
-// process is started with `--localstorage-file`. They shadow the jsdom ones, so modules
-// touching storage at import time (e.g. services/consent via hooks/auth) blow up with
-// "localStorage.getItem is not a function". Swap in a working in-memory Storage, but only
-// when the global is actually broken, so jsdom's own implementation is preferred.
+// Node 22+ storage globals shadow jsdom's and break without `--localstorage-file`.
 const installStorage = (key: 'localStorage' | 'sessionStorage') => {
   if (typeof (globalThis as any)[key]?.getItem === 'function') return;
 

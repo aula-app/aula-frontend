@@ -66,8 +66,7 @@ const Box: React.FC = () => {
   const quorum = useQuorum(boxPhase);
   const users = useRoomUsers(room_id);
 
-  // `:phase` only mirrors the box and goes stale when the box is moved. Everything downstream reads
-  // the param (idea styling, the approval badge, the nested idea route), so realign it on the box.
+  // `:phase` goes stale when the box is moved, and everything downstream reads it.
   useEffect(() => {
     if (!box || !room_id) return;
     if (String(box.phase_id) === phase) return;
@@ -89,7 +88,6 @@ const Box: React.FC = () => {
     });
   }, [box, room_id, t, dispatch]);
 
-  // Deleting the box we are viewing leaves nothing to show — return to the phase.
   const handleBoxChanged = async () => {
     const updated = await refetch();
     if (!updated) navigate(`/room/${room_id}/phase/${phase}`);

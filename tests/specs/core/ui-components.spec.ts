@@ -80,9 +80,7 @@ async function gotoTooltipPage(page: import('@playwright/test').Page, dbInstance
   await ensureInstanceCode(page, dbInstanceCode);
 }
 
-// Tooltip only opens on :focus-visible, which Chromium grants to keyboard-initiated
-// focus. A bare .focus() after any mouse action does not qualify, so step off and
-// back with the keyboard to land on the trigger in keyboard modality.
+// Tooltip opens on :focus-visible, which needs keyboard-initiated focus.
 async function focusViaKeyboard(page: import('@playwright/test').Page, locator: import('@playwright/test').Locator) {
   await locator.focus();
   await page.keyboard.press('Shift+Tab');

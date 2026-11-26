@@ -13,8 +13,6 @@ export interface PhaseStatus {
 const POSITIVE = 'bg-success text-success-fg';
 const NEGATIVE = 'bg-error text-error-fg';
 const NEUTRAL = 'bg-neutral text-neutral-fg';
-// Rejected ideas share the results phase with four other NEUTRAL states, so they get a
-// paler band of their own rather than reading as just another undecided outcome.
 const ARCHIVED = 'bg-neutral-light text-muted';
 
 export const getPhaseColor = (phase: `${RoomPhases}`) => phases[phase] ?? 'wild';
@@ -27,7 +25,7 @@ export const getPhaseColors = (phase: `${RoomPhases}`) => {
 interface PhaseStatusInput {
   idea: IdeaType;
   phase: `${RoomPhases}`;
-  /** The current user's vote. Null or undefined — not voted, still loading, or not allowed to vote — all read as waiting. */
+  /** The current user's vote. Null/undefined reads as waiting. */
   vote?: Vote | null;
   /** Percentage of eligible users that must vote. 0 or undefined means no quorum is configured. */
   quorum?: number;

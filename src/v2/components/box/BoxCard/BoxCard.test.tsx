@@ -226,7 +226,6 @@ describe('BoxCard approval progress', () => {
   it('leaves a rejected idea out of the results count, which it could never reach', () => {
     const { container } = renderCard(40, { ideas: ideaList([-1, 1, 1], [], [0, 1, -1]) });
 
-    // The two that ran are both decided: a rejected idea must not hold the bar below full.
     expect(bar(container)?.getAttribute('aria-valuenow')).toBe('100');
   });
 

@@ -1,10 +1,7 @@
 import { getRoom } from '@/services/rooms';
 import { useEffect, useState } from 'react';
 
-/**
- * Members of a room, the denominator every quorum is measured against. Read from the room
- * because the idea list endpoints do not all return it.
- */
+/** Room member count for quorums; idea endpoints don't all return it. */
 export const useRoomUsers = (room_id: string | undefined): number => {
   const [users, setUsers] = useState(0);
 
