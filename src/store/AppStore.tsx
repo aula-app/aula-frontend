@@ -5,9 +5,12 @@ import {
   Dispatch,
   FunctionComponent,
   PropsWithChildren,
+  useCallback,
   useContext,
+  useMemo,
   useReducer,
 } from 'react';
+import { addToast } from '@/v2/components/ui/Toast/toastQueue';
 import AppReducer from './AppReducer';
 
 /**
@@ -15,9 +18,10 @@ import AppReducer from './AppReducer';
  */
 
 export interface ToastMessage {
-  id: string;
   message: string;
   type: 'error' | 'success' | 'warning' | 'info';
+  /** Survives navigation. */
+  persistent?: boolean;
 }
 
 export interface AppStoreState {
@@ -25,7 +29,6 @@ export interface AppStoreState {
   isAuthenticated: boolean;
   hasConsent: boolean;
   currentUser?: object | undefined;
-  toasts: ToastMessage[];
   breadcrumb: [string, string][];
   lastScroll: number;
   lastIdeaList: string;
@@ -38,15 +41,12 @@ export type AppAction =
   | { type: 'HAS_CONSENT'; payload: boolean }
   | { type: 'SET_BREADCRUMB'; breadcrumb: [string, string][] }
   | { type: 'DARK_MODE'; payload: boolean }
-  | { type: 'ADD_TOAST'; message: Omit<ToastMessage, 'id'> }
-  | { type: 'REMOVE_TOAST'; id: string }
-  | { type: 'REMOVE_ALL_TOASTS' };
+  | { type: 'ADD_TOAST'; message: ToastMessage };
 
 const INITIAL_APP_STATE: AppStoreState = {
   darkMode: false, // Overridden by useMediaQuery('(prefers-color-scheme: dark)') in AppStore
   isAuthenticated: false, // Overridden in AppStore by checking auth token
   hasConsent: false,
-  toasts: [],
   breadcrumb: [],
   lastScroll: 0,
   lastIdeaList: '',
@@ -78,7 +78,12 @@ const AppStoreProvider: FunctionComponent<PropsWithChildren> = ({ children }) =>
     isAuthenticated: tokenExists,
     darkMode: darkMode,
   };
-  const value: AppContextReturningType = useReducer(AppReducer, initialState);
+  const [state, reducerDispatch] = useReducer(AppReducer, initialState);
+  const dispatch = useCallback<Dispatch<AppAction>>(
+    (action) => (action.type === 'ADD_TOAST' ? addToast(action.message) : reducerDispatch(action)),
+    []
+  );
+  const value = useMemo<AppContextReturningType>(() => [state, dispatch], [state, dispatch]);
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
