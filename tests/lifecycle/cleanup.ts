@@ -1,7 +1,9 @@
 import path from 'path';
 import fs from 'fs';
 
-export async function cleanupTestData(opts: { keepAdminContext: boolean } = { keepAdminContext: false }): Promise<void> {
+export async function cleanupTestData(
+  opts: { keepAdminContext: boolean } = { keepAdminContext: false }
+): Promise<void> {
   const authStatesDir = path.join(process.cwd(), 'tests/auth-states');
   const generatedTestDataDir = path.join(process.cwd(), 'tests/generated-test-data');
   try {

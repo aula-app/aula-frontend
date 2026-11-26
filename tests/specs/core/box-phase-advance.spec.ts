@@ -6,7 +6,6 @@ import * as ideas from '../../interactions/ideas';
 import * as navigation from '../../interactions/navigation';
 import { BoxData } from '../../support/types';
 
-// The countdown route to a spent phase is untestable here: back-dating phase_start needs DB access.
 test('Box offers the next phase once every Idea is ruled on', async ({ seededRoom, newPageFor }) => {
   const PHASES = { DISCUSSION: 10, APPROVAL: 20, VOTING: 30 } as const;
 
@@ -79,5 +78,48 @@ test('Box offers the next phase once every Idea is ruled on', async ({ seededRoo
   await test.step('The Box is listed under its new phase for everyone', async () => {
     await navigation.goToRoomPhase(userPage, seededRoom.name, PHASES.VOTING);
     await expect(userPage.getByTestId(`box-${box.name}`)).toBeVisible();
+  });
+});
+
+test('Box offers the next phase once its countdown runs out', async ({
+  seededRoom,
+  newPageFor,
+  backdatePhaseStart,
+}) => {
+  const PHASES = { DISCUSSION: 10, APPROVAL: 20 } as const;
+
+  const adminPage = await newPageFor('admin');
+
+  const box: BoxData = entities.createBox('countdown-box', seededRoom);
+  box.phase = PHASES.DISCUSSION;
+
+  const boxCard = () => adminPage.getByTestId(TEST_IDS.BOX_CARD).filter({ hasText: box.name });
+
+  await test.step('Admin creates a Box in the Discussion phase', async () => {
+    await boxes.create(adminPage, box);
+  });
+
+  await test.step('No phase change button while the countdown is running', async () => {
+    await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.DISCUSSION);
+    await expect(boxCard()).toBeVisible();
+    await expect(boxCard().getByTestId(TEST_IDS.ADVANCE_PHASE_BUTTON)).toBeHidden();
+  });
+
+  await test.step('The Discussion phase runs out', async () => {
+    await backdatePhaseStart(box.name, box.discussionDays! + 1);
+  });
+
+  await test.step('The card offers the next phase once the countdown has run out', async () => {
+    await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.DISCUSSION);
+    await expect(boxCard().getByTestId(TEST_IDS.ADVANCE_PHASE_BUTTON)).toBeVisible();
+  });
+
+  await test.step('Confirming moves the Box into the Approval phase', async () => {
+    await boxCard().getByTestId(TEST_IDS.ADVANCE_PHASE_BUTTON).click();
+    await adminPage.getByRole('alertdialog').getByTestId(TEST_IDS.ADVANCE_PHASE_CONFIRM).click();
+    await expect(boxCard()).toBeHidden();
+
+    await navigation.goToRoomPhase(adminPage, seededRoom.name, PHASES.APPROVAL);
+    await expect(adminPage.getByTestId(`box-${box.name}`)).toBeVisible();
   });
 });

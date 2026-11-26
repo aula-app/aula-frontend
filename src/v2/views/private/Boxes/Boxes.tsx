@@ -47,7 +47,7 @@ const Boxes: React.FC = () => {
     setReversed,
   } = useListFilter(boxes, boxesFilterConfig, `boxes-${room_id}-${currentPhase}`);
 
-  // Keyed on the full list, not the filtered one, so searching does not refetch.
+  // Full list, so searching doesn't refetch.
   const { ideas: boxIdeas, refetch: refetchBoxIdeas } = useBoxIdeas(boxes);
 
   const handleBoxChanged = () => {
@@ -99,6 +99,7 @@ const Boxes: React.FC = () => {
           total={boxes.length}
           defaultOpen={!!searchQuery}
           onToggle={(open) => !open && setSearchQuery('')}
+          sortReversed={reversed}
         >
           <TextInput
             dense

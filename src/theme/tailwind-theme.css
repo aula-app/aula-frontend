@@ -54,7 +54,6 @@
   --color-neutral-fg: hsl(215, 20%, 28%);
 
   /* --- Phases --- */
-  /* -light/-fg are the filled pair (idea bubbles); base/-active are the solid chrome */
   --color-wild: hsl(210, 100%, 86%);
   --color-wild-active: hsl(210, 88%, 76%);
   --color-wild-light: hsl(210, 100%, 92%);
@@ -95,7 +94,7 @@
 
   /* --- Content / Text --- */
   --color-foreground: hsl(215, 20%, 95%);
-  /* Light enough to clear AA as secondary text on the phase fills, not just on the page */
+  /* Must pass AA on phase fills */
   --color-muted: hsl(215, 15%, 80%);
 
   /* --- Semantic states --- */
@@ -241,4 +240,8 @@
   --color-shadow: var(--color-shadow);
   --color-input-border: var(--color-input-border);
   --color-input-border-hover: var(--color-input-border-hover);
+
+  /* --- Shadows --- */
+  /* shadow-md mirrored, for popovers that open above their trigger */
+  --shadow-md-up: 0 -4px 6px -1px rgb(0 0 0 / 0.1), 0 -2px 4px -2px rgb(0 0 0 / 0.1);
 }

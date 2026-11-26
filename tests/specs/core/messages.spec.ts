@@ -55,7 +55,7 @@ test('Message Management - User Messages', async ({ seededUser, newPageFor }) =>
     await expect(adminPage.locator('table tr').filter({ hasText: messageData.headline })).toBeVisible();
 
     // Ensure checkbox is unchecked first, then check it
-    const checkbox = (adminPage.locator('table tr').filter({ hasText: messageData.headline })).locator('input');
+    const checkbox = adminPage.locator('table tr').filter({ hasText: messageData.headline }).locator('input');
     await expect(checkbox).toBeVisible();
     if (await checkbox.isChecked()) {
       await checkbox.uncheck();

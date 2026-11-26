@@ -81,7 +81,7 @@ describe('Updates', () => {
     renderView();
     await screen.findAllByTestId('update-item');
 
-    await userEvent.click(screen.getByRole('button', { name: 'v2.ui.actions.search' }));
+    await userEvent.click(screen.getByRole('button', { name: 'v2.ui.actions.searchAndSort' }));
     await userEvent.type(screen.getByRole('searchbox'), 'bike');
 
     expect(screen.getAllByTestId('update-item')).toHaveLength(1);

@@ -206,6 +206,7 @@
         "remove": "Remove {{var}}",
         "report": "Report a bug",
         "search": "Search",
+        "searchAndSort": "Search and sort",
         "select": "Select {{var}}"
       },
       "announcement": {
@@ -336,10 +337,10 @@
         "notEnabled": "No sync is enabled for this school. An operator can turn it on in aula-manager.",
         "connectReturned": "Signed in at the provider. Your aula account is now linked and the school is identified.",
         "reviewWarning": "Please check these matches. A wrong merge gives one person another's account, including everything they have written.",
-        "rooms": "Classes and rooms",
+        "rooms": "Rooms",
         "steps": "Review steps",
-        "filterRoom": "Class",
-        "allRooms": "All classes",
+        "filterRoom": "Room",
+        "allRooms": "All rooms",
         "noClasses": "No class",
         "filterPerson": "Person",
         "allPeople": "Everybody",
@@ -399,6 +400,10 @@
           "save": {
             "title": "Could not save the change.",
             "body": "Nothing was changed. Try again."
+          },
+          "progress": {
+            "title": "Could not check the sync status.",
+            "body": "Reload the page. If it keeps failing, check that the provider is reachable."
           }
         },
         "actionNeeded": "Action needed:",
@@ -451,7 +456,23 @@
           "no_local_row": "No aula record is selected for this match.",
           "local_row_claimed_twice": "This aula record is matched more than once.",
           "local_row_already_linked": "This aula record is already linked to someone else at the provider."
-        }
+        },
+        "outcome": {
+          "merge": "Merged",
+          "pending": "Needs confirming",
+          "create": "New in aula",
+          "keep": "Unchanged",
+          "empty": "Empty"
+        },
+        "checking": "Checking the sync status",
+        "legend": {
+          "merge": "Matched — the two become one account.",
+          "pending": "Proposed — confirm it, or both stay as they are.",
+          "create": "Only at the provider — a new aula account is made.",
+          "keep": "Only in aula — stays as it is.",
+          "empty": "Empty space where you can assign a match."
+        },
+        "legendTitle": "Legend:"
       },
       "dashboard": {
         "title": "My activity",
@@ -616,6 +637,7 @@
     "appOutdated": "Your app is outdated. Please update aula to continue using it.",
     "appBelowRecommended": "You are running aula {{currentVersion}}, but we recommend updating to {{recommendedVersion}} to avoid issues.",
     "appOutdatedImage": "Winking character illustration reminding you to update the app",
+    "boxClosed": "This box is no longer accepting new ideas",
     "databaseError": "Failed to fetch data",
     "default": "Something went wrong",
     "existingUser": "Username and/or email already in use",
@@ -750,33 +772,33 @@
   },
   "requests": {
     "accepted": "Your data change request has been accepted.",
-    "cancel": "Data request change denied",
+    "cancel": "Data change request denied",
     "changeName": {
-      "body": "A data change procedure was requested for user {{var}}. They want to change their {{old}} to {{new}}",
-      "request": "Data change procedure requested. Please wait for approval.",
+      "body": "User {{var}} requested a data change: “{{old}}” to “{{new}}”",
+      "request": "Data change requested. Please wait for approval.",
       "title": "Data change request for {{var}}"
     },
     "confirm": "Data request change confirmed",
     "confirmation": "Are you sure you want to confirm this request?",
     "confirmationTitle": "Confirm request",
     "deleteAccount": {
-      "body": "A data deletion procedure was requested for user {{var}}",
+      "body": "User {{var}} has requested an account deletion",
       "button": "Request account deletion",
       "confirm": "Are you sure you want to delete your account? All your data will be lost. This action cannot be undone",
-      "title": "Account deletion request for {{var}}"
+      "title": "Account deletion request for {{var}}",
+      "request": "Account deletion requested. Please wait for confirmation."
     },
     "denied": "Your data change request has been denied. Please contact the school admin for further information.",
     "exportData": {
-      "button": "Download data export",
+      "body": "A data export procedure was requested for user {{var}}",
+      "button": "Request data export",
       "info": "According to data protection requirements (GDPR), online services must provide their users with all stored data upon request.",
-      "legacyHint": "Please navigate to your profile page (click on your name / picture), go to Privacy / Export account data and click on Download data export"
+      "title": "Account data export request for {{var}}"
     },
     "label": "Requests",
     "updateData": {
-      "body": "A data update procedure was requested for user {{var}}",
       "confirm": "Are you sure you want to request the update of your fields?",
       "headline": "Data update request",
-      "title": "Account data update request for {{var}}",
       "validation": "This action should be validated by an Admin to take place."
     }
   },
@@ -1010,7 +1032,8 @@
       "userlevel": "User level",
       "username": "User name",
       "vote_bias": "Vote Bias",
-      "idp_user_id": "Type"
+      "idp_user_id": "Type",
+      "idp_group_id": "Type"
     },
     "customFields": {
       "form": "Custom field {{var}}",

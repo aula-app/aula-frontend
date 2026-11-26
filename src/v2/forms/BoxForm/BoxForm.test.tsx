@@ -17,7 +17,7 @@ vi.mock('@/services/ideas', () => ({
   getIdeasByBox: vi.fn(async () => ({ data: [roomIdeas[0]], error: null })),
 }));
 
-// The API sends `phase_id` as a JSON number even though `BoxType` declares it as a string.
+// The API sends `phase_id` as a number.
 const box = {
   hash_id: 'box-1',
   name: 'Existing box',
@@ -46,13 +46,14 @@ describe('BoxForm', () => {
 
   it('submits added ideas for a new box', async () => {
     const user = userEvent.setup();
-    const onSubmit = vi.fn(async (_data: any) => true);
+    const onSubmit = vi.fn<(data: unknown) => Promise<boolean>>(async () => true);
     render(<BoxForm contextRoomId="room-1" onSubmit={onSubmit} onCancel={() => {}} />);
 
     await user.type(screen.getByTestId('box-form-name'), 'New box');
     const ideas = screen.getByTestId('box-form-ideas');
     await waitFor(() => expect(ideas).toBeEnabled());
     await user.click(ideas);
+    await user.keyboard('{ArrowDown}');
     await user.click(await screen.findByTestId('box-form-ideas-option-i2'));
     fireEvent.click(screen.getByTestId('box-form-submit'));
 
@@ -61,7 +62,7 @@ describe('BoxForm', () => {
   });
 
   it('submits ideas dropped from an existing box as removals', async () => {
-    const onSubmit = vi.fn(async (_data: any) => true);
+    const onSubmit = vi.fn<(data: unknown) => Promise<boolean>>(async () => true);
     render(<BoxForm defaultValues={box} contextRoomId="room-1" onSubmit={onSubmit} onCancel={() => {}} />);
 
     fireEvent.click(await screen.findByTestId('box-form-ideas-remove-i1'));

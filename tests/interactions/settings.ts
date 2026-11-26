@@ -77,8 +77,10 @@ export const clearFilter = async (page: Page) => {
   await expect(filterPanelToggleButton).toBeVisible();
 
   const clearFilterTextButton = page.getByTestId('clear-filter-button');
-  if (!(await clearFilterTextButton.isVisible())
-    || (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')) {
+  if (
+    !(await clearFilterTextButton.isVisible()) ||
+    (await page.getByTestId('filter-panel').getAttribute('style'))?.includes('; height: 0px')
+  ) {
     // open the filter menu if it's not already open
     await filterPanelToggleButton.click();
   }

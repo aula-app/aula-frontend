@@ -5,12 +5,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface IdeaFieldProps {
-  /** Room the pickable ideas come from. */
   roomId: string;
-  /** Ideas currently assigned, as `{ value: hash_id, label: title }`. */
   value: SelectOption[];
   onChange: (ideas: SelectOption[]) => void;
-  /** The assigned ideas are still being fetched. */
   loadingValue?: boolean;
   disabled?: boolean;
   'data-testid'?: string;
@@ -19,7 +16,6 @@ interface IdeaFieldProps {
 const uniqueOptions = (list: SelectOption[]) =>
   list.filter((option, index) => list.findIndex((other) => other.value === option.value) === index);
 
-/** Picks ideas out of a room and lists the picked ones, each removable. */
 const IdeaField = ({
   roomId,
   value,
@@ -50,7 +46,7 @@ const IdeaField = ({
     };
   }, [roomId]);
 
-  // The room only lists unassigned ideas, so assigned and removed ones are kept in the pool to stay pickable.
+  // The room only lists unassigned ideas.
   const [removed, setRemoved] = useState<SelectOption[]>([]);
   const pool = uniqueOptions([...options, ...value, ...removed]);
 

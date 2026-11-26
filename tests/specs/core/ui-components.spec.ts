@@ -9,7 +9,7 @@ const host = shared.getHost();
  */
 async function ensureInstanceCode(page: import('@playwright/test').Page, dbInstanceCode: string) {
   const instanceCodeInput = page.getByTestId('instance-code');
-  if (await instanceCodeInput.isVisible() && await instanceCodeInput.isEnabled()) {
+  if ((await instanceCodeInput.isVisible()) && (await instanceCodeInput.isEnabled())) {
     await instanceCodeInput.fill(dbInstanceCode);
     await page.getByTestId('instance-code-confirm').click();
     await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });
@@ -80,9 +80,7 @@ async function gotoTooltipPage(page: import('@playwright/test').Page, dbInstance
   await ensureInstanceCode(page, dbInstanceCode);
 }
 
-// Tooltip only opens on :focus-visible, which Chromium grants to keyboard-initiated
-// focus. A bare .focus() after any mouse action does not qualify, so step off and
-// back with the keyboard to land on the trigger in keyboard modality.
+// Tooltip needs :focus-visible, i.e. keyboard focus.
 async function focusViaKeyboard(page: import('@playwright/test').Page, locator: import('@playwright/test').Locator) {
   await locator.focus();
   await page.keyboard.press('Shift+Tab');

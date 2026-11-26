@@ -29,7 +29,7 @@ export const useComments = (idea_id: string | undefined): UseCommentsState => {
       } else {
         setComments(response.data || []);
       }
-    } catch (err) {
+    } catch {
       setError('fetch');
     } finally {
       setIsLoading(false);

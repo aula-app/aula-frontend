@@ -26,8 +26,13 @@ test('Content Reports', async ({ seededRoom, newPageFor }) => {
     await ideas.create(adminPage, adminIdeaMisinformation);
   });
 
-  await test.step('User reports Admin\'s Idea', async () => {
-    await reporting.reportIdea(userPage, seededRoom, adminIdeaMisinformation.name, reporting.REPORT_TYPES.MISINFORMATION);
+  await test.step("User reports Admin's Idea", async () => {
+    await reporting.reportIdea(
+      userPage,
+      seededRoom,
+      adminIdeaMisinformation.name,
+      reporting.REPORT_TYPES.MISINFORMATION
+    );
   });
 
   await test.step('Admin verifies report exists', async () => {

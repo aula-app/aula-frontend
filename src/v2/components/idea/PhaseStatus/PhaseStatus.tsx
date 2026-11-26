@@ -5,12 +5,10 @@ import { twMerge } from 'tailwind-merge';
 import { PhaseStatus as PhaseStatusType } from './getPhaseStatus';
 
 interface PhaseStatusProps {
-  /** Descriptor from `getPhaseStatus`. */
   status: PhaseStatusType;
   className?: string;
 }
 
-/** Phase status badge sitting on top of an idea bubble. */
 const PhaseStatus = ({ status, className }: PhaseStatusProps) => {
   const { t } = useTranslation();
 
