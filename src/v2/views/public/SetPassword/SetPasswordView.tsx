@@ -2,7 +2,6 @@ import Icon from '@/v2/components/ui/Icon';
 import Button from '@/v2/components/button/Button';
 import IconButton from '@/v2/components/button/IconButton';
 import TextInput from '@/v2/components/input/TextInput';
-import Link from '@/v2/components/navigation/Link';
 import Hint from '@/v2/components/ui/Hint';
 import InstanceCodeField from '@/v2/components/input/InstanceCodeField/InstanceCodeField';
 import { useInstanceCode } from '@/v2/components/input/InstanceCodeField/useInstanceCode';
@@ -18,7 +17,7 @@ const MAX_PASSWORD_LENGTH = 64;
 
 const SetPasswordView = () => {
   const { t } = useTranslation();
-  const { isValid, setValid, error, onSubmit } = useSetPasswordSubmit();
+  const { isValid, setValid, onSubmit } = useSetPasswordSubmit();
   const {
     instanceCode,
     setInstanceCode,
@@ -50,7 +49,6 @@ const SetPasswordView = () => {
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 

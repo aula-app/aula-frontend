@@ -2,7 +2,6 @@ import { expect, Page } from '@playwright/test';
 import { TEST_IDS } from '../../src/test-ids';
 import * as shared from '../support/utils';
 import * as types from '../support/types';
-import * as formsInteractions from './forms';
 import * as navigation from './navigation';
 import { TIMEOUTS } from '../support/constants';
 

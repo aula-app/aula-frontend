@@ -18,7 +18,7 @@ export const clickOnLink = async (page: Page, path: string) => {
 };
 
 export const ensureUrl = async (page: Page, path: string, forceRefresh: boolean = false) => {
-  if (!forceRefresh && (page.url() === `${host}${path}`)) {
+  if (!forceRefresh && page.url() === `${host}${path}`) {
     return;
   }
 

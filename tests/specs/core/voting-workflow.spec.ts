@@ -12,7 +12,6 @@ import { BoxData } from '../../support/types';
  * Tests complete voting workflow from creation to results (without delegation)
  */
 test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
-
   // Phase constants matching the application
   const PHASES = {
     WILD: 0,

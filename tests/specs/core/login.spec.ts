@@ -35,7 +35,7 @@ test('Instance code entry', async ({ browser, dbInstanceCode, baselineLoaded: _ 
 
   // Skip if the app doesn't show an editable instance code input — single-instance or already stored
   const instanceCodeInput = page.getByTestId('instance-code');
-  if (!await instanceCodeInput.isVisible() || !await instanceCodeInput.isEnabled()) {
+  if (!(await instanceCodeInput.isVisible()) || !(await instanceCodeInput.isEnabled())) {
     await expect(page.locator('input[name="username"]')).toBeVisible();
     test.skip(true, 'Single-instance setup or code already stored — skipping instance code tests');
     return;
@@ -73,7 +73,7 @@ test('Login form', async ({ browser, dbInstanceCode, baselineLoaded: _ }) => {
   // If the instance code field is visible and editable (multi-instance, no stored code),
   // validate it first so api_url is set in localStorage before the login form runs.
   const instanceCodeInput = page.getByTestId('instance-code');
-  if (await instanceCodeInput.isVisible() && await instanceCodeInput.isEnabled()) {
+  if ((await instanceCodeInput.isVisible()) && (await instanceCodeInput.isEnabled())) {
     await instanceCodeInput.fill(dbInstanceCode);
     await page.getByTestId('instance-code-confirm').click();
     await expect(instanceCodeInput).toBeDisabled({ timeout: 10000 });

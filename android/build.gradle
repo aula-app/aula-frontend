@@ -22,6 +22,19 @@ allprojects {
         google()
         mavenCentral()
     }
+
+    // Align all Kotlin stdlib artifacts to a single version. Some transitive
+    // dependencies request kotlin-stdlib-jdk7/jdk8:1.6.21, whose classes were
+    // merged into the main kotlin-stdlib as of Kotlin 1.8, causing duplicate
+    // class errors when combined with kotlin-stdlib:1.8.22. Forcing the jdk7/jdk8
+    // artifacts to 1.8.22 turns them into empty shims that delegate to the main stdlib.
+    configurations.all {
+        resolutionStrategy {
+            force "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22"
+            force "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22"
+        }
+    }
 }
 
 task clean(type: Delete) {

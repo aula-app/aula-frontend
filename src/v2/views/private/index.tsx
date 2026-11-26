@@ -5,7 +5,7 @@ import Layout from './Layout';
 import { fetchIsOnline } from '@/hooks/auth';
 import PrivateRoutes from '@/routes/PrivateRoutes';
 
-const PrivateLayout: FunctionComponent<{ children?: React.ReactNode }> = ({ children }) => {
+const PrivateLayout: FunctionComponent<{ children?: React.ReactNode }> = () => {
   const location = useLocation();
   const [online, setOnline] = useState(true);
 

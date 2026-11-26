@@ -11,7 +11,6 @@ import { BoxData } from '../../support/types';
  * Uses pure Playwright fixtures for setup/teardown
  */
 test.describe('Box Management - Creation, phase changes and Permissions', () => {
-
   test.skip('Unprivileged User cannot create a Box', async () => {
     // TODO: const box = entities.createBox('unprivileged-box', seededRoom)
     // TODO: const userPage = await newPageFor('user');
