@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Route } from "@playwright/test";
+import { Route } from '@playwright/test';
 
 export const AUTH_STATES_DIR = path.join(process.cwd(), 'tests/auth-states');
 

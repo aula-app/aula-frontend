@@ -43,7 +43,7 @@ test('Group Management - Creation and User Assignment', async ({ seededStudent, 
 
   await test.step('Admin - Verify that the Group form is closed and new Group appears in the list', async () => {
     await expect(adminPage.getByTestId('group-name-field-input')).not.toBeVisible();
-    await adminPage.waitForLoadState("networkidle");
+    await adminPage.waitForLoadState('networkidle');
 
     // Group is visible in the list
     const groupChip = adminPage.getByTestId('groups-chips-stack').getByText(groupData.group_name).first();
@@ -53,9 +53,9 @@ test('Group Management - Creation and User Assignment', async ({ seededStudent, 
     await groupChip.click();
     await expect(adminPage.getByTestId('group-name-field-input')).toHaveValue(groupData.group_name);
     // @FIXME: this still doesn't pinpoint the Group Description (it could be Standard Room Description)
-    await expect(adminPage.getByTestId('markdown-editor-description_public')
-      .filter({ hasText: groupData.description_public }))
-      .toBeVisible();
+    await expect(
+      adminPage.getByTestId('markdown-editor-description_public').filter({ hasText: groupData.description_public })
+    ).toBeVisible();
   });
 
   await test.step('Admin - Send message to Group', async () => {

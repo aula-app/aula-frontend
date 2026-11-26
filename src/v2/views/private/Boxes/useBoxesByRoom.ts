@@ -30,7 +30,7 @@ export const useBoxesByRoom = (room_id: string | undefined, phase: `${RoomPhases
       } else {
         setBoxes(response.data || []);
       }
-    } catch (err) {
+    } catch {
       setError('fetch');
     } finally {
       setIsLoading(false);

@@ -65,8 +65,7 @@ const Box: React.FC = () => {
   const quorum = useQuorum(boxPhase);
   const users = useRoomUsers(room_id);
 
-  // `:phase` only mirrors the box and goes stale when the box is moved. Everything downstream reads
-  // the param (idea styling, the approval badge, the nested idea route), so realign it on the box.
+  // `:phase` goes stale when the box moves.
   useEffect(() => {
     if (!box || !room_id) return;
     if (String(box.phase_id) === phase) return;
