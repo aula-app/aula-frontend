@@ -95,6 +95,7 @@ const BoxForm: React.FC<BoxFormProps> = ({
   }, [defaultValues?.hash_id, setValue]);
 
   const roomId = contextRoomId || watch('room');
+
   const { clearDraft } = useDraftStorage(form, {
     storageKey: `v2-boxform-draft-${contextRoomId ?? 'unknown'}`,
     enabled: !defaultValues,

@@ -21,6 +21,13 @@ export const edit = async (page: Page, box: types.BoxData) => {
   await sendForm(page, box);
 };
 
+/** Opens a Box from its Room phase page, landing on the Box page. */
+export const open = async (page: Page, room: types.RoomData, phase: number, box: types.BoxData) => {
+  await navigation.goToRoomPhase(page, room.name, phase);
+  await navigation.clickOnPageItem(page, box.name);
+  await page.waitForURL((url) => url.pathname.includes('/idea-box/'));
+};
+
 export const fill = async (page: Page, box: types.BoxData) => {
   await sendForm(page, box);
 };

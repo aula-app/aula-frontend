@@ -1,10 +1,10 @@
 import { ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
 import Stat from '@/v2/components/idea/Stat';
-import { IdeaLike } from './useIdeaLike';
+import { LikeState } from '@/v2/hooks/useLike';
 
 type LikeStatProps = Omit<ComponentProps<typeof Stat>, 'icon' | 'count' | 'label' | 'active' | 'onClick'> & {
-  like: IdeaLike;
+  like: LikeState;
 };
 
 /**

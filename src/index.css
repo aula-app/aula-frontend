@@ -13,6 +13,8 @@
 /* Semantic state colors */
 @source inline("{bg,text,border}-{error,warning,info,success,neutral}");
 @source inline("{bg,text,border}-{error,warning,info,success,neutral}-fg");
+/* -light/-active exist for these three only, and ProgressBar builds them from a tone name */
+@source inline("{bg,text}-{error,success,neutral}-{light,active}");
 
 /* Phase colors — base, hover, and active states */
 @source inline("{bg,text}-{wild,discussion,approval,voting,results}");

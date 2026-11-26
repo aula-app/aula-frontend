@@ -1,11 +1,11 @@
-import { PhaseType } from '@/types/SettingsTypes';
+import { StatusTone } from '@/v2/components/idea/PhaseStatus/getPhaseStatus';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ProgressBarProps {
   /** 0–100, clamped. */
   value: number;
-  color: PhaseType;
+  color: StatusTone;
   label: string;
   /** 0–100. */
   marker?: number;

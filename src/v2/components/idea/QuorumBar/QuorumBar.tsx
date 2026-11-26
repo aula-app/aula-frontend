@@ -1,4 +1,4 @@
-import { PhaseType } from '@/types/SettingsTypes';
+import { StatusTone } from '@/v2/components/idea/PhaseStatus/getPhaseStatus';
 import Icon, { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
 import ProgressBar from '@/v2/components/ui/ProgressBar';
 import { useTranslation } from 'react-i18next';
@@ -17,7 +17,7 @@ interface QuorumBarProps {
   users: number;
   /** Percentage; 0 hides the marker. */
   quorum?: number;
-  color: PhaseType;
+  color: StatusTone;
   className?: string;
 }
 
