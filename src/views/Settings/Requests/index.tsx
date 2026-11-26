@@ -1,3 +1,3 @@
 import RequestsView from './RequestsView';
 
-export { RequestsView as default,  };
+export { RequestsView as default };

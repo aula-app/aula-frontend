@@ -1,3 +1,3 @@
 import RoomPhaseView from './RoomPhaseView';
 
-export { RoomPhaseView as default,  };
+export { RoomPhaseView as default };

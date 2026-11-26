@@ -60,7 +60,7 @@ test('Idea Management', async ({ seededRoom, newPageFor }) => {
     await ideas.remove(adminPage, seededRoom, adminIdea);
   });
 
-  await test.step('Admin can delete User\'s Idea', async () => {
+  await test.step("Admin can delete User's Idea", async () => {
     await ideas.remove(adminPage, seededRoom, userIdea1);
   });
 

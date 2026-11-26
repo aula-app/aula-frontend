@@ -1,3 +1,3 @@
 import UserInfo from './UserInfo';
 
-export { UserInfo as default,  };
+export { UserInfo as default };

@@ -38,4 +38,3 @@ export const remove = async (page: Page, room: types.RoomData) => {
 
   await settingsInteractions.remove({ page, scope: 'rooms', filters: { option: 'room_name', value: room.name } });
 };
-

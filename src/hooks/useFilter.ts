@@ -91,9 +91,7 @@ function readSortFromStorage(
         ? parsed.sortKey
         : defaultSortKey;
     const sortDirection =
-      parsed.sortDirection === 'asc' || parsed.sortDirection === 'desc'
-        ? parsed.sortDirection
-        : defaultSortDirection;
+      parsed.sortDirection === 'asc' || parsed.sortDirection === 'desc' ? parsed.sortDirection : defaultSortDirection;
     return { sortKey, sortDirection };
   } catch {
     return { sortKey: defaultSortKey, sortDirection: defaultSortDirection };

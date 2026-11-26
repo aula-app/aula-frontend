@@ -1,3 +1,3 @@
 import IdeasBoxView from './IdeasBoxView';
 
-export { IdeasBoxView as default,  };
+export { IdeasBoxView as default };

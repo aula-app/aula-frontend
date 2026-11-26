@@ -31,7 +31,9 @@ test.describe('Change pass flow', () => {
 
   const checkSuccessDiv = async (userPage: Page) => {
     // Wait for either outcome — the same Collapse renders success or error depending on API result.
-    const messageDiv = userPage.locator('[data-testid="password-change-success"], [data-testid="password-change-error"]');
+    const messageDiv = userPage.locator(
+      '[data-testid="password-change-success"], [data-testid="password-change-error"]'
+    );
     await messageDiv.waitFor({ state: 'visible' });
 
     // If the error variant appeared, surface the backend message immediately instead of timing out.

@@ -1,3 +1,3 @@
 import ImageEditor from './ImageEditor';
 
-export { ImageEditor as default,  };
+export { ImageEditor as default };

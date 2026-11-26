@@ -1,3 +1,3 @@
 import IdeaBubble from './IdeaBubble';
 
-export { IdeaBubble as default,  };
+export { IdeaBubble as default };

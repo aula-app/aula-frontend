@@ -32,6 +32,7 @@
     "preview": "vite preview",
     "format": "prettier ./src --write",
     "format:all": "prettier . --write",
+    "format:check": "prettier src tests --check",
     "check": "tsc",
     "test": "NODE_OPTIONS=--max-old-space-size=15000 playwright test",
     "test:ui": "NODE_OPTIONS=--max-old-space-size=15000 playwright test --ui",

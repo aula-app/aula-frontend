@@ -47,7 +47,13 @@ ${data.content || ''}
       >
         <Icon type="bug" size="1.5rem" />
       </IconButton>
-      <Drawer anchor="bottom" open={isOpen} onClose={onClose} sx={{ overflowY: 'auto' }} data-testid={TEST_IDS.BUG_DIALOG}>
+      <Drawer
+        anchor="bottom"
+        open={isOpen}
+        onClose={onClose}
+        sx={{ overflowY: 'auto' }}
+        data-testid={TEST_IDS.BUG_DIALOG}
+      >
         <BugForms onClose={onClose} onSubmit={onSubmit} />
       </Drawer>
     </>

@@ -2,7 +2,6 @@ import Icon from '@/components/new/Icon/Icon';
 import Button from '@/v2/components/button/Button';
 import IconButton from '@/v2/components/button/IconButton/IconButton';
 import TextInput from '@/v2/components/input/TextInput';
-import Link from '@/v2/components/navigation/Link';
 import Hint from '@/v2/components/ui/Hint';
 import InstanceCodeField from '@/v2/components/input/InstanceCodeField/InstanceCodeField';
 import { useInstanceCode } from '@/v2/components/input/InstanceCodeField/useInstanceCode';
@@ -55,7 +54,6 @@ const ResetPasswordView = () => {
     register,
     handleSubmit,
     reset,
-    control,
     formState: { errors },
   } = useForm({ resolver: yupResolver(schema) });
 

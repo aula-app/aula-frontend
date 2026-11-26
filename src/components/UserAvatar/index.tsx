@@ -1,3 +1,3 @@
 import UserAvatar from './UserAvatar';
 
-export { UserAvatar as default,  };
+export { UserAvatar as default };

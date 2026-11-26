@@ -15,7 +15,6 @@ import {
 import React, { useRef, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-
 type Props = {
   extraTools?: ({ items }: { items: Array<string> }) => JSX.Element;
   scope: SettingNamesType;

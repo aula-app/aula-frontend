@@ -17,13 +17,7 @@ interface Props extends BaseTextFieldProps {
  * Renders "IdeaField" component
  */
 
-const IdeaField: React.FC<Props> = ({
-  room,
-  defaultValues,
-  onChange,
-  disabled = false,
-  ...restOfProps
-}) => {
+const IdeaField: React.FC<Props> = ({ room, defaultValues, onChange, disabled = false, ...restOfProps }) => {
   const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);

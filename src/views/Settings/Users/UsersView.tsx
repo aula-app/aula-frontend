@@ -42,9 +42,12 @@ const UsersView: React.FC = () => {
 
   const columns = COLUMNS.filter((column) => {
     switch (true) {
-      case isSsoRequired: return !['email', 'temp_pw'].includes(column.name);
-      case !isSsoManaged: return !['idp_user_id'].includes(column.name);
-      default: return true;
+      case isSsoRequired:
+        return !['email', 'temp_pw'].includes(column.name);
+      case !isSsoManaged:
+        return !['idp_user_id'].includes(column.name);
+      default:
+        return true;
     }
   });
 

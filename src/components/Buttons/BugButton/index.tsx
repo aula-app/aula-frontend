@@ -1,3 +1,3 @@
 import BugButton from './BugButton';
 
-export { BugButton as default,  };
+export { BugButton as default };
