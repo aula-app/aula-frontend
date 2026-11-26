@@ -159,6 +159,7 @@
         "remove": "{{var}} entfernen",
         "report": "Einen Fehler melden",
         "search": "Suchen",
+        "searchAndSort": "Suchen und sortieren",
         "select": "{{var}} auswählen"
       },
       "announcement": {
