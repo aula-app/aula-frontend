@@ -3,7 +3,9 @@ import { MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import ArchiveButton from '@/v2/components/button/ArchiveButton';
 import IconButton from '@/v2/components/button/IconButton';
-import { archiveMessage } from '@/v2/components/message/archiveMessage';
+import RestoreButton from '@/v2/components/button/RestoreButton';
+import { archiveConfirmDescription, archiveMessage, restoreMessage } from '@/v2/components/message/archiveMessage';
+import { MESSAGE_STATUS } from '@/v2/components/message/getInboxMessages';
 import { getMessageVariant, VARIANT_STYLES } from '@/v2/components/message/MessageCard/messageVariant';
 import MessageMeta from '@/v2/components/message/MessageMeta';
 import { parseMessageBody } from '@/v2/components/message/parseMessageBody';
@@ -18,7 +20,7 @@ import RequestContent from './RequestContent';
 
 interface MessageDetailProps {
   message: MessageType;
-  /** Called once the message is archived or a request is resolved. */
+  /** Called once the message is archived or restored, or a request is resolved. */
   onDone?: () => void;
   /** Adds a close button, e.g. inside a modal. */
   onClose?: () => void;
@@ -35,7 +37,10 @@ const MessageDetail = ({ message, onDone, onClose, className }: MessageDetailPro
   const variant = getMessageVariant(message.msg_type);
   const { icon, iconClass } = VARIANT_STYLES[variant];
   const { metadata, content } = parseMessageBody(message.body);
-  const canArchive = checkPermissions('messages', 'status') && !isActionableRequest(metadata);
+  const canChangeStatus = checkPermissions('messages', 'status');
+  const canArchive =
+    canChangeStatus && Number(message.status) === MESSAGE_STATUS.active && !isActionableRequest(metadata);
+  const canRestore = canChangeStatus && Number(message.status) === MESSAGE_STATUS.archived;
 
   return (
     <article data-testid={`message-detail-${variant}`} className={twMerge('flex flex-col gap-4', className)}>
@@ -71,11 +76,24 @@ const MessageDetail = ({ message, onDone, onClose, className }: MessageDetailPro
         <ArchiveButton
           labelled
           size="1.25em"
+          confirmDescription={archiveConfirmDescription(t, message.headline)}
           successMessage={t('v2.scopes.messages.archived')}
           onArchive={() => archiveMessage(message.hash_id)}
           onArchived={onDone}
           className="self-end"
           data-testid={TEST_IDS.ARCHIVE_MESSAGE_BUTTON}
+        />
+      )}
+
+      {canRestore && (
+        <RestoreButton
+          labelled
+          size="1.25em"
+          successMessage={t('v2.scopes.messages.restored')}
+          onRestore={() => restoreMessage(message.hash_id)}
+          onRestored={onDone}
+          className="self-end"
+          data-testid={TEST_IDS.RESTORE_MESSAGE_BUTTON}
         />
       )}
     </article>

@@ -2,11 +2,14 @@ import { usePageTitle } from '@/hooks/usePageTitle';
 import { useAppStore } from '@/store/AppStore';
 import { TEST_IDS } from '@/test-ids';
 import { MessageType } from '@/types/Scopes';
-import ComboBox from '@/v2/components/input/ComboBox';
+import { checkPermissions } from '@/utils';
+import CheckboxGroup from '@/v2/components/input/CheckboxGroup';
+import SelectInput from '@/v2/components/input/SelectInput';
 import SortSelect from '@/v2/components/input/SortSelect';
 import TextInput from '@/v2/components/input/TextInput';
 import ListPageLayout from '@/v2/components/layout/ListPageLayout';
 import MessageCard from '@/v2/components/message/MessageCard';
+import { INBOX_STATUSES, InboxStatus } from '@/v2/components/message/getInboxMessages';
 import { getMessageVariant, MESSAGE_VARIANTS } from '@/v2/components/message/MessageCard/messageVariant';
 import MessageDetail from '@/v2/components/message/MessageDetail';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
@@ -41,7 +44,9 @@ const Messages = () => {
   const navigate = useNavigate();
   const isDrawer = useIsDrawerMode();
   const [, dispatch] = useAppStore();
-  const { messages, isLoading, error, refetch } = useMessages();
+  const canFilterStatus = checkPermissions('messages', 'status');
+  const [status, setStatus] = useState<InboxStatus>('active');
+  const { messages, isLoading, error, refetch } = useMessages(status);
   const [types, setTypes] = useState<string[]>(MESSAGE_VARIANTS);
   const typedMessages = useMemo(
     () => messages.filter((message) => types.includes(getMessageVariant(message.msg_type))),
@@ -51,6 +56,7 @@ const Messages = () => {
     value: variant,
     label: t(`v2.scopes.messages.types.${variant}`),
   }));
+  const statusOptions = INBOX_STATUSES.map((value) => ({ value, label: t(`status.${value}`) }));
   const {
     visibleItems: visibleMessages,
     searchQuery,
@@ -61,7 +67,7 @@ const Messages = () => {
     reversed,
     setReversed,
   } = useListFilter(typedMessages, messagesFilterConfig, 'messages');
-  usePageTitle('pageTitles.messages');
+  usePageTitle('pageTitles.inbox');
 
   const selected = messages.find((message) => message.hash_id === message_id);
   const isMissing = !!message_id && !isLoading && !error && !selected;
@@ -74,7 +80,7 @@ const Messages = () => {
   };
 
   useEffect(() => {
-    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.messages'), '/messages']] });
+    dispatch({ type: 'SET_BREADCRUMB', breadcrumb: [[t('ui.navigation.inbox'), '/messages']] });
   }, [dispatch, t]);
 
   const notFound = (
@@ -96,25 +102,32 @@ const Messages = () => {
               scope="messages"
               count={visibleMessages.length}
               total={messages.length}
-              defaultOpen={!!searchQuery}
+              defaultOpen={!!searchQuery || status !== 'active'}
               onToggle={(open) => {
                 if (open) return;
                 setSearchQuery('');
                 setTypes(MESSAGE_VARIANTS);
+                setStatus('active');
               }}
             >
               <div className="flex min-w-0 flex-1 flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <TextInput
-                    dense
-                    type="search"
-                    label={t('v2.ui.actions.search')}
-                    startAdornment={<Icon type="search" />}
-                    value={searchQuery}
-                    onChange={setSearchQuery}
-                    className="flex-1 min-w-20"
-                    data-testid={TEST_IDS.SEARCH_FIELD}
-                  />
+                <TextInput
+                  dense
+                  type="search"
+                  label={t('v2.ui.actions.search')}
+                  startAdornment={<Icon type="search" />}
+                  value={searchQuery}
+                  onChange={setSearchQuery}
+                  data-testid={TEST_IDS.SEARCH_FIELD}
+                />
+                <CheckboxGroup
+                  aria-label={t('v2.scopes.messages.types.label')}
+                  options={typeOptions}
+                  value={types}
+                  onChange={setTypes}
+                  data-testid={TEST_IDS.MESSAGE_TYPE_FILTER}
+                />
+                <div className="flex flex-wrap items-center gap-2">
                   <SortSelect
                     options={orderOptions}
                     value={orderBy}
@@ -123,17 +136,17 @@ const Messages = () => {
                     onReversedChange={setReversed}
                     data-testid={TEST_IDS.SORT_SELECT}
                   />
+                  {canFilterStatus && (
+                    <SelectInput
+                      dense
+                      label={t('settings.columns.status')}
+                      options={statusOptions}
+                      value={status}
+                      onChange={(value) => setStatus(value as InboxStatus)}
+                      data-testid={TEST_IDS.MESSAGE_STATUS_FILTER}
+                    />
+                  )}
                 </div>
-                <ComboBox
-                  dense
-                  label={t('v2.scopes.messages.types.label')}
-                  tagsLabel={t('v2.scopes.messages.types.selected')}
-                  options={typeOptions}
-                  value={types}
-                  onChange={setTypes}
-                  className="w-full"
-                  data-testid={TEST_IDS.MESSAGE_TYPE_FILTER}
-                />
               </div>
             </ScopeTitle>
           }
@@ -179,7 +192,7 @@ const Messages = () => {
             <ScrollList storageKey="messages" className="gap-1">
               {visibleMessages.map((message) => (
                 <li key={message.hash_id} data-testid="message-item">
-                  <MessageCard message={message} selected={message.hash_id === message_id} onArchived={refetch} />
+                  <MessageCard message={message} selected={message.hash_id === message_id} onChanged={refetch} />
                 </li>
               ))}
             </ScrollList>

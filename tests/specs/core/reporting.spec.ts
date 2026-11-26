@@ -71,10 +71,14 @@ test('Bug Reports', async ({ newPageFor }) => {
 
   await test.step('Admin archives the bug report', async () => {
     await adminPage.getByTestId(TEST_IDS.ARCHIVE_MESSAGE_BUTTON).click();
+    await adminPage.getByRole('alertdialog').getByTestId(TEST_IDS.ARCHIVE_CONFIRM).click();
   });
 
   await test.step('Admin verifies bug report is gone', async () => {
     await reporting.searchMessages(adminPage, bugReport);
-    await expect(adminPage.getByTestId('messages-no-results-state')).toBeVisible();
+    // An emptied inbox shows the empty state instead of "no results".
+    await expect(
+      adminPage.getByTestId('messages-no-results-state').or(adminPage.getByTestId('messages-empty-state'))
+    ).toBeVisible();
   });
 });

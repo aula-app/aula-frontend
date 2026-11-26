@@ -1,7 +1,9 @@
 import { MessageType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import ArchiveButton from '@/v2/components/button/ArchiveButton';
-import { archiveMessage } from '@/v2/components/message/archiveMessage';
+import RestoreButton from '@/v2/components/button/RestoreButton';
+import { archiveConfirmDescription, archiveMessage, restoreMessage } from '@/v2/components/message/archiveMessage';
+import { MESSAGE_STATUS } from '@/v2/components/message/getInboxMessages';
 import { parseMessageBody } from '@/v2/components/message/parseMessageBody';
 import { isActionableRequest } from '@/v2/components/message/RequestActions';
 import Link from '@/v2/components/navigation/Link';
@@ -10,23 +12,29 @@ import Icon from '@/v2/components/ui/Icon/Icon';
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
-import { getMessageVariant, VARIANT_STYLES } from './messageVariant';
+import { ARCHIVED_STYLES, getMessageVariant, VARIANT_STYLES } from './messageVariant';
 
 interface MessageCardProps {
   message: MessageType;
   /** Marks the card whose message is open beside the list. */
   selected?: boolean;
-  /** Called once the message is archived. */
-  onArchived?: () => void;
+  /** Called once the message is archived or restored. */
+  onChanged?: () => void;
 }
 
-const MessageCard = ({ message, selected = false, onArchived }: MessageCardProps) => {
+const MessageCard = ({ message, selected = false, onChanged }: MessageCardProps) => {
   const { t } = useTranslation();
   const titleId = useId();
   const variant = getMessageVariant(message.msg_type);
-  const { icon, iconClass, color, hover } = VARIANT_STYLES[variant];
+  const isArchived = Number(message.status) === MESSAGE_STATUS.archived;
+  const { icon, iconClass, color: typeColor } = VARIANT_STYLES[variant];
+  const { color, hover } = isArchived ? ARCHIVED_STYLES : VARIANT_STYLES[variant];
+  const canChangeStatus = checkPermissions('messages', 'status');
   const canArchive =
-    checkPermissions('messages', 'status') && !isActionableRequest(parseMessageBody(message.body).metadata);
+    canChangeStatus &&
+    Number(message.status) === MESSAGE_STATUS.active &&
+    !isActionableRequest(parseMessageBody(message.body).metadata);
+  const canRestore = canChangeStatus && isArchived;
 
   return (
     <article
@@ -37,7 +45,7 @@ const MessageCard = ({ message, selected = false, onArchived }: MessageCardProps
         selected && 'outline-2 outline-offset-2 outline-foreground'
       )}
     >
-      <div className={twMerge('flex shrink-0 items-center justify-center rounded-l-2xl px-4', color)}>
+      <div className={twMerge('flex shrink-0 items-center justify-center rounded-l-2xl px-4', typeColor)}>
         <Icon type={icon} size="2rem" className={iconClass} />
       </div>
       <Link
@@ -48,27 +56,47 @@ const MessageCard = ({ message, selected = false, onArchived }: MessageCardProps
           'hover:no-underline transition-colors duration-150',
           color,
           hover,
-          !canArchive && 'rounded-r-2xl pr-6'
+          !canArchive && !canRestore && 'rounded-r-2xl pr-6'
         )}
       >
         <h2 id={titleId} className="truncate text-lg font-semibold">
           {message.headline}
         </h2>
-        {message.created && (
-          <p className="text-xs">
-            {t('v2.scopes.messages.sentOn')}{' '}
-            <DateText withTime date={message.created} className="font-bold text-current" />
+        {(message.created || isArchived) && (
+          <p className="flex flex-wrap items-center gap-x-2 text-xs">
+            {message.created && (
+              <span>
+                {t('v2.scopes.messages.sentOn')}{' '}
+                <DateText withTime date={message.created} className="font-bold text-current" />
+              </span>
+            )}
+            {isArchived && (
+              <span className="inline-flex items-center gap-1 font-semibold">
+                <Icon type="archive" size="1em" aria-hidden="true" />
+                {t('status.archived')}
+              </span>
+            )}
           </p>
         )}
       </Link>
-      {canArchive && (
+      {(canArchive || canRestore) && (
         <div className={twMerge('flex shrink-0 items-center justify-center rounded-r-2xl px-3', color)}>
-          <ArchiveButton
-            subject={message.headline}
-            successMessage={t('v2.scopes.messages.archived')}
-            onArchive={() => archiveMessage(message.hash_id)}
-            onArchived={onArchived}
-          />
+          {canArchive ? (
+            <ArchiveButton
+              subject={message.headline}
+              confirmDescription={archiveConfirmDescription(t, message.headline)}
+              successMessage={t('v2.scopes.messages.archived')}
+              onArchive={() => archiveMessage(message.hash_id)}
+              onArchived={onChanged}
+            />
+          ) : (
+            <RestoreButton
+              subject={message.headline}
+              successMessage={t('v2.scopes.messages.restored')}
+              onRestore={() => restoreMessage(message.hash_id)}
+              onRestored={onChanged}
+            />
+          )}
         </div>
       )}
     </article>

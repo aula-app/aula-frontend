@@ -50,12 +50,12 @@ export const getAllMessages = async (args: GenericListRequest): Promise<GetMessa
  * Get a list of messages from the database.
  */
 
-export const getPersonalMessages = async (): Promise<GetMessagesResponse> => {
+export const getPersonalMessages = async (status: StatusTypes = 1): Promise<GetMessagesResponse> => {
   const response = await databaseRequest(
     {
       model: 'Message',
       method: 'getPersonalMessagesByUser',
-      arguments: {},
+      arguments: { status },
     },
     ['user_id']
   );
@@ -63,12 +63,12 @@ export const getPersonalMessages = async (): Promise<GetMessagesResponse> => {
   return response as GetMessagesResponse;
 };
 
-export const getAdminMessages = async (): Promise<GetMessagesResponse> => {
+export const getAdminMessages = async (status: StatusTypes = 1): Promise<GetMessagesResponse> => {
   const response = await databaseRequest(
     {
       model: 'Message',
       method: 'getAdminMessages',
-      arguments: {},
+      arguments: { status },
     },
     ['user_id']
   );

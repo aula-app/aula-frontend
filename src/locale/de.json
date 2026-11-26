@@ -146,6 +146,8 @@
         "plural": "Nachrichten",
         "sentOn": "am",
         "archived": "Nachricht archiviert",
+        "archiveConfirm": "„{{var}}“ wird ins Archiv verschoben.\nMit dem Statusfilter „{{status}}“ lassen sich archivierte Einträge wieder anzeigen.",
+        "restored": "Nachricht wiederhergestellt",
         "reject": "Ablehnen",
         "date": "Datum",
         "select": "Wähle eine Nachricht aus, um sie zu lesen",
@@ -199,7 +201,8 @@
         "report": "Inhalt melden",
         "share": "Ideen-Link kopieren",
         "submit": "Übermitteln",
-        "archive": "Archivieren"
+        "archive": "Archivieren",
+        "unarchive": "Wiederherstellen"
       },
       "code": {
         "button": "Code: {{var}}",
@@ -211,6 +214,9 @@
         "label": "Dunkelmodus"
       },
       "dialog": {
+        "archive": {
+          "title": "Archivieren?"
+        },
         "delete": {
           "title": "Vorsicht!",
           "description": "Möchtest du wirklich fortfahren?\nDiese Aktion kann nicht rückgängig gemacht werden.",
@@ -1270,6 +1276,7 @@
       "closeMenu": "Hauptmenü schließen",
       "mainMenu": "Hauptnavigation",
       "openMenu": "Hauptmenü öffnen",
+      "inbox": "Inbox",
       "messages": "Nachrichten",
       "privacy": "Datenschutz",
       "profile": "Profil",
@@ -1321,6 +1328,7 @@
   "pageTitles": {
     "welcome": "Willkommen",
     "about": "Über aula",
+    "inbox": "Inbox",
     "messages": "Nachrichten",
     "announcements": "Ankündigungen",
     "announcement": "Ankündigung",
