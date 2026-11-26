@@ -5,8 +5,7 @@ import * as shared from '../support/utils';
 const host = shared.getHost();
 
 export const clickOnPageItem = async (page: Page, text: string) => {
-  // Closed <dialog>s keep their content mounted, so a bare text match can hit
-  // offscreen copies of the same label.
+  // Closed <dialog>s keep their content mounted.
   const item = page.getByText(text).filter({ visible: true });
   await expect(item).toBeVisible();
   await item.click();
@@ -18,7 +17,7 @@ export const clickOnLink = async (page: Page, path: string) => {
 };
 
 export const ensureUrl = async (page: Page, path: string, forceRefresh: boolean = false) => {
-  if (!forceRefresh && (page.url() === `${host}${path}`)) {
+  if (!forceRefresh && page.url() === `${host}${path}`) {
     return;
   }
 
@@ -151,4 +150,3 @@ export const goToMessagesSettings = async (page: Page, forceRefresh: boolean = f
 export const goToAnnouncementsSettings = async (page: Page, forceRefresh: boolean = false) => {
   await ensureUrl(page, '/settings/announcements', forceRefresh);
 };
-

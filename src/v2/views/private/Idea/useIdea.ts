@@ -31,7 +31,7 @@ export const useIdea = (idea_id: string | undefined): UseIdeaState => {
       }
       setIdea(response.data);
       return response.data;
-    } catch (err) {
+    } catch {
       setError('fetch');
       return null;
     } finally {

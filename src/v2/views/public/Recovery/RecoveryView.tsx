@@ -7,7 +7,6 @@ import { Controller, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import { useRecoverySubmit } from './useRecoverySubmit';
-import Link from '@/v2/components/navigation/Link';
 import { useMemo } from 'react';
 
 const RecoveryPasswordView = () => {

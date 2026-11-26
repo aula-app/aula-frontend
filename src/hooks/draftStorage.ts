@@ -9,10 +9,7 @@ export interface UseDraftStorageOptions {
   onCancel?: () => void;
 }
 
-export const useDraftStorage = <T extends FieldValues>(
-  form: UseFormReturn<T>,
-  options: UseDraftStorageOptions
-) => {
+export const useDraftStorage = <T extends FieldValues>(form: UseFormReturn<T>, options: UseDraftStorageOptions) => {
   const { storageKey, isNewRecord, selections, onSubmit, onCancel } = options;
   const { watch, reset, getValues } = form;
 

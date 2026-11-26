@@ -19,9 +19,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, children, outlined = false, text = false, color, onMouseDown, to, ...props }, ref) => {
     const { createRipple, RipplesContainer } = useRipple();
 
-    // A `-fg` token is the text colour for a *filled* button, so it is only legible on that
-    // fill. Outlined and text buttons sit on the page instead and take a body colour, with
-    // the border following the text so it keeps its own contrast.
+    // `-fg` only contrasts on its own fill.
     const onPage = !color
       ? 'text-current'
       : color === 'error'
@@ -40,7 +38,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         ? 'hover:bg-shadow active:bg-shadow'
         : 'hover:brightness-95 active:brightness-90 dark:hover:brightness-110 dark:active:brightness-125',
       `outline-${color ? `${color}-fg` : 'current'}`,
-      'disabled:cursor-not-allowed disabled:opacity-50',
+      'disabled:cursor-not-allowed disabled:opacity-60',
       outlined ? `border border-current ${onPage}` : text ? `${onPage} shadow-none` : filled,
       className
     );

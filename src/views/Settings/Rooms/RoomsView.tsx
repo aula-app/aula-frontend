@@ -1,6 +1,6 @@
 import { RoomForms } from '@/components/DataForms';
 import SettingsView from '@/components/SettingsView';
-import { useDataTableState } from '@/hooks';
+import { useDataTableState, useSsoManaged } from '@/hooks';
 import { deleteRoom, getRooms } from '@/services/rooms';
 import { useAppStore } from '@/store/AppStore';
 import { RoomType } from '@/types/Scopes';
@@ -12,6 +12,7 @@ const FILTER = ['room_name', 'description_public'] as Array<keyof RoomType>;
 const COLUMNS = [
   { name: 'room_name', orderId: 5 },
   { name: 'description_public', orderId: 6 },
+  { name: 'idp_group_id', orderId: 0 },
   { name: 'status', orderId: 2 },
   { name: 'created', orderId: 4 },
   { name: 'last_update', orderId: 0 },
@@ -20,6 +21,8 @@ const COLUMNS = [
 const RoomsView: React.FC = () => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
+  const isSsoManaged = useSsoManaged();
+  const columns = isSsoManaged ? COLUMNS : COLUMNS.filter((column) => column.name !== 'idp_group_id');
 
   const fetchFn = useCallback(async (params: Record<string, unknown>) => {
     return await getRooms({
@@ -41,7 +44,7 @@ const RoomsView: React.FC = () => {
   return (
     <SettingsView
       scope="rooms"
-      columns={COLUMNS}
+      columns={columns}
       filterFields={FILTER}
       dataTableState={dataTableState}
       FormComponent={RoomForms as React.ComponentType<{ onClose: () => void; defaultValues?: unknown }>}

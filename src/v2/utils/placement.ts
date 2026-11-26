@@ -59,16 +59,46 @@ const horizontalClasses: Record<XZone, string> = {
   right: 'right-1/2', // near right → panel ends at wrapper center, extends left
 };
 
+const GAP = 8;
+
+interface Measurement {
+  zones: { x: XZone; y: YZone };
+  containerWidth: number;
+  availableHeight: number;
+}
+
+function measure(el: HTMLElement | null): Measurement {
+  const rect = el?.getBoundingClientRect() ?? new DOMRect();
+  const container = getClippingRect(el ?? document.body);
+  const zones = getZones(el ?? document.body, rect);
+  const availableHeight = Math.max(
+    0,
+    (zones.y === 'bottom' ? rect.top - container.top : container.bottom - rect.bottom) - GAP
+  );
+  return { zones, containerWidth: container.width, availableHeight };
+}
+
+const isSameMeasurement = (a: Measurement, b: Measurement) =>
+  a.zones.x === b.zones.x &&
+  a.zones.y === b.zones.y &&
+  a.containerWidth === b.containerWidth &&
+  a.availableHeight === b.availableHeight;
+
 /** Shared placement hook: returns zones and all position classes. */
 export function usePlacement(ref: { current: HTMLElement | null }) {
-  // `ref.current` is null on the first render (the ref attaches after the DOM mounts), so the
-  // measurement below would fall back to a zeroed DOMRect and misplace the panel below the trigger.
-  // Force one re-measure in a layout effect — after the ref is attached but before paint — so the
-  // placement is correct on first paint instead of only after a later re-render.
-  const [, setTick] = useState(0);
-  const remeasure = useCallback(() => setTick((n) => n + 1), []);
+  // Refs can't be read during render, so measure in a layout effect (after the ref attaches,
+  // before paint) and keep the previous state when nothing changed to avoid a render loop.
+  const [measurement, setMeasurement] = useState(() => measure(null));
+  const remeasure = useCallback(() => {
+    const next = measure(ref.current);
+    setMeasurement((prev) => (isSameMeasurement(prev, next) ? prev : next));
+  }, [ref]);
+
   useLayoutEffect(() => {
     remeasure();
+  });
+
+  useLayoutEffect(() => {
     // The trigger can move/resize after mount (e.g. it lives in a Collapse that expands, so its
     // box animates 0→full height). Re-measure on every resize so placement tracks the final
     // geometry instead of the collapsed geometry captured at mount.
@@ -79,18 +109,9 @@ export function usePlacement(ref: { current: HTMLElement | null }) {
     return () => observer.disconnect();
   }, [ref, remeasure]);
 
-  const el = ref.current;
-  const rect = el?.getBoundingClientRect() ?? new DOMRect();
-  const container = getClippingRect(el ?? document.body);
-  const zones = getZones(el ?? document.body, rect);
+  const { zones, containerWidth, availableHeight } = measurement;
   const { x, y } = zones;
-
   const verticalClass = y === 'bottom' ? 'bottom-[calc(100%+0.25rem)]' : 'top-[calc(100%+0.25rem)]';
-  const GAP = 8;
-  const availableHeight = Math.max(
-    0,
-    (y === 'bottom' ? rect.top - container.top : container.bottom - rect.bottom) - GAP
-  );
 
   return {
     zones,
@@ -98,7 +119,7 @@ export function usePlacement(ref: { current: HTMLElement | null }) {
     horizontalClass: horizontalClasses[x],
     cornerClass: cornerClasses[y][x],
     originClass: originClasses[y][x],
-    containerWidth: container.width,
+    containerWidth,
     availableHeight,
   };
 }

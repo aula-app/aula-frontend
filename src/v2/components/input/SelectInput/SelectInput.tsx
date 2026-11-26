@@ -1,4 +1,11 @@
-import { FieldHint, FieldLabel, fieldBoxClasses, listBoxClasses, popoverClasses } from '@/v2/components/input/Field';
+import {
+  FieldHint,
+  FieldLabel,
+  fieldBoxClasses,
+  listBoxClasses,
+  listBoxItemClasses,
+  popoverClasses,
+} from '@/v2/components/input/Field';
 import Icon from '@/v2/components/ui/Icon';
 import { ReactNode } from 'react';
 import { Button, Key, ListBox, ListBoxItem, Popover, Select, SelectValue } from 'react-aria-components';
@@ -117,10 +124,7 @@ const SelectInput = ({
                   id={option.value}
                   textValue={option.label}
                   data-testid={dataTestId ? `${dataTestId}-option-${option.value}` : undefined}
-                  className={twMerge(
-                    'px-3 py-2 text-sm cursor-pointer outline-none transition-colors duration-100 text-nowrap text-muted',
-                    'data-selected:text-current data-selected:font-medium data-focused:bg-primary/10'
-                  )}
+                  className={twMerge(listBoxItemClasses, 'text-nowrap')}
                 >
                   {option.label}
                 </ListBoxItem>

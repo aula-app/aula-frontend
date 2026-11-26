@@ -32,7 +32,12 @@ const isValidPhase = (phase: string): phase is `${RoomPhases}` => Object.keys(ph
 const PhaseIdeas = ({ phase }: { phase: `${RoomPhases}` }) => {
   const { t } = useTranslation();
   const [, dispatch] = useAppStore();
-  const dashboard = useCollapseOnScroll();
+  const {
+    ref: dashboardRef,
+    open: dashboardOpen,
+    setOpen: setDashboardOpen,
+    onScroll: onListScroll,
+  } = useCollapseOnScroll();
   const quorum = useQuorum(phase);
   const { ideas, isLoading, error, refetch } = usePhaseIdeas(phase);
   const votes = useIdeaVotes(ideas, phase === '30');
@@ -55,7 +60,7 @@ const PhaseIdeas = ({ phase }: { phase: `${RoomPhases}` }) => {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-      <Dashboard open={dashboard.open} onOpenChange={dashboard.setOpen} />
+      <Dashboard ref={dashboardRef} open={dashboardOpen} onOpenChange={setDashboardOpen} />
       <ListPageLayout
         header={
           <ScopeTitle
@@ -125,7 +130,7 @@ const PhaseIdeas = ({ phase }: { phase: `${RoomPhases}` }) => {
         )}
 
         {!isLoading && visibleIdeas.length > 0 && (
-          <ScrollList storageKey={storageKey} onScroll={dashboard.onScroll}>
+          <ScrollList storageKey={storageKey} onScroll={onListScroll}>
             {visibleIdeas.map((idea) => (
               <li key={idea.hash_id} data-testid="phase-idea-item">
                 <Idea idea={idea} vote={votes[idea.hash_id]} quorum={quorum} onChanged={refetch} />

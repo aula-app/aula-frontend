@@ -6,7 +6,6 @@ import { checkPermissions } from '@/utils';
 import DeleteButton from '@/v2/components/button/DeleteButton';
 import EditButton from '@/v2/components/button/EditButton';
 import ReportButton from '@/v2/components/button/ReportButton';
-import ShareButton from '@/v2/components/button/ShareButton';
 import Avatar from '@/v2/components/idea/Avatar';
 import LikeStat from '@/v2/components/idea/LikeStat';
 import UserMeta from '@/v2/components/idea/UserMeta';
@@ -15,7 +14,7 @@ import Markdown from '@/v2/components/ui/Markdown';
 import MoreOptions from '@/v2/components/ui/MoreOptions';
 import { CommentForm } from '@/v2/forms';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { twMerge } from 'tailwind-merge';
 import { useCommentLike } from './useCommentLike';
 
@@ -29,7 +28,6 @@ interface CommentProps {
 const Comment = ({ comment, className, onChanged }: CommentProps) => {
   const { t } = useTranslation();
   const { phase } = useParams<{ phase: `${RoomPhases}` }>();
-  const { pathname } = useLocation();
 
   // Comments close along with the idea once approval starts.
   const canLike = Number(phase || '0') < 20 && checkPermissions('comments', 'like', comment.user_hash_id);
