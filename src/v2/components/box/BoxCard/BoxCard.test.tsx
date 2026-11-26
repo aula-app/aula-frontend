@@ -14,7 +14,10 @@ vi.mock('@/utils', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/utils')>()),
   checkPermissions: () => true,
 }));
-vi.mock('@/v2/components/ui/MoreOptions', () => ({ default: () => null }));
+vi.mock('@/v2/components/ui/MoreOptions', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/v2/components/ui/MoreOptions')>()),
+  default: () => null,
+}));
 vi.mock('@/v2/components/ui/Markdown', () => ({ default: () => null }));
 
 const boxAt = (phase_id: number) =>

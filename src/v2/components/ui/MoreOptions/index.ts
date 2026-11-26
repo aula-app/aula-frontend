@@ -1,1 +1,1 @@
-export { default } from './MoreOptions';
+export { default, moreOptionsClearance, moreOptionsHost } from './MoreOptions';
