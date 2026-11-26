@@ -121,6 +121,7 @@ const Messages = () => {
                   data-testid={TEST_IDS.SEARCH_FIELD}
                 />
                 <CheckboxGroup
+                  aria-label={t('v2.scopes.messages.types.label')}
                   options={typeOptions}
                   value={types}
                   onChange={setTypes}

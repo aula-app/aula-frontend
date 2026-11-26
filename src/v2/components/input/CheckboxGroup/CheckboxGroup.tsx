@@ -5,6 +5,8 @@ import { twMerge } from 'tailwind-merge';
 
 interface CheckboxGroupProps {
   label?: string;
+  /** Accessible name when there is no visible `label`. */
+  'aria-label'?: string;
   options: SelectOption[];
   /** Values of the checked options. */
   value: string[];
@@ -16,6 +18,7 @@ interface CheckboxGroupProps {
 /** A labelled set of checkboxes for picking any number of a few fixed options. */
 const CheckboxGroup = ({
   label,
+  'aria-label': ariaLabel,
   options,
   value,
   onChange,
@@ -23,6 +26,7 @@ const CheckboxGroup = ({
   'data-testid': dataTestId,
 }: CheckboxGroupProps) => (
   <AriaCheckboxGroup
+    aria-label={ariaLabel}
     value={value}
     onChange={onChange}
     data-testid={dataTestId}
