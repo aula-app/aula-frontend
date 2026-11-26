@@ -16,10 +16,9 @@ export class DbBackchannel {
 
       let result;
       try {
-        result = await centralConnection.query<{ data: { tenancy_db_username: string; tenancy_db_password: string; tenancy_db_name: string } }[]>(
-          `SELECT data FROM tenants WHERE instance_code = ?`,
-          [instanceCode]
-        );
+        result = await centralConnection.query<
+          { data: { tenancy_db_username: string; tenancy_db_password: string; tenancy_db_name: string } }[]
+        >(`SELECT data FROM tenants WHERE instance_code = ?`, [instanceCode]);
         const { data } = result[0];
 
         const self = new DbBackchannel();
@@ -31,23 +30,23 @@ export class DbBackchannel {
           password: data.tenancy_db_password,
           database: data.tenancy_db_name,
           multipleStatements: true,
-          connectionLimit: 15
+          connectionLimit: 15,
         });
         this._instances[instanceCode] = self;
       } catch (e) {
         console.error(`Error getting conn. pool for ${instanceCode}. Result: ${JSON.stringify(result)}`, e);
       } finally {
-        await centralConnection.end()
+        await centralConnection.end();
       }
     }
 
     return this._instances[instanceCode];
-  }
+  };
 
   /**
    * Use the static method `async DbBackchannel.getInstance()` to initialize a new object of this class.
    */
-  private constructor() { }
+  private constructor() {}
   private tenantConnectionsPool!: mariadb.Pool;
 
   public async truncateAll(): Promise<void> {
@@ -56,6 +55,16 @@ export class DbBackchannel {
 
   public async seed(): Promise<void> {
     await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '120-seed.sql'));
+  }
+
+  /** Marks part of the baseline as IdP-managed; undone by the next `seed()`. */
+  public async seedIdpManaged(): Promise<void> {
+    await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '130-idp-managed.sql'));
+  }
+
+  /** Adds school-wide role users and a memberless room to the baseline; undone by the next `seed()`. */
+  public async seedGlobalRoles(): Promise<void> {
+    await this.runSqlFile(path.join(path.resolve(__dirname, 'sql'), '140-global-roles.sql'));
   }
 
   private async runSqlFile(filePath: string) {

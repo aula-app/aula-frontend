@@ -108,7 +108,6 @@ describe('Idea metrics by phase', () => {
     const nobody = { ...idea, number_of_users: 0 };
     const { container } = renderAt('40', { idea: nobody, users: 0 });
 
-    // QuorumBar draws nothing without participants, so the bubble must not cut its corner for it.
     expect(barOf(container)).toBeNull();
     expect(container.querySelector('.rounded-br-none')).toBeNull();
   });

@@ -11,13 +11,11 @@ import { twMerge } from 'tailwind-merge';
 interface BoxIdeaListProps {
   ideas: IdeaType[];
   phase: `${RoomPhases}`;
-  /** Palette the rows are drawn in — the box's own phase color. */
   color: PhaseType;
-  /** Path of the box these ideas sit in; each row links to the idea beneath it. */
   boxPath: string;
-  /** Category per idea, keyed by idea hash_id. Rows without one omit the chip. */
+  /** Keyed by idea hash_id. */
   categories?: Record<string, Category>;
-  /** The viewer's own vote per idea, keyed by idea hash_id. Without one a row reads as not yet voted. */
+  /** Keyed by idea hash_id. */
   votes?: Record<string, Vote | null>;
   className?: string;
   'data-testid'?: string;
@@ -25,11 +23,9 @@ interface BoxIdeaListProps {
 
 const DISCUSSION_PHASE = '10';
 
-// Three 32px rows and their 2px gaps, plus half a row, so a fourth idea is cut
-// in half and gives the list a visible edge to scroll.
+// 3.5 rows, so the list visibly scrolls.
 const PREVIEW_HEIGHT = 'max-h-[118px]';
 
-/** What a box holds, as full-width rows: category, title and status. */
 const BoxIdeaList = ({
   ideas,
   phase,

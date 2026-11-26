@@ -15,10 +15,20 @@ interface Props<T extends string> {
   /** Accessible name of the tab list. */
   label: string;
   className?: string;
+  /** For pinning the strip while the panel scrolls. */
+  tabListClassName?: string;
   'data-testid'?: string;
 }
 
-const Tabs = <T extends string>({ tabs, value, onChange, label, className = '', 'data-testid': testId }: Props<T>) => {
+const Tabs = <T extends string>({
+  tabs,
+  value,
+  onChange,
+  label,
+  className = '',
+  tabListClassName = '',
+  'data-testid': testId,
+}: Props<T>) => {
   const id = useId();
   const strip = useRef<HTMLDivElement>(null);
   const current = tabs.findIndex((tab) => tab.value === value);
@@ -58,7 +68,7 @@ const Tabs = <T extends string>({ tabs, value, onChange, label, className = '', 
         ref={strip}
         role="tablist"
         aria-label={label}
-        className="flex gap-1 border-b border-current/15"
+        className={`flex gap-1 border-b border-current/15 ${tabListClassName}`}
         onKeyDown={walk}
         data-testid={testId}
       >

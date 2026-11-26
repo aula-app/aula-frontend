@@ -46,11 +46,7 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onCha
   const canLike = phaseNumber < 20;
   const participants = Number(users) || Number(idea.number_of_users) || 0;
 
-  // The bar poses a different question either side of voting, and only while it is still open:
-  // before, whether the idea has drawn enough likes to advance — settled the moment it is judged;
-  // after, whether enough people turned out — which a rejected idea never gets to ask.
-  // It must also agree with what QuorumBar will actually draw: the bubble squares its bottom
-  // corner to seat the bar, so promising one that never arrives leaves a cut corner over nothing.
+  // Must match QuorumBar's render condition.
   const isJudged = phaseNumber >= 20 && !!idea.approved;
   const hasQuorumBar = participants > 0 && (isVoting ? idea.approved !== -1 : quorum > 0 && !isJudged);
 

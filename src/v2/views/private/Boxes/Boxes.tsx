@@ -48,7 +48,7 @@ const Boxes: React.FC = () => {
     setReversed,
   } = useListFilter(boxes, boxesFilterConfig, `boxes-${room_id}-${currentPhase}`);
 
-  // Keyed on the full list, not the filtered one, so searching does not refetch.
+  // Full list, so searching doesn't refetch.
   const { ideas: boxIdeas, refetch: refetchBoxIdeas } = useBoxIdeas(boxes);
 
   const handleBoxChanged = () => {
@@ -56,7 +56,6 @@ const Boxes: React.FC = () => {
     refetchBoxIdeas();
   };
 
-  // Votes are per idea and the rows span every box, so they are fetched for the lot at once.
   const allIdeas = useMemo(() => Object.values(boxIdeas).flat(), [boxIdeas]);
   const votes = useIdeaVotes(allIdeas, currentPhase === '30');
 

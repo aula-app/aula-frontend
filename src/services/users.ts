@@ -2,7 +2,6 @@ import { databaseRequest, GenericListRequest, GenericResponse } from '@/services
 import { StatusTypes } from '@/types/Generics';
 import { DelegationType, UserType } from '@/types/Scopes';
 import { RoleTypes } from '@/types/SettingsTypes';
-import { localStorageGet } from '@/utils';
 
 interface GetUserResponse extends GenericResponse {
   data: UserType | null;
@@ -175,19 +174,20 @@ export async function editSelfAbout(about_me: string): Promise<GenericResponse> 
 }
 
 /**
- * Fetch user GDPR data
+ * Get user GDPR data
  */
 
-export function getUserGDPRData(userPublicId: string): Promise<Response> {
-  // TODO abstracize this somewhere, probably at the latest for FE/v2
-  const apiUrl =`${localStorageGet('api_url')}/api/v2/users/${userPublicId}/export`;
-  const token = localStorageGet('token');
-  return fetch(apiUrl, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-      'aula-instance-code': localStorageGet('code')
-    }
-  });
+export async function exportSelfData(): Promise<GetUserResponse> {
+  const response = await databaseRequest(
+    {
+      model: 'User',
+      method: 'getUserGDPRData',
+      arguments: {},
+    },
+    ['user_id']
+  );
+
+  return response as GetUserResponse;
 }
 
 /**

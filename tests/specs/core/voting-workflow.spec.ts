@@ -12,7 +12,6 @@ import { BoxData } from '../../support/types';
  * Tests complete voting workflow from creation to results (without delegation)
  */
 test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
-
   // Phase constants matching the application
   const PHASES = {
     WILD: 0,
@@ -67,8 +66,7 @@ test('Voting Workflow', async ({ seededRoom, newPageFor }) => {
     await adminPage.getByTestId('box-form-cancel').click();
   });
 
-  // Assigning existing Ideas to a Box lives in Settings; the box card's edit dialog
-  // only covers room/name/description/phase.
+  // Idea assignment lives in Settings.
   await test.step("Admin adds both user's Ideas to Box", async () => {
     await boxes.edit(adminPage, { ...box, ideas: [idea1, idea2] } as BoxData);
   });

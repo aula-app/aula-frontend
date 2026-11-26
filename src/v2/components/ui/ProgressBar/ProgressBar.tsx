@@ -3,23 +3,18 @@ import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
 interface ProgressBarProps {
-  /** Filled share of the track, 0–100. Clamped. */
+  /** 0–100, clamped. */
   value: number;
-  /** Palette: the track is `bg-{color}`, the fill `bg-{color}-active`. */
   color: PhaseType;
-  /** Accessible name — the bar's own content is treated as decorative. */
   label: string;
-  /** Threshold to mark on the track, 0–100, e.g. a quorum. */
+  /** 0–100. */
   marker?: number;
-  /** Rendered inside the marker. Keep it to a few characters — the triangle narrows fast. */
   markerLabel?: ReactNode;
-  /** Sits at the leading edge of the fill, like the percentage in a loading bar. Hidden at zero. */
+  /** Hidden at 0. */
   valueLabel?: ReactNode;
-  /** Pinned to the end of the track, and dropped once the fill or marker crowds it. */
+  /** Hidden when crowded. */
   endLabel?: ReactNode;
-  /** Pinned inside the left of the bar, e.g. an icon and a count. */
   children?: ReactNode;
-  /** Corner radius is the caller's, since bars sit both standalone and as card footers. */
   className?: string;
 }
 
@@ -28,7 +23,6 @@ const clamp = (value: number) => Math.min(100, Math.max(0, value));
 const FILL_CROWDS_END = 88;
 const MARKER_CROWDS_END = 70;
 
-/** Inline progress track shared by every progress and quorum readout. */
 const ProgressBar = ({
   value,
   color,

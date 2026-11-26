@@ -13,7 +13,6 @@ const GAP = 8;
 interface AutocompleteInputProps {
   label: string;
   options: SelectOption[];
-  /** Fires with the picked option's value. */
   onSelect: (value: string) => void;
   loading?: boolean;
   disabled?: boolean;

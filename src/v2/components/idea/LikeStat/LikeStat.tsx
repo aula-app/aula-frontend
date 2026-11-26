@@ -4,7 +4,6 @@ import Stat from '@/v2/components/idea/Stat';
 import { IdeaLike } from './useIdeaLike';
 
 type LikeStatProps = Omit<ComponentProps<typeof Stat>, 'icon' | 'count' | 'label' | 'active' | 'onClick'> & {
-  /** State from `useIdeaLike`, owned by the caller so the count can drive other readouts too. */
   like: IdeaLike;
 };
 

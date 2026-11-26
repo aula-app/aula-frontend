@@ -37,6 +37,12 @@ export interface GenericListRequest {
   user_needs_to_consent?: StatusTypes;
 }
 
+const CODE_2_ERRORS: Record<string, string> = {
+  addUser: 'errors.existingUser',
+  editUser: 'errors.existingUser',
+  addIdea: 'errors.boxClosed',
+};
+
 /**
  * Makes an authenticated request to the database API.
  *
@@ -154,10 +160,7 @@ export const baseRequest = async <T = unknown>(
     }
 
     if (response.error_code) {
-      let errorKey = 'errors.default';
-      if (response.error_code === 2) {
-        errorKey = 'errors.existingUser';
-      }
+      const errorKey = (response.error_code === 2 && CODE_2_ERRORS[data.method]) || 'errors.default';
 
       return {
         data: null,

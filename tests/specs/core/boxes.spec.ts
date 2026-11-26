@@ -11,7 +11,6 @@ import { BoxData } from '../../support/types';
  * Uses pure Playwright fixtures for setup/teardown
  */
 test.describe('Box Management - Creation, phase changes and Permissions', () => {
-
   test.skip('Unprivileged User cannot create a Box', async () => {
     // TODO: const box = entities.createBox('unprivileged-box', seededRoom)
     // TODO: const userPage = await newPageFor('user');
@@ -64,8 +63,7 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
       await boxes.create(adminPage, box);
     });
 
-    // Assigning an existing Idea to a Box lives in Settings; the box card's edit
-    // dialog only covers room/name/description/phase.
+    // Idea assignment lives in Settings.
     await test.step('Admin assigns Idea to a Box', async () => {
       const boxNewPhaseObject = { ...box, ideas: [idea] } as BoxData;
 
