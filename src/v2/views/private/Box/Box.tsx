@@ -66,7 +66,7 @@ const Box: React.FC = () => {
   const quorum = useQuorum(boxPhase);
   const users = useRoomUsers(room_id);
 
-  // `:phase` goes stale when the box is moved, and everything downstream reads it.
+  // `:phase` goes stale when the box moves.
   useEffect(() => {
     if (!box || !room_id) return;
     if (String(box.phase_id) === phase) return;

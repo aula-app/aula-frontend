@@ -46,7 +46,7 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, className, onCha
   const canLike = phaseNumber < 20;
   const participants = Number(users) || Number(idea.number_of_users) || 0;
 
-  // Must match when QuorumBar renders: the bubble squares its corner for the bar.
+  // Must match QuorumBar's render condition.
   const isJudged = phaseNumber >= 20 && !!idea.approved;
   const hasQuorumBar = participants > 0 && (isVoting ? idea.approved !== -1 : quorum > 0 && !isJudged);
 

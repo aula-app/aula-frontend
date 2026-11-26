@@ -16,7 +16,7 @@ vi.mock('@/services/ideas', () => ({
   getIdeasByBox: vi.fn(async () => ({ data: [roomIdeas[0]], error: null })),
 }));
 
-// The API sends `phase_id` as a JSON number even though `BoxType` declares it as a string.
+// The API sends `phase_id` as a number.
 const box = {
   hash_id: 'box-1',
   name: 'Existing box',

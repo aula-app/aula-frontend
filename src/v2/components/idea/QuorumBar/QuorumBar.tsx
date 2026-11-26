@@ -11,24 +11,20 @@ const METRICS: Record<Metric, { icon: ICON_TYPE; label: string }> = {
 };
 
 interface QuorumBarProps {
-  /** Participation the bar measures: likes before voting opens, votes after. */
   metric: Metric;
-  /** Likes or votes the idea has drawn. */
   count: number;
-  /** Eligible participants. Renders nothing when zero — there is no share to draw. */
+  /** Renders nothing when 0. */
   users: number;
-  /** Share of participants required, as a percentage. 0 hides the marker. */
+  /** Percentage; 0 hides the marker. */
   quorum?: number;
-  /** Phase palette the bar is drawn in. */
   color: PhaseType;
   className?: string;
 }
 
-/** Participation on an idea drawn against the quorum it has to clear. */
 const QuorumBar = ({ metric, count, users, quorum = 0, color, className }: QuorumBarProps) => {
   const { t } = useTranslation();
 
-  // The API sends these as strings, and omits them entirely on some idea endpoints.
+  // The API sends strings, or omits them.
   const total = Number(users) || 0;
   const reached = Number(count) || 0;
 

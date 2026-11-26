@@ -10,7 +10,6 @@ export const useInstanceGuard = () => {
     const ensureInstanceConfiguration = async () => {
       const { IS_MULTI, CENTRAL_API_URL } = getRuntimeConfig();
 
-      // Multi-instance: InstanceCodeField persists code and api_url.
       if (IS_MULTI) return;
 
       localStorageSet('code', 'SINGLE');

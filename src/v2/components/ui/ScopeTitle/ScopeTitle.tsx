@@ -22,8 +22,7 @@ type ScopeTitleProps = {
   onToggle?: (open: boolean) => void;
   /** Whether the controls start expanded, e.g. to reveal a restored search. */
   defaultOpen?: boolean;
-  /** Phase id, e.g. '10'. When set, the title reads inside the phase sentence, e.g. "3 ideas in voting",
-   * and the icon becomes the phase icon. */
+  /** Switches to the phase sentence and icon, e.g. "3 ideas in voting". */
   phase?: string;
 };
 

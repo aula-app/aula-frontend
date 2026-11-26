@@ -23,7 +23,7 @@ export const useIdeasByBox = (box_id: string | undefined): UseIdeasByBoxState =>
       setIsLoading(true);
       setError(null);
       const response = await getIdeasByBox({ topic_id: box_id });
-      // error_code 2 means "no ideas" — a normal empty result, not an error.
+      // error_code 2: no ideas.
       if (response.error_code && response.error_code !== 2) {
         setError('generic');
       } else {

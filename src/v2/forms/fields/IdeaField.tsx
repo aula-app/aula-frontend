@@ -9,20 +9,15 @@ import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 
 interface IdeaFieldProps {
-  /** Room the pickable ideas come from. */
   roomId: string;
-  /** Ideas currently assigned, as `{ value: hash_id, label: title }`. */
   value: SelectOption[];
   onChange: (ideas: SelectOption[]) => void;
-  /** Palette the rows are drawn in — normally the box's own phase color. */
   color?: PhaseType;
-  /** The assigned ideas are still being fetched. */
   loadingValue?: boolean;
   disabled?: boolean;
   'data-testid'?: string;
 }
 
-/** Picks ideas out of a room and lists the picked ones, each removable. */
 const IdeaField = ({
   roomId,
   value,
@@ -54,7 +49,7 @@ const IdeaField = ({
     };
   }, [roomId]);
 
-  // The room only lists unassigned ideas, so a removed one has to be kept to stay pickable.
+  // The room only lists unassigned ideas.
   const [removed, setRemoved] = useState<SelectOption[]>([]);
 
   const selectedIds = value.map((idea) => idea.value);

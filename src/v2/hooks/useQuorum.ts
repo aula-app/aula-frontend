@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 const APPROVAL = 20;
 const VOTING = 30;
 
-/** Configured quorum as a percentage of eligible users, or 0 when the phase has none. */
+/** Percentage; 0 means none. */
 export const useQuorum = (phase: string | undefined): number => {
   const [quorum, setQuorum] = useState(0);
 

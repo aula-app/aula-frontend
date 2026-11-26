@@ -19,7 +19,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, children, outlined = false, text = false, color, onMouseDown, to, ...props }, ref) => {
     const { createRipple, RipplesContainer } = useRipple();
 
-    // `-fg` tokens only contrast on their own fill, so outlined/text buttons use body colours.
+    // `-fg` only contrasts on its own fill.
     const onPage = !color
       ? 'text-current'
       : color === 'error'

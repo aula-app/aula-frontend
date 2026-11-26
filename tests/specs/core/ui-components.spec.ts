@@ -80,7 +80,7 @@ async function gotoTooltipPage(page: import('@playwright/test').Page, dbInstance
   await ensureInstanceCode(page, dbInstanceCode);
 }
 
-// Tooltip opens on :focus-visible, which needs keyboard-initiated focus.
+// Tooltip needs :focus-visible, i.e. keyboard focus.
 async function focusViaKeyboard(page: import('@playwright/test').Page, locator: import('@playwright/test').Locator) {
   await locator.focus();
   await page.keyboard.press('Shift+Tab');

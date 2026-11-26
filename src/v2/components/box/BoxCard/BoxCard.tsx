@@ -22,15 +22,13 @@ import { twMerge } from 'tailwind-merge';
 
 interface BoxCardProps {
   box: BoxType;
-  /** The box's ideas, shown as a short preview list. Omit where they are already on screen. */
   ideas?: IdeaType[];
-  /** Decision progress for the phases that have one. Derived from `ideas` when those are given. */
+  /** Derived from `ideas` when given. */
   progress?: { settled: number; total: number };
-  /** Category per idea, keyed by idea hash_id, for the preview list's chips. */
+  /** Keyed by idea hash_id. */
   categories?: Record<string, Category>;
-  /** The viewer's own vote per idea, keyed by idea hash_id, for the preview list's chips. */
+  /** Keyed by idea hash_id. */
   votes?: Record<string, Vote | null>;
-  /** Refetch the surrounding list after an edit or delete. */
   onChanged?: () => void;
 }
 

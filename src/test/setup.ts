@@ -7,7 +7,7 @@ if (typeof globalThis.PointerEvent === 'undefined') {
   globalThis.PointerEvent = class PointerEvent extends Event {} as typeof globalThis.PointerEvent;
 }
 
-// jsdom doesn't implement matchMedia, which AppStore reads for the dark-mode default.
+// jsdom lacks matchMedia.
 if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
   window.matchMedia = ((query: string) => ({
     matches: false,
@@ -21,7 +21,7 @@ if (typeof window !== 'undefined' && typeof window.matchMedia !== 'function') {
   })) as typeof window.matchMedia;
 }
 
-// jsdom doesn't implement the <dialog> methods that Modal drives.
+// jsdom lacks <dialog> methods.
 if (typeof HTMLDialogElement !== 'undefined' && typeof HTMLDialogElement.prototype.showModal !== 'function') {
   HTMLDialogElement.prototype.showModal = function showModal() {
     this.open = true;
@@ -35,7 +35,7 @@ if (typeof HTMLDialogElement !== 'undefined' && typeof HTMLDialogElement.prototy
   };
 }
 
-// Node 22+ storage globals shadow jsdom's and break without `--localstorage-file`.
+// Node 22+ storage globals shadow jsdom's.
 const installStorage = (key: 'localStorage' | 'sessionStorage') => {
   if (typeof (globalThis as any)[key]?.getItem === 'function') return;
 

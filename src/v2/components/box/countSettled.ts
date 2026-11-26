@@ -4,7 +4,6 @@ import { toVerdict } from '@/utils';
 const VOTING_PHASE = 30;
 const RESULTS_PHASE = 40;
 
-/** From voting on, rejected ideas are out of every count. */
 export const inTheRunning = (ideas: IdeaType[], phase: number): IdeaType[] =>
   phase >= VOTING_PHASE ? ideas.filter((idea) => idea.approved !== -1) : ideas;
 

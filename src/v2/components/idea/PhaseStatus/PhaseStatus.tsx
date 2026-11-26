@@ -5,14 +5,12 @@ import { twMerge } from 'tailwind-merge';
 import { PhaseStatus as PhaseStatusType } from './getPhaseStatus';
 
 interface PhaseStatusProps {
-  /** Descriptor from `getPhaseStatus`. */
   status: PhaseStatusType;
-  /** Drop the label and keep only the icon. Stays labelled for screen readers. */
+  /** Icon only; still labelled for screen readers. */
   iconOnly?: boolean;
   className?: string;
 }
 
-/** Phase status badge sitting on top of an idea bubble. */
 const PhaseStatus = ({ status, iconOnly = false, className }: PhaseStatusProps) => {
   const { t } = useTranslation();
 

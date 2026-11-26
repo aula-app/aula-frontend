@@ -6,7 +6,6 @@ import { ICON_TYPE } from '@/v2/components/ui/Icon/Icon';
 export interface PhaseStatus {
   icon: ICON_TYPE;
   label: string;
-  /** bg/text pair shared by the badge and the idea bubble, so both always agree. */
   colors: string;
 }
 
@@ -25,11 +24,11 @@ export const getPhaseColors = (phase: `${RoomPhases}`) => {
 interface PhaseStatusInput {
   idea: IdeaType;
   phase: `${RoomPhases}`;
-  /** The current user's vote. Null/undefined reads as waiting. */
+  /** Null/undefined reads as waiting. */
   vote?: Vote | null;
-  /** Percentage of eligible users that must vote. 0 or undefined means no quorum is configured. */
+  /** Percentage; 0 means none. */
   quorum?: number;
-  /** Room members. Falls back to the idea's own count. */
+  /** Defaults to the idea's own count. */
   users?: number;
 }
 
@@ -52,7 +51,6 @@ const VOTED: Record<Vote, PhaseStatus> = {
   [-1]: { icon: 'against', label: 'v2.scopes.ideas.status.votedAgainst', colors: NEGATIVE },
 };
 
-/** Status badge for the current phase, or null when the phase has none. */
 export const getPhaseStatus = (input: PhaseStatusInput): PhaseStatus | null => {
   const { idea, phase, vote } = input;
   const pending = getPhaseColors(phase);

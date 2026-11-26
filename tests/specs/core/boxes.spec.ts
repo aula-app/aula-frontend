@@ -63,8 +63,7 @@ test.describe('Box Management - Creation, phase changes and Permissions', () => 
       await boxes.create(adminPage, box);
     });
 
-    // Assigning an existing Idea to a Box lives in Settings; the box card's edit
-    // dialog only covers room/name/description/phase.
+    // Idea assignment lives in Settings.
     await test.step('Admin assigns Idea to a Box', async () => {
       const boxNewPhaseObject = { ...box, ideas: [idea] } as BoxData;
 

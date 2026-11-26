@@ -8,7 +8,7 @@ type StatProps = Omit<ComponentProps<typeof Chip>, 'children'> & {
   count: number;
   label: string;
   active?: boolean;
-  /** Renders a plain count instead of a control, for metrics the current phase has frozen. */
+  /** Plain count, not a button. */
   readOnly?: boolean;
 };
 
