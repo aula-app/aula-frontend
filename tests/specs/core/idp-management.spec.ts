@@ -49,10 +49,10 @@ test.describe('IdP Management - synced rooms and SSO users', () => {
       await expect(dialog.getByTestId('room-role-select-local')).toBeVisible();
     });
 
-    await test.step('"Not in this room" is offered everywhere except the synced room', async () => {
+    await test.step('"Not in this room" is offered everywhere except the synced and standard rooms', async () => {
       expect(await roleOptions(adminPage, '1a')).not.toContain('0');
       expect(await roleOptions(adminPage, 'local')).toContain('0');
-      expect(await roleOptions(adminPage, 'std')).toContain('0');
+      expect(await roleOptions(adminPage, 'std')).not.toContain('0');
     });
 
     await test.step('Role change in the synced room saves', async () => {
@@ -72,12 +72,16 @@ test.describe('IdP Management - synced rooms and SSO users', () => {
     });
   });
 
-  test('Local user keeps full room membership control', async ({ seededUser, newPageFor }) => {
+  test('Local user can leave every room except the standard room', async ({ seededUser, newPageFor }) => {
     const adminPage = await newPageFor('admin');
     const dialog = await openRoomRoles(adminPage, seededUser.displayName);
 
     await expect(dialog.getByTestId('room-role-select-idp2b')).toBeVisible();
     expect(await roleOptions(adminPage, '1a')).toContain('0');
+
+    const standardRoomOptions = await roleOptions(adminPage, 'std');
+    expect(standardRoomOptions).not.toContain('0');
+    expect(standardRoomOptions).toEqual(expect.arrayContaining(['10', '20', '30']));
   });
 
   test('Rooms table shows where each room comes from', async ({ newPageFor }) => {

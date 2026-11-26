@@ -536,6 +536,7 @@
     "appOutdated": "Deine App ist veraltet. Bitte aktualisiere Aula, um sie weiter zu nutzen.",
     "appBelowRecommended": "Du nutzt Aula {{currentVersion}}, aber wir empfehlen ein Update auf {{recommendedVersion}}, um Probleme zu vermeiden.",
     "appOutdatedImage": "Zwinkernde Charakterillustration als Erinnerung, die App zu aktualisieren",
+    "boxClosed": "Diese Box nimmt keine neuen Ideen mehr an",
     "databaseError": "Daten konnten nicht abgerufen werden",
     "default": "Etwas ist schief gelaufen",
     "existingUser": "Benutzername und/oder E-Mail sind bereits vergeben",

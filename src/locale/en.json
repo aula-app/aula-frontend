@@ -536,6 +536,7 @@
     "appOutdated": "Your app is outdated. Please update aula to continue using it.",
     "appBelowRecommended": "You are running aula {{currentVersion}}, but we recommend updating to {{recommendedVersion}} to avoid issues.",
     "appOutdatedImage": "Winking character illustration reminding you to update the app",
+    "boxClosed": "This box is no longer accepting new ideas",
     "databaseError": "Failed to fetch data",
     "default": "Something went wrong",
     "existingUser": "Username and/or email already in use",
