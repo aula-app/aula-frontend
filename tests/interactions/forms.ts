@@ -82,7 +82,7 @@ export const selectAutocompleteOption = async (page: Page, testId: string, optio
   await expect(displayedValue).toHaveValue(optionLabel);
 };
 
-/** Picks an option in a v2 AutocompleteInput, where the testId is on the field itself. */
+/** Picks an option in a v2 ComboBox, where the testId is on the field itself. */
 export const pickAutocompleteOption = async (page: Page, testId: string, optionLabel: string) => {
   const field = page.getByTestId(testId);
   await expect(field).toBeVisible();

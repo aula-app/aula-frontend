@@ -24,7 +24,7 @@ const InstanceCodeField = ({ value, onChange, error, isEditing, onEditClick, onC
       error={error}
       helperText={isEditing ? t('v2.page.code.hint') : undefined}
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={onChange}
       disabled={!isEditing || disabled}
       data-testid="instance-code"
       endAdornment={

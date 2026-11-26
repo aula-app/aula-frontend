@@ -11,13 +11,17 @@ const displayPhases = Object.keys(dashboardPhases) as Array<keyof typeof dashboa
 
 interface DashboardProps {
   show?: boolean;
+  /** Controls the expanded state; falls back to internal state seeded by `show` when omitted. */
+  open?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
-const Dashboard = ({ show = true }: DashboardProps) => {
+const Dashboard = ({ show = true, open, onOpenChange }: DashboardProps) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [count, setCount] = useState<Record<number, number>>();
-  const [isShowing, setShowing] = useState(show);
+  const [internalOpen, setInternalOpen] = useState(show);
+  const isShowing = open ?? internalOpen;
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -53,7 +57,10 @@ const Dashboard = ({ show = true }: DashboardProps) => {
       >
         <Stack direction="row" width="100%" pr={1} gap={1} sx={{ alignItems: 'center' }}>
           <Button
-            onClick={() => setShowing(!isShowing)}
+            onClick={() => {
+              setInternalOpen(!isShowing);
+              onOpenChange?.(!isShowing);
+            }}
             sx={{ mr: 'auto', color: 'inherit', textTransform: 'none' }}
             aria-expanded={isShowing}
             aria-controls="dashboard-content"

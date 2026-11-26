@@ -98,7 +98,8 @@
         "plural": "boxes",
         "reviewed": "{{count}} of {{total}} reviewed",
         "singular": "box",
-        "phaseReady": "Ready for {{var}}",
+        "allReviewed": "All ideas reviewed",
+        "moveTo": "Move to {{var}}",
         "advance": "Move on"
       },
       "comments": {
@@ -135,6 +136,10 @@
           "decision": "Approval",
           "reason": "Reason for rejection"
         }
+      },
+      "rooms": {
+        "singular": "Room",
+        "plural": "Rooms"
       }
     },
     "ui": {
@@ -153,7 +158,9 @@
         "print": "Print this page",
         "remove": "Remove {{var}}",
         "report": "Report a bug",
-        "search": "Search"
+        "search": "Search",
+        "searchAndSort": "Search and sort",
+        "select": "Select {{var}}"
       },
       "announcement": {
         "title": "Announcement",
@@ -255,9 +262,11 @@
       },
       "navigation": "Navigation menu",
       "moveToPhase": "Move to {{phase}}",
+      "roomPhase": "{{room}}: {{var}}",
       "phases": "Phase navigation",
       "sort": {
         "label": "Sort by",
+        "default": "Default order",
         "asc": "Sort ascending",
         "desc": "Sort descending",
         "created": "Creation date",
@@ -415,6 +424,10 @@
           "empty": "Empty space where you can assign a match."
         },
         "legendTitle": "Legend:"
+      },
+      "dashboard": {
+        "title": "My activity",
+        "newCount": "{{label}}: {{count}} new"
       }
     }
   },

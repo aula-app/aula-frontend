@@ -24,6 +24,8 @@ type ScopeTitleProps = {
   defaultOpen?: boolean;
   /** Switches to the phase sentence and icon, e.g. "3 ideas in voting". */
   phase?: string;
+  /** Shows the descending sort icon on the closed toggle. */
+  sortReversed?: boolean;
 };
 
 const ScopeTitle = ({
@@ -36,6 +38,7 @@ const ScopeTitle = ({
   onToggle,
   defaultOpen = false,
   phase,
+  sortReversed = false,
 }: ScopeTitleProps) => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -46,7 +49,7 @@ const ScopeTitle = ({
   const isFiltered = total !== undefined && total !== count;
   const nounCount = isFiltered ? total : count;
   const hasControls = Children.toArray(children).length > 0;
-  const toggleLabel = t(isOpen ? 'v2.ui.actions.close' : 'v2.ui.actions.search');
+  const toggleLabel = t(isOpen ? 'v2.ui.button.close' : 'v2.ui.actions.searchAndSort');
 
   const iconType: ICON_TYPE = (phase && phases[phase as `${RoomPhases}`]) || scope;
 
@@ -73,7 +76,7 @@ const ScopeTitle = ({
   return (
     <div className="flex flex-col p-2 pb-0 sm:p-4 sm:pb-0">
       <div className="flex justify-between items-center">
-        <Heading className={twMerge('flex min-w-0 items-center gap-2', className)}>
+        <Heading data-testid={TEST_IDS.SCOPE_TITLE} className={twMerge('flex min-w-0 items-center gap-2', className)}>
           <Icon type={iconType} size=".9em" className="shrink-0" />
           {phase ? (
             <span className="truncate first-letter:capitalize">
@@ -94,9 +97,16 @@ const ScopeTitle = ({
             aria-controls={panelId}
             data-testid={TEST_IDS.SEARCH_BUTTON}
             onClick={toggle}
-            className="shrink-0"
+            className="shrink-0 aspect-auto gap-1"
           >
-            <Icon type={isOpen ? 'close' : 'search'} size="1.5em" />
+            {isOpen ? (
+              <Icon type="close" size="1.5em" />
+            ) : (
+              <>
+                <Icon type="search" size="1.25em" />
+                <Icon type={sortReversed ? 'sortDesc' : 'sortAsc'} size="1.25em" />
+              </>
+            )}
           </IconButton>
         )}
       </div>
@@ -105,7 +115,7 @@ const ScopeTitle = ({
           open={isOpen}
           id={panelId}
           role="search"
-          aria-label={t('v2.ui.actions.search')}
+          aria-label={t('v2.ui.actions.searchAndSort')}
           data-testid={TEST_IDS.SCOPE_CONTROLS}
         >
           <div ref={panelRef} className="flex items-center gap-2 pb-1">

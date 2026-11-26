@@ -12,7 +12,6 @@ import AnnouncementView from '@/views/Messages/Announcement';
 import MessageView from '@/views/Messages/Message';
 import ReportView from '@/views/Messages/Report';
 import OfflineView from '@/views/OfflineView';
-import PhasesView from '@/views/Phases';
 import SchoolSetupView from '@/views/Public/SchoolSetupView';
 import AnnouncementsView from '@/views/Settings/Announcements';
 import BoxesView from '@/views/Settings/Boxes';
@@ -27,12 +26,13 @@ import RequestsView from '@/views/Settings/Requests';
 import RoomsView from '@/views/Settings/Rooms';
 import UsersView from '@/views/Settings/Users';
 import UpdatesView from '@/views/Updates';
-import WelcomeView from '@/views/Welcome';
 import { useEffect } from 'react';
 import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import RestrictedRoutes from './RestrictedRoutes';
 import Box from '@/v2/views/private/Box';
 import Idea from '@/v2/views/private/Idea';
+import Home from '@/v2/views/private/Home';
+import Phase from '@/v2/views/private/Phase';
 
 const PrivateRoutes = () => {
   const [, dispatch] = useAppStore();
@@ -55,7 +55,7 @@ const PrivateRoutes = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<WelcomeView />} />
+      <Route path="/" element={<Home />} />
       <Route path="oauth-login/*" element={<SsoCallbackLanded />} />
       <Route path="about" element={<AboutView />} />
       <Route path="announcements" element={<UserMessagesView />} />
@@ -65,7 +65,7 @@ const PrivateRoutes = () => {
       <Route path="reports/:report_id" element={<ReportView />} />
       <Route path="bugs/:report_id" element={<ReportView />} />
       <Route path="requests/:report_id" element={<ReportView />} />
-      <Route path="phase/:phase" element={<PhasesView />} />
+      <Route path="phase/:phase" element={<Phase />} />
       <Route path="room/:room_id/" element={<RoomLayout />}>
         <Route path="phase/0" element={<Ideas />} />
         <Route path="phase/:phase" element={<Boxes />} />

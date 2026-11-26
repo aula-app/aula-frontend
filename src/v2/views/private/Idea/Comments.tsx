@@ -3,9 +3,8 @@ import { TEST_IDS } from '@/test-ids';
 import { CommentType } from '@/types/Scopes';
 import { checkPermissions } from '@/utils';
 import Fab from '@/v2/components/button/Fab/Fab';
-import IconButton from '@/v2/components/button/IconButton';
 import Comment from '@/v2/components/comment/Comment';
-import SelectInput from '@/v2/components/input/SelectInput';
+import SortSelect from '@/v2/components/input/SortSelect';
 import TextInput from '@/v2/components/input/TextInput';
 import FeedbackState from '@/v2/components/ui/FeedbackState';
 import Icon from '@/v2/components/ui/Icon/Icon';
@@ -75,6 +74,7 @@ const Comments: React.FC<CommentsProps> = ({ idea_id, phase }) => {
         total={comments.length}
         defaultOpen={!!searchQuery}
         onToggle={(open) => !open && setSearchQuery('')}
+        sortReversed={reversed}
       >
         <TextInput
           dense
@@ -82,29 +82,18 @@ const Comments: React.FC<CommentsProps> = ({ idea_id, phase }) => {
           label={t('v2.ui.actions.search')}
           startAdornment={<Icon type="search" />}
           value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
+          onChange={setSearchQuery}
           className="flex-1 min-w-20"
           data-testid={TEST_IDS.SEARCH_FIELD}
         />
-        <SelectInput
-          dense
-          label={t('v2.ui.sort.label')}
+        <SortSelect
           options={orderOptions}
           value={orderBy}
           onChange={setOrderBy}
+          reversed={reversed}
+          onReversedChange={setReversed}
           data-testid={TEST_IDS.SORT_SELECT}
         />
-        <IconButton
-          dense
-          hint={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
-          aria-label={t(`v2.ui.sort.${reversed ? 'desc' : 'asc'}`)}
-          aria-pressed={reversed}
-          data-testid={TEST_IDS.SORT_DIRECTION_BUTTON}
-          onClick={() => setReversed(!reversed)}
-          className="min-w-6"
-        >
-          <Icon type={reversed ? 'sortDesc' : 'sortAsc'} size="1.5em" />
-        </IconButton>
       </ScopeTitle>
 
       {canAddComments && (
@@ -165,7 +154,7 @@ const Comments: React.FC<CommentsProps> = ({ idea_id, phase }) => {
       )}
 
       {!isLoading && !error && visibleComments.length > 0 && (
-        <ul className="flex flex-col gap-1 p-2 sm:p-4">
+        <ul className="flex flex-col p-2 sm:p-4">
           {visibleComments.map((comment) => (
             <li key={comment.id}>
               <Comment comment={comment} onChanged={refetch} />
