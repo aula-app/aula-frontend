@@ -7,6 +7,7 @@
 - **Bug fixes**
   - SSO-managed schools (EDUPLACES): add, delete and CSV import are now blocked only when SSO is mandatory, and remain available when SSO is merely offered
   - Users cannot be removed from main room.
+  - Auditors and super moderators with voting rights see all rooms again, not only the main room
 
 ## 2.0.0
 
