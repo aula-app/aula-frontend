@@ -38,7 +38,6 @@ const Announcement = () => {
       {consentLevel > 0 && (
         <div className="px-6 py-3">
           <Checkbox
-            // eslint-disable-next-line jsx-a11y/no-autofocus
             autoFocus
             id={`consent-box-${displayed.id}`}
             label={displayed.consent_text || t('v2.ui.actions.agree')}
@@ -53,7 +52,6 @@ const Announcement = () => {
       )}
       <div className="flex items-center justify-end gap-2 px-4 py-3">
         <Button
-          // eslint-disable-next-line jsx-a11y/no-autofocus
           autoFocus={consentLevel === 0}
           type="button"
           disabled={isSubmitting || (consentLevel === 2 && !isChecked)}

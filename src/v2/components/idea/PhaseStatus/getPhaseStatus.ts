@@ -9,7 +9,6 @@ export type StatusTone = PhaseType | 'success' | 'error' | 'neutral';
 export interface PhaseStatus {
   icon: ICON_TYPE;
   label: string;
-  /** bg/text pair shared by the badge and the idea bubble, so both always agree. */
   colors: string;
   /** The same palette as a single name, for components that build their own classes. */
   tone: StatusTone;
@@ -29,7 +28,7 @@ export const getPhaseColors = (phase: `${RoomPhases}`) => {
 interface PhaseStatusInput {
   idea: IdeaType;
   phase: `${RoomPhases}`;
-  /** The current user's vote. Null or undefined — not voted, still loading, or not allowed to vote — all read as waiting. */
+  /** Null/undefined reads as waiting. */
   vote?: Vote | null;
 }
 
@@ -51,7 +50,6 @@ const VOTED: Record<Vote, PhaseStatus> = {
   [-1]: { icon: 'against', label: 'v2.scopes.ideas.status.votedAgainst', ...NEGATIVE },
 };
 
-/** Status badge for the current phase, or null when the phase has none. */
 export const getPhaseStatus = ({ idea, phase, vote }: PhaseStatusInput): PhaseStatus | null => {
   if (phase === '20') {
     if (idea.approved === 1) return { icon: 'star', label: 'v2.scopes.ideas.status.approved', ...POSITIVE };

@@ -65,8 +65,7 @@ const Idea = ({ idea, categories = [], vote, quorum = 0, users, detail = false, 
   const hasVoteBar = detail && phase_id === '30' && !isArchived;
   const hasVoteResults = detail && phase_id === '40' && !isArchived;
   const hasWinnerBar = hasVoteResults && checkPermissions('ideas', 'setWinner');
-  // Must agree with what QuorumBar will actually draw: the bubble squares its bottom corner to
-  // seat the bar, so promising one that never arrives leaves a cut corner over nothing.
+  // Must match QuorumBar's render condition.
   const hasQuorumBar = participants > 0 && !isArchived && !hasVoteResults && (isVoting || (quorum > 0 && !isJudged));
 
   const results = useVoteResults(idea.hash_id, hasVoteResults);

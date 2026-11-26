@@ -22,8 +22,7 @@ type ScopeTitleProps = {
   onToggle?: (open: boolean) => void;
   /** Whether the controls start expanded, e.g. to reveal a restored search. */
   defaultOpen?: boolean;
-  /** Phase id, e.g. '10'. When set, the title reads inside the phase sentence, e.g. "3 ideas in voting",
-   * and the icon becomes the phase icon. */
+  /** Switches to the phase sentence and icon, e.g. "3 ideas in voting". */
   phase?: string;
 };
 
@@ -49,7 +48,6 @@ const ScopeTitle = ({
   const hasControls = Children.toArray(children).length > 0;
   const toggleLabel = t(isOpen ? 'v2.ui.actions.close' : 'v2.ui.actions.search');
 
-  // Inside a phase sentence the heading is about the phase, so the phase icon reads truer than the scope's.
   const iconType: ICON_TYPE = (phase && phases[phase as `${RoomPhases}`]) || scope;
 
   const nounLabel = t(`v2.scopes.${scope}.${nounCount === 1 ? 'singular' : 'plural'}`);

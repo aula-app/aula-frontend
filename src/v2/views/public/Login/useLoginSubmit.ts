@@ -144,5 +144,15 @@ export const useLoginSubmit = () => {
     }
   };
 
-  return { onSubmit, isLoading, isSsoLoading, loginError, setError, linkBanner, setLinkBanner, ssoAvailable, handleSsoLogin };
+  return {
+    onSubmit,
+    isLoading,
+    isSsoLoading,
+    loginError,
+    setError,
+    linkBanner,
+    setLinkBanner,
+    ssoAvailable,
+    handleSsoLogin,
+  };
 };

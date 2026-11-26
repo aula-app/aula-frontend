@@ -10,18 +10,28 @@ interface Props {
   defaultValue: string;
   room_id?: string;
   disabled?: boolean;
+  /** Disables boxes outside the discussion phase, which can't receive new ideas */
+  discussionOnly?: boolean;
 }
+
+type BoxOption = { label: string; value: string; disabled?: boolean };
 
 /**
  * Renders "SelectInput" component
  */
 
-const SelectBoxField: React.FC<Props> = ({ defaultValue, room_id, onChange, disabled = false }) => {
+const SelectBoxField: React.FC<Props> = ({
+  defaultValue,
+  room_id,
+  onChange,
+  disabled = false,
+  discussionOnly = false,
+}) => {
   const { t } = useTranslation();
   const { box_id } = useParams();
   const [loading, setLoading] = useState(false);
-  const [boxes, setBoxes] = useState<{ label: string; value: string }[]>([{ label: '', value: '' }]);
-  const [value, setValue] = useState<{ label: string; value: string }>({ label: '', value: '' });
+  const [boxes, setBoxes] = useState<BoxOption[]>([{ label: '', value: '' }]);
+  const [value, setValue] = useState<BoxOption>({ label: '', value: '' });
 
   const fetchBoxes = async () => {
     setLoading(true);
@@ -31,10 +41,16 @@ const SelectBoxField: React.FC<Props> = ({ defaultValue, room_id, onChange, disa
   };
 
   const createOptions = (data: BoxType[]) => {
-    setBoxes(data.map((option) => ({ label: option.name, value: option.hash_id })));
+    setBoxes(
+      data.map((option) => ({
+        label: option.name,
+        value: option.hash_id,
+        disabled: discussionOnly && Number(option.phase_id) !== 10,
+      }))
+    );
   };
 
-  const handleChange = (value: { label: string; value: string } | null) => {
+  const handleChange = (value: BoxOption | null) => {
     const selected = boxes.filter((box) => box.value === value?.value)[0];
     setValue(selected);
     onChange(value?.value || '');
@@ -57,6 +73,7 @@ const SelectBoxField: React.FC<Props> = ({ defaultValue, room_id, onChange, disa
       id="controllable-states-demo"
       loading={loading}
       options={boxes}
+      getOptionDisabled={(option) => !!option.disabled}
       renderInput={(params) => (
         <TextField
           {...params}

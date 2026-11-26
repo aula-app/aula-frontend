@@ -3,13 +3,11 @@ import { BoxType, IdeaType } from '@/types/Scopes';
 import { useCallback, useEffect, useState } from 'react';
 
 interface UseBoxIdeasState {
-  /** The ideas each box holds, keyed by box hash_id. */
+  /** Keyed by box hash_id. */
   ideas: Record<string, IdeaType[]>;
-  /** Reloads every box's ideas. */
   refetch: () => Promise<void>;
 }
 
-/** The ideas each box holds, keyed by box hash_id. One request per box. */
 export const useBoxIdeas = (boxes: BoxType[], enabled = true): UseBoxIdeasState => {
   const [ideas, setIdeas] = useState<Record<string, IdeaType[]>>({});
   const boxIds = boxes.map((box) => box.hash_id).join(',');

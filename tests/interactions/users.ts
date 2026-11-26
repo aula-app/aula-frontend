@@ -2,7 +2,6 @@ import { expect, Page } from '@playwright/test';
 import { TEST_IDS } from '../../src/test-ids';
 import * as shared from '../support/utils';
 import * as types from '../support/types';
-import * as formsInteractions from './forms';
 import * as navigation from './navigation';
 import { TIMEOUTS } from '../support/constants';
 
@@ -11,7 +10,6 @@ const host = shared.getHost();
 export const ensureSpecificInstanceEntered = async (page: Page, instanceCode: string) => {
   const instanceCodeInput = page.getByTestId('instance-code');
 
-  // Not visible → single-instance, or a broken page. The login form tells us which.
   if (!(await instanceCodeInput.isVisible())) {
     await expect(page.locator('input[name="username"]')).toBeVisible();
     return true;
@@ -34,7 +32,6 @@ export const ensureInstanceEntered = async (page: Page, username?: string) => {
   const instance = process.env.INSTANCE_CODE || 'SINGLE';
   const instanceCodeInput = page.getByTestId('instance-code');
 
-  // Not visible → single-instance, or a broken page. The login form tells us which.
   if (!(await instanceCodeInput.isVisible())) {
     console.log(`${instance === 'SINGLE' ? '✅' : '⚠️'} No instance selector input found. User: "${username}"`);
     if (instance !== 'SINGLE') {
