@@ -3,13 +3,9 @@ import { localStorageGet } from '@/utils';
 import { useEffect, useState } from 'react';
 
 /**
- * The instance's SSO status, checked again whenever `instanceCode` changes.
- *
- * `undefined` until the first answer (callers gate rendering instead of failing
- * open); `null` when the backend could not answer, or while a new instance code
- * is being checked. api_url is written asynchronously by useInstanceGuard — and
- * only once the user enters their code in multi-instance mode — so poll for it
- * before querying.
+ * Rechecked when `instanceCode` changes. `undefined` until the first answer;
+ * `null` if the backend can't answer or a new code is being checked.
+ * Polls until useInstanceGuard has written api_url.
  */
 export function useSsoStatus(instanceCode?: string): SsoStatus | null | undefined {
   const [result, setResult] = useState<{ instanceCode?: string; status: SsoStatus | null }>();

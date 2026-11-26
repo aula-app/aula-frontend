@@ -74,8 +74,13 @@ const LoginView: React.FC = () => {
     onSubmit(data);
   };
 
+  const confirmCode = (e: React.FormEvent) => {
+    e.preventDefault();
+    validateCode();
+  };
+
   return (
-    <form onSubmit={handleSubmit(wrappedSubmit)} noValidate className="flex-1 flex flex-col gap-4">
+    <div className="flex-1 flex flex-col gap-4">
       <h1>{t('v2.page.login.title', { var: 'Aula' })}</h1>
 
       <Collapse open={linkBanner !== ''}>
@@ -127,20 +132,22 @@ const LoginView: React.FC = () => {
           {(showField || showPasswordLogin) && (
             <div className="rounded-box flex flex-col gap-2">
               {showField && (
-                <InstanceCodeField
-                  value={instanceCode}
-                  onChange={setInstanceCode}
-                  error={codeError}
-                  isEditing={isEditing}
-                  onEditClick={startEditing}
-                  onConfirmClick={() => {
-                    validateCode();
-                  }}
-                  disabled={isLoading || codeLoading}
-                />
+                <form onSubmit={confirmCode} noValidate>
+                  <InstanceCodeField
+                    value={instanceCode}
+                    onChange={setInstanceCode}
+                    error={codeError}
+                    isEditing={isEditing}
+                    onEditClick={startEditing}
+                    onConfirmClick={() => {
+                      validateCode();
+                    }}
+                    disabled={isLoading || codeLoading}
+                  />
+                </form>
               )}
               {showPasswordLogin && (
-                <>
+                <form onSubmit={handleSubmit(wrappedSubmit)} noValidate className="flex flex-col gap-2">
                   <TextInput
                     label={t('v2.form.login.label')}
                     required
@@ -164,7 +171,7 @@ const LoginView: React.FC = () => {
                   <Link to="/recovery" className="ml-auto px-2 text-sm text-text-secondary mt-4">
                     {t('v2.page.recovery.link')}
                   </Link>
-                </>
+                </form>
               )}
             </div>
           )}
@@ -195,7 +202,7 @@ const LoginView: React.FC = () => {
           )}
         </>
       )}
-    </form>
+    </div>
   );
 };
 

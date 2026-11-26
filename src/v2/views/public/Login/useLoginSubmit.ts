@@ -28,7 +28,7 @@ export const useLoginSubmit = (instanceCode?: string) => {
   const [loginError, setError] = useState<string>('');
   const [linkBanner, setLinkBanner] = useState<string>('');
   const [ssoLinkToken, setSsoLinkToken] = useState<string | null>(null);
-  /** True when nobody knows yet whether this person has an aula account. */
+  /** Unknown yet whether this person has an aula account. */
   const [claimable, setClaimable] = useState(false);
 
   const ssoStatus = useSsoStatus(instanceCode);
@@ -45,9 +45,6 @@ export const useLoginSubmit = (instanceCode?: string) => {
 
     if (ssoError === 'account_link_required' && ssoLink) {
       setSsoLinkToken(ssoLink);
-      // A claimable link comes from a school mid-migration: nobody knows yet
-      // whether this person already has an aula account, so they have to be
-      // able to say they do not.
       const isClaimable = searchParams.get('claimable') === '1';
       setClaimable(isClaimable);
       setLinkBanner(
@@ -150,9 +147,7 @@ export const useLoginSubmit = (instanceCode?: string) => {
       const url = await initiateSso(instanceApiUrl, options);
 
       if (Capacitor.isNativePlatform()) {
-        // A Custom Tab keeps the login layered over the app; assigning
-        // window.location here would send the WebView off-origin and Capacitor
-        // would hand it to the system browser, stranding the user outside.
+        // Capacitor sends an off-origin WebView to the system browser.
         await Browser.open({ url });
         return;
       }
@@ -164,9 +159,7 @@ export const useLoginSubmit = (instanceCode?: string) => {
     }
   };
 
-  // IdP-initiated entry (e.g. Eduplaces marketplace launch) lands here with
-  // ?via=eduplaces. Trigger SSO automatically, preserving the upstream
-  // login_hint so the user is not asked to identify themselves again.
+  // Eduplaces launches land with ?via=eduplaces.
   useEffect(() => {
     if (searchParams.get('via') !== 'eduplaces') return;
     if (ssoStatus === undefined) return;

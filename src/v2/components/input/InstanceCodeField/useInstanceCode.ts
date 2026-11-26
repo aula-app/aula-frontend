@@ -71,7 +71,7 @@ export const useInstanceCode = () => {
   return {
     instanceCode,
     setInstanceCode,
-    /** The last code that was validated and saved; changes only once a new code is confirmed. */
+    /** Last validated code; changes only on confirm. */
     confirmedCode,
     isEditing,
     startEditing,
