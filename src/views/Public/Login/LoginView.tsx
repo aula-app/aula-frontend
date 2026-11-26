@@ -3,7 +3,7 @@ import Eduplaces from "@/components/Buttons/Eduplaces/Eduplaces";
 import { handleOAuthLogin } from "@/services/auth";
 import { declineAccountClaim } from "@/services/idpMigration";
 import { loginUser } from "@/services/login";
-import { completeSsoLink, getSsoStatus, initiateSso } from "@/services/sso";
+import { completeSsoLink, getSsoStatus, initiateSso, type InitiateSsoOptions } from "@/services/sso";
 import { useAppStore } from "@/store";
 import { LoginFormValues } from "@/types/LoginTypes";
 import { isSsoBrowserSupported, localStorageGet, localStorageSet, MIN_SSO_SAFARI_VERSION, parseJwt } from "@/utils";
@@ -166,7 +166,7 @@ const LoginView = () => {
     }
   };
 
-  const handleSsoLogin = async (options: { loginHint?: string } = {}) => {
+  const handleSsoLogin = async (options: InitiateSsoOptions = {}) => {
     const instanceApiUrl = localStorageGet('api_url');
     if (!instanceApiUrl) {
       dispatch({ type: 'ADD_POPUP', message: { message: t('errors.noServer'), type: 'error' } });
@@ -221,13 +221,23 @@ const LoginView = () => {
   // not asked to identify themselves again at Eduplaces.
   useEffect(() => {
     if (searchParams.get('via') !== 'eduplaces') return;
+    const ssoError = searchParams.get('sso_error');
+    if (ssoError === 'school_not_provisioned') {
+      // First launch of a school no instance knows yet. Retry against the
+      // instance this browser remembers; without one, useInstanceGuard asks
+      // for the code and InstanceCodeView comes back here.
+      navigate('/login?via=eduplaces', { replace: true });
+      return;
+    }
+    // A refused login must not restart itself.
+    if (ssoError) return;
     // Wait for the school's own answer before bouncing anyone to Keycloak,
     // which would only be refused if the school has SSO switched off.
     if (instanceSso === undefined) return;
     if (!ssoAvailable) return;
     if (!ssoBrowserSupported) return;
     const loginHint = searchParams.get('login_hint') ?? undefined;
-    handleSsoLogin({ loginHint });
+    handleSsoLogin({ loginHint, resumesLaunch: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, ssoAvailable, instanceSso]);
 

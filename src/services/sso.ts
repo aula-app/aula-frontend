@@ -91,11 +91,17 @@ export interface InitiateSsoOptions {
    * is pre-selected and the second hop is silent.
    */
   loginHint?: string;
+  /**
+   * The login resumes a launch from the provider's own portal, where the user
+   * signed in moments ago. `prompt=login` would only send them through the
+   * provider a second time.
+   */
+  resumesLaunch?: boolean;
 }
 
 export const initiateSso = async (apiUrl: string, options: InitiateSsoOptions = {}): Promise<string> => {
   const instanceCode = localStorageGet('code');
-  const forceLogin = localStorage.getItem('sso_force_login') === 'true';
+  const forceLogin = !options.resumesLaunch && localStorage.getItem('sso_force_login') === 'true';
   // Keep the flag set until login succeeds (cleared in OAuthLogin).
 
   const initiateUrl = new URL(`${apiUrl}/api/v2/auth/sso/initiate`);

@@ -358,6 +358,7 @@
       "idp_user_missing": "Your school did not tell us who you are. Please contact your administrator.",
       "idp_identity_taken": "This school account is already linked to a different aula account. Please contact your administrator.",
       "link_user_not_found": "We could not find your aula account. Please try logging in again.",
+      "school_mismatch": "This aula instance belongs to a different school than the one you are signed in with. Please check the instance code.",
       "school_not_provisioned": "This school is not set up yet. Please contact your administrator.",
       "sso_disabled": "Single Sign-On is not enabled for this school.",
       "login_cancelled": "Single Sign-On was cancelled. You can try again.",
