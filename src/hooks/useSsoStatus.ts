@@ -3,15 +3,16 @@ import { localStorageGet } from '@/utils';
 import { useEffect, useState } from 'react';
 
 /**
- * The instance's SSO status, fetched once.
+ * The instance's SSO status, checked again whenever `instanceCode` changes.
  *
- * `undefined` while unresolved (callers gate rendering instead of failing
- * open); `null` when the backend could not answer. api_url is written
- * asynchronously by useInstanceGuard — and only once the user enters their
- * code in multi-instance mode — so poll for it before querying.
+ * `undefined` until the first answer (callers gate rendering instead of failing
+ * open); `null` when the backend could not answer, or while a new instance code
+ * is being checked. api_url is written asynchronously by useInstanceGuard — and
+ * only once the user enters their code in multi-instance mode — so poll for it
+ * before querying.
  */
-export function useSsoStatus(): SsoStatus | null | undefined {
-  const [status, setStatus] = useState<SsoStatus | null | undefined>(undefined);
+export function useSsoStatus(instanceCode?: string): SsoStatus | null | undefined {
+  const [result, setResult] = useState<{ instanceCode?: string; status: SsoStatus | null }>();
 
   useEffect(() => {
     let cancelled = false;
@@ -26,8 +27,8 @@ export function useSsoStatus(): SsoStatus | null | undefined {
         return;
       }
 
-      const result = await getSsoStatus(apiUrl);
-      if (!cancelled) setStatus(result);
+      const status = await getSsoStatus(apiUrl);
+      if (!cancelled) setResult({ instanceCode, status });
     };
 
     check();
@@ -36,7 +37,8 @@ export function useSsoStatus(): SsoStatus | null | undefined {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, []);
+  }, [instanceCode]);
 
-  return status;
+  if (!result) return undefined;
+  return result.instanceCode === instanceCode ? result.status : null;
 }
