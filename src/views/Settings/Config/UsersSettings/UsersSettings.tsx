@@ -105,7 +105,7 @@ const DataSettings = ({ onReload }: Props) => {
     const reader = new FileReader();
     reader.onload = function () {
       if (!reader.result) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+        dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
         return;
       }
       const lines = String(reader.result)
@@ -170,10 +170,10 @@ const DataSettings = ({ onReload }: Props) => {
           return;
         }
       }
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.default'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.default'), type: 'error' } });
       return;
     }
-    dispatch({ type: 'ADD_POPUP', message: { message: t('forms.csv.success'), type: 'success' } });
+    dispatch({ type: 'ADD_TOAST', message: { message: t('forms.csv.success'), type: 'success' } });
     onReload();
     onReset();
   };

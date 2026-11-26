@@ -40,7 +40,7 @@ const ResetPasswordButton: FC<Props> = ({ target, hasEmail = false, onSuccess, .
   const handleReset = async (event: SyntheticEvent) => {
     event.stopPropagation();
     if (!target.hash_id) {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.failed'), type: 'error' } });
       return;
     }
 
@@ -49,10 +49,10 @@ const ResetPasswordButton: FC<Props> = ({ target, hasEmail = false, onSuccess, .
       const response = await resetUserPassword(target.hash_id);
 
       if (response.error) {
-        dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+        dispatch({ type: 'ADD_TOAST', message: { message: t('errors.failed'), type: 'error' } });
       } else {
         dispatch({
-          type: 'ADD_POPUP',
+          type: 'ADD_TOAST',
           message: {
             message: t('auth.forgotPassword.successfulUser', {
               user: target.realname || target.displayname,
@@ -67,7 +67,7 @@ const ResetPasswordButton: FC<Props> = ({ target, hasEmail = false, onSuccess, .
         onSuccess?.();
       }
     } catch {
-      dispatch({ type: 'ADD_POPUP', message: { message: t('errors.failed'), type: 'error' } });
+      dispatch({ type: 'ADD_TOAST', message: { message: t('errors.failed'), type: 'error' } });
     }
 
     setConfirm(false);

@@ -10,6 +10,7 @@ import {
   HiOutlineCheckCircle,
   HiOutlineChevronDown,
   HiOutlineChevronLeft,
+  HiOutlineClipboard,
   HiOutlineCog6Tooth,
   HiOutlineEnvelope,
   HiOutlineEnvelopeOpen,
@@ -34,6 +35,7 @@ import {
   HiOutlineUsers,
   HiOutlineXCircle,
   HiOutlineXMark,
+  HiLanguage,
 } from 'react-icons/hi2';
 import { IoBugOutline } from 'react-icons/io5';
 import { MdCloudSync, MdDragIndicator } from 'react-icons/md';
@@ -50,6 +52,7 @@ export const ICONS = {
   announcements: HiOutlineMegaphone,
   back: HiOutlineChevronLeft,
   chevronDown: HiOutlineChevronDown,
+  copy: HiOutlineClipboard,
   box: HiOutlineArchiveBox,
   boxes: HiOutlineArchiveBox,
   bug: IoBugOutline,
@@ -67,6 +70,8 @@ export const ICONS = {
   home: HiOutlineHome,
   idea: HiOutlineLightBulb,
   ideas: HiOutlineLightBulb,
+  info: HiOutlineInformationCircle,
+  language: HiLanguage,
   logout: HiOutlineArrowRightEndOnRectangle,
   menu: HiOutlineBars3,
   message: HiOutlineEnvelope,

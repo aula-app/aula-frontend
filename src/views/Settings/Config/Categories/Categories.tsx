@@ -3,7 +3,7 @@ import { CAT_ICONS } from '@/components/AppIcon/AppIcon';
 import CategoryForms from '@/components/DataForms/CategoryForms';
 import { deleteCategory, getCategories } from '@/services/categories';
 import { CategoryType } from '@/types/Scopes';
-import { WarningAmber } from '@mui/icons-material';
+import WarningAmber from '@mui/icons-material/WarningAmber';
 import {
   Button,
   Chip,
