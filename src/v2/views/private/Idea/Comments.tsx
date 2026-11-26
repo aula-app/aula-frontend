@@ -74,6 +74,7 @@ const Comments: React.FC<CommentsProps> = ({ idea_id, phase }) => {
         total={comments.length}
         defaultOpen={!!searchQuery}
         onToggle={(open) => !open && setSearchQuery('')}
+        sortReversed={reversed}
       >
         <TextInput
           dense

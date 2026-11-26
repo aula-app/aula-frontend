@@ -25,4 +25,19 @@ describe('useCollapseOnScroll', () => {
     act(() => result.current.onScroll(scrollEvent(0, 400, 400)));
     expect(result.current.open).toBe(false);
   });
+
+  it('stays open while focus is inside the panel', () => {
+    const { result } = renderHook(() => useCollapseOnScroll());
+    const panel = document.createElement('section');
+    const button = document.createElement('button');
+    panel.appendChild(button);
+    document.body.appendChild(panel);
+    (result.current.ref as { current: HTMLElement | null }).current = panel;
+    button.focus();
+
+    act(() => result.current.onScroll(scrollEvent(120)));
+    expect(result.current.open).toBe(true);
+
+    panel.remove();
+  });
 });

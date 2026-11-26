@@ -55,7 +55,7 @@ const PhaseIdeas = ({ phase }: { phase: `${RoomPhases}` }) => {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-      <Dashboard open={dashboard.open} onOpenChange={dashboard.setOpen} />
+      <Dashboard ref={dashboard.ref} open={dashboard.open} onOpenChange={dashboard.setOpen} />
       <ListPageLayout
         header={
           <ScopeTitle

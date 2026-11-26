@@ -4,7 +4,7 @@ import PhaseCountLink from '@/v2/components/dashboard/PhaseCountLink';
 import Alert from '@/v2/components/ui/Alert';
 import Collapse from '@/v2/components/ui/Collapse';
 import Icon from '@/v2/components/ui/Icon/Icon';
-import { useId } from 'react';
+import { forwardRef, useId } from 'react';
 import { useTranslation } from 'react-i18next';
 import { twMerge } from 'tailwind-merge';
 import { useActivityCounts } from './useActivityCounts';
@@ -17,7 +17,7 @@ interface DashboardProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
+const Dashboard = forwardRef<HTMLElement, DashboardProps>(({ open, onOpenChange }, ref) => {
   const { t } = useTranslation();
   const { counts, error } = useDashboard();
   const activity = useActivityCounts();
@@ -25,7 +25,7 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
   const panelId = useId();
 
   return (
-    <section aria-labelledby={headingId} className="flex flex-col p-2 sm:p-4 sm:pb-0 bg-shadow m-2 mb-0 rounded-2xl">
+    <section ref={ref} aria-labelledby={headingId} className="flex flex-col p-2 bg-shadow m-2 mx-4 mb-0 rounded-2xl">
       <div className="flex items-center justify-between gap-2">
         <h2 id={headingId} className="min-w-0">
           <button
@@ -34,7 +34,7 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
             aria-controls={panelId}
             onClick={() => onOpenChange(!open)}
             data-testid="dashboard-toggle"
-            className="flex cursor-pointer items-center gap-2 rounded-lg pl-2"
+            className="flex max-w-full cursor-pointer items-center gap-2 rounded-lg pl-2"
           >
             <span className="truncate">{t('v2.ui.dashboard.title')}</span>
             <Icon
@@ -65,7 +65,7 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
         {error ? (
           <Alert severity="error" title={t('v2.ui.error.fetch.title')} className="my-2" />
         ) : (
-          <ul className="grid grid-cols-2 gap-2 py-2 sm:grid-cols-4">
+          <ul className="grid grid-cols-2 gap-2 p-1 pt-2 sm:grid-cols-4">
             {DASHBOARD_PHASES.map((phase) => (
               <li key={phase}>
                 <PhaseCountLink phase={phase} count={counts?.[phase]} />
@@ -76,6 +76,8 @@ const Dashboard = ({ open, onOpenChange }: DashboardProps) => {
       </Collapse>
     </section>
   );
-};
+});
+
+Dashboard.displayName = 'Dashboard';
 
 export default Dashboard;

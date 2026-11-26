@@ -53,6 +53,7 @@ describe('BoxForm', () => {
     const ideas = screen.getByTestId('box-form-ideas');
     await waitFor(() => expect(ideas).toBeEnabled());
     await user.click(ideas);
+    await user.keyboard('{ArrowDown}');
     await user.click(await screen.findByTestId('box-form-ideas-option-i2'));
     fireEvent.click(screen.getByTestId('box-form-submit'));
 
