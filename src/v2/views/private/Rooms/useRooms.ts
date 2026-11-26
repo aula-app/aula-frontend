@@ -25,7 +25,7 @@ export const useRooms = (): UseRoomsState => {
       } else {
         setRooms(response.data || []);
       }
-    } catch (err) {
+    } catch {
       setError('fetch');
     } finally {
       setIsLoading(false);
